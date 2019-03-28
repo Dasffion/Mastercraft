@@ -919,8 +919,8 @@ parts.inv:
 	action (engineering) math lenses.count add 1 when some lenses
 	action (engineering) math %order.pref.item.count add 1 when ^\s+(?:an?|some) (%work.material).*(%order.pref|stack)
 	action (engineering) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(%order.pref|stack)
-	action (alchemy) math %herb1.item.count add 1 when ^\s+(?:an?|some).*(%herb1)
-	action (alchemy) math %herb2.item.count add 1 when ^\s+(?:an?|some).*(%herb2)
+	action (alchemy) math %herb1.item.count add 1 when ^\s+(?:an?|some).*(%herb1)(?! ?(salve|ointment|ungent|potion|poultices|draught|elixir|tonic|salve|wash|balm))
+	action (alchemy) math %herb2.item.count add 1 when ^\s+(?:an?|some).*(%herb2)(?! ?(salve|ointment|ungent|potion|poultices|draught|elixir|tonic|salve|wash|balm))
 	action (alchemy) math water.count add 1 when ^\s+(?:an?|some) water
 	action (alchemy) math alcohol.count add 1 when ^\s+(?:an?|some) grain alcohol
 	action (alchemy) math coal.count add 1 when ^\s+(?:an?|some).*coal nugget
