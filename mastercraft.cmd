@@ -1566,7 +1566,7 @@ fail:
     pause 1
 	gosub PUT open my %remnant.storage
     if contains("$roomobjs", "bucket") then gosub PUT_IT my $MC.order.noun in bucket
-        else drop my $MC.order.noun
+        else gosub PUT drop my $MC.order.noun
     gosub PUT close my %remnant.storage
     math fail add 1
     if %fail = 1 then gosub check.tools
