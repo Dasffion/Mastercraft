@@ -1732,6 +1732,7 @@ repair.tool_1:
 		echo ***  Pausing script for you to get %repair.temp repaired!
 		echo ***  You should probably repair all of your relevant tools while you're there.
 		echo ***  Type GOGO in your original crafting hall to resume script...
+		put #parse GO REPAIR
 		waitforre /gogo/i
 		return
 		#Code for moving to individual repair places according to society, zone, etc.
