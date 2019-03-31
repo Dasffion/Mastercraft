@@ -362,7 +362,7 @@ var master Paarupensteen
 put #tvar master.room %HE.master.room
 put #tvar work.room %HE.work.room
 put #tvar supply.room 466
-put #tvar part.room 465
+put #tvar part.room 466
 put #tvar tool.room 465
 put #tvar ingot.buy 399
 put #tvar repair.room %haven.repair.room
@@ -425,7 +425,7 @@ var master Talia
 put #tvar master.room %CE.master.room
 put #tvar work.room %CE.work.room
 put #tvar supply.room 874
-put #tvar part.room 851
+put #tvar part.room 874
 put #tvar tool.room 851
 put #tvar ingot.buy 906
 put #tvar repair.room %crossing.repair.room
@@ -501,7 +501,7 @@ var master Master
 put #tvar master.room %RE.master.room
 put #tvar work.room %RE.work.room
 put #tvar supply.room 858
-put #tvar part.room 857
+put #tvar part.room 858
 put #tvar tool.room 857
 put #tvar ingot.buy 829
 put #tvar repair.room %ratha.repair.room
@@ -550,7 +550,7 @@ var master Master
 put #tvar master.room %SE.master.room
 put #tvar work.room %SE.work.room
 put #tvar supply.room 711
-put #tvar part.room 718
+put #tvar part.room 711
 put #tvar tool.room 718
 put #tvar ingot.buy 658
 put #tvar repair.room %shard.repair.room
