@@ -842,7 +842,7 @@ calc.parts:
 	if matchre("$righthand|$lefthand", "book") then gosub PUT_IT my book in my %main.storage
 	if matchre("%assemble", "(\S+)") then math asmCount1 subtract %$1.count
 	if matchre("%assemble", "(\S+)\s(\S+)") then math asmCount1 subtract %$1.$2.count
-	if matchre("%assemble2", "(\S+)") then math asmCount2 subtract %$1.count
+	if (matchre("%assemble2", "(\S+)") && ("%assemble2" != "mechanism")) then math asmCount2 subtract %$1.count
 	if matchre("%assemble2", "(\S+)\s(\S+)") then math asmCount2 subtract %$1.$2.count
 	if "%assemble2" = "mechanism" then 
 		{
@@ -1075,7 +1075,7 @@ manual.count:
 	
 purchase.assemble:
 	if "%assemble" = "NULL" then return
-	if matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble", "strips|string|backing|backing|padding|hilt|haft|cord|pole|handle|boss") && $roomid != $part.room then gosub automove $part.room
+	if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble", "strips|string|backing|backing|padding|hilt|haft|cord|pole|handle|boss") && $roomid != $part.room) then gosub automove $part.room
 	else if $roomid != $supply.room then gosub automove $supply.room
 	purchase.assemble_1:
 	action (order) on
