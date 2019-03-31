@@ -240,6 +240,14 @@ location.vars:
 	 var SA.room.list 700|701|702|703|704|705
 	 var SA.master.room 700|701|702|703|704|705
 	 var SA.work.room 700|701|702|703|704|705
+	 #Shard Engineering
+	 var SE.room.list 711|712|713|714|715|716|717|718
+	 var SE.master.room 716|717|718
+	 var SE.work.room 712|713|714|715
+	 #Shard Outfitting
+	 var SO.room.list 719|720|721|722|723|724|725|726|727|728|729|730|731
+	 var SO.master.room 719|720|721|722|723|724|725
+	 var SO.work.room 726|727|728|729|730|731
 	#Hibarnhivdar Forging
 	 var HibF.room.list 407|408|416|417|418|419|409|410|411|412|413|414|415
  	 var HibF.master.room 407|408|416|417|418|419|409|410|411|412|413|414|415
@@ -281,6 +289,8 @@ location.vars:
 	 var haven.repair clerk
 	 var ratha.repair.room 854
      var ratha.repair Glarstan
+	 var shard.repair.room Forging Clerk
+	 var shard.repair clerk
 
 	 var Master.Found 0
 	 action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than 
@@ -305,6 +315,8 @@ check.location:
 	if $zoneid = 90 && matchre("%RA.room.list", "$roomid") then var society Ratha.Alchemy
 	if $zoneid = 67 && matchre("%SF.room.list", "$roomid") then var society Shard.Forging
 	if $zoneid = 67 && matchre("%SA.room.list", "$roomid") then var society Shard.Alchemy
+	if $zoneid = 67 && matchre("%SE.room.list", "$roomid") then var society Shard.Engineering
+	if $zoneid = 67 && matchre("%SO.room.list", "$roomid") then var society Shard.Outfitting
 	if $zoneid = 116 && matchre("%HibF.room.list", "$roomid") then var society Hib.Forging
 	if $zoneid = 107 && matchre("%MKF.room.list", "$roomid") then var society MerKresh.Forging
 	if $zoneid = 7 && matchre("%LvF.room.list", "$roomid") then var society Lava.Forge
@@ -517,6 +529,8 @@ put #tvar deed.room 661
 put #tvar supply.room 658
 put #tvar part.room 653
 put #tvar tool.room 653
+put #tvar repair.room %shard.repair.room
+put #tvar repair.clerk %shard.repair
 var society.type Forging
 return
 
@@ -526,7 +540,33 @@ put #tvar master.room %SA.master.room
 put #tvar work.room %SA.work.room
 put #tvar supply.room 701
 put #tvar tool.room 703
+put #tvar repair.room %shard.repair.room
+put #tvar repair.clerk %shard.repair
 var society.type Alchemy
+return
+
+Shard.Engineering:
+var master Master
+put #tvar master.room %SE.master.room
+put #tvar work.room %SE.work.room
+put #tvar supply.room 711
+put #tvar part.room 718
+put #tvar tool.room 718
+put #tvar ingot.buy 658
+put #tvar repair.room %shard.repair.room
+put #tvar repair.clerk %shard.repair
+var society.type Engineering
+return
+
+Shard.Outfitting:
+var master Jakke
+put #tvar master.room %SO.master.room
+put #tvar work.room %SO.work.room
+put #tvar supply.room 724
+put #tvar tool.room 723
+put #tvar repair.room %shard.repair.room
+put #tvar repair.clerk %shard.repair
+var society.type Outfitting
 return
 
 Hib.Forging:
