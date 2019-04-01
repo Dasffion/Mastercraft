@@ -710,7 +710,7 @@ calc.material:
 		if matchre("%full.order.noun", "a neck potion|some neck tonic") then var herb1 riolur
 		if matchre("%full.order.noun", "a chest potion|some chest tonic") then var herb1 root
 		if matchre("%full.order.noun", "a back potion|some back tonic") then var herb1 junliar
-		if matchre("%full.order.noun", "an eye potion|some eye potion") then var herb1 aevaes
+		if matchre("%full.order.noun", "an eye potion|some eye tonic") then var herb1 aevaes
 		if matchre("%full.order.noun", "some face ointment|some face poultices") then var herb1 pollen
 		if matchre("%full.order.noun", "some body ointment|some body poultices") then var herb1 genich
 		if matchre("%full.order.noun", "a body draught|a body elixer") then var herb1 ojhenik
