@@ -1638,10 +1638,10 @@ turn.in1:
 		echo ***  Doing another order!
 		goto new.order
 	}
-	if matchre("blacksmith|armor|weapon", "%discipline") && $Forging.LearningRate < 20 then goto new.order
-	if matchre("carving|shaping", "%discipline") && $Engineering.LearningRate < 20 then goto new.order
-	if "%discipline" = "tailor" && $Outfitting.LearningRate < 20 then goto new.order
-	if "%discipline" = "remed" && $Alchemy.LearningRate < 20 then goto new.order
+	if ((matchre("blacksmith|armor|weapon", "%discipline")) && ($Forging.LearningRate < 20)) then goto new.order
+	if ((matchre("carving|shaping", "%discipline")) && ($Engineering.LearningRate < 20)) then goto new.order
+	if (("%discipline" = "tailor") && ($Outfitting.LearningRate < 20)) then goto new.order
+	if (("%discipline" = "remed") && ($Alchemy.LearningRate < 20)) then goto new.order
 	gosub PUT_IT my logbook in my %main.storage
 	gosub PUT open my %remnant.storage
 	put #parse MASTERCRAFT DONE
