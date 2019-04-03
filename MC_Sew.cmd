@@ -34,7 +34,7 @@ action var tool awl when needs holes punched.*|requires some holes punched
 action var tool done when Applying the final touches, you complete working
 action var excessloc $2 when You carefully cut off the excess material and set it (on the|in your|at your) (\S+).$
 action var tool needle when ^measure my \S+ with my yardstick|^rub my \S+ with my slickstone|poke my \S+ with my pins|^poke my \S+ with my awl|^cut my \S+ with my scissors|pushing it with a needle and thread
-action GOTO unfinished when That tool does not seem suitable for that task.
+#action GOTO unfinished when That tool does not seem suitable for that task.
 action send get $MC.order.noun when ^You must be holding the .* to do that\.
 #action (work) goto Retry when \.\.\.wait|type ahead
 action (work) off
