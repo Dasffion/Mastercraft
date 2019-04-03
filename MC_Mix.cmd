@@ -158,10 +158,6 @@ add.herb:
 	pause 0.5
 	return
 	
-analyze:
-	gosub Action analyze my $MC.order.noun
-	goto work
-	
 specialcheck:
 	if "%special" != "NULL" then gosub %special
 	var special NULL

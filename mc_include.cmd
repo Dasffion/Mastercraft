@@ -816,15 +816,16 @@ Action:
 var command $0
 Action_1:
 matchre Action_1 ^\.\.\.wait|type ahead
-matchre ActionAnalyze ^That tool does not seem suitable for that task\.
+matchre Analyze ^That tool does not seem suitable for that task\.
 matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
 send %command
 matchwait 10
 return
 
-ActionAnalyze:
-var tool Analyze
-var Action Analyze
+Analyze:
+	 gosub Action analyze $MC.order.noun
+	return
+
 return
 
 	 ### ORDERING SUB, FOR SHOPS

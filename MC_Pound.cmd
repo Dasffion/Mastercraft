@@ -113,12 +113,6 @@ work:
 	goto work
 
 
-analyze:
-	 pause
-	 pause 1
-	 gosub Action analyze $MC.order.noun
-	goto work
-
 hammer:
 	 gosub poundcheck
 	 if %tongs.adj = 1 then send adjust my tongs

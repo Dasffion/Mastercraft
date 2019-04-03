@@ -47,13 +47,9 @@ start.enchant:
 	gosub PUT_IT my %rawmat on brazier
 	goto work
 	
-analyze:
-	 pause
-	 pause 1
-	 send analyze $MC.order.noun
-	 pause 1
+analyze1:
+	gosub analyze
 	goto work
-
 
 work:
 	pause 0.5
