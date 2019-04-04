@@ -53,6 +53,7 @@ action var assemble $1 $2 when another finished (long|short) wooden (pole)
 
 send tap my tong
 pause .5
+if "$MC_SHOVEL" != "$MC_TONGS" then var swap.tongs 0
 if %swap.tongs = 1 then
 	{
 	 var shovel $MC_TONGS

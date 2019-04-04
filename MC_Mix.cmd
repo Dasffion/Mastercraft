@@ -170,28 +170,16 @@ if contains("$scriptlist", "mastercraft") then
 	var temp.room $roomid
 	if %water.gone = 1 then
 	{
-		gosub automove Alchemy suppl
 		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then send put my %bowl in my %tool.storage
-		action (order) on
-		pause 0.5
-		gosub ORDER
-		action (order) off
-		gosub ORDER %water.order
-		gosub PUT_IT my water in my %alchemy.storage
+		gosub summonwater
 		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
 		pause .5
 		var water.gone 0
 	}
 	if %alcohol.gone = 1 then
 	{
-		gosub automove Alchemy suppl
 		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then send put my %bowl in my %tool.storage
-		action (order) on
-		pause 1
-		gosub ORDER
-		action (order) off
-		gosub ORDER %alcohol.order
-		gosub PUT_IT my alcohol in my %alchemy.storage
+		gosub summonalcohol
 		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
 		var alcohol.gone 0
 	}

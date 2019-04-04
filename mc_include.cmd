@@ -774,6 +774,52 @@ ingot:
 	var anvilingot 1
 	return
 	
+summonwater:
+	match summonwater2 Brushing your fingers
+	match manualwater What were you referring
+	match manualwater Lacking the power to activate
+	send rub white waterskin in %main.storage
+	matchwait
+summonwater2:
+	if %waterskin = 0 then goto manualwater
+	gosub GET water from white waterskin in %main.storage
+	gosub PUT_IT my water in my %main.storage
+	var water.gone 0
+	return
+	
+manualwater:
+	gosub automove alchemy suppl
+	action (order) on
+	gosub ORDER
+	action (order) off				
+	gosub ORDER $water.order
+	gosub PUT_IT my water in my %main.storage
+	var water.gone 0
+	return
+
+summonalcohol:
+	match summonalcohol2 Brushing your fingers
+	match manualalcohol What were you referring
+	match manualalcohol Lacking the power to activate
+	send rub moonshine jug in %main.storage
+	matchwait
+summonalcohol2:
+	if %alchoholjug = 0 then goto manualalcohol
+	gosub GET alcohol from moonshine jug in %main.storage
+	gosub PUT_IT my alcohol in my %main.storage
+	var water.gone 0
+	return
+
+manualalcohol:
+	gosub automove alchemy suppl
+	action (order) on
+	gosub ORDER
+	action (order) off	
+	gosub ORDER $alcohol.order
+	gosub PUT_IT my alcohol in my %main.storage
+	var water.gone 0
+	return
+	
 #### EMPTY HANDS SUB
 EMPTY_HANDS:
      pause 0.0001
@@ -801,7 +847,7 @@ ToolCheckLeft:
 	var tools $0
 	if "$lefthand" = "Empty" then
 		{
-		if (matchre("%tools", "tongs" && %worn.tongs = 1) then gosub HOLD my %tools
+		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
 		else gosub GET MY %tools
 		return
 		}
