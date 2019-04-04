@@ -781,7 +781,6 @@ summonwater:
 	send rub white waterskin in %main.storage
 	matchwait
 summonwater2:
-	if %waterskin = 0 then goto manualwater
 	gosub GET water from white waterskin in %main.storage
 	gosub PUT_IT my water in my %main.storage
 	var water.gone 0
@@ -804,7 +803,6 @@ summonalcohol:
 	send rub moonshine jug in %main.storage
 	matchwait
 summonalcohol2:
-	if %alchoholjug = 0 then goto manualalcohol
 	gosub GET alcohol from moonshine jug in %main.storage
 	gosub PUT_IT my alcohol in my %main.storage
 	var water.gone 0

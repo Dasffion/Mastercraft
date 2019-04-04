@@ -747,22 +747,13 @@ calc.material:
 		Echo Herbs per Item: %volume
 		echo Number of Items Required: %order.quantity
 		echo Inventory: %%herb1.material.volume
-		if ((%water.count < 1) || (%alcohol.count < 1)) then
+		if (%water.count < 1) then
 			{
-			gosub automove alchemy suppl
-			action (order) on
-			gosub ORDER
-			action (order) off
-				if %water.count < 1 then 
-					{
-					gosub ORDER $water.order
-					gosub PUT_IT my water in my %main.storage
-					}
-				if %alcohol.count < 1 then
-					{
-					gosub ORDER $alcohol.order
-					gosub PUT_IT my alcohol in my %main.storage
-					}
+			gosub summonwater
+			}
+		if (%alcohol.count < 1) then
+			{
+			gosub summonalcohol
 			}
 		if %coal.count < 1 then
 			{
