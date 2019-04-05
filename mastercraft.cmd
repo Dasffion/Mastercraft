@@ -1066,8 +1066,9 @@ manual.count:
 	
 purchase.assemble:
 	if "%assemble" = "NULL" then return
-	if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble", "strips|string|backing|backing|padding|hilt|haft|cord|pole|handle|boss") && $roomid != $part.room) then gosub automove $part.room
-	else if $roomid != $supply.room then gosub automove $supply.room
+	# if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble", "strips|string|backing|backing|padding|hilt|haft|cord|pole|handle|boss") && $roomid != $part.room) then gosub automove $part.room
+	# else if $roomid != $supply.room then gosub automove $supply.room
+	gosub automove $part.room
 	purchase.assemble_1:
 	action (order) on
 	gosub ORDER

@@ -326,6 +326,35 @@ check.location:
 	if $zoneid = 150 && matchre("%FO.room.list", "$roomid") then var society Fang.Outfitting
 	if $zoneid = 150 && matchre("%FA.room.list", "$roomid") then var society Fang.Alchemy
 	pause 1
+	assembleloc:
+	# if $zoneid = 116 then
+		# {
+		# var handle.loc 413
+		# var cord.loc 413
+		# var pole.loc 413
+		# var padding.loc 413
+		# var hilt.loc 413
+		# var haft.loc 413
+		# }
+	# if $zoneid = 107 then
+		# {
+		# var handle.loc 337
+		# var cord.loc 337
+		# var pole.loc 337
+		# var padding.loc 337
+		# var hilt.loc 337
+		# var haft.loc 337
+		# }
+	# if $zoneid =67 then
+		# {
+		# var padding.loc 724
+		# var handle.loc 724
+		# var cord.loc 724
+		# var flights.loc 711
+		# var strips.loc 711
+		# var pole.loc 711
+		# var lenses.loc 711
+		
 	gosub %society
 	return
 
@@ -362,7 +391,7 @@ var master Paarupensteen
 put #tvar master.room %HE.master.room
 put #tvar work.room %HE.work.room
 put #tvar supply.room 466
-put #tvar part.room 466
+put #tvar part.room 465
 put #tvar tool.room 465
 put #tvar ingot.buy 399
 put #tvar repair.room %haven.repair.room
