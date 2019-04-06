@@ -806,6 +806,7 @@ ingot:
 summonwater:
 	match summonwater2 Brushing your fingers
 	match manualwater What were you referring
+	match manualwater Rub what?
 	match manualwater Lacking the power to activate
 	send rub white waterskin in %main.storage
 	matchwait
@@ -828,6 +829,7 @@ manualwater:
 summonalcohol:
 	match summonalcohol2 Brushing your fingers
 	match manualalcohol What were you referring
+	match manualalcohol Rub what?
 	match manualalcohol Lacking the power to activate
 	send rub moonshine jug in %main.storage
 	matchwait
