@@ -45,6 +45,7 @@ GetTool:
 	goto stir
 
 Stir:
+	match stir ...wait
 	match turn crucible's sides
 	match fuel needs more fuel
 	match bellows stifled coals
