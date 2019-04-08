@@ -677,12 +677,14 @@ return
 find.room:
 	if "%discipline" = "remed" then return
 	var find.room $1
-	 if ((matchre("%find.room", "$roomid")) && matchre("$MC_FRIENDLIST", "(?:$roomplayers)|(^$)")) then return
+	#gosub roomplayerstrip
+	 if ((matchre("%find.room", "$roomid")) && matchre("$roomplayers", "$MC_FRIENDLIST|(^$)")) then return
 	 var temp 0
 	 eval temp.max count("%find.room","|")
 find.room2:
 	 gosub automove %find.room(%temp)
- 	 if ((matchre("%find.room", "\b$roomid\b")) && matchre("$MC_FRIENDLIST", "(?:$roomplayers)|(^$)")) then
+	 #gosub roomplayerstrip
+ 	 if ((matchre("%find.room", "\b$roomid\b")) && matchre("$roomplayers", "$MC_FRIENDLIST|(^$)")) then
 		{
 		unvar temp
 		unvar temp.max
@@ -692,6 +694,11 @@ find.room2:
 	 if %temp > %temp.max then gosub find.room.wait
 	 goto find.room2
 	return
+	
+roomplayerstrip:
+	eval tempplayers replace("$roomplayers", "Also here: ", "")
+	eval tempplayers replace("$roomplayers", ", ", "|")
+	eval tempplayers replace("%tempplayers", " and " "|")
 	
 find.room.wait:
 	 var temp 0
