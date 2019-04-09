@@ -25,6 +25,7 @@ put #var MC_FORGING.MATERIAL steel
 put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
+put #var MC_Forging_NOWO 0
 #######################################################################
 ###################  ENGINEERING VARIABLES  ###########################
 #######################################################################
@@ -40,6 +41,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
+put #var MC_Engineering_NOWO 0
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -55,6 +57,7 @@ put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
+put #var MC_Outfitting_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -64,6 +67,7 @@ put #var MC_OUT.DEED off
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_Alchemy_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -79,6 +83,7 @@ put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
+put #var MC_Enchanting_NOWO
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -110,7 +115,6 @@ put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
 #put #var MC_PREFERRED.ROOM 
 #put #var MC_FRIENDLIST
-put #var MC_NOWO 0
 put #var MC_END.EARLY 0
 put #var MC_MAX.ORDER 4
 put #var MC_MIN.ORDER 3
@@ -172,6 +176,7 @@ put #var MC_FORGING.MATERIAL steel
 put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
+put #var MC_Forging_NOWO 0
 #######################################################################
 ###################  ENGINEERING VARIABLES  ###########################
 #######################################################################
@@ -187,6 +192,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
+put #var MC_Engineering_NOWO
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -202,6 +208,7 @@ put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
+put #var MC_Outfitting_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -211,6 +218,7 @@ put #var MC_OUT.DEED off
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_Alchemy_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -227,6 +235,7 @@ put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
+put #var MC_Enchanting_NOWO
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -257,7 +266,6 @@ put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
 #put #var MC_PREFERRED.ROOM 
 #put #var MC_FRIENDLIST
-put #var MC_NOWO 1
 put #var MC_END.EARLY 0
 put #var MC_MAX.ORDER 4
 put #var MC_MIN.ORDER 3
@@ -317,6 +325,7 @@ put #var MC_FORGING.MATERIAL steel
 put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
+put #var MC_Forging_NOWO 0
 #######################################################################
 ###################  ENGINEERING VARIABLES  ###########################
 #######################################################################
@@ -332,6 +341,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
+put #var MC_Engineering_NOWO
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -341,12 +351,13 @@ put #var MC_ENG.DEED off
 #	MC_OUT.PREF: Material type noun i.e. yarn, cloth, leather
 #	MC_OUT.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_OUT.DEED: DEED orders instead of bundling items on or off
-put #var MC_OUTFITTING.STORAGE shoulder pack
+put #var MC_OUTFITTING.STORAGE satchel
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
+put #var MC_Outfitting_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -356,6 +367,7 @@ put #var MC_OUT.DEED off
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_Alchemy_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -371,6 +383,8 @@ put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
+put #var MC_FOCUS.WAND wood wand
+put #var MC_Enchanting_NOWO
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -456,12 +470,13 @@ CHARACTER4:
 #	MC_FORGING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_FORGING.DEED: DEED orders instead of bundling items on or off
 #	MC_SMALL.ORDERS: For only working orders 5 volumes or smaller, 0 for off, 1 for on
-put #var MC_FORGING.STORAGE bag
-put #var MC_FORGING.DISCIPLINE blacksmith
-put #var MC_FORGING.MATERIAL bronze
-put #var MC_FORGING.DIFFICULTY easy
+put #var MC_FORGING.STORAGE shoulder pack
+put #var MC_FORGING.DISCIPLINE weapon
+put #var MC_FORGING.MATERIAL steel
+put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
+put #var MC_Forging_NOWO 0
 #######################################################################
 ###################  ENGINEERING VARIABLES  ###########################
 #######################################################################
@@ -471,12 +486,13 @@ put #var MC_SMALL.ORDERS 0
 #	MC_ENG.PREF: Material type noun i.e. lumber, bone, stone
 #	MC_ENG.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_ENG.DEED: DEED orders instead of bundling items on or off
-put #var MC_ENGINEERING.STORAGE bag
+put #var MC_ENGINEERING.STORAGE shoulder pack
 put #var MC_ENG.DISCIPLINE carving
 put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
-put #var MC_ENG.DIFFICULTY challenging
+put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
+put #var MC_Engineering_NOWO
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -486,12 +502,13 @@ put #var MC_ENG.DEED off
 #	MC_OUT.PREF: Material type noun i.e. yarn, cloth, leather
 #	MC_OUT.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_OUT.DEED: DEED orders instead of bundling items on or off
-put #var MC_OUTFITTING.STORAGE bag
+put #var MC_OUTFITTING.STORAGE satchel
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
-put #var MC_OUT.DIFFICULTY challenging
+put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
+put #var MC_Outfitting_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -501,6 +518,7 @@ put #var MC_OUT.DEED off
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_Alchemy_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -511,12 +529,13 @@ put #var MC_ALC.DIFFICULTY challenging
 # 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
-
 put #var MC_ENCHANTING.STORAGE shoulder pack
 put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
+put #var MC_FOCUS.WAND wood wand
+put #var MC_Enchanting_NOWO
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -608,6 +627,7 @@ put #var MC_FORGING.MATERIAL steel
 put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
+put #var MC_Forging_NOWO 0
 #######################################################################
 ###################  ENGINEERING VARIABLES  ###########################
 #######################################################################
@@ -623,6 +643,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
+put #var MC_Engineering_NOWO
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -632,12 +653,13 @@ put #var MC_ENG.DEED off
 #	MC_OUT.PREF: Material type noun i.e. yarn, cloth, leather
 #	MC_OUT.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_OUT.DEED: DEED orders instead of bundling items on or off
-put #var MC_OUTFITTING.STORAGE shoulder pack
+put #var MC_OUTFITTING.STORAGE satchel
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
+put #var MC_Outfitting_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -647,6 +669,7 @@ put #var MC_OUT.DEED off
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_Alchemy_NOWO
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -657,12 +680,13 @@ put #var MC_ALC.DIFFICULTY challenging
 # 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
-
-put #var MC_ENCHANTING.STORAGE backpack
+put #var MC_ENCHANTING.STORAGE shoulder pack
 put #var MC_ENCHANTING.DISCIPLINE artif
-put #var MC_ENCHANTING.DIFFICULTY easy
+put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
+put #var MC_FOCUS.WAND wood wand
+put #var MC_Enchanting_NOWO
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -694,7 +718,6 @@ put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
 #put #var MC_PREFERRED.ROOM 
 #put #var MC_FRIENDLIST
-put #var MC_NOWO 0
 put #var MC_END.EARLY 0
 put #var MC_MAX.ORDER 4
 put #var MC_MIN.ORDER 3
