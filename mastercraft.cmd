@@ -1657,7 +1657,7 @@ deed.order:
 #################################
 
 check.tools:
-	evalmath lastToolRepairTime $gametime - $lastToolRepair
+	evalmath lastToolRepairTime $gametime - $last%society.typeRepair
 	if %lastToolRepairTime < 3600 then return
 	var temp 0
 	eval temp.max count("%work.tools","|")
@@ -1680,7 +1680,7 @@ check.tools2:
 		gosub repair.tool stamp
 		gosub PUT_IT my stamp in my %main.storage
 	}
-	put #var lastToolRepair $gametime
+	put #var last%society.typeRepair $gametime
 	return
 
 repair.tool:

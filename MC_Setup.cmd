@@ -737,4 +737,8 @@ goto endsetup
 
 endsetup:
 ### DONT MODIFY THIS
-if !def(lastToolRepair) then put #var lastToolRepair 0
+if !def(lastForgingRepair) then put #var lastForgingRepair 0
+if !def(lastEngineeringRepair) then put #var lastEngineeringRepair 0
+if !def(lastOutfittingRepair) then put #var lastForgingRepair 0
+if !def(lastAlchemyRepair) then put #var lastAlchemyRepair 0
+if !def(lastEnchantingRepair) then put #var lastEnchantingRepair 0
