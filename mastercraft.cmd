@@ -521,7 +521,7 @@ turn.page:
 	var page $1
 	gosub PUT turn my book to page %page
 	gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				math difficultytry add 1
 				pause 0.5
@@ -627,7 +627,7 @@ calc.material:
 		var volume $1
 		action (book) off		
 		gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				gosub PUT_IT my book in my %main.storage
 				math difficultytry add 1
@@ -1182,7 +1182,7 @@ process.order:
 		gosub GET my %discipline book
 		gosub STUDY my book
 		pause .5
-		if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+		if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 		{
 			gosub GET %work.material ingot on anvil
 			gosub PUT_IT ingot in $MC_FORGING.STORAGE
@@ -1210,7 +1210,7 @@ process.order:
 			if %volume > $1 then gosub small.mat %order.pref
 			gosub GET my %discipline book
 			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				gosub PUT_IT %work.material %order.pref in my %main.storage
 				math difficultytry add 1
@@ -1228,7 +1228,7 @@ process.order:
 			if %volume > $1 then gosub small.mat yarn
 			gosub GET my %discipline book
 			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 					{
 					gosub PUT_IT %work.material yarn in my %main.storage
 					math difficultytry add 1
@@ -1254,7 +1254,7 @@ process.order:
 			if %volume > $1 then gosub small.mat stack
 			gosub GET my %discipline book
 			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				gosub PUT_IT %work.material stack in my %main.storage
 				math difficultytry add 1
@@ -1281,7 +1281,7 @@ process.order:
 			if %volume > $1 then gosub small.mat %order.pref
 			gosub GET my %discipline book
 			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				gosub PUT_IT %work.material %order.pref in my %main.storage
 				math difficultytry add 1
@@ -1303,7 +1303,7 @@ process.order:
 			if %volume > $1 then gosub small.mat %order.pref
 			gosub GET my %discipline book
 			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				gosub PUT_IT %work.material %order.pref in my %main.storage
 				math difficultytry add 1
@@ -1323,7 +1323,7 @@ process.order:
 			if %volume > $1 then gosub small.mat %herb1
 			gosub GET my %discipline book
 			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				gosub PUT_IT %work.material %order.pref in my %main.storage
 				math difficultytry add 1
@@ -1340,7 +1340,7 @@ process.order:
 			gosub gather.material %order.pref
 			gosub GET my %discipline book
 			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_NOWO)) then 
+			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{
 				gosub PUT_IT %order.pref in my %main.storage
 				math difficultytry add 1
@@ -1350,11 +1350,11 @@ process.order:
 			send .MC_enchant %order.pref $MC.order.noun
 			waitforre ^ENCHANTING DONE
 	}
-	if (($MC_END.EARLY = 1) || ($MC_NOWO = 1)) then gosub expcheck
+	if (($MC_END.EARLY = 1) || ($MC_%society.type_NOWO = 1)) then gosub expcheck
 	gosub bundle.order
 	if %order.quantity = 0 then 
 		{
-		if $MC_NOWO then goto endearly
+		if $MC_%society.type_NOWO then goto endearly
 		goto order.summary
 		}
 	goto process.order
@@ -1372,8 +1372,37 @@ endearly:
 	gosub untie.early
 	gosub PUT_IT my %society.type logbook in my %main.storage
 	gosub PUT open my %remnant.storage
+	gosub REMNANT.CHECK
 	put #parse MASTERCRAFT DONE
 	exit
+	
+REMNANT.CHECK:
+	var remnantcontents
+	action (remnant) var remnantcontents $1 when In the .* you see (.*)\.
+	pause 0.5
+	put look in %remnant.storage
+	waitforre ^In the|There is|What were
+	eval remnantcontents replacere("%remnantcontents", ",\s+|\s+and\s+", "|")
+	eval remnantcontents replacere("%remnantcontents", "\b(an?|some)\b ", "")
+REMNANT.CHECK1:
+	if "%remnantcontents" = "" then return
+	if matchre("%remnantcontents", "$MC.order.noun|%order.pref") then 
+		{
+		var remnantitem $0
+		gosub REMNANT.REMOVE
+		goto REMNANT.CHECK1
+		}
+	else return
+	
+REMNANT.REMOVE:
+	gosub GET %remnantitem from %remnant.storage
+	gosub PUT_IT %remnantitem in %main.storage
+	eval remnantcontents replacere("%remnantcontents", "%remnantitem", "")
+	eval remnantcontents replacere("%remnantcontents", "\|+", "|")
+	eval remnantcontents replacere("%remnantcontents", "^\|", "")
+	eval remnantcontents replacere("%remnantcontents", "\|$", "")
+	return
+
 	
 untie.early:
 	match return You have nothing bundled with the logbook
@@ -1397,7 +1426,7 @@ gosub PUT_IT my book in my %main.storage
 return
 	
 bundle.order:
-	if $MC_NOWO then 
+	if $MC_%society.type_NOWO then 
 		{
 		gosub PUT_IT my $MC.order.noun in bucket
 		if matchre("$righthand|$lefthand", "$MC.order.noun") then gosub PUT drop my $MC.order.noun
