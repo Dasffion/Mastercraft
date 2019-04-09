@@ -1065,6 +1065,7 @@ PUT_IT:
      matchre RETURN ^I could not find what you were referring to\.
      matchre RETURN ^What were you referring to\?	 
 	 matchre RETURN ^The (\S+) can only hold
+	 matchre BAG_FULL no matter how you arrange it
 	 matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
      send put %PutIt
      matchwait 15
@@ -1072,6 +1073,14 @@ PUT_IT:
      put #echo >$Log Crimson $datetime PutIt = %PutIt
      put #log $datetime MISSING MATCH IN PUT_IT (utility.inc)
      return
+	 
+BAG_FULL:
+    gosub combine.check "%main.storage" %order.pref
+    send open $MC_REMNANT.STORAGE
+    gosub combine.check "$MC_REMNANT.STORAGE" %order.pref
+    send close $MC_REMNANT.STORAGE
+    pause 1    
+    RETURN
 	
 #### GET SUB
 GET:
