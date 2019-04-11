@@ -1,4 +1,4 @@
-#debug 10
+debug 10
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
@@ -295,9 +295,9 @@ if "%discipline" = "weapon" then
 		matchre chapter.7 This logbook is tracking a work order requiring you to craft (a metal javelin|a two-pronged halberd|a light metal spear|a metal khuj|a metal scythe|a metal partisan|a metal bardiche|a metal military fork|a metal lochaber axe|a metal duraka skefne|a metal guisarme|a metal pole axe|a metal halberd|a metal fauchard|a metal tzece|a metal ngalio|a metal coresca|a metal pike|a metal awgravet ava|a metal lance|a metal hunthsleg|a metal spetum|a metal allarh|a metal ranseur|a metal spear|a metal ilglaiks skefne|a metal glaive) from any material\.
 		matchre chapter.8 This logbook is tracking a work order requiring you to craft (a metal cane|some metal elbow spikes|a metal nightstick|some metal knee spikes|a metal quarterstaff|some spiked metal knuckles|some metal knuckles|some metal hand claws|a metal pike staff) from any material\.
 		matchre chapter.9 This logbook is tracking a work order requiring you to craft (a metal throwing spike|a metal boarding axe|a metal bastard sword|a metal half-handled riste|a metal war sword|a thin-bladed metal fan|a metal broadaxe|a metal riste|a metal bar mace|a thick-bladed metal fan|a metal splitting maul) from any material\.
-		matchre new.order.wait ^This logbook has been used to complete
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 	}
 if "%discipline" = "armor" then
 	{
@@ -305,9 +305,9 @@ if "%discipline" = "armor" then
 		matchre chapter.2 This logbook is tracking a work order requiring you to craft (a metal scale mask|some brigandine sleeves|a metal scale aventail|a metal lamellar balaclava|some metal scale gloves|some lamellar vambraces|a metal brigandine mask|a metal lamellar tasset|a metal brigandine aventail|a metal scale vest|a metal scale cap|a metal scale lorica|some metal scale greaves|a brigandine shirt|a metal lamellar aventail|some lamellar sleeves|a metal brigandine cap|a metal brigandine vest|a metal scale helm|a metal brigandine mantle|some metal lamellar gloves|a metal brigandine lorica|some brigandine greaves|a metal scale robe|a metal lamellar cap|a metal scale shirt|a metal brigandine helm|a metal lamellar shirt|a metal scale balaclava|a brigandine hauberk|some metal scale vambraces|a metal lamellar robe|a metal scale tasset|a metal lamellar vest|some metal scale sleeves|a metal lamellar mantle|some lamellar greaves|a metal lamellar lorica|a metal lamellar helm|a metal scale hauberk|a brigandine balaclava|a lamellar hauberk|some brigandine vambraces|a metal brigandine tasset) from any material\.
 		matchre chapter.3 This logbook is tracking a work order requiring you to craft (a light plate mask|a metal sallet|a light plate aventail|some light plate greaves|a plate mask|a metal great helm|a metal dome helm|some heavy plate greaves|a plate aventail|some heavy plate vambraces|some light plate gauntlets|some plate sleeves|a heavy plate mask|a metal heavy backplate|a metal morion|a heavy plate fauld|a heavy plate aventail|a metal breastplate|some plate gauntlets|a light plate cuirass|a metal bascinet|some heavy plate sleeves|a metal barbute|a heavy breastplate|heavy plate gauntlets|a plate cuirass|a metal visored helm|some light field plate|some light plate vambraces|some light half plate|a light backplate|a heavy plate cuirass|a light plate fauld|some field plate|a metal closed helm|some half plate|a metal armet|some light full plate|some plate greaves|some heavy field plate|some plate vambraces|some full plate|some light plate sleeves|ome heavy half plate|a metal backplate|some heavy full plate|a plate fauld|a light breastplate) from any material\.
 		matchre chapter.4 This logbook is tracking a work order requiring you to craft (a metal shield handle|a metal ceremonial shield|a metal shield boss|a metal kite shield|a metal target shield|a metal skirmisher's shield|a metal ordinary shield|a metal jousting shield|a metal round sipar|a metal tower shield|a metal medium shield|a metal warrior's shield|a metal triangular sipar|a metal aegis|a metal targe|a metal heater shield|a metal oval shield|a metal battle shield|a metal medium buckler|a metal war shield|a metal circular buckler|a metal curved shield) from any material\.
-		matchre new.order.wait ^This logbook has been used to complete
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 	}
 if "%discipline" = "blacksmith" then
 	{
@@ -315,9 +315,9 @@ if "%discipline" = "blacksmith" then
 		matchre chapter.3 This logbook is tracking a work order requiring you to craft (some short metal chisels|a textured metal rasp|some long metal chisels|some rough metal pliers|some square metal rifflers|a metal slender bow saw|a thin metal rasp|some sharpened chisels|a metal straight bone saw|some elongated rifflers|some squat metal rifflers|a flat metal rasp|some plain metal pliers|some thick metal pliers|some sturdy metal chisels|a tapered metal rasp|a coarse metal rasp|some hooked metal pliers|some curved metal pliers|a metal tapered bone saw|a metal curved bone saw|a metal serrated bone saw|some reinforced chisels|some curved metal rifflers) from any material\.
 		matchre chapter.4 This logbook is tracking a work order requiring you to craft (a metal hide scraper|some squat knitting needles|some smooth knitting needles|some knobby sewing needles|a stout metal yardstick|a rectangular yardstick|some plain sewing needles|some bent metal scissors|some straight metal scissors|a serrated hide scraper|a curved hide scraper|a compact metal awl|a pointed metal awl|some polished knitting needles|some tapered knitting needle|a slender metal awl|a flat metal yardstick|a detailed yardstick|some curved metal scissors|some serrated scissors|some ribbed sewing needles|some thin sewing needles|a narrow metal awl) from any material\.
 		matchre chapter.6 This logbook is tracking a work order requiring you to craft (a shallow metal cup|a metal rod|a metal lockpick ring|a slender metal rod|a metal herbal case|a tall metal mug|a metal jewelry box|a short metal mug|a metal flights box|a soft metal keyblank|a metal razor|a metal horseshoe|a large metal flask|a back scratcher|a metal armband|some metal barbells|a metal instrument case|a large metal horseshoe|a metal chest|a small metal flask|a metal backtube|a metal ankle band|a metal starchart tube|a metal lockpick case|some metal clippers|a metal origami case|a metal crown|a metal bolt box|a metal torque|a metal talisman case|a metal mask|a metal flask|a metal headdress|a metal oil lantern) from any material\.
-		matchre new.order.wait ^This logbook has been used to complete
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 	}
 if "%discipline" = "tailor" then
 	{
@@ -330,9 +330,9 @@ if "%discipline" = "tailor" then
 		matchre chapter.8 This logbook is tracking a work order requiring you to craft (a leather weapon strap) from any (material|leather)\.
 		matchre chapter.9 This logbook is tracking a work order requiring you to craft (a rugged leather mask|a thick leather tasset|a rugged leather aventail|a rugged leather jerkin|a thick leather mask|a coarse leather cowl|a thick leather aventail|some coarse greaves|a rugged leather cap|some coarse vambraces|some rugged gloves|a coarse leather tasset|a coarse leather mask|a thick leather vest|a thick leather cap|some thick leather sleeves|some thick gloves|a thick leather jerkin|a rugged leather helm|a rugged leather robe|a coarse leather aventail|a rugged leather coat|a coarse leather cap|a thick leather mantle|some coarse gloves|a coarse leather vest|a thick leather helm|some coarse leather sleeves|a rugged leather cowl|a coarse leather mantle|some rugged greaves|a coarse leather jerkin|some rugged vambraces|a thick leather coat|a rugged leather tasset|some rugged leathers|a coarse leather helm|a thick leather robe|a thick leather cowl|a coarse leather coat|some thick greaves|some thick leathers|some thick vambraces|a coarse leather robe|some rugged leather sleeves|some coarse leathers|a rugged leather vest|a rugged leather mantle) from any (material|leather)\.
 		matchre chapter.10 This logbook is tracking a work order requiring you to craft (a leather shield handle|a leather oval shield|a long leather cord|a leather targe|a leather target shield|a medium leather shield|an ordinary leather shield|a leather kite shield|a leather buckler|a small leather shield) from any (material|leather)\.
-		matchre new.order.wait ^This logbook has been used to complete
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 	}
 if "%discipline" = "carving" then
 	{
@@ -346,9 +346,10 @@ if "%discipline" = "carving" then
 		matchre chapter.8 This logbook is tracking a work order requiring you to craft (a bone bludgeon|a bone javelin|a bone carving knife|a light bone spear|a bone hand axe|a bone maul|a bone war club|a bone mattock|a bone shiv|a bone flail|a bone hand sword|a bone mallet) from any material\.
 		matchre chapter.9 This logbook is tracking a work order requiring you to craft (a bone band|a bone brooch|a bone nose ring|a bone armband|a bone toe ring|a bone belt buckle|a bone bracelet|a bone choker|a bone anklet|a bone locket|a bone pin|a bone tiara|a bone cloak pin|an articulated bone bracelet|a bone hairpin|some bone bangles|a bone tailband|an articulated bone necklace|a shallow bone cup|a bone circlet|a bone pendant|a bone crown|a bone amulet|a bone comb|a bone medallion|a bone haircomb|a pair of bone earrings|a bone earcuff) from any material\.
 		matchre chapter.10 This logbook is tracking a work order requiring you to craft (a segmented bone mask|a segmented bone mantle|a segmented bone aventail|a segmented bone tabard|a notched bone mask|a ribbed bone balaclava|a notched bone aventail|some ribbed bone greaves|a segmented bone cap|some ribbed vambraces|some segmented bone gloves|some notched bone sleeves|a ribbed bone mask|a ribbed bone tasset|a ribbed bone aventail|a notched bone vest|a notched bone cap|a notched bone mantle|some notched bone gloves|a notched bone tabard|a segmented bone helm|a segmented bone robe|a ribbed bone cap|a segmented bone coat|some ribbed bone gloves|some ribbed bone sleeves|a notched bone helm|a ribbed bone vest|a segmented bone balaclava|a ribbed bone mantle|some segmented bone greaves|a ribbed bone tabard|some segmented vambraces|a notched bone robe|a segmented bone tasset|a notched bone coat|a ribbed bone helm|a segmented bone hauberk|a notched bone balaclava|a ribbed bone robe|some notched bone greaves|a ribbed bone coat|some notched vambraces|a notched bone hauberk|some segmented bone sleeves|a ribbed bone hauberk|a notched bone tasset|a segmented bone vest) from any material\.
-		matchre new.order.wait ^This logbook has been used to complete
+		
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 	}
 if "%discipline" = "shaping" then
 	{
@@ -360,9 +361,10 @@ if "%discipline" = "shaping" then
 		matchre chapter.8 This logbook is tracking a work order requiring you to craft (a wood bead|a detailed wood bead|a wood totem|a detailed wood totem|a wood humanoid bead|a wood figurine|a detailed wood figurine|a wood statuette|a detailed wood stattuette|a wood statue|a detailed wood statue|) from any material\.
 		matchre chapter.9 This logbook is tracking a work order requiring you to craft (a wood nightstick|a wood cane|a wood walking cane|a wood quarterstaff|a wood crook|a wood bo staff|a weighted staff) from any material\.
 		#matchre chapter.10 This logbook is tracking a work order requiring you to craft (a rough wood table|a low wood table|a high wood table|a round wood table|a square wood table|a long wood table|an oval wood table|a wood dining table|a wood buffet table|a wood refectory table|a wood parquet table|a wood meditation table) from any material\.
-		matchre new.order.wait ^This logbook has been used to complete
+		
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 	}
 if "%discipline" = "tinkering" then
 	{
@@ -372,9 +374,10 @@ if "%discipline" = "tinkering" then
 		matchre chapter.5 This logbook is tracking a work order requiring you to craft (a simple stonebow|a stonebow |a sturdy stonebow|a alpine stonebow|a saddle stonebow|a lobbing stonebow|a steppe stonebow|a battle stonebow|a forester's stonebow|a slingbow|a pelletbow) from any material\.
 		#matchre chapter.7 This logbook is tracking a work order requiring you to craft (boar-tusk bolts|cougar-claw bolts|hele'la bolts|angiswaerd bolts|sabertooth bolts|elsralael bolts|basilisk bolts|soot-stained bolts|ice-adder bolts|drake-fang bolts|jagged-horn bolts) from any material\.
 		matchre chapter.9 This logbook is tracking a work order requiring you to craft (a small music box|a simple telescope|a miniature female soldier|a miniature male soldier|a musical box|a telescope|a clockwork telescope)
-		matchre new.order.wait ^This logbook has been used to complete
+		
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 	}
 if "%discipline" = "remed" then
 		{
@@ -384,9 +387,9 @@ if "%discipline" = "remed" then
 		matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic)
 		matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices)
 		matchre chapter.6 This logbook is tracking a work order requiring you to craft (a body draught|a body elixer)
-		matchre new.order.wait ^This logbook has been used to complete
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 		}
 		
 if "%discipline" = "artif" then
@@ -394,9 +397,10 @@ if "%discipline" = "artif" then
 		matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a flash trinket|a wind trinket|an earth trinket)
 		matchre chapter.3 This logbook is tracking a work order requiring you to craft (training ritual focus|basic lunar ritual focus|basic elemental ritual focus|basic life ritual focus|basic holy ritual focus)
 		matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|burden runestone|manifest force runestone|strange arrow runestone|gauage flow runestone|dispel runestone|lay ward runestone)
-		matchre new.order.wait ^This logbook has been used to complete
+		
 		put read my %society.type logbook
-		matchwait
+		matchwait 1
+		goto new.order.wait
 		}
 echo Discipline is not set properly
 put #echo >Log Discipline is not set properly
@@ -520,6 +524,7 @@ turn.page:
 	waitforre (?<!Page).*Page (\d+):.*%full.order.noun
 	var page $1
 	gosub PUT turn my book to page %page
+	if $MC_%society.type_NOWO = 1 then goto calc.material
 	gosub STUDY my book
 			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
 				{

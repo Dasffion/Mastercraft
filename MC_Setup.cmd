@@ -57,7 +57,7 @@ put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
-put #var MC_Outfitting_NOWO
+put #var MC_Outfitting_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -67,7 +67,7 @@ put #var MC_Outfitting_NOWO
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
-put #var MC_Alchemy_NOWO
+put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -83,7 +83,7 @@ put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
-put #var MC_Enchanting_NOWO
+put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -192,7 +192,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
-put #var MC_Engineering_NOWO
+put #var MC_Engineering_NOWO 0
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -208,7 +208,7 @@ put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
-put #var MC_Outfitting_NOWO
+put #var MC_Outfitting_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -218,7 +218,7 @@ put #var MC_Outfitting_NOWO
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
-put #var MC_Alchemy_NOWO
+put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -235,7 +235,7 @@ put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
-put #var MC_Enchanting_NOWO
+put #var MC_Enchanting_NOWO 0
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -341,7 +341,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
-put #var MC_Engineering_NOWO
+put #var MC_Engineering_NOWO 0
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -357,7 +357,7 @@ put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
-put #var MC_Outfitting_NOWO
+put #var MC_Outfitting_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -367,7 +367,7 @@ put #var MC_Outfitting_NOWO
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
-put #var MC_Alchemy_NOWO
+put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -384,7 +384,7 @@ put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
-put #var MC_Enchanting_NOWO
+put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -492,7 +492,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
-put #var MC_Engineering_NOWO
+put #var MC_Engineering_NOWO 0
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -518,7 +518,7 @@ put #var MC_Outfitting_NOWO
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
-put #var MC_Alchemy_NOWO
+put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -535,7 +535,7 @@ put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
-put #var MC_Enchanting_NOWO
+put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -643,7 +643,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
-put #var MC_Engineering_NOWO
+put #var MC_Engineering_NOWO 0
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -669,7 +669,7 @@ put #var MC_Outfitting_NOWO
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
-put #var MC_Alchemy_NOWO
+put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -686,7 +686,7 @@ put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
-put #var MC_Enchanting_NOWO
+put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -762,6 +762,6 @@ endsetup:
 ### DONT MODIFY THIS
 if !def(lastForgingRepair) then put #var lastForgingRepair 0
 if !def(lastEngineeringRepair) then put #var lastEngineeringRepair 0
-if !def(lastOutfittingRepair) then put #var lastForgingRepair 0
+if !def(lastOutfittingRepair) then put #var lastOutfittingRepair 0
 if !def(lastAlchemyRepair) then put #var lastAlchemyRepair 0
 if !def(lastEnchantingRepair) then put #var lastEnchantingRepair 0
