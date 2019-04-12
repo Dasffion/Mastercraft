@@ -960,7 +960,7 @@ count.material:
 		var c.action analyze
 		var tempcount %ingot.item.count
 	}
-	if contains("(leather|cloth|yarn)","%count") then
+	if !contains("(leather|cloth|yarn)","%count") then
 	{
 		var c.action count
 		var tempcount %%order.pref.item.count
@@ -1018,6 +1018,13 @@ count.material2:
 	action (count) off
 	pause 1
 		evalmath bigenough (floor(%itemvolume/%volume))+%bigenough
+	if (("%count" = "deed") && ("%discipline" != "carving"))then
+		{
+			gosub get %work.material deed from %main.storage
+			put tap deed
+			gosub PUT_IT %work.material %order.pref in %main.storage
+			if %material.volume > %mass.volume then return
+		}	
 	if %tempcount < 1 then
 	{
 		unvar tempcount
