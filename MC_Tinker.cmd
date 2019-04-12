@@ -129,7 +129,7 @@ first.carve:
 			if contains("$righthandnoun", "lumber") then gosub PUT swap
 			pause 1
 			gosub ToolCheckRight $MC_DRAWKNIFE
-			 matchre excess You carefully separate out the excess material and place it on the ground.
+			 matchre excess You carefully separate out the excess material and place it (at your feet|on the ground)\.
 			 matchre work Roundtime: \d+
 			 send scrape my lumber with my $MC_DRAWKNIFE
 			matchwait
