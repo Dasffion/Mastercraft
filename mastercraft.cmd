@@ -1018,7 +1018,7 @@ count.material2:
 	action (count) off
 	pause 1
 		evalmath bigenough (floor(%itemvolume/%volume))+%bigenough
-	if (("%count" = "deed") && ("%discipline" != "carving"))then
+	if (("%count" = "deed") && ("%discipline" != "carving")) then
 		{
 			gosub get %work.material deed from %main.storage
 			put tap deed
