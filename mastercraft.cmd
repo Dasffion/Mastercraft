@@ -960,7 +960,7 @@ count.material:
 		var c.action analyze
 		var tempcount %ingot.item.count
 	}
-	if !contains("(leather|cloth|yarn)","%count") then
+	if contains("(leather|cloth|yarn)","%count") then
 	{
 		var c.action count
 		var tempcount %%order.pref.item.count
