@@ -372,6 +372,7 @@ arrowhead_make:
 new.tool:
 	if !contains("$scriptlist", "mastercraft.cmd") then return
 	 var temp.room $roomid
+	 gosub location.vars
 	 gosub check.location
 	if %stain.gone = 1 then
 		{
