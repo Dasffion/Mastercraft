@@ -139,11 +139,7 @@ first.carve:
 excess:
 	pause
 	 gosub STOW_RIGHT
-	 wait
-	 gosub GET %excessmats
-	 wait
-	 gosub PUT_IT my %excessmats in my $MC_ENGINEERING.STORAGE
-	 wait
+	 gosub STOW %excessmats
 	 goto work
 	 
 work:
