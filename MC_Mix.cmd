@@ -68,6 +68,11 @@ unfinished:
 		pause 1
 		goto work
 	}
+	if !matchre("$0", "There is nothing in there") then
+		{
+		put tilt %bowl
+		put tilt %bowl
+		}
 
 first.mix:
 	gosub ToolCheckRight %bowl
