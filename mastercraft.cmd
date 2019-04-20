@@ -1161,13 +1161,13 @@ process.order:
 	if %diff.change = 1 then goto new.order
 	if %tool.gone = 1 then gosub new.tool
 	if ((matchre("%discipline", "carving|shaping|tailor|tinkering")) && ($MC_WORK.OUTSIDE = 1) && ($MC_PREFERRED.ROOM != $roomid)) then gosub automove $MC_PREFERRED.ROOM
-	if !matchre("$work.room", "$roomid")) || (matchre("%discipline", ("blacksmith|armor|weapon"))) then gosub find.room $work.room
+	if ((($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) || (matchre("%discipline", "blacksmith|armor|weapon"))) then gosub find.room $work.room
 	if matchre("%discipline", "weapon|armor|blacksmith") then
 	{
 		
 		put store custom %work.material ingot in %main.storage
 		var manual 0
-		if !matchre("$work.room", "\b$roomid\b") then gosub find.room $work.room
+		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "\b$roomid\b")) then gosub find.room $work.room
 		gosub EMPTY_HANDS
 		pause 1
 		var tempvolume null
@@ -1211,7 +1211,7 @@ process.order:
 	if "%discipline" = "tailor" then
 	{
 		put store custom %work.material %order.pref in %main.storage
-		if $MC_WORK.OUTSIDE = 0 && !matchre("$work.room", "$roomid") then gosub find.room $work.room
+		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
 		gosub EMPTY_HANDS
 		pause 2
 		if "%order.pref" != "yarn" then
@@ -1255,7 +1255,7 @@ process.order:
 	{
 		if "%order.pref" = "bone then put store custom %work.material stack in %main.storage
 		else put store custom %work.material %order.pref in %main.storage
-		if $MC_WORK.OUTSIDE = 0 && !matchre("$work.room", "$roomid") then gosub find.room $work.room
+		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
 		gosub EMPTY_HANDS
 		pause 2
 		if "%order.pref" = "bone" then
@@ -1285,7 +1285,7 @@ process.order:
 	if "%discipline" = "shaping" then
 	{
 		put store custom %work.material %order.pref in %main.storage
-		if $MC_WORK.OUTSIDE = 0 && !matchre("$work.room", "$roomid") then gosub find.room $work.room
+		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
 		gosub EMPTY_HANDS
 			gosub gather.material %order.pref
 			send count my %order.pref
@@ -1307,7 +1307,7 @@ process.order:
 	if "%discipline" = "tinkering" then
 	{
 		put store custom %work.material %order.pref in %main.storage
-		if $MC_WORK.OUTSIDE = 0 && !matchre("$work.room", "$roomid") then gosub find.room $work.room
+		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
 		gosub EMPTY_HANDS
 			gosub gather.material %order.pref
 			send count my %order.pref
@@ -1327,7 +1327,7 @@ process.order:
 	}
 	if "%discipline" = "remed" then
 	{
-		if $MC_WORK.OUTSIDE = 0 && !matchre($work.room, $roomid) then gosub find.room $work.room
+		if (($MC_WORK.OUTSIDE = 0) && !matchre($work.room, $roomid)) then gosub find.room $work.room
 		gosub EMPTY_HANDS
 			gosub gather.material %herb1
 			send count my %herb1
