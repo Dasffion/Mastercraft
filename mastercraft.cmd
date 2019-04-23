@@ -768,7 +768,7 @@ calc.material:
 			action (order) off
 			gosub ORDER $catalyst.order
 			gosub PUT_IT my nugget in my %main.storage
-			gosub automove alchemy
+			gosub automove alchemy supplies
 			}
 			
 		}
