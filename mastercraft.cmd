@@ -1686,7 +1686,7 @@ deed.order:
 	waitforre you record it on a deed for your records\.$
 	gosub PUT_IT packet in %main.storage
 	gosub GET my %society.type logbook from my %main.storage
-	send bundle deed with logbook
+	send bundle my deed with logbook
 	waitforre ^you record it on a deed for your records\.$|^You notate the deed in
 	return
 
