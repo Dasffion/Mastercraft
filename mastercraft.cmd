@@ -1460,7 +1460,7 @@ bundle.order:
 	{
 		gosub GET my %society.type logbook from my %main.storage
 		if !matchre("$righthand", "logbook") then gosub PUT swap
-		send bundle my $lefthand with my logbook
+		send bundle my $MC.order.noun with my logbook
 		pause 0.5
 	}
 	else gosub deed.order

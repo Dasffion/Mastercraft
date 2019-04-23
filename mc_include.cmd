@@ -770,8 +770,8 @@ automovecont2:
 	 return
 
 mark:
-	if $MC.Mark = "off" then return
-	if $MC.Mark = "on" then
+	if "$MC.Mark" = "off" then return
+	if "$MC.Mark" = "on" then
 	{
 	 send get my stamp
 	 waitforre ^You get
