@@ -165,9 +165,9 @@ shaper:
 	return
 	
 clamp:
-	gosub ToolCheckRight $MC_CLAMPS
+	gosub ToolCheckRight $MC_CLAMP
 	var Action drawknife
-	 gosub action push my $MC.order.noun with my $MC_CLAMPS
+	 gosub action push my $MC.order.noun with my $MC_CLAMP
 	return
 
 assemble:
