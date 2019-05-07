@@ -67,7 +67,7 @@ put #var MC_Outfitting_NOWO 0
 put #var MC_ALCHEMY.STORAGE shoulder pack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
-put #var MC_Alchemy_NOWO 0
+put #var MC_Alchemy_NOWO 1
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
