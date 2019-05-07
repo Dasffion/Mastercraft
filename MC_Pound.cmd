@@ -91,8 +91,8 @@ small.ingot:
 ingot.grab:
 	 pause 1
 	 gosub PUT_IT my $MC_HAMMER in my %tool.storage
-	if "%excessloc" != "ground" then gosub GET ingot from my %excessloc
-	if "%excessloc" = "feet" then gosub GET ingot
+	if "%excessloc" != "feet" then gosub GET ingot from my %excessloc
+	if "%excessloc" = "feet" then gosub GET my ingot
 	if %small.ingot = 1 then
 	{
 		if %worn.tongs = 1 then GOSUB WEAR my $MC_TONGS
