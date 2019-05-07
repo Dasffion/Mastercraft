@@ -1861,7 +1861,7 @@ lack.coin:
 	if "%get.coin" = "off" then goto lack.coin.exit
 	var temp.room $roomid
 	action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
-	if matchre("90|116", "$zoneid") then gosub automove 1teller
+	if matchre("90|116", "\b$zoneid\b") then gosub automove 1teller
 	else gosub automove teller
 	gosub PUT withd 5 gold
 	gosub automove %temp.room
