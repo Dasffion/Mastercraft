@@ -1,4 +1,4 @@
-debug 10
+#debug 10
 #MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
 #v 0.1.6

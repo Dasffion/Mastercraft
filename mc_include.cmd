@@ -78,65 +78,65 @@ put #trigger {quickly realize the design is far beyond your abilities\.$} {#var 
 #Forging settings
 if "%society.type" = "Forging" then
 	{
-	 eval discipline tolower($MC_FORGING.DISCIPLINE)
-	 if !matchre("blacksmith|weapon|armor", "%discipline") then goto discfail
-	 eval work.difficulty tolower($MC_FORGING.DIFFICULTY)
-	 eval work.material tolower($MC_FORGING.MATERIAL)
-	 eval order.pref tolower(ingot)
-	 eval main.storage tolower(%forging.storage)
-	 put #var MC.Mark off
-	 eval deed.order tolower($MC_FORGING.DEED)
+     eval discipline tolower($MC_FORGING.DISCIPLINE)
+     if !matchre("blacksmith|weapon|armor", "%discipline") then goto discfail
+     eval work.difficulty tolower($MC_FORGING.DIFFICULTY)
+     eval work.material tolower($MC_FORGING.MATERIAL)
+     eval order.pref tolower(ingot)
+     eval main.storage tolower(%forging.storage)
+     put #var MC.Mark off
+     eval deed.order tolower($MC_FORGING.DEED)
 	}
 #Outfitting settings
 if "%society.type" = "Outfitting" then
 	{
-	 eval discipline tolower($MC_OUT.DISCIPLINE)
-	 if "%discipline" != "tailor" then goto discfail
-	 eval work.difficulty tolower($MC_OUT.DIFFICULTY)
-	 eval work.material tolower($MC_OUT.MATERIAL)
-	 eval order.pref tolower($MC_OUT.PREF)
-	 eval main.storage tolower(%outfitting.storage)
-	 put #var MC.Mark off
-	 eval deed.order tolower($MC_OUT.DEED)
+     eval discipline tolower($MC_OUT.DISCIPLINE)
+     if "%discipline" != "tailor" then goto discfail
+     eval work.difficulty tolower($MC_OUT.DIFFICULTY)
+     eval work.material tolower($MC_OUT.MATERIAL)
+     eval order.pref tolower($MC_OUT.PREF)
+     eval main.storage tolower(%outfitting.storage)
+     put #var MC.Mark off
+     eval deed.order tolower($MC_OUT.DEED)
 	}
 #Engineering settings
 if "%society.type" = "Engineering" then
 	{
-	 eval discipline tolower($MC_ENG.DISCIPLINE)
-	 if !matchre("carving|shaping|tinkering", "%discipline") then goto discfail
-	 eval work.difficulty tolower($MC_ENG.DIFFICULTY)
-	 eval work.material tolower($MC_ENG.MATERIAL)
-	 eval deed.size
-	 eval order.pref tolower($MC_ENG.PREF)
-	 eval main.storage tolower(%engineering.storage)
-	 put #var MC.Mark off
-	 eval deed.order tolower($MC_ENG.DEED)
+     eval discipline tolower($MC_ENG.DISCIPLINE)
+     if !matchre("carving|shaping|tinkering", "%discipline") then goto discfail
+     eval work.difficulty tolower($MC_ENG.DIFFICULTY)
+     eval work.material tolower($MC_ENG.MATERIAL)
+     eval deed.size
+     eval order.pref tolower($MC_ENG.PREF)
+     eval main.storage tolower(%engineering.storage)
+     put #var MC.Mark off
+     eval deed.order tolower($MC_ENG.DEED)
 	}
 #Alchemy Settings
 if "%society.type" = "Alchemy" then
 	{
-	 eval discipline tolower($MC_ALC.DISCIPLINE)
-	 if "%discipline" != "remed" then goto discfail
-	 eval work.difficulty tolower($MC_ALC.DIFFICULTY)
-	 var work.material
-	 var deed.size
-	 var order.pref 
-	 eval main.storage tolower(%alchemy.storage)
-	 put #var MC.Mark off
-	 var deed.order 
+     eval discipline tolower($MC_ALC.DISCIPLINE)
+     if "%discipline" != "remed" then goto discfail
+     eval work.difficulty tolower($MC_ALC.DIFFICULTY)
+     var work.material
+     var deed.size
+     var order.pref 
+     eval main.storage tolower(%alchemy.storage)
+     put #var MC.Mark off
+     var deed.order 
 	}
 #Enchanting Settings
 if "%society.type" = "Enchanting" then
 	{
-	 eval discipline tolower($MC_ENCHANTING.DISCIPLINE)
-	 if "%discipline" != "artif" then goto discfail
-	 eval work.difficulty tolower($MC_ENCHANTING.DIFFICULTY)
-	 var work.material
-	 var deed.size
-	 var order.pref 
-	 eval main.storage tolower(%enchanting.storage)
-	 put #var MC.Mark off
-	 var deed.order 
+     eval discipline tolower($MC_ENCHANTING.DISCIPLINE)
+     if "%discipline" != "artif" then goto discfail
+     eval work.difficulty tolower($MC_ENCHANTING.DIFFICULTY)
+     var work.material
+     var deed.size
+     var order.pref 
+     eval main.storage tolower(%enchanting.storage)
+     put #var MC.Mark off
+     var deed.order 
 	}
 goto endinclude
 
@@ -149,80 +149,80 @@ discfail:
 ### End of Character Profiles. The following is necessary for location settings and script operation. 
 ####################################################################################################
 
-
+     
 location.vars:
 	#Haven Forging
-	 var HF.room.list 442|441|443|405|404|398|402|403|409|408|399|406|407|400|410|411|401
-	 var HF.master.room 398|399|400|401
-	 var HF.work.room 405|409|403|407|411
-	 var HF.smelt.room 402|404|406|408|410
-	 var HF.grind.room %HF.work.room 
+     var HF.room.list 442|441|443|405|404|398|402|403|409|408|399|406|407|400|410|411|401
+     var HF.master.room 398|399|400|401
+     var HF.work.room 405|409|403|407|411
+     var HF.smelt.room 402|404|406|408|410
+     var HF.grind.room %HF.work.room 
 	#Haven Outfitting
-	 var HO.room.list 448|450|449|451|458|459|455|452|453|454|456|457|460
-	 var HO.master.room 448|449|450|451|452|453|454
-	 var HO.work.room 458|459|460|455|456|457
-	 var HO.wheel.room 458|459|460
-	 var HO.loom.room 455|456|457
+     var HO.room.list 448|450|449|451|458|459|455|452|453|454|456|457|460
+     var HO.master.room 448|449|450|451|452|453|454
+     var HO.work.room 458|459|460|455|456|457
+     var HO.wheel.room 458|459|460
+     var HO.loom.room 455|456|457
 	#Haven Engineering
-	 var HE.room.list 461|462|463|464|465|466|467|468|469
-	 var HE.master.room 462|461|463|464|465|466
-	 var HE.work.room 467|468|469|464|462
+     var HE.room.list 461|462|463|464|465|466|467|468|469
+     var HE.master.room 462|461|463|464|465|466
+     var HE.work.room 467|468|469|464|462
 	#Haven Alchemy
-	 var HA.tools.room 470
+     var HA.tools.room 470
      var HA.supplies.room 472
      var HA.books.room 482
      var HA.work.room 479|478|477|475|474|473|481|476
      var HA.room.list 470|471|473|474|475|481|472|476|479|478|477|480|482
      var HA.master.room 470|471|473|474|475|481|472|476|479|478|477|480|482
 	#Haven Enchanting
-	 var HENT.tools.room 533
-	 var HENT.supplies.room 532
-	 var HENT.books.room 534
-	 var HENT.work.room 535|536|537|538|539|540|541
-	 var HENT.room.list 526|527|528|529|530|531|532|533|534|535|536|537|538|539|540
-	 var HENT.master.room 526|529|530|531|527|528
+     var HENT.tools.room 533
+     var HENT.supplies.room 532
+     var HENT.books.room 534
+     var HENT.work.room 535|536|537|538|539|540|541
+     var HENT.room.list 526|527|528|529|530|531|532|533|534|535|536|537|538|539|540
+     var HENT.master.room 526|529|530|531|527|528
 	#Crossing Forging
-	 var CF.room.list 903|865|962|961|960|902|905|904|906|963|907|908|909
-	 var CF.master.room 903|865|962|961|960|902|905|904|906|963|907|908|909
-	 var CF.smelt.room 903|904|960|961
-	 var CF.work.room 907|908|909|962|963
-	 var CF.grind.room 962|963
+     var CF.room.list 903|865|962|961|960|902|905|904|906|963|907|908|909
+     var CF.master.room 903|865|962|961|960|902|905|904|906|963|907|908|909
+     var CF.smelt.room 903|904|960|961
+     var CF.work.room 907|908|909|962|963
+     var CF.grind.room 962|963
 	#Crossing Outfitting
-	 var CO.room.list 873|910|911|912|913|914|915|916|917|918|919|920|921|922|923|924
-	 var CO.master.room 873|910|911|912|913|914|915|916
-	 var CO.work.room 917|918
-	 var CO.wheel.room 922|923|924
-	 var CO.loom.room 919|920|921
+     var CO.room.list 873|910|911|912|913|914|915|916|917|918|919|920|921|922|923|924
+     var CO.master.room 873|910|911|912|913|914|915|916
+     var CO.work.room 917|918
+     var CO.wheel.room 922|923|924
+     var CO.loom.room 919|920|921
 	#Crossing Engineering
-	 var CE.room.list 851|925|874|926|927|928|929|930
-	 var CE.master.room 851|925|874|926|927|928|929|930
-	 var CE.work.room 928|929|930
+     var CE.room.list 851|925|874|926|927|928|929|930
+     var CE.master.room 851|925|874|926|927|928|929|930
+     var CE.work.room 928|929|930
 	#Crossing Alchemy
-	 var CA.room.list 898|931|932|933|934
-	 var CA.master.room 898|931|932|933|934
-	 var CA.work.room 898|931|932|933|934
+     var CA.room.list 898|931|932|933|934
+     var CA.master.room 898|931|932|933|934
+     var CA.work.room 898|931|932|933|934
 	#Lava Forge
-	 var LvF.room.list 774|777|776|775|778|782|779|784|780|786|781|783|785
-	 var LvF.master.room 775|778|782|779|784|780|786
-	 var LvF.smelt.room 778|779|780
-	 var LvF.work.room 781|783|785
-	 var LvF.grind.room 782|786|784
+     var LvF.room.list 774|777|776|775|778|782|779|784|780|786|781|783|785
+     var LvF.master.room 775|778|782|779|784|780|786
+     var LvF.smelt.room 778|779|780
+     var LvF.work.room 781|783|785
+     var LvF.grind.room 782|786|784
 	#Leth Premie Forge
-	 var LPF.room.list 248|238|239|240|241|242|243|244|245|246|247|253|252|251|250|249|237
-	 var LPF.master.room 248|238|239|240|241|242|243|244|245|246|247|253|252
-	 var LPF.work.room 251|250|249
-	 var LPF.grind.room 252|253|247
-    #Ratha Forging
+     var LPF.room.list 248|238|239|240|241|242|243|244|245|246|247|253|252|251|250|249|237
+     var LPF.master.room 248|238|239|240|241|242|243|244|245|246|247|253|252
+     var LPF.work.room 251|250|249
+     var LPF.grind.room 252|253|247
+     #Ratha Forging
      var RF.room.list 818|819|820|821|822|823|824|825|826|827|828|829|830|831|832
      var RF.master.room 819|820|821|822|823|824|825|826|827|828|829|830|831|832
      var RF.work.room 830|831|832
      var RF.grind.room 821|822|823
-    #Ratha Outfitting
-    var RO.room.list 850|851|852|846|843|845|847|848|849|844|841|839|840|842
-    var RO.master.room 844|841|839|840|842|843|845|846
-    var RO.work.room 845|846
-    var RO.wheel.room 847|848|849
-    var RO.loom.room 850|851|852
+     #Ratha Outfitting
+     var RO.room.list 850|851|852|846|843|845|847|848|849|844|841|839|840|842
+     var RO.master.room 844|841|839|840|842|843|845|846
+     var RO.work.room 845|846
+     var RO.wheel.room 847|848|849
+     var RO.loom.room 850|851|852
     #Ratha Engineering
      var RE.room.list 853|854|855|856|857|858|859|860|861|862
      var RE.master.room 853|854|855|856|857|858|859
@@ -232,69 +232,93 @@ location.vars:
      var RA.master.room 863|864|865|866|867|868|869|870
      var RA.work.room 871|872|873	
 	#Shard Forging
-	 var SF.room.list 644|661|645|648|648|649|650|651|652|653|654|655|656|657|658|659|660|646
-	 var SF.master.room 644|645|649|650|653|654|655|658|646|661
-	 var SF.work.room 648|652|657|660
-	 var SF.grind.room %SF.work.room
-	 #Shard Alchemy
-	 var SA.room.list 700|701|702|703|704|705
-	 var SA.master.room 700|701|702|703|704|705
-	 var SA.work.room 700|701|702|703|704|705
-	 #Shard Engineering
-	 var SE.room.list 711|712|713|714|715|716|717|718
-	 var SE.master.room 716|717|718
-	 var SE.work.room 712|713|714|715
-	 #Shard Outfitting
-	 var SO.room.list 719|720|721|722|723|724|725|726|727|728|729|730|731
-	 var SO.master.room 719|720|721|722|723|724|725
-	 var SO.work.room 726|727|728|729|730|731
+     var SF.room.list 644|661|645|648|648|649|650|651|652|653|654|655|656|657|658|659|660|646
+     var SF.master.room 644|645|649|650|653|654|655|658|646|661
+     var SF.work.room 648|652|657|660
+     var SF.grind.room %SF.work.room
+     #Shard Alchemy
+     var SA.room.list 700|701|702|703|704|705
+     var SA.master.room 700|701|702|703|704|705
+     var SA.work.room 700|701|702|703|704|705
+     #Shard Engineering
+     var SE.room.list 711|712|713|714|715|716|717|718
+     var SE.master.room 711|716|717|718
+     var SE.work.room 712|713|714|715
+     #Shard Outfitting
+     var SO.room.list 719|720|721|722|723|724|725|726|727|728|729|730|731
+     var SO.master.room 719|720|721|722|723|724|725
+     var SO.work.room 726|727|728|729|730|731
 	#Hibarnhivdar Forging
-	 var HibF.room.list 407|408|416|417|418|419|409|410|411|412|413|414|415
- 	 var HibF.master.room 407|408|416|417|418|419|409|410|411|412|413|414|415
-	 var HibF.work.room 416|417|418|419
-	 var HibF.grind.room 418|419
-	 
+     var HibF.room.list 407|408|416|417|418|419|409|410|411|412|413|414|415
+     var HibF.master.room 407|408|416|417|418|419|409|410|411|412|413|414|415
+     var HibF.work.room 416|417|418|419
+     var HibF.grind.room 418|419
+     
 	#Mer'Kresh Forging
-	 var MKF.room.list 334|335|336|337|338|339|340|341|342|343|344|345|346|347|348
- 	 var MKF.master.room 334|335|336|337|338
-	 var MKF.work.room 344|345|346|347|348
-	 var MKF.grind.room %MKF.work.room
-	 
-	 #Fang Cove Engineering
-	 var FE.room.list 206|207|208|209|210|220|221
-	 var FE.master.room 206|207|208|209|210
-	 var FE.work.room 220|221
-	 
-	 #Fang Cove Forging
-	 var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219
-	 var FF.master.room 196|197|198|199|200|201|202|203|204
-	 var FF.work.room 217|219
-	 var FF.grind.room 217|219
-	 var FF.smelt.room 216|218
+     var MKF.room.list 334|335|336|337|338|339|340|341|342|343|344|345|346|347|348
+     var MKF.master.room 334|335|336|337|338
+     var MKF.work.room 344|345|346|347|348
+     var MKF.grind.room %MKF.work.room
+     
+     #Fang Cove Engineering
+     var FE.room.list 206|207|208|209|210|220|221
+     var FE.master.room 206|207|208|209|210
+     var FE.work.room 220|221
+     
+     #Fang Cove Forging
+     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219
+     var FF.master.room 196|197|198|199|200|201|202|203|204
+     var FF.work.room 217|219
+     var FF.grind.room 217|219
+     var FF.smelt.room 216|218
 
-	 #Fang Cove Outfitting
-	 var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
-	 var FO.master.room 183|184|185|186|187|188|189
-	 var FO.work.room 211|212|213|214	 
-	 
-	 #Fang Cove Alchemy
-	 var FA.room.list 190|191|192|193|194|195
-	 var FA.master.room 190|191|192|193|194|195
-	 var FA.work.room 190|191
+     #Fang Cove Outfitting
+     var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
+     var FO.master.room 183|184|185|186|187|188|189
+     var FO.work.room 211|212|213|214     
+     
+     #Fang Cove Alchemy
+     var FA.room.list 190|191|192|193|194|195
+     var FA.master.room 190|191|192|193|194|195
+     var FA.work.room 190|191
+     
+     #Muspari Forging
+     var MUF.room.list 504|505|506|507|508|509|510|511|512|513|514|515|516|517|518|519|520
+     var MUF.master.room 504|505|506|507|508|509|510|511|512|513|514
+     var MUF.work.room 516|518|520
+     var MUF.grind.room 516|518|520
+     var MUF.smelt.room 515|517|519
+     
+     #Muspari Engineering
+     var MUE.room.list 521|522|523|524|525|526|527|528|529|530
+     var MUE.master.room 521|522|523|524|525|526|527
+     var MUE.work.room 528|529|530
+     
+     #Muspari Outfitting
+     var MUO.room.list 489|490|491|492|493|494|495|496|497|498|499|500|501|502|503
+     var MUO.master.room 489|490|491|492|493|494|495|496|497
+     var MUO.work.room 498|499|500|501|502|503
+     
+     #Muspari Alchemy
+     var MUA.room.list 531|532|533|534|535|536|537|538|539
+     var MUA.master.room 531|532|533|534|535|536
+     var MUA.work.room 537|538|539
 	
 	#Repair Locations
-	 var crossing.repair.room Rangu
-	 var crossing.repair Rangu
-	 var haven.repair.room 398
-	 var haven.repair clerk
-	 var ratha.repair.room 854
+     var crossing.repair.room Rangu
+     var crossing.repair Rangu
+     var haven.repair.room 398
+     var haven.repair clerk
+     var ratha.repair.room 854
      var ratha.repair Glarstan
-	 var shard.repair.room Forging Clerk
-	 var shard.repair clerk
+     var shard.repair.room Forging Clerk
+     var shard.repair clerk
+     var muspari.repair.room 506
+     var muspari.repair Rokumru
 
-	 var Master.Found 0
-	 action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than 
-	 return
+     var Master.Found 0
+     action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than 
+     return
 
 check.location: 
 	#gosub Crossing.%current.lore
@@ -325,6 +349,10 @@ check.location:
 	if $zoneid = 150 && matchre("%FF.room.list", "$roomid") then var society Fang.Forging
 	if $zoneid = 150 && matchre("%FO.room.list", "$roomid") then var society Fang.Outfitting
 	if $zoneid = 150 && matchre("%FA.room.list", "$roomid") then var society Fang.Alchemy
+     if $zoneid = 47 && matchre("%MUF.room.list", "$roomid") then var society Muspari.Forging
+     if $zoneid = 47 && matchre("%MUE.room.list", "$roomid") then var society Muspari.Engineering
+     if $zoneid = 47 && matchre("%MUO.room.list", "$roomid") then var society Muspari.Outfitting
+     if $zoneid = 47 && matchre("%MUA.room.list", "$roomid") then var society Muspari.Alchemy
 	pause 1
 	assembleloc:
 	# if $zoneid = 116 then
@@ -642,7 +670,7 @@ put #tvar deed.room 203
 put #tvar supply.room 200
 put #tvar part.room 215
 put #tvar tool.room 215
-put #tvar smelt.room 216
+put #tvar smelt.room %FF.smelt.room
 var society.type Forging
 return
 
@@ -665,6 +693,57 @@ put #tvar tool.room 193
 var society.type Alchemy
 return
 
+Muspari.Engineering:
+var master Master
+put #tvar master.room %MUE.master.room
+put #tvar work.room %MUE.work.room
+put #tvar supply.room 525
+put #tvar part.room 525
+put #tvar tool.room 526
+put #tvar ingot.buy 511
+put #tvar repair.room %muspari.repair.room
+put #tvar repair.clerk %muspari.repair
+var society.type Engineering
+return
+
+Muspari.Forging:
+var master Master
+put #tvar master.room %MUF.master.room
+put #tvar grind.room %MUF.grind.room
+put #tvar work.room %MUF.work.room
+put #tvar deed.room 509
+put #tvar supply.room 511
+put #tvar part.room 510
+put #tvar tool.room 510
+put #tvar repair.room %muspari.repair.room
+put #tvar repair.clerk %muspari.repair
+put #tvar smelt.room %MUF.smelt.room
+var society.type Forging
+return
+
+Muspari.Outfitting:
+var master Master
+put #tvar master.room %MUO.master.room
+put #tvar work.room %MUO.work.room
+put #tvar supply.room 493
+put #tvar part.room 493
+put #tvar tool.room 495
+put #tvar repair.room %muspari.repair.room
+put #tvar repair.clerk %muspari.repair
+var society.type Outfitting
+return
+
+Muspari.Alchemy:
+var master Master
+put #tvar master.room %MUA.master.room
+put #tvar work.room %MUA.work.room
+put #tvar supply.room 532
+put #tvar tool.room 534
+put #tvar repair.room %muspari.repair.room
+put #tvar repair.clerk %muspari.repair
+var society.type Alchemy
+return
+
 none:
 if matchre("$scriptlist", "mastercraft") then 
 	{
@@ -678,21 +757,21 @@ find.room:
 	if "%discipline" = "remed" then return
 	var find.room $1
 	#gosub roomplayerstrip
-	 if ((matchre("%find.room", "$roomid")) && matchre("$roomplayers", "$MC_FRIENDLIST|(^$)")) then return
-	 var temp 0
-	 eval temp.max count("%find.room","|")
+     if ((matchre("%find.room", "$roomid")) && matchre("$roomplayers", "$MC_FRIENDLIST|(^$)")) then return
+     var temp 0
+     eval temp.max count("%find.room","|")
 find.room2:
-	 gosub automove %find.room(%temp)
-	 #gosub roomplayerstrip
- 	 if ((matchre("%find.room", "\b$roomid\b")) && matchre("$roomplayers", "$MC_FRIENDLIST|(^$)")) then
+     gosub automove %find.room(%temp)
+     #gosub roomplayerstrip
+      if ((matchre("%find.room", "\b$roomid\b")) && matchre("$roomplayers", "$MC_FRIENDLIST|(^$)")) then
 		{
 		unvar temp
 		unvar temp.max
 		return
 		}
-	 math temp add 1
-	 if %temp > %temp.max then gosub find.room.wait
-	 goto find.room2
+     math temp add 1
+     if %temp > %temp.max then gosub find.room.wait
+     goto find.room2
 	return
 	
 roomplayerstrip:
@@ -701,85 +780,85 @@ roomplayerstrip:
 	eval tempplayers replace("%tempplayers", " and " "|")
 	
 find.room.wait:
-	 var temp 0
-	 gosub automove $tool.room
-	 echo *** All workrooms occupied, waiting 90 seconds before trying again...
-	 put #parse All workrooms occupied
-	 pause 90
-	 return
+     var temp 0
+     gosub automove $tool.room
+     echo *** All workrooms occupied, waiting 90 seconds before trying again...
+     put #parse All workrooms occupied
+     pause 90
+     return
 
 find.master:
-	 gosub check.location
-	 var Master.Found 0
-	 var temp 0
-	 eval temp.max count("$master.room","|")
-	 #pause 1
-	 #send look %master
-	 #pause 1
-	 #if %Master.Found = 1 then
+     gosub check.location
+     var Master.Found 0
+     var temp 0
+     eval temp.max count("$master.room","|")
+     #pause 1
+     #send look %master
+     #pause 1
+     #if %Master.Found = 1 then
          if matchre("$roomobjs", "%master") then
-	 {
-	 unvar temp
-	 unvar temp.max
-	 return
-	 }
+     {
+     unvar temp
+     unvar temp.max
+     return
+     }
 find.master2:
-	 pause 1
-	 gosub automove $master.room(%temp)
-	 #send look %master
-	 #pause 1
-	 #if %Master.Found = 1 then
+     pause 1
+     gosub automove $master.room(%temp)
+     #send look %master
+     #pause 1
+     #if %Master.Found = 1 then
          if matchre("$roomobjs", "%master") then
 		{
 		unvar temp
 		unvar temp.max
 		return
 		}
-	 math temp add 1
-	 if %temp > %temp.max then
+     math temp add 1
+     if %temp > %temp.max then
 	{
 	goto find.master
-	 echo %master not found in any room specified. Check your master room list for this society!
-	 exit
+     echo %master not found in any room specified. Check your master room list for this society!
+     exit
 	}
 	gosub find.master2
 	return
 
 automove:
-	 if $roomid = 0 then return
-	 var toroom $0
+     if $roomid = 0 then return
+     var toroom $0
 automovecont:
-	 match automovecont2 Bonk! You smash your nose.
-	 match return YOU HAVE ARRIVED
-	 match automovecont1 YOU HAVE FAILED
-	 put #goto %toroom
-	 matchwait 90
-	 put #mapper reset
-	 goto automovecont
+     match automovecont2 Bonk! You smash your nose.
+     match return YOU HAVE ARRIVED
+     match automovecont1 YOU HAVE FAILED
+     put #goto %toroom
+     matchwait 90
+     put #mapper reset
+     goto automovecont
 
 automovecont1:
-	 pause
-	 put look
-	 pause
+     pause
+     put look
+     pause
 	goto automovecont
 
 automovecont2:
-	 pause
-	 if matchre("$scriptlist", "automapper") then send #script abort automapper
-	 pause
-	 return
+     pause
+     if matchre("$scriptlist", "automapper") then send #script abort automapper
+     pause
+     return
 
 mark:
 	if "$MC.Mark" = "off" then return
 	if "$MC.Mark" = "on" then
 	{
-	 send get my stamp
-	 waitforre ^You get
-	 send mark $MC.order.noun with my stamp
-	 waitforre ^Roundtime
-	 send stow my stamp
-	 waitforre ^You put
-	 return
+     send get my stamp
+     waitforre ^You get
+     send mark $MC.order.noun with my stamp
+     waitforre ^Roundtime
+     send stow my stamp
+     waitforre ^You put
+     return
 	}
 	return
 	
@@ -864,7 +943,7 @@ EMPTY_HANDS:
      if ("$righthand" != "Empty") then gosub PUT_IT $righthandnoun in %main.storage
      if ("$lefthand" != "Empty") then gosub PUT_IT $lefthandnoun in %main.storage
      return
-	 
+     
 ToolCheckRight:
 	var tools $0
 	if "$righthand" = "Empty" then
@@ -905,12 +984,12 @@ matchwait 10
 return
 
 Analyze:
-	 gosub Action analyze $MC.order.noun
+     gosub Action analyze $MC.order.noun
 	return
 
 return
 
-	 ### ORDERING SUB, FOR SHOPS
+     ### ORDERING SUB, FOR SHOPS
 ORDER:
      var Order $0
      var LOCATION ORDER_1
@@ -921,19 +1000,19 @@ ORDER:
      matchre WEBBED ^You can't do that while entangled in a web
      matchre STUNNED ^You are still stunned
      matchre ORDER_1 ^The attendant says\,\s*\"You (can|may) purchase .*\.\s*Just order it again and we'll see it done\!\" 
-	 matchre fullhands ^You realize your hands are full, and stop\.
-	 matchre lack.coin you don't have enough coins|you don't have that much
+     matchre fullhands ^You realize your hands are full, and stop\.
+     matchre lack.coin you don't have enough coins|you don't have that much
      matchre RETURN ^The attendant takes some coins from you and hands you .*\.
-	 matchre RETURN pay the sales clerk
-	 matchre RETURN ^\[You may purchase items from the shopkeeper with ORDER
-	    if %need.coin = 1 then
+     matchre RETURN pay the sales clerk
+     matchre RETURN ^\[You may purchase items from the shopkeeper with ORDER
+        if %need.coin = 1 then
         {
         var temp.room $roomid
         gosub lack.coin
         goto ORDER_1
         }
      if matchre("%Order", "\d+") then send order %Order
-	 if !matchre("%Order", "\d+") then 
+     if !matchre("%Order", "\d+") then 
 		{
 		if matchre("%Order", "\w+") then send buy %Order
 		else send Order
@@ -943,7 +1022,7 @@ ORDER:
      put #echo >$Log Crimson $datetime Order = %Order
      put #log $datetime MISSING MATCH IN ORDER! (utility.inc)
      return
-	 
+     
 fullhands:
 	gosub EMPTY_HANDS
 	goto ORDER_1
@@ -988,19 +1067,19 @@ PUT:
      matchre RETURN ^There is no more room in .*\.
      matchre RETURN ^There is nothing in there\.
      matchre RETURN ^In the .* you see .*\.
-	 matchre RETURN ^Searching methodically
+     matchre RETURN ^Searching methodically
      matchre RETURN ^This spell cannot be targeted\.
      matchre RETURN ^You cannot figure out how to do that\.
      matchre RETURN ^You will now store .* in your .*\.
      matchre RETURN ^You.*analyze
-	 matchre RETURN ^You lay your hand upon
+     matchre RETURN ^You lay your hand upon
      matchre RETURN ^You glance down .*\.
      matchre RETURN ^You glance heavenward
      matchre RETURN ^You turn .*\.
      matchre RETURN ^You chatter away\.\.\.
      matchre RETURN ^You are now
      matchre RETURN ^You search
-	 matchre RETURN ^You get
+     matchre RETURN ^You get
      matchre RETURN ^You have nothing to 
      matchre RETURN ^There isn't any more room in .* for that\.
      matchre RETURN ^You are already focusing your appraisal on a subject\.
@@ -1008,13 +1087,13 @@ PUT:
      matchre RETURN ^\[Ingredients can be added by using ASSEMBLE Ingredient1 WITH Ingredient2\]
      matchre RETURN ^You can't seem to focus on that\.\s*Perhaps you're too mentally tired from researching similar principles recently\.
      matchre RETURN ^\s*LINK ALL CANCEL\s*\- Breaks all links
-	 matchre RETURN (bundle them with your logbook and then give|you trace|you just received a work order|You hand|You slide|You place)
-	 matchre RETURN ^(You have no idea how to craft|The book is already turned|You turn your book|You realize you have items bundled with the logbook)
-	 matchre RETURN (You measure out|You carefully break off|^You hand|"There isn't a scratch on that|"I don't repair those here\.")
-	 matchre RETURN (Just give it to me again if you want|completely undamaged and does not need repair|not damaged enough to warrant repair)
-	 matchre RETURN ^(You find your jar|The (\S+) can only hold)
-	 matchre RETURN ^(You .*open|You .*close|That is already open|That is already closed)
-	 matchre RETURN ^You count out
+     matchre RETURN (bundle them with your logbook and then give|you trace|you just received a work order|You hand|You slide|You place)
+     matchre RETURN ^(You have no idea how to craft|The book is already turned|You turn your book|You realize you have items bundled with the logbook)
+     matchre RETURN (You measure out|You carefully break off|^You hand|"There isn't a scratch on that|"I don't repair those here\.")
+     matchre RETURN (Just give it to me again if you want|completely undamaged and does not need repair|not damaged enough to warrant repair)
+     matchre RETURN ^(You find your jar|The (\S+) can only hold)
+     matchre RETURN ^(You .*open|You .*close|That is already open|That is already closed)
+     matchre RETURN ^You count out
      # matchre RETURN ^
      matchre RETURN ^\s*Encumbrance\s*\:
      send %Command
@@ -1023,8 +1102,8 @@ PUT:
      put #echo >$Log Crimson $datetime Command = %Command
      put #log $datetime MISSING MATCH IN PUT (utility.inc)
      return
-	 
-	 
+     
+     
 STUDY:
      var Study $0
      var LOCATION STUDY_1
@@ -1040,9 +1119,9 @@ STUDY:
      match RETURN You take on a studious look
      match STUDY_END Why do you need to study this chart again?
      matchre STUDY_NEXT (^With|^In) a sudden moment of clarity
-	 matchre GET_BOOK ^But you are not holding it
+     matchre GET_BOOK ^But you are not holding it
      matchre RETURN You study|You scan|You notate|You review
-	 matchre RETURN ^You now feel ready to begin the crafting process.
+     matchre RETURN ^You now feel ready to begin the crafting process.
      send study %Study
      matchwait
 
@@ -1063,17 +1142,17 @@ PUT_IT:
      matchre RETURN ^Please rephrase that command\.
      matchre RETURN ^.* what\?
      matchre RETURN ^I could not find what you were referring to\.
-     matchre RETURN ^What were you referring to\?	 
-	 matchre RETURN ^The (\S+) can only hold
-	 matchre BAG_FULL no matter how you arrange it
-	 matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
+     matchre RETURN ^What were you referring to\?     
+     matchre RETURN ^The (\S+) can only hold
+     matchre BAG_FULL no matter how you arrange it
+     matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
      send put %PutIt
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT_IT! (utility.inc) ***
      put #echo >$Log Crimson $datetime PutIt = %PutIt
      put #log $datetime MISSING MATCH IN PUT_IT (utility.inc)
      return
-	 
+     
 BAG_FULL:
     gosub combine.check "%main.storage" %order.pref
     send open $MC_REMNANT.STORAGE
@@ -1103,7 +1182,7 @@ GET:
      matchre RETURN ^What were you referring to\?
      matchre RETURN ^You grab .*(?:\.|\!|\?)
      matchre RETURN ^As best it can\, .* moves in your direction\.
-	 matchre UNTIE ^You pull at it
+     matchre UNTIE ^You pull at it
      send get %Get
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET! (utility.inc) ***
@@ -1131,17 +1210,17 @@ HOLD:
      matchre RETURN ^You get .*\.
      matchre RETURN ^You take .*\.
      matchre RETURN ^You pull .*\.
-	 matchre RETURN ^You remove .*\.
-	 matchre RETURN ^You loosen .*\.
+     matchre RETURN ^You remove .*\.
+     matchre RETURN ^You loosen .*\.
      matchre RETURN ^You remove .* from your belt\.
      matchre RETURN ^You are already holding that\.
      matchre RETURN ^Get what\?
-	 matchre RETURN ^Hold hands with whom
-	 matchre RETURN ^You work your way out of
-	 matchre RETURN ^You aren't
+     matchre RETURN ^Hold hands with whom
+     matchre RETURN ^You work your way out of
+     matchre RETURN ^You aren't
      matchre RETURN ^I could not find what you were referring to\.
      matchre RETURN ^What were you referring to\?
-	 matchre GET_1 ^Perhaps you should be holding that
+     matchre GET_1 ^Perhaps you should be holding that
      send hold %Get
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN HOLD! (utility.inc) ***
@@ -1165,7 +1244,7 @@ STOW:
      matchre RETURN ^You open your pouch and put .* inside\, closing it once more\.
      matchre RETURN ^What were you referring to\?
      matchre RETURN ^Stow what\?  Type 'STOW HELP' for details\.
-	 matchre STOW_LEFT You need a free hand
+     matchre STOW_LEFT You need a free hand
      matchre STOW.UNLOAD ^You should unload
      send stow %Stow
      matchwait 15
@@ -1173,7 +1252,7 @@ STOW:
      put #echo >$Log Crimson $datetime Stow = %Stow
      put #log $datetime MISSING MATCH IN STOW (utility.inc)
      return
-	 
+     
 STOW_LEFT:
 	if matchre("%alltools", "$lefthandnoun") then 
 		{
@@ -1188,7 +1267,7 @@ STOW_LEFT:
 		}
 	else gosub PUT_IT my $lefthandnoun in my %main.storage
 	return
-	 
+     
 STOW_RIGHT:
 	if matchre("%alltools", "$righthandnoun") then 		
 		{
@@ -1203,11 +1282,11 @@ STOW_RIGHT:
 		}
 	else gosub PUT_IT my $righthandnoun in my %main.storage
 	return
-	 
+     
 		
 #### WEAR SUB
 WEAR_CHECK:
-	 	 if matchre("$righthand", "stone quarterstaff|stone lance") then 
+          if matchre("$righthand", "stone quarterstaff|stone lance") then 
 		{
 		put drop $righthand
 		return
@@ -1245,6 +1324,6 @@ RETURN_CLEAR:
      return
 RETURN:
      pause 0.0001
-     return	 
+     return     
 	
 endinclude:

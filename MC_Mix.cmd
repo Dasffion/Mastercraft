@@ -1,4 +1,4 @@
-debug 10
+#debug 10
 var mix.repeat 0
 var current.lore ALCHEMY
 if_3 var herb1 %3

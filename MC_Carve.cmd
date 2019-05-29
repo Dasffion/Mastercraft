@@ -33,15 +33,24 @@ var assemble
 
 if "$MC_ENG.PREF" = "bone" then 
 	{
-    var rock stack
-    var chisel $MC_SAW
+     var rock stack
+     var chisel $MC_SAW
 	var hand my
 	}
 if "$MC_ENG.PREF" = "stone" then 
 	{
-    var rock boulder    
-    var chisel $MC_CHISEL
-	var hand
+     if_2 then 
+          {
+          var rock %2
+          var chisel $MC_CHISEL
+          var hand my
+          }
+     else
+          {
+          var rock boulder
+          var chisel $MC_CHISEL
+          var hand
+          }
 	}
 
 action var Action riffler when notice several rough, jagged (shards|edges) protruding|rubbing the .* with a riffler set
@@ -150,7 +159,7 @@ polish:
 	 gosub GET my polish
 	}
 	var Action carve
-	 gosub Action apply %hand polish to my $MC.order.noun
+	 gosub Action apply %hand polish to %hand $MC.order.noun
 	return
 
 assemble:
