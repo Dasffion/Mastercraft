@@ -169,40 +169,6 @@ action instant var chapter $1 when You seem to recall this item being somewhere 
 action goto lack.coin when ^LACK COIN
 action (analyze) off
 
-#### Finding Ordering Numbers
-action (order) put #tvar handle.order $1 when (\d+)\)\.\s+a (\S+) shield handle.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar l.cord.order $1 when (\d+)\)\.\s+a long leather cord.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar l.padding.order $1 when (\d+)\)\..*some large cloth padding.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar s.padding.order $1 when (\d+)\)\..*some.*small.*padding.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar pins.order $1 when (\d+)\)\..*some straight iron pins.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar polish.order $1 when (\d+)\)\..*jar of surface polish.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar oil.order $1 when (\d+)\)\.\s+a flask of oil.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar brush.order $1 when (\d+)\)\.\s+an iron wire brush.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar burlap.order $1 when (\d+)\)\..*yards of burlap cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar wool.order $1 when (\d+)\)\..*yards of wool cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar silk.order $1 when (\d+)\)\..*yards of silk cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar linen.order $1 when (\d+)\)\..*yards of linen cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar rat-pelt.order $1 when (\d+)\)\..*yards of rat-pelt leather.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar cougar-pelt.order $1 when (\d+)\)\..*yards of cougar-pelt leather.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar thread.order $1 when (\d+)\)\..*yards of cotton thread.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar water.order $1 when (\d+)\)\..*10 splashes of water.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
- 
-#### Identifying extra pieces from the instruction book
-action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
-action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (\S+) shield (handle)$
-action (book) var assemble $2; var asmCount1 $1 when .*(\d).* wooden (hilt|haft)$
-action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (lenses)
-action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (large) cloth (padding)$
-action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (large) leather (backing)$
-action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (string)$
-action (book) var assemble2 $2 $3; var asmCount2 $1 when .*(\d).* (small) cloth (padding)$
-action (book) var assemble2 $2 $3; var asmCount2 $1 when .*(\d).* (small) leather (backing)$
-action (book) var assemble2 $2 $3; var asmCount2 $1 when .*(\d).* (long|short) leather (cord)$
-action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* (mechanism)$
-
 
 ##############################
 #
