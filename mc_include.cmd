@@ -269,6 +269,7 @@ location.vars:
      var SF.master.room 644|645|649|650|653|654|655|658|646|661
      var SF.work.room 648|652|657|660
      var SF.grind.room %SF.work.room
+     var SF.smelt.room 647|651|656|659
      #Shard Alchemy
      var SA.room.list 700|701|702|703|704|705
      var SA.master.room 700|701|702|703|704|705
@@ -615,6 +616,7 @@ var master Serric
 put #tvar master.room %SF.master.room
 put #tvar grind.room %SF.grind.room
 put #tvar work.room %SF.work.room
+put #tvar smelt.room %SF.smelt.room
 put #tvar deed.room 661
 put #tvar supply.room 658
 put #tvar part.room 653
