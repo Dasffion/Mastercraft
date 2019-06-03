@@ -265,7 +265,7 @@ location.vars:
      var RA.master.room 863|864|865|866|867|868|869|870
      var RA.work.room 871|872|873	
 	#Shard Forging
-     var SF.room.list 644|661|645|648|648|649|650|651|652|653|654|655|656|657|658|659|660|646
+     var SF.room.list 644|661|645|648|647|649|650|651|652|653|654|655|656|657|658|659|660|646
      var SF.master.room 644|645|649|650|653|654|655|658|646|661
      var SF.work.room 648|652|657|660
      var SF.grind.room %SF.work.room
@@ -940,8 +940,9 @@ summonwater2:
 manualwater:
 	gosub automove alchemy suppl
 	action (order) on
+     pause 0.5
 	gosub ORDER
-	action (order) off				
+	action (order) off
 	gosub ORDER $water.order
 	gosub PUT_IT my water in my %main.storage
 	var water.gone 0
