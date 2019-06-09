@@ -20,12 +20,12 @@ CHARACTER1:
 #	MC_FORGING.DEED: DEED orders instead of bundling items on or off
 #	MC_SMALL.ORDERS: For only working orders 5 volumes or smaller, 0 for off, 1 for on
 put #var MC_FORGING.STORAGE shoulder pack
-put #var MC_FORGING.DISCIPLINE weapon
+put #var MC_FORGING.DISCIPLINE blacksmith
 put #var MC_FORGING.MATERIAL steel
-put #var MC_FORGING.DIFFICULTY hard
+put #var MC_FORGING.DIFFICULTY challenging
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
-put #var MC_Forging_NOWO 0
+put #var MC_Forging_NOWO 1
 #######################################################################
 ###################  ENGINEERING VARIABLES  ###########################
 #######################################################################
