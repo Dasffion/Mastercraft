@@ -23,8 +23,6 @@ var swap.tongs 0
 var worn.tongs 0
 var tongs.adj 0
 
-
-action var swap.tongs 1 when ^You tap some.*(flat-bladed|articulated).*tongs (in.*|that you are holding|that you are wearing)\.$
 action var worn.tongs 1 when ^You tap some.*(segmented|articulated).*tongs that you are wearing\.$
 action var tongs.adj 0 when ^With a yank you fold the shovel
 action var tongs.adj 1 when ^You lock the tongs into a fully extended position
@@ -50,17 +48,15 @@ action var assemble $1 when another finished wooden (hilt|haft)
 action var assemble $1 $2 when another finished (long|short|small|large) leather (cord|backing)
 action var assemble $1 $2 when another finished (small|large) cloth (padding)
 action var assemble $1 $2 when another finished (long|short) wooden (pole)
-
-send tap my tong
-pause .5
-if "$MC_SHOVEL" != "$MC_TONGS" then var swap.tongs 0
+send tap my tongs
+if "$MC_SHOVEL" = "$MC_TONGS" then var swap.tongs 1
 if %swap.tongs = 1 then
 	{
 	 var shovel $MC_TONGS
 	 send analyze my $MC_TONGS
 	 waitforre ^(These tongs are used|This tool is used to shovel)
-	 if "$1" = "This tool is used to shovel" then send adjust my $MC_TONGS
-	 var tongs.adj 0
+	 if "$1" = "This tool is used to shovel" then var tongs.adj 1
+	 else var tongs.adj 0
 	}
 else var shovel $MC_SHOVEL
 action (tongs) off
@@ -69,6 +65,10 @@ pause .5
 unfinished:
 	 var tool analyze
 	 gosub poundcheck
+	if %swap.tongs = 1 then
+          {
+          if %tongs.adj = 1 then send adjust my $MC_TONGS
+          }
 	 matchre work $MC.order.noun
 	 matchre clean unfinished .+ (\S+)\.
 	 matchre first.pound (a|an) .+ ingot
@@ -79,6 +79,10 @@ first.pound:
 	 var small.ingot 0
 	 var tool hammer
 	 gosub poundcheck
+	if %swap.tongs = 1 then
+          {
+          if %tongs.adj = 1 then send adjust my $MC_TONGS
+          }
 	 matchre ingot.grab ^You realize the .+ will not require as much metal as you have
 	 matchre small.ingot ^You need a larger volume
 	 matchre work ^Roundtime
@@ -92,7 +96,7 @@ ingot.grab:
 	 pause 1
 	 gosub PUT_IT my $MC_HAMMER in my %tool.storage
 	if "%excessloc" != "feet" then gosub GET ingot from my %excessloc
-	if "%excessloc" = "feet" then gosub GET my ingot
+	if "%excessloc" = "feet" then gosub STOW feet
 	if %small.ingot = 1 then
 	{
 		if %worn.tongs = 1 then GOSUB WEAR my $MC_TONGS
@@ -116,10 +120,13 @@ work:
 
 hammer:
 	 gosub poundcheck
-	 if %tongs.adj = 1 then send adjust my tongs
+	if %swap.tongs = 1 then
+          {
+          if %tongs.adj = 1 then send adjust my $MC_TONGS
+          }
 	 pause .5
 	 gosub Action pound $MC.order.noun on anvil with my $MC_HAMMER
-	return
+	 return
 
 poundcheck:
 	pause 1
@@ -147,7 +154,10 @@ bellows:
 
 tongs:
 	 gosub poundcheck
-	 if %swap.tongs = 1 && %tongs.adj = 1 then send adjust my $MC_TONGS
+	 if %swap.tongs = 1 then
+          {
+		if %tongs.adj = 1 then send adjust my $MC_TONGS
+          }
 	 pause .5
 	 var tool hammer
 	 gosub Action turn $MC.order.noun on anvil with my $MC_TONGS
