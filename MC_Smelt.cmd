@@ -4,6 +4,25 @@ include mc_include.cmd
 var material %1
 var matstow %tool.storage
 gosub EMPTY_HANDS
+var swap.tongs 0
+var worn.tongs 0
+var tongs.adj 0
+
+
+action var worn.tongs 1 when ^You tap some.*(segmented|articulated).*tongs that you are wearing\.$
+action var tongs.adj 0 when ^With a yank you fold the shovel
+action var tongs.adj 1 when ^You lock the tongs into a fully extended position
+send tap my tongs
+if "$MC_SHOVEL" = "$MC_TONGS" then var swap.tongs 1
+if %swap.tongs = 1 then
+	{
+	 var shovel $MC_TONGS
+	 send analyze my $MC_TONGS
+	 waitforre ^(These tongs are used|This tool is used to shovel)
+	 if "$1" = "This tool is used to shovel" then var tongs.adj 1
+	 else var tongs.adj 0
+	}
+else var shovel $MC_SHOVEL
 
 
 action INSTANT goto finish when ^At last the metal appears to be thoroughly mixed and you pour it into an ingot mold
@@ -56,13 +75,17 @@ Stir:
 	matchwait
 
 Fuel:
-	gosub GET my $MC_SHOVEL
+	gosub ToolCheckLeft $MC_SHOVEL
+     if %swap.tongs = 1 then
+          {
+               if %tongs.adj = 0 then send adjust my $MC_TONGS
+          }
 	gosub Action push fuel with $MC_SHOVEL
 	gosub STOW_LEFT
 	goto stir
 
 Bellows:
-	gosub GET my $MC_BELLOWS
+	gosub ToolCheckLeft $MC_BELLOWS
 	gosub Action push $MC_BELLOWS
 	gosub STOW_LEFT
 	goto stir
