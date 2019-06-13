@@ -94,7 +94,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
 #	MC_REORDER: For repurchasing mats, on or off
-#	MC_REMNANT.STORAGE: Where small items will go. This needs to be different from your discipline storage
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
 #	MC_WORK.OUTSIDE: If you want to work outside of the order hall set to 1 if not leave as 0, must set MC_PREFERRED.ROOM if set to 1
@@ -109,7 +108,6 @@ put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
 put #var MC_REORDER on
-put #var MC_REMNANT.STORAGE canvas sack
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
@@ -245,7 +243,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
 #	MC_REORDER: For repurchasing mats, on or off
-#	MC_REMNANT.STORAGE: Where small items will go. This needs to be different from your discipline storage
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
 #	MC_WORK.OUTSIDE: If you want to work outside of the order hall set to 1 if not leave as 0, must set MC_PREFERRED.ROOM if set to 1
@@ -260,7 +257,6 @@ put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
 put #var MC_REORDER on
-put #var MC_REMNANT.STORAGE canvas sack
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
@@ -395,7 +391,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
 #	MC_REORDER: For repurchasing mats, on or off
-#	MC_REMNANT.STORAGE: Where small items will go. This needs to be different from your discipline storage
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
 #	MC_WORK.OUTSIDE: If you want to work outside of the order hall set to 1 if not leave as 0, must set MC_PREFERRED.ROOM if set to 1
@@ -410,7 +405,6 @@ put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
 put #var MC_REORDER on
-put #var MC_REMNANT.STORAGE canvas sack
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
@@ -546,7 +540,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
 #	MC_REORDER: For repurchasing mats, on or off
-#	MC_REMNANT.STORAGE: Where small items will go. This needs to be different from your discipline storage
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
 #	MC_WORK.OUTSIDE: If you want to work outside of the order hall set to 1 if not leave as 0, must set MC_PREFERRED.ROOM if set to 1
@@ -561,7 +554,6 @@ put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR off
 put #var MC_GET.COIN on
 put #var MC_REORDER on
-put #var MC_REMNANT.STORAGE haversack
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
@@ -697,7 +689,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
 #	MC_REORDER: For repurchasing mats, on or off
-#	MC_REMNANT.STORAGE: Where small items will go. This needs to be different from your discipline storage
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
 #	MC_WORK.OUTSIDE: If you want to work outside of the order hall set to 1 if not leave as 0, must set MC_PREFERRED.ROOM if set to 1
@@ -712,7 +703,6 @@ put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
 put #var MC_REORDER on
-put #var MC_REMNANT.STORAGE canvas sack
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0

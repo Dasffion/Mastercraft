@@ -916,11 +916,19 @@ clean:
 	return
 
 manualclean:
-	send get ingot
+	send get ingot from anvil
 	send drop ingot
 	return
 	
 ingot:
+     var tempvolume null
+     send analyze ingot on anvil
+	waitforre About (\d+) volume of metal was used in this|^Roundtime|What where you
+     var tempvolume $1
+     if "%tempvolume" != "null" then
+		{
+			if %volume > %tempvolume then goto manualclean
+		}
 	var anvilingot 1
 	return
 	

@@ -2,7 +2,7 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 1.0.0
+#v 1.2.0
 #
 # Script Usage: .mastercraft								--to only do one work order
 #				.mastercraft <no. of orders>				--to perform more than one
@@ -145,7 +145,7 @@ if "%discipline" = "artif" then
 	var work.tools $MC_BURIN|$MC_LOOP
 }
 
-gosub PUT close my %remnant.storage
+# gosub PUT close my %remnant.storage
 if $MC_END.EARLY = 1 then 
 {
     action instant var order.quantity 1 when You must bundle and deliver (\d+) more within
@@ -200,9 +200,9 @@ untie.order:
 		if matchre("$lefthand", "%alltools") then gosub PUT_IT $lefthandnoun in my %tool.storage
 		else gosub PUT_IT $lefthandnoun in my %main.storage
 		}		
-	gosub PUT open my %remnant.storage
+	# gosub PUT open my %remnant.storage
 	gosub untie.early
-	gosub PUT close my %remnant.storage
+	# gosub PUT close my %remnant.storage
 	goto new.order
 
 time.order:
@@ -980,6 +980,7 @@ count.material2:
 		var bagcount %tempcount
 		goto manual.count
 		}
+     var %ordinal(%tempcount).volume %itemvolume
 	math tempcount subtract 1
 	action (count) off
 	pause 1
@@ -1030,6 +1031,7 @@ manual.count:
 		action (count) off
 		evalmath bigenough (floor(%itemvolume/%volume))+%bigenough
 		pause 1
+          var %ordinal(%temp).volume %itemvolume
 		if %temp < 1 then
 		{
 			unvar temp
@@ -1136,25 +1138,26 @@ process.order:
 		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "\b$roomid\b")) then gosub find.room $work.room
 		gosub EMPTY_HANDS
 		pause 1
-		var tempvolume null
-		action (volume) var manual 1 when unable to discern hardly anything about it\.$|make a few observations\.$|learn more about its construction\.$
-		action (volume) var tempvolume $1 when a volume of (\d+)\.$
-		action (volume) var tempvolume $1 when About (\d+) volume of metal was used in this
-		gosub gather.material ingot
-		send analyze my ingot
-		waitforre About (\d+) volume of metal was used in this|^(Roundtime)
-		if %manual = 1 then 
-			{
-			if !contains("$lefthand", "yardstick") then gosub GET yard from my %main.storage
-			send measure my ingot with my yardstick
-			waitforre posses a volume of (\d+)\.$|^(Roundtime)
-			gosub PUT_IT yard in my %main.storage
-			}
-		if "%tempvolume" != "null" then
-		{
-			if %volume > %tempvolume then gosub small.mat ingot
-		}
-		action (volume) off
+		# var tempvolume null
+		# action (volume) var manual 1 when unable to discern hardly anything about it\.$|make a few observations\.$|learn more about its construction\.$
+		# action (volume) var tempvolume $1 when a volume of (\d+)\.$
+		# action (volume) var tempvolume $1 when About (\d+) volume of metal was used in this
+		gosub gather.ingot
+		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "\b$roomid\b")) then gosub find.room $work.room
+		# send analyze my ingot
+		# waitforre About (\d+) volume of metal was used in this|^(Roundtime)
+		# if %manual = 1 then 
+			# {
+			# if !contains("$lefthand", "yardstick") then gosub GET yard from my %main.storage
+			# send measure my ingot with my yardstick
+			# waitforre posses a volume of (\d+)\.$|^(Roundtime)
+			# gosub PUT_IT yard in my %main.storage
+			# }
+		# if "%tempvolume" != "null" then
+		# {
+			# if %volume > %tempvolume then gosub small.mat ingot
+		# }
+		# action (volume) off
 		gosub anvilcheck
 		if %anvilingot = 0 then gosub PUT_IT my %work.material ingot on anvil
 		gosub GET my %discipline book
@@ -1239,6 +1242,7 @@ process.order:
 				goto new.order
 				}
 			gosub PUT_IT my book in my %main.storage
+               if matchre("%full.order.noun", "bead|totem|figurine|statuette|statue") then gosub codex
 			send .MC_carve
 			waitforre ^CARVING DONE
 		}
@@ -1349,8 +1353,8 @@ endearly:
 	if matchre("$righthand|$lefthand", "$MC.order.noun") then gosub PUT drop my $MC.order.noun
 	gosub untie.early
 	gosub PUT_IT my %society.type logbook in my %main.storage
-	gosub PUT open my %remnant.storage
-	gosub REMNANT.CHECK
+	# gosub PUT open my %remnant.storage
+	# gosub REMNANT.CHECK
 	put #parse MASTERCRAFT DONE
 	exit
 	
@@ -1452,6 +1456,34 @@ grind:
 		if (("$roomplayers" != "") && (%order.quantity > 1)) then gosub find.room $work.room
 	}
 	return
+     
+gather.ingot:
+     var tempingot 1
+gather.ingot1:
+     if %%ordinal(%tempingot).volume >= %volume then 
+          {
+          gosub GET %ordinal(%tempingot) %work.material ingot from my %main.storage
+          var ingotchange %ordinal(%tempingot)
+          evalmath newvolume %%ordinal(%tempingot).volume - %volume
+          goto ingotchange
+          }
+     math tempingot add 1
+     if %tempingot > %ingot.item.count then goto smelt
+     goto gather.ingot1
+     
+ingotchange:
+     var tempchange %ingot.item.count
+     if %ingotchange.volume = %volume then evalmath ingot.item.count %ingot.item.count - 1
+     var new %ingot.item.count
+ingotchange1:
+     if %new < 1 then return
+     var %ordinal(%new).volume %%ordinal(%tempchange).volume
+     math tempchange subtract 1
+     if "%ordinal(%tempchange)" = "%ingotchange" then math tempchange subtract 1
+     math new subtract 1
+     if ((%tempchange < 1) && (%newvolume != 0)) then var first.volume %newvolume
+     goto ingotchange1
+     
 
 gather.material:
 	var get.mat $0
@@ -1481,25 +1513,26 @@ gather.material:
 
 small.mat:
     var tempitem $0
-    pause 1
-    gosub PUT open my %remnant.storage
-    pause 1
-    gosub combine.check "%remnant.storage" %tempitem
+    # pause 1
+    # gosub PUT open my %remnant.storage
+    # pause 1
+    gosub combine.check "%main.storage" %tempitem
     if "$righthand" != "Empty" then gosub PUT_IT my %tempitem in my %main.storage
-    if (("%discipline" = "weapon")||("%discipline" = "armor")||("%discipline" = "blacksmith")) then
-		{
-		if "%work.material" = "bronze" then
-			{
-			if %volume > 5 then gosub smelt
-			}
-		if "%work.material" = "steel" then
-			{
-			if %volume > 10 then gosub smelt
-			}
-		}
-    pause 1
-    gosub PUT close my %remnant.storage
+    # if (("%discipline" = "weapon")||("%discipline" = "armor")||("%discipline" = "blacksmith")) then
+		# {
+		# if "%work.material" = "bronze" then
+			# {
+			# if %volume > 5 then gosub smelt
+			# }
+		# if "%work.material" = "steel" then
+			# {
+			# if %volume > 10 then gosub smelt
+			# }
+		# }
+    # pause 1
+    # gosub PUT close my %remnant.storage
     unvar temptime
+    if ((%%order.pref.item.count = 1) && (%material.volume < %mass.volume) then gosub lack.material
     gosub clear
     goto process.order
    
@@ -1528,30 +1561,32 @@ combine.check:
 
 smelt:
 	if !matchre("$smelt.room", "\b$roomid\b") then gosub find.room $smelt.room
-	matchre smelt_1 You get
-	matchre smelt_2 ^What were|I could not find
-	put get %work.material ingot from my %remnant.storage
-	matchwait
-smelt_1:
-	gosub PUT_IT ingot in %main.storage
-	goto smelt
+	# matchre smelt_1 You get
+	# matchre smelt_2 ^What were|I could not find
+	# put get %work.material ingot from my %remnant.storage
+	# matchwait
+# smelt_1:
+	# gosub PUT_IT ingot in %main.storage
+	# goto smelt
 
 smelt_2:
 	put .MC_Smelt %work.material
 	waitfor SMELTING DONE
+     put get ingot from %main.storage
+     var first.volume %material.volume
 	return
 
 
 combine:
-    if !contains("$righthand|$lefthand", "%combine.temp") then gosub GET %combine.temp from my %combine.storage
-    if %%order.pref.item.count = 1 then goto combine.end
-    gosub GET %combine.temp from %combine.storage
-    send combine
+     if !matchre("$righthand|$lefthand", "%combine.temp") then gosub GET %combine.temp from my %combine.storage
+     if %%order.pref.item.count <= 1 then goto combine.end
+     gosub GET %combine.temp from %combine.storage
+     send combine
 	pause 1
-    math %order.pref.item.count subtract 1
+     math %order.pref.item.count subtract 1
 	if !matchre("$lefthand|$righthand", "Empty") then goto combine.end
 	pause 0.5
-    goto combine
+     goto combine
 
 combine.end:
     if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
@@ -1563,10 +1598,10 @@ combine.end:
    
 fail:
     pause 1
-    gosub PUT open my %remnant.storage
-    if contains("$roomobjs", "bucket") then gosub PUT_IT my $MC.order.noun in bucket
+    # gosub PUT open my %remnant.storage
+    if matchre("$roomobjs", "bucket") then gosub PUT_IT my $MC.order.noun in bucket
     else gosub PUT drop my $MC.order.noun
-    gosub PUT close my %remnant.storage
+    # gosub PUT close my %remnant.storage
     math fail add 1
     if %fail = 1 then gosub check.tools
     if %fail > 1 then gosub diff.change
@@ -1642,7 +1677,7 @@ turn.in1:
 	if (("%discipline" = "tailor") && ($Outfitting.LearningRate < 20)) then goto new.order
 	if (("%discipline" = "remed") && ($Alchemy.LearningRate < 20)) then goto new.order
 	gosub PUT_IT my logbook in my %main.storage
-	gosub PUT open my %remnant.storage
+	# gosub PUT open my %remnant.storage
 	put #parse MASTERCRAFT DONE
 	exit
 
@@ -1840,6 +1875,26 @@ lack.coin.exit:
 	echo You need some startup coin to purchase stuff! Go to the bank and try again!
 	put #parse Need coin
 	exit
+buyingvolumechange:
+          var oldnumber %ingot.item.count
+          evalmath ingot.item.count %ingot.item.count + %reqd.order
+          evalmath ingotdiff %ingot.item.count - %oldnumber
+          var tempnumber %ingot.item.count
+          gosub oldchange
+          var tracker 1
+buyingvolumechange1:
+     if %tracker > %ingotdiff then return
+     if "%work.material" = "bronze" then var %ordinal(%tracker).volume 5
+     if "%work.material" = "steel" then var %ordinal(%tracker).volume 10
+     math tracker add 1
+     goto buyingvolumechange1
+     
+oldchange:
+     if %oldnumber < 1 then return
+     var %ordinal(%tempnumber).volume %%ordinal(%oldnumber).volume
+     math tempnumber subtract 1
+     math oldnumber subtract 1
+     goto oldchange
 
 lack.material:
 	if "%reorder" = "off" then goto lack.material.exit
@@ -1850,6 +1905,7 @@ lack.material:
 		if !contains("bronze|steel", "%work.material") then goto lack.material.exit
 		if "%work.material" = "bronze" then evalmath reqd.order ceiling((((%order.quantity-%bigenough)*%volume) - (%material.volume-(%volume*%bigenough)))/5)
 		if "%work.material" = "steel" then evalmath reqd.order ceiling((((%order.quantity-%bigenough)*%volume) - (%material.volume-(%volume*%bigenough)))/10)
+          gosub buyingvolumechange
 		var main.storage $MC_FORGING.STORAGE
 		var order.type ingot
 		goto purchase.material
