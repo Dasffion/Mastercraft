@@ -289,11 +289,26 @@ location.vars:
      var SO.room.list 719|720|721|722|723|724|725|726|727|728|729|730|731
      var SO.master.room 719|720|721|722|723|724|725
      var SO.work.room 726|727|728|729|730|731
+     #Shard Enchanting
+     var SENT.tools.room 757
+     var SENT.supplies.room 758
+     var SENT.books.room 759
+     var SENT.work.room 762|763|764|765|766|767
+     var SENT.room.list 755|756|757|758|759|760|761|762|763|764|765|766|767
+     var SENT.master.room 756
 	#Hibarnhivdar Forging
      var HibF.room.list 407|408|416|417|418|419|409|410|411|412|413|414|415
      var HibF.master.room 407|408|416|417|418|419|409|410|411|412|413|414|415
      var HibF.work.room 416|417|418|419
      var HibF.grind.room 418|419
+     
+     #Hibarnhivdar Enchanting
+     var HIBENT.tools.room 438
+     var HIBENT.supplies.room 439
+     var HIBENT.books.room 437
+     var HIBENT.work.room 441|442|443|444
+     var HIBENT.room.list 435|436|437|438|439|440|441|442|443|444
+     var HIBENT.master.room 435|436|437|438|439|440
      
 	#Mer'Kresh Forging
      var MKF.room.list 334|335|336|337|338|339|340|341|342|343|344|345|346|347|348
@@ -383,7 +398,9 @@ check.location:
 	if $zoneid = 67 && matchre("%SA.room.list", "$roomid") then var society Shard.Alchemy
 	if $zoneid = 67 && matchre("%SE.room.list", "$roomid") then var society Shard.Engineering
 	if $zoneid = 67 && matchre("%SO.room.list", "$roomid") then var society Shard.Outfitting
+     if $zoneid = 67 && matchre("%SENT.room.list", "$roomid") then var society Shard.Enchanting
 	if $zoneid = 116 && matchre("%HibF.room.list", "$roomid") then var society Hib.Forging
+     if $zoneid = 116 && matchre("%HIBENT.room.list", "$roomid") then var society Hib.Enchanting
 	if $zoneid = 107 && matchre("%MKF.room.list", "$roomid") then var society MerKresh.Forging
 	if $zoneid = 7 && matchre("%LvF.room.list", "$roomid") then var society Lava.Forge
 	if $zoneid = 61 && matchre("%LPF.room.list", "$roomid") then var society Leth.Premie.Forge
@@ -680,6 +697,17 @@ put #tvar repair.clerk %shard.repair
 var society.type Outfitting
 return
 
+Shard.Enchanting:
+var master Trainer
+put #tvar master.room %SENT.master.room
+put #tvar work.room %SENT.work.room
+put #tvar supply.room %SENT.supplies.room
+put #tvar tool.room %SENT.tools.room
+put #tvar repair.room %shard.repair.room
+put #tvar repair.clerk %shard.repair
+var society.type Enchanting
+return
+
 Hib.Forging:
 var master Juln
 put #tvar master.room %HibF.master.room
@@ -690,6 +718,15 @@ put #tvar supply.room 415
 put #tvar part.room 413
 put #tvar tool.room 413
 var society.type Forging
+return
+
+Hib.Enchanting:
+var master Trainer
+put #tvar master.room %HIBENT.master.room
+put #tvar work.room %HIBENT.work.room
+put #tvar supply.room %HIBENT.supplies.room
+put #tvar tool.room %HIBENT.tools.room
+var society.type Enchanting
 return
 
 MerKresh.Forging:
