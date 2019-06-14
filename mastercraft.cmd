@@ -2,7 +2,7 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 1.2.0
+#v 1.2.1
 #
 # Script Usage: .mastercraft								--to only do one work order
 #				.mastercraft <no. of orders>				--to perform more than one
@@ -113,6 +113,18 @@ var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twel
 var assemble NULL
 var assemble2 NULL
 var difficultytry add 0
+var volume.first
+var volume.second
+var volume.third
+var volume.fourth
+var volume.fifth
+var volume.sixth
+var volume.seventh
+var volume.eighth
+var volume.ninth
+var volume.tenth
+var volume.eleventh
+
 
 	 
 if matchre("%discipline", "weapon|blacksmith") then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD
@@ -360,9 +372,10 @@ if "%discipline" = "remed" then
 		
 if "%discipline" = "artif" then
 		{
-		matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a flash trinket|a wind trinket|an earth trinket)
+		matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a cambrinth retuner|a flash trinket|a wind trinket|an earth trinket)
 		matchre chapter.3 This logbook is tracking a work order requiring you to craft (training ritual focus|basic lunar ritual focus|basic elemental ritual focus|basic life ritual focus|basic holy ritual focus)
-		matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|burden runestone|manifest force runestone|strange arrow runestone|gauage flow runestone|dispel runestone|lay ward runestone)
+		matchre chapter.4 This logbook is tracking a work order requiring you to craft (common material minor fount|common material lesser fount|common material greater fount)
+          matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|burden runestone|manifest force runestone|strange arrow runestone|gauage flow runestone|dispel runestone|lay ward runestone)
 		
 		put read my %society.type logbook
 		matchwait 1
@@ -743,7 +756,7 @@ calc.material:
 		pause .1
 		action (book) on
 		var sigil
-		action var order.pref $1 when ^\s+\(\d\)\s+A (?:finished|basic).* (runestone|totem|wand)
+		action var order.pref $1 when ^\s+\(\d\)\s+[Aa] (?:finished|basic|small).* (runestone|totem|wand|rod|sphere)
 		action var sigil %sigil|$1 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
 		pause .5
 		if !matchre("$righthand", "book") then gosub GET my %discipline book
@@ -980,7 +993,7 @@ count.material2:
 		var bagcount %tempcount
 		goto manual.count
 		}
-     var %ordinal(%tempcount).volume %itemvolume
+     var volume.%ordinal(%tempcount) %itemvolume
 	math tempcount subtract 1
 	action (count) off
 	pause 1
@@ -1459,29 +1472,46 @@ grind:
      
 gather.ingot:
      var tempingot 1
+     gosub setold
 gather.ingot1:
-     if %%ordinal(%tempingot).volume >= %volume then 
+     if %volume.%ordinal(%tempingot) >= %volume then 
           {
           gosub GET %ordinal(%tempingot) %work.material ingot from my %main.storage
           var ingotchange %ordinal(%tempingot)
-          evalmath newvolume %%ordinal(%tempingot).volume - %volume
+          evalmath newvolume %volume.%ordinal(%tempingot) - %volume
           goto ingotchange
           }
      math tempingot add 1
      if %tempingot > %ingot.item.count then goto smelt
      goto gather.ingot1
      
+setold:
+     var oldvolume 1
+setold_1:
+     if %oldvolume > %ingot.item.count then return
+     var oldvolume.%ordinal(%oldvolume) %volume.%ordinal(%oldvolume)
+     math oldvolume add 1
+     goto setold_1
+     
 ingotchange:
      var tempchange %ingot.item.count
-     if %ingotchange.volume = %volume then evalmath ingot.item.count %ingot.item.count - 1
+     if %volume.%ingotchange = %volume then 
+          {
+          var old %ingot.item.count
+          evalmath ingot.item.count %ingot.item.count - 1
+          }
      var new %ingot.item.count
 ingotchange1:
-     if %new < 1 then return
-     var %ordinal(%new).volume %%ordinal(%tempchange).volume
+     if %new < 1 then 
+          {
+          if %new != %old then var volume.%ordinal(%old)
+          return
+          }
+     var volume.%ordinal(%new) %oldvolume.%ordinal(%tempchange)
      math tempchange subtract 1
      if "%ordinal(%tempchange)" = "%ingotchange" then math tempchange subtract 1
      math new subtract 1
-     if ((%tempchange < 1) && (%newvolume != 0)) then var first.volume %newvolume
+     if ((%tempchange < 1) && (%newvolume != 0)) then var volume.first %newvolume
      goto ingotchange1
      
 
@@ -1561,6 +1591,16 @@ combine.check:
 
 smelt:
 	if !matchre("$smelt.room", "\b$roomid\b") then gosub find.room $smelt.room
+     var tempsmelt 2
+smelt_1
+     if %tempsmelt > %ingot.item.count then
+          {
+          var ingot.item.count 1
+          goto smelt_2
+          }
+     var volume.%ordinal(%tempsmelt)
+     math tempsmelt add 1
+     goto smelt_1
 	# matchre smelt_1 You get
 	# matchre smelt_2 ^What were|I could not find
 	# put get %work.material ingot from my %remnant.storage
@@ -1573,7 +1613,7 @@ smelt_2:
 	put .MC_Smelt %work.material
 	waitfor SMELTING DONE
      put get ingot from %main.storage
-     var first.volume %material.volume
+     var volume.first %material.volume
 	return
 
 
