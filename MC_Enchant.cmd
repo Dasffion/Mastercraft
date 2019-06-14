@@ -109,7 +109,7 @@ meditate:
 	return
 	
 focus:
-	if def(MC_FOCUS.WAND) then
+	if matchre("$MC_FOCUS.WAND", "WAND") then
 		{
 		gosub GET $MC_FOCUS.WAND
 		gosub Action wave $MC_FOCUS.WAND at $MC.order.noun
