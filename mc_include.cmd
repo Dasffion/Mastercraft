@@ -234,6 +234,13 @@ location.vars:
      var CA.room.list 898|931|932|933|934
      var CA.master.room 898|931|932|933|934
      var CA.work.room 898|931|932|933|934
+     #Crossing Enchanting
+     var CENT.tools.room 997
+     var CENT.supplies.room 996
+     var CENT.books.room 995
+     var CENT.work.room 1000|1001|1002|1003
+     var CENT.room.list 994|995|996|997|998|999|1000|1001|1002|1003
+     var CENT.master.room 994|995|996|997|998|999
 	#Lava Forge
      var LvF.room.list 774|777|776|775|778|782|779|784|780|786|781|783|785
      var LvF.master.room 775|778|782|779|784|780|786
@@ -367,6 +374,7 @@ check.location:
 	if $zoneid = 1 && matchre("%CO.room.list", "$roomid") then var society Crossing.Outfitting
 	if $zoneid = 1 && matchre("%CE.room.list", "$roomid") then var society Crossing.Engineering
 	if $zoneid = 1 && matchre("%CA.room.list", "$roomid") then var society Crossing.Alchemy
+     if $zoneid = 1 && matchre("%CENT.room.list", "$roomid") then var society Crossing.Enchanting
 	if $zoneid = 90 && matchre("%RF.room.list", "$roomid") then var society Ratha.Forging
 	if $zoneid = 90 && matchre("%RO.room.list", "$roomid") then var society Ratha.Outfitting
 	if $zoneid = 90 && matchre("%RE.room.list", "$roomid") then var society Ratha.Engineering
@@ -533,6 +541,17 @@ put #tvar tool.room 931
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
 var society.type Alchemy
+return
+
+Crossing.Enchanting:
+var master Trainer
+put #tvar master.room %CENT.master.room
+put #tvar work.room %CENT.work.room
+put #tvar supply.room 996
+put #tvar tool.room 997
+put #tvar repair.room %crossing.repair.room
+put #tvar repair.clerk %crossing.repair
+var society.type Enchanting
 return
 
 Lava.Forge:
@@ -823,6 +842,8 @@ find.room.wait:
      return
 
 find.master:
+     action (master) put #script abort automapper when eval matchre("$roomobjs", "%master")
+     action (master) put #parse YOU HAVE ARRIVED when eval matchre("$monsterlist", "%master")
      gosub check.location
      var Master.Found 0
      var temp 0
@@ -847,6 +868,7 @@ find.master2:
 		{
 		unvar temp
 		unvar temp.max
+          action (master) off
 		return
 		}
      math temp add 1
@@ -856,7 +878,7 @@ find.master2:
      echo %master not found in any room specified. Check your master room list for this society!
      exit
 	}
-	gosub find.master2
+	goto find.master2
 	return
 
 automove:
