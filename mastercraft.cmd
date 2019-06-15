@@ -1917,21 +1917,20 @@ lack.coin.exit:
 	exit
 buyingvolumechange:
           var oldnumber %ingot.item.count
-          evalmath ingot.item.count %ingot.item.count + %reqd.order
+          evalmath tempnumber %ingot.item.count + %reqd.order
           evalmath ingotdiff %ingot.item.count - %oldnumber
-          var tempnumber %ingot.item.count
           gosub oldchange
           var tracker 1
 buyingvolumechange1:
      if %tracker > %ingotdiff then return
-     if "%work.material" = "bronze" then var %ordinal(%tracker).volume 5
-     if "%work.material" = "steel" then var %ordinal(%tracker).volume 10
+     if "%work.material" = "bronze" then var volume.%ordinal(%tracker) 5
+     if "%work.material" = "steel" then var volume.%ordinal(%tracker) 10
      math tracker add 1
      goto buyingvolumechange1
      
 oldchange:
      if %oldnumber < 1 then return
-     var %ordinal(%tempnumber).volume %%ordinal(%oldnumber).volume
+     var volume.%ordinal(%tempnumber) %volume.%ordinal(%oldnumber)
      math tempnumber subtract 1
      math oldnumber subtract 1
      goto oldchange
