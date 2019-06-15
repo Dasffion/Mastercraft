@@ -113,17 +113,7 @@ var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twel
 var assemble NULL
 var assemble2 NULL
 var difficultytry add 0
-var volume.first
-var volume.second
-var volume.third
-var volume.fourth
-var volume.fifth
-var volume.sixth
-var volume.seventh
-var volume.eighth
-var volume.ninth
-var volume.tenth
-var volume.eleventh
+gosub clearvolume
 
 
 	 
@@ -1591,16 +1581,7 @@ combine.check:
 
 smelt:
 	if !matchre("$smelt.room", "\b$roomid\b") then gosub find.room $smelt.room
-     var tempsmelt 2
-smelt_1
-     if %tempsmelt > %ingot.item.count then
-          {
-          var ingot.item.count 1
-          goto smelt_2
-          }
-     var volume.%ordinal(%tempsmelt)
-     math tempsmelt add 1
-     goto smelt_1
+     gosub clearvolume
 	# matchre smelt_1 You get
 	# matchre smelt_2 ^What were|I could not find
 	# put get %work.material ingot from my %remnant.storage
@@ -2151,5 +2132,19 @@ lack.material.exit:
     exit
 
 return:
+return
+
+clearvolume:
+var volume.first
+var volume.second
+var volume.third
+var volume.fourth
+var volume.fifth
+var volume.sixth
+var volume.seventh
+var volume.eighth
+var volume.ninth
+var volume.tenth
+var volume.eleventh
 return
 
