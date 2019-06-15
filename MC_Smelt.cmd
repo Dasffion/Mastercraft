@@ -33,7 +33,7 @@ exit
 
 SmeltStart:
      action (settype) on
-     action (settype) var mattype $1 when %material (ingot|nugget) 
+     action (settype) var mattype $1 when %material (ingot|nugget)
      send look in my $MC_FORGING.STORAGE
      pause 2
      action (settype) off
