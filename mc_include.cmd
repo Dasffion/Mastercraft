@@ -502,6 +502,7 @@ var master Trainer
 put #tvar master.room %HENT.master.room
 put #tvar work.room %HENT.work.room
 put #tvar supply.room 532
+put #tvar part.room 532
 put #tvar tool.room 533
 put #tvar repair.room %haven.repair.room
 put #tvar repair.clerk %haven.repair
@@ -565,6 +566,7 @@ var master Trainer
 put #tvar master.room %CENT.master.room
 put #tvar work.room %CENT.work.room
 put #tvar supply.room 996
+put #tvar part.room 996
 put #tvar tool.room 997
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
@@ -702,6 +704,7 @@ var master Trainer
 put #tvar master.room %SENT.master.room
 put #tvar work.room %SENT.work.room
 put #tvar supply.room %SENT.supplies.room
+put #tvar part.room %SENT.supplies.room
 put #tvar tool.room %SENT.tools.room
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
@@ -725,6 +728,7 @@ var master Trainer
 put #tvar master.room %HIBENT.master.room
 put #tvar work.room %HIBENT.work.room
 put #tvar supply.room %HIBENT.supplies.room
+put #tvar part.room %HIBENT.supplies.room
 put #tvar tool.room %HIBENT.tools.room
 var society.type Enchanting
 return
@@ -893,6 +897,7 @@ find.master:
      {
      unvar temp
      unvar temp.max
+     action (master) off
      return
      }
 find.master2:
