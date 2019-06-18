@@ -1,4 +1,4 @@
-#debug 10
+debug 10
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
@@ -891,7 +891,7 @@ parts.inv:
 	action (alchemy) math coal.count add 1 when ^\s+(?:an?|some).*coal nugget
 	action (enchanting) math $1.sigil add 1 when ^\s+(?:an?).* (\S+) sigil-scroll
 	action (enchanting) math fount.count add 1 when ^\s+(?:an?).* fount
-	action (enchanting) math %order.pref.item.count add 1 when ^\s+(an?).*(%order.pref)
+	action (enchanting) math %order.pref.item.count add 1 when ^\s+(?:an?).*?(?<!imbuement |stirring )(rod)
 	action (forging) off
 	action (outfitting) off
 	action (engineering) off
@@ -1260,22 +1260,28 @@ process.order:
 		put store custom %work.material %order.pref in %main.storage
 		if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
 		gosub EMPTY_HANDS
-			gosub gather.material %order.pref
-			send count my %order.pref
-			waitforre You count out (\d+) pieces.*of lumber remaining
-			if %volume > $1 then gosub small.mat %order.pref
-			gosub GET my %discipline book
-			gosub STUDY my book
-			if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
-				{
+          gosub gather.material %order.pref
+		send count my %order.pref
+		waitforre You count out (\d+) pieces.*of lumber remaining
+		if %volume > $1 then 
+               {
+               gosub small.mat %order.pref
+               send count my %order.pref
+               waitforre You count out (\d+) pieces.*of lumber remaining
+               if %volume > $1 then gosub lack.material
+               }
+		gosub GET my %discipline book
+		gosub STUDY my book
+		if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+			{
 				gosub PUT_IT %work.material %order.pref in my %main.storage
 				math difficultytry add 1
 				goto new.order
-				}
-			gosub PUT_IT my book in my %main.storage
-			if matchre("%full.order.noun", "bead|totem|figurine|statuette|statue") then gosub codex
-			send .MC_shape
-			waitforre ^SHAPING DONE
+			}
+		gosub PUT_IT my book in my %main.storage
+		if matchre("%full.order.noun", "bead|totem|figurine|statuette|statue") then gosub codex
+		send .MC_shape
+		waitforre ^SHAPING DONE
 		}
 	if "%discipline" = "tinkering" then
 	{
@@ -1462,6 +1468,8 @@ grind:
      
 gather.ingot:
      var tempingot 1
+     gosub bigenoughcheck
+     if %bigenoughfinal < %order.quantity then gosub smelt
      gosub setold
 gather.ingot1:
      if %volume.%ordinal(%tempingot) >= %volume then 
@@ -1472,8 +1480,24 @@ gather.ingot1:
           goto ingotchange
           }
      math tempingot add 1
-     if %tempingot > %ingot.item.count then goto smelt
+     if %tempingot > %ingot.item.count then 
+          {
+          gosub smelt
+          return
+          }
      goto gather.ingot1
+
+bigenoughcheck:
+     var bigenoughfinal 0
+     var tracker 1
+bigenoughcheck1:
+     if %tracker > %ingot.item.count then return
+     if "%volume.%ordinal(%tracker)" != "" then
+          {
+               evalmath bigenoughfinal (floor(%volume.%ordinal(%tracker)/%volume))+%bigenoughfinal
+          }
+     math tracker add 1
+     goto bigenoughcheck1
      
 setold:
      var oldvolume 1
@@ -1507,6 +1531,15 @@ ingotchange1:
 
 gather.material:
 	var get.mat $0
+     if "%discipline" = "artif" then
+          {
+               if "%order.pref" = "rod" then var work.material bobcat
+               if "%order.pref" = "totem" then var work.material bone
+               if "%order.pref" = "bead" then var work.material heron
+               if "%order.pref" = "wand" then var work.material rosewood
+               if "%order.pref" = "runestone" then var work.material basic
+               if "%order.pref" = "sphere" then var work.material small
+          }
 #	if "%get.mat" = "stone" then {}
 	send get %work.material %get.mat from my %main.storage
 	waitforre ^(You get|What were)
@@ -1538,6 +1571,19 @@ small.mat:
     # pause 1
     gosub combine.check "%main.storage" %tempitem
     if "$righthand" != "Empty" then gosub PUT_IT my %tempitem in my %main.storage
+	if ("%discipline" = "tailor") then action (outfitting) on
+	if matchre("%discipline", "weapon|armor|blacksmith") then action (forging) on
+	if matchre("%discipline", "carving|shaping|tinkering") then action (engineering) on
+	if "%discipline" = "remed" then action (alchemy) on
+	if "%discipline" = "artif" then action (enchanting) on
+	send inv %main.storage
+	waitforre INVENTORY HELP
+	pause 2
+	if ("%discipline" = "tailor") then action (outfitting) off
+	if matchre("%discipline", "weapon|armor|blacksmith") then action (forging) off
+	if matchre("%discipline", "carving|shaping|tinkering") then action (engineering) off
+	if "%discipline" = "remed" then action (alchemy) off
+	if "%discipline" = "artif" then action (enchanting) off
     # if (("%discipline" = "weapon")||("%discipline" = "armor")||("%discipline" = "blacksmith")) then
 		# {
 		# if "%work.material" = "bronze" then
@@ -1552,7 +1598,7 @@ small.mat:
     # pause 1
     # gosub PUT close my %remnant.storage
     unvar temptime
-    if ((%%order.pref.item.count = 1) && (%material.volume < %mass.volume) then gosub lack.material
+    if ((%%order.pref.item.count = 1) && (%material.volume < %mass.volume)) then gosub lack.material
     gosub clear
     goto process.order
    
@@ -1897,11 +1943,11 @@ lack.coin.exit:
 	put #parse Need coin
 	exit
 buyingvolumechange:
-          var oldnumber %ingot.item.count
-          evalmath tempnumber %ingot.item.count + %reqd.order
-          evalmath ingotdiff %ingot.item.count - %oldnumber
-          gosub oldchange
-          var tracker 1
+     var oldnumber %ingot.item.count
+     evalmath tempnumber %ingot.item.count + %reqd.order
+     evalmath ingotdiff %tempnumber - %oldnumber
+     gosub oldchange
+     var tracker 1
 buyingvolumechange1:
      if %tracker > %ingotdiff then return
      if "%work.material" = "bronze" then var volume.%ordinal(%tracker) 5
