@@ -893,25 +893,32 @@ find.master:
      #send look %master
      #pause 1
      #if %Master.Found = 1 then
-         if matchre("$roomobjs", "%master") then
-     {
-     unvar temp
-     unvar temp.max
-     action (master) off
-     return
-     }
+     if matchre("$roomobjs", "%master") then
+          {
+               unvar temp
+               unvar temp.max
+               action (master) off
+               return
+          }
 find.master2:
      pause 1
+     if matchre("$roomobjs", "%master") then
+		{
+               unvar temp
+               unvar temp.max
+               action (master) off
+               return
+		}
      gosub automove $master.room(%temp)
      #send look %master
      #pause 1
      #if %Master.Found = 1 then
-         if matchre("$roomobjs", "%master") then
+     if matchre("$roomobjs", "%master") then
 		{
-		unvar temp
-		unvar temp.max
-          action (master) off
-		return
+               unvar temp
+               unvar temp.max
+               action (master) off
+               return
 		}
      math temp add 1
      if %temp > %temp.max then

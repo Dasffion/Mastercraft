@@ -14,7 +14,7 @@ action var special meditate when The traced sigil pattern blurs before your eyes
 action var special focus when The .* struggles to accept the sigil scribing
 action var special fount when You need another mana fount to continue crafting
 action var special loop when You notice many of the scribed sigils are slowly merging back
-action var tool study when You must first study instructions regarding the enchantment you wish to begin
+action var tool restudy when You must first study instructions regarding the enchantment you wish to begin
 action var tool burin when more permanently with a burin
 action var tool sigil;var sigil $1 when ^You need another (\S+) .*sigil to continue the enchanting process
 action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.
@@ -57,7 +57,7 @@ work:
 	gosub %tool
 	goto work
 	
-study:
+restudy:
 	if "$MC_IMBUE" = "SPELL" then put release spell
 	gosub GET %rawmat from brazier
 	gosub PUT_IT my %rawmat in %main.storage
@@ -66,7 +66,6 @@ study:
 	gosub PUT_IT my book in my %main.storage
 	goto start.enchant
 	
-
 imbue:
 	gosub specialcheck
 	if "$MC_IMBUE" = "ROD" then

@@ -144,7 +144,7 @@ if "%discipline" = "remed" then
 }
 if "%discipline" = "artif" then
 {
-	var work.tools $MC_BURIN|$MC_LOOP
+	var work.tools $MC_LOOP
 }
 
 # gosub PUT close my %remnant.storage
@@ -754,7 +754,7 @@ calc.material:
 		pause 2
 		action (book) off
 		pause 0.1
-		put #var MC.order.noun %order.pref
+          if !matchre("$MC.order.noun", "fount|loop") then put #var MC.order.noun %order.pref
 		eval sigil replacere("%sigil", "^\|", "")
 		eval sigil replace("%sigil", "any", "%sigil(0)"
 		eval sigil.total count("%sigil", "|")
@@ -809,6 +809,7 @@ calc.parts:
 	if matchre("%assemble", "(\S+)\s(\S+)") then math asmCount1 subtract %$1.$2.count
 	if (matchre("%assemble2", "(\S+)") && ("%assemble2" != "mechanism")) then math asmCount2 subtract %$1.count
 	if matchre("%assemble2", "(\S+)\s(\S+)") then math asmCount2 subtract %$1.$2.count
+     if matchre("%assemble2", "(\S+)") then math asmCount2 subtract %$1.count
 	if "%assemble2" = "mechanism" then 
 		{
 		put #tvar totalmechanisms %asmCount2
@@ -889,9 +890,9 @@ parts.inv:
 	action (alchemy) math water.count add 1 when ^\s+(?:an?|some) water
 	action (alchemy) math alcohol.count add 1 when ^\s+(?:an?|some) grain alcohol
 	action (alchemy) math coal.count add 1 when ^\s+(?:an?|some).*coal nugget
-	action (enchanting) math $1.sigil add 1 when ^\s+(?:an?).* (\S+) sigil-scroll
+	action (enchanting) math $1.count add 1 when ^\s+(?:an?).* (\S+) sigil-scroll
 	action (enchanting) math fount.count add 1 when ^\s+(?:an?).* fount
-	action (enchanting) math %order.pref.item.count add 1 when ^\s+(?:an?).*?(?<!imbuement |stirring )(rod)
+	action (enchanting) math %order.pref.item.count add 1 when ^\s+(?:an?).*?(?<!imbuement |stirring )(%order.pref)
 	action (forging) off
 	action (outfitting) off
 	action (engineering) off
@@ -1566,24 +1567,13 @@ gather.material:
 
 small.mat:
     var tempitem $0
+    
     # pause 1
     # gosub PUT open my %remnant.storage
     # pause 1
-    gosub combine.check "%main.storage" %tempitem
-    if "$righthand" != "Empty" then gosub PUT_IT my %tempitem in my %main.storage
-	if ("%discipline" = "tailor") then action (outfitting) on
-	if matchre("%discipline", "weapon|armor|blacksmith") then action (forging) on
-	if matchre("%discipline", "carving|shaping|tinkering") then action (engineering) on
-	if "%discipline" = "remed" then action (alchemy) on
-	if "%discipline" = "artif" then action (enchanting) on
-	send inv %main.storage
-	waitforre INVENTORY HELP
-	pause 2
-	if ("%discipline" = "tailor") then action (outfitting) off
-	if matchre("%discipline", "weapon|armor|blacksmith") then action (forging) off
-	if matchre("%discipline", "carving|shaping|tinkering") then action (engineering) off
-	if "%discipline" = "remed" then action (alchemy) off
-	if "%discipline" = "artif" then action (enchanting) off
+     gosub combine.check "%main.storage" %tempitem
+     if "$righthand" != "Empty" then gosub PUT_IT my %tempitem in my %main.storage
+     gosub parts.inv
     # if (("%discipline" = "weapon")||("%discipline" = "armor")||("%discipline" = "blacksmith")) then
 		# {
 		# if "%work.material" = "bronze" then
@@ -1597,7 +1587,7 @@ small.mat:
 		# }
     # pause 1
     # gosub PUT close my %remnant.storage
-    unvar temptime
+    unvar tempitem
     if ((%%order.pref.item.count = 1) && (%material.volume < %mass.volume)) then gosub lack.material
     gosub clear
     goto process.order
@@ -2028,14 +2018,17 @@ lack.material:
 				{
 				var order.num 13
 				var order.type yarn
-				evalmath reqd.order (%mass.volume-%material.volume)/10
+				evalmath reqd.order (%mass.volume-%material.volume)/100
 				evalmath reqd.order ceiling(%reqd.order)
 				var main.storage $MC_OUTFITTING.STORAGE
 				goto purchase.material
 				}
+               else 
+                    {
+                         evalmath reqd.order (%mass.volume-%material.volume)/10
+                         evalmath reqd.order ceiling(%reqd.order)
+                    }
 			if !contains("rat-pelt|cougar-pelt|linen|burlap|wool|silk", "%work.material") then goto lack.material.exit
-			evalmath reqd.order (%mass.volume-%material.volume)/10
-			evalmath reqd.order ceiling(%reqd.order)
 			var main.storage $MC_OUTFITTING.STORAGE
 			goto purchase.material
 		}
@@ -2074,6 +2067,9 @@ lack.material:
 		if "%order.pref" = "totem" then var order.num 6
 		if "%order.pref" = "runestone" then var order.num runestone
 		if "%order.pref" = "wand" then var order.num wand
+          if "%order.pref" = "sphere" then var order.num sphere
+          if "%order.pref" = "rod" then var order.num rod
+          if "%order.pref" = "bead" then var order.num bead
 		goto purchase.material
 		}
 	goto lack.material.exit
