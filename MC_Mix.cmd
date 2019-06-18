@@ -197,7 +197,7 @@ if contains("$scriptlist", "mastercraft") then
 		gosub ORDER
 		action (order) off
 		gosub ORDER %catalyst.order
-		gosub PUT_IT my coal in my %alchemy.storage
+		gosub PUT_IT my nugget in my %alchemy.storage
 		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
 		var catalyst.gone 0
 	}
