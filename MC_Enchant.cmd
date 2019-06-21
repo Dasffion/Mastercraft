@@ -15,7 +15,7 @@ action var special focus when The .* struggles to accept the sigil scribing
 action var special fount when You need another mana fount to continue crafting
 action var special loop when You notice many of the scribed sigils are slowly merging back
 action var tool restudy when You must first study instructions regarding the enchantment you wish to begin
-action var tool burin when more permanently with a burin
+action var tool scribe when more permanently with a burin
 action var tool sigil;var sigil $1 when ^You need another (\S+) .*sigil to continue the enchanting process
 action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.
 action var tool done when With the enchantment complete|With the enchanting process completed
@@ -71,12 +71,17 @@ imbue:
 	if "$MC_IMBUE" = "ROD" then
 		{
 		gosub GET imbue rod
-		gosub Action wave rod at $MC.order.noun
+		gosub Action wave rod at $MC.order.noun on braz
 		}
 	if ("$MC_IMBUE" = "SPELL") then 
 		{
+          if "$preparedspell" != "Imbue" then 
+               {
+               if "$preparedspell" != "None" then put release spell
+               put prepare imbue $MC_IMBUE.MANA
+               }
 		if !$prepared then waitfor You feel fully prepared 
-		send cast $MC.order.noun
+		send cast $MC.order.noun on braz
 		}
 	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my imbue rod in my %tool.storage
 	goto work
@@ -84,14 +89,14 @@ imbue:
 sigil:
 	gosub GET %sigil sigil from %main.storage
 	gosub STUDY %sigil sigil
-	gosub PUT trace $MC.order.noun
+	gosub PUT trace $MC.order.noun on braz
 	var tool scribe
 	goto work
 	
 	
 fount:
 	gosub GET my fount
-	send wave fount at $MC.order.noun
+	send wave fount at $MC.order.noun on braz
 	return
 	
 scribe:
@@ -108,13 +113,14 @@ meditate:
 	return
 	
 focus:
+     if !def(MC_FOCUS.WAND) then put #var MC_FOCUS.WAND NULL
 	if matchre("$MC_FOCUS.WAND", "WAND") then
 		{
 		gosub GET $MC_FOCUS.WAND
-		gosub Action wave $MC_FOCUS.WAND at $MC.order.noun
+		gosub Action wave $MC_FOCUS.WAND at $MC.order.noun on braz
 		gosub PUT_IT $MC_FOCUS.WAND in %tool.storage
 		}
-	else gosub Action focus $MC.order.noun
+	else gosub Action focus $MC.order.noun on braz
 	var special NULL
 	return
 
