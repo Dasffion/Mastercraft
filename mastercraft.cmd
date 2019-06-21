@@ -574,7 +574,7 @@ calc.material:
 		if %%order.pref.deed.count > 11 then var %%order.pref.deed.count 11
 		if %%order.pref.deed.count > 0 then gosub count.material deed
 		if %mass.volume > %material.volume then gosub lack.material
-		gosub combine.check "%main.storage" %order.pref
+		gosub combine.check "%main.storage" "%work.material %order.pref"
 		pause 0.5
 		echo Total Yards Req'd: %mass.volume
 		echo Yards per Item: %volume
