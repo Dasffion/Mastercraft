@@ -82,6 +82,7 @@ imbue:
                }
 		if !$prepared then waitfor You feel fully prepared 
 		send cast $MC.order.noun on braz
+          put #tvar prepared 0
 		}
 	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my imbue rod in my %tool.storage
 	goto work
