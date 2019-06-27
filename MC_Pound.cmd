@@ -27,7 +27,7 @@ action var worn.tongs 1 when ^You tap some.*(segmented|articulated).*tongs that 
 action var tongs.adj 0 when ^With a yank you fold the shovel
 action var tongs.adj 1 when ^You lock the tongs into a fully extended position
 action var tool bellows when and produces less heat from the stifled coals\.|is unable to consume its fuel\.|PUSH a BELLOWs
-action var tool tongs when would benefit from some soft reworking\.|could use some straightening along the horn of the anvil\.|must be drawn into wire on a mandrel and placed in mold sets using tongs\.|^The .+ now looks ready to be turned into wire using a mandrel or mold set\.|TURN it with the tongs to perform these tasks\.$|^The metal must be transfered to plate molds and drawn into wire on a mandrel sets using tongs\.|TURN it with the tongs
+action var tool tongs when would benefit from some soft reworking\.|could use some straightening along the horn of the anvil\.|drawn into wire on a mandrel|^The .+ now looks ready to be turned into wire using a mandrel or mold set\.|TURN it with the tongs to perform these tasks\.$|^The metal must be transfered to plate molds and drawn into wire on a mandrel sets using tongs\.|TURN it with the tongs
 action var tool shovel when dies down and appears to need some more fuel|^The fire needs more fuel before you can do that\.|^As you complete working the fire dies down and needs more fuel|PUSH FUEL with a SHOVEL
 action var tool tub when ready for a quench hardening in the slack tub\.|^The metal now appears ready for cooling in the slack tub\.|^ You can PUSH the TUB to reposition it and quench the hot metal\.|PUSH the TUB
 action var tool oil when some oil to preserve and protect it.$|POUR OIL on .* to complete the forging process\.$
