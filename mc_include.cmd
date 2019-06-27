@@ -89,6 +89,7 @@ action (order) put #tvar water.order $1 when (\d+)\)\..*10 splashes of water.*(L
 action (order) put #tvar alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
+action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
  
 #### Identifying extra pieces from the instruction book
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
@@ -1417,6 +1418,7 @@ PUT_IT:
      matchre RETURN ^I could not find what you were referring to\.
      matchre RETURN ^What were you referring to\?     
      matchre RETURN ^The (\S+) can only hold
+     matchre TRASH ^This appears too far altered to enchant
      matchre BAG_FULL no matter how you arrange it
      matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
      send put %PutIt
@@ -1425,6 +1427,12 @@ PUT_IT:
      put #echo >$Log Crimson $datetime PutIt = %PutIt
      put #log $datetime MISSING MATCH IN PUT_IT (utility.inc)
      return
+     
+TRASH:
+     if matchre("$roomobjs", "(bucket|bin)") then gosub PUT_IT %rawmat in bin
+     else put drop %rawmat
+     gosub clear
+     goto start.enchant
      
 BAG_FULL:
     gosub combine.check "%main.storage" %order.pref
