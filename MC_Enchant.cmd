@@ -18,16 +18,26 @@ action var tool restudy when You must first study instructions regarding the enc
 action var tool scribe when more permanently with a burin
 action var tool sigil;var sigil $1 when ^You need another (\S+) .*sigil to continue the enchanting process
 action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.
-action var tool done when With the enchantment complete|With the enchanting process completed
+action var tool done when With the enchantment complete|With the enchanting process completed|With enchanting complete
 action put #tvar prepared 1 when ^You feel fully prepared
-#action (work) goto Retry when \.\.\.wait|type ahead
+action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*)\.
 action (work) off
 var main.storage $MC_ENCHANTING.STORAGE
 
+CleanBrazier:
+     send analyze brazier
+     pause 0.5
+     pause 0.5
+     pause 0.5
+     if (("%tool.repair" = "in pristine condition") || ("%tool.repair" = "practically in mint condition")) then goto unfinished
+CleanBrazier_1:
+     gosub GET salt
+     gosub PUT pour salt on brazier
+     gosub STOW salt
 		
 unfinished:
 	 var tool analyze
-	 matchre analyze $MC.order.noun
+	 matchre analyze1 $MC.order.noun
 	 matchre clean unfinished .+ (\S+)\.
 	 matchre start.enchant There is nothing on there
 	 matchre stow.fount fount
@@ -42,7 +52,7 @@ stow.fount:
 
 start.enchant:
 	put #tvar prepared 0
-	if "$MC_IMBUE" = "SPELL" then put prepare imbue $MC_IMBUE.MANA
+	if "$MC_IMBUE" = "SPELL" then gosub PREPARE imbue $MC_IMBUE.MANA
 	if !matchre("$righthand|$lefthand", "%rawmat") then gosub GET my %rawmat from %main.storage
 	gosub PUT_IT my %rawmat on brazier
 	goto work
@@ -77,11 +87,11 @@ imbue:
 		{
           if "$preparedspell" != "Imbue" then 
                {
-               if "$preparedspell" != "None" then put release spell
-               put prepare imbue $MC_IMBUE.MANA
+               if "$preparedspell" != "None" then gosub release spell
+               gosub prepare imbue $MC_IMBUE.MANA
                }
 		if !$prepared then waitfor You feel fully prepared 
-		send cast $MC.order.noun on braz
+		gosub CAST_TARGET $MC.order.noun on braz
           put #tvar prepared 0
 		}
 	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my imbue rod in my %tool.storage
