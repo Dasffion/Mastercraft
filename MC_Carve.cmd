@@ -89,7 +89,7 @@ unfinished:
 first.carve:
 	if contains("$righthandnoun", "%rock") then gosub PUT swap
 	pause 1
-	if ((contains("$lefthandnoun", "%rock")) && ("%rock" != "stack")) then gosub PUT drop my $lefthandnoun
+	#if ((contains("$lefthandnoun", "%rock")) && ("%rock" != "stack")) then gosub PUT drop my $lefthandnoun
 	pause 1
 	gosub ToolCheckRight %chisel
 	 matchre excess and place the excess (.+) off to the side|cut off the excess material

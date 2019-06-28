@@ -772,7 +772,7 @@ calc.material:
                }
           if %salt.count < 1 then
                {
-                    gosub automove forging suppl
+                    gosub automove forging tool
                     action (order) on
                     gosub ORDER
                     action (order) off
@@ -1840,7 +1840,7 @@ lack.coin:
      var need.coin 0
      action remove (^The clerk flips through her ledger|^The clerk tells you)
      pause 1
-     goto %purchaselabel
+     goto purchase.material
 
 lack.coin.exit:
      echo You need some startup coin to purchase stuff! Go to the bank and try again!

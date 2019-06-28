@@ -1,12 +1,20 @@
 #Metal Smelting
 debug 10
+if_1 goto Continue
+echo Usage is: .smelt <material>
+echo To smelt more than one material separate them by a space .smelt <material> <material>
+exit
+Continue:
 include mc_include.cmd
-var material %1
+gosub setmaterial
+eval matcount count("%material", "|")
+gosub itemcountclear
 var matstow %tool.storage
 gosub EMPTY_HANDS
 var swap.tongs 0
 var worn.tongs 0
 var tongs.adj 0
+
 
 
 action var worn.tongs 1 when ^You tap some.*(segmented|articulated).*tongs that you are wearing\.$
@@ -26,38 +34,64 @@ else var shovel $MC_SHOVEL
 
 
 action INSTANT goto finish when ^At last the metal appears to be thoroughly mixed and you pour it into an ingot mold
-#goto gettool
-if_1 goto SmeltStart
-echo Usage is: .smelt <material>
-exit
+goto smeltstart
+
+SetMaterial:
+     var material %1
+SetMaterial_1:
+     shift
+     if_1 then 
+          {
+          var material %material|%1
+          goto setmaterial_1
+          }
+     return
+     
+itemcountclear:
+     counter set 0
+itemcountclear_1:
+     if %c > %matcount then return
+     var %material(%c)nugget 0
+     var %material(%c)ingot 0
+     var %material(%c)bar 0
+     counter add 1
+     goto itemcountclear_1
 
 SmeltStart:
+     counter set 0
      action (settype) on
-     action (settype) var mattype $1 when %material (ingot|nugget)
-     send look in my $MC_FORGING.STORAGE
-     pause 2
+     action (settype) math $1$2 add 1 when (%material) (ingot|nugget)
+     put inv $MC_FORGING.STORAGE
+     waitfor [Type INVENTORY
      action (settype) off
-     match putmat You get
-     match end What do you want to get
-     match end What were you referring
-     send get my %material %mattype
-     matchwait
+     evalmath check %%material(0)nugget + %%material(0)ingot + %%material(0)bar
+     if %check = 0 then goto end
+SmeltStart_1:
+     if %c > %matcount then goto gettool
+     gosub GetMat nugget
+     gosub GetMat ingot
+     gosub GetMat bar
+     counter add 1
+     goto SmeltStart_1
 
 GetMat:
+     var mattype $1
+     if %%material(%c)%mattype < 1 then return
      match putmat You get
-     match gettool What do you want to get
-     match gettool What were you referring
-     send get my %material %mattype
+     match return What do you want to get
+     match return What were you referring
+     send get my %material(%c) %mattype
      matchwait
 
 PutMat:
+     math %material(%c)%mattype subtract 1
      match toomuch at once would be dangerous
-     match getmat You put
+     match GetMat You put
      send put %mattype in cruc
      matchwait
 
 TooMuch:
-     gosub PUT_IT my %material %mattype in my $MC_FORGING.STORAGE
+     gosub PUT_IT my %material(%c) %mattype in my $MC_FORGING.STORAGE
      goto gettool
 
 GetTool:

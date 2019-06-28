@@ -1596,6 +1596,100 @@ WEAR:
      put #echo >$Log Crimson $datetime Stow = %Stow
      put #log $datetime MISSING MATCH IN WEAR (utility.inc)
      return
+     
+#### SPELL CASTING
+PREPARE:
+     var Prepare $0
+     var LOCATION PREPARE_1
+     pause 0.0001
+PREPARE_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+	matchre SPELL_CAST_RETURN ^But you've already prepared the
+     matchre SPELL_CAST_RETURN ^You have already fully prepared
+     matchre SPELL_CAST_RETURN ^You are already preparing the .* spell\!
+     matchre SPELL_CAST_RETURN ^You begin chanting .* to invoke the .* spell\.
+     matchre SPELL_CAST_RETURN ^You mutter .* to yourself while preparing the .* spell\.
+     matchre SPELL_CAST_RETURN ^With .* movements you prepare your body for the .* spell\.
+     matchre SPELL_CAST_RETURN ^You raise your .* skyward\, chanting the .* of the .* spell\.
+     matchre SPELL_CAST_RETURN ^You rock back and forth\, humming tunelessly as you invoke the .* spell\.
+     matchre SPELL_CAST_RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Your eyes darken to black as a starless night as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^You close your eyes and breathe deeply, gathering energy for the .* spell\.
+     matchre SPELL_CAST_RETURN ^You trace an arcane sigil in the air\, shaping the pattern of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Your eyes darken to black as a starless night as you prepare the .* spell\.
+	matchre SPELL_CAST_RETURN ^You trace a geometric sigil in the air, shaping the pattern of the .* spell\.
+     matchre SPELL_CAST_RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
+     matchre SPELL_CAST_RETURN ^A soft breeze surrounds your body as you confidently prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^Tiny tendrils of lightning jolt between your hands as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^Heatless orange flames blaze between your fingertips as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^Entering a trance-like state\, your hands begin to tremble as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^You adeptly sing the incantations for the .* spell\, setting the words to a favorite tune\.
+     matchre SPELL_CAST_RETURN ^You bring your hand slowly to your forehead as you begin chanting the words of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Icy blue frost crackles up your arms with the ferocity of a blizzard as you begin to prepare the .* spell\!
+     matchre SPELL_CAST_RETURN ^You have to strain to harness the energy for this spell, and you aren't sure you can get enough to cast it\.
+     matchre SPELL_CAST_RETURN ^You giggle to yourself as you move through the syncopated gestures that accompany the preparations of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Darkly gleaming motes of sanguine light swirl briefly about your fingertips as you gesture while uttering the .* spell\.
+     matchre SPELL_CAST_RETURN ^As you begin to solemnly intone the .* spell a blue glow swirls about forming a nimbus that surrounds your entire being\.
+     matchre SPELL_CAST_RETURN ^Your skin briefly withers and tightens\, becoming gaunt as the energies of the .* spell begin to build up through your body\.
+     matchre SPELL_CAST_RETURN ^You trace an intricate rune in the air with your finger\, illusory lines lingering several seconds as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^You begin reciting a solemn incantation\, causing familiar patterns of geometric shapes to circle your hand as the .* spell forms\.
+     matchre SPELL_CAST_RETURN ^You take up a handful of dirt in your palm to prepare the .* spell\.  As you whisper arcane words\, you gently blow the dust away and watch as it becomes swirling motes of glittering light that veil your hands in a pale aura\.
+     matchre SPELL_CAST_RETURN ^You recall the exact details
+     matchre SPELL_CAST_RETURN ^But you've already prepared the Chaos symbiosis
+     matchre SPELL_CAST_DONE ^What do you want to prepare\?
+     matchre SPELL_CAST_DONE ^That is not a spell you can cast\.
+     matchre SPELL_CAST_DONE ^You wouldn't have the first clue how to do that\.
+     matchre SPELL_CAST_DONE ^You stop\, convinced that there's no way to control that much mana\.
+     matchre SPELL_CAST_FAIL ^You have to strain to harness the energy for this spell, and you aren't sure you can get enough to cast it\.
+     send prepare %Prepare
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PREPARE! (utility.inc) ***
+     put #echo >$Log Crimson $datetime Prepare = %Prepare
+     put #log $datetime MISSING MATCH IN PREPARE! (utility.inc)
+     goto SPELL_CAST_RETURN
+
+SPELL_CAST_DONE:
+     put #queue clear
+     put #var symb 0
+     pause 0.0001
+     return
+SPELL_CAST_FAIL:
+     gosub RELEASE MANA
+SPELL_CAST_RETURN:
+     pause 0.0001
+     return
+RELEASE:
+     var Release $0
+     var LOCATION RELEASE_1
+     pause 0.0001
+     RELEASE_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre RETURN ^\s*Encumbrance\s*\:
+     put -release %Release;-encumbrance
+     matchwait
+     
+SPELL_CAST_TARGET:
+     var Target $0
+     var LOCATION SPELL_CAST_TARGET_1
+     pause 0.0001
+SPELL_CAST_TARGET_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre SPELL_CAST_DONE ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
+     matchre SPELL_CAST_DONE ^You gesture
+     matchre SPELL_CAST_DONE ^Focus the power of justice on whom\?
+     matchre SPELL_CAST_FAIL ^You don't have a spell prepared\!
+     matchre SPELL_CAST_FAIL ^Your concentration slips for a moment\, and your spell is lost\.
+     put -cast %Target;-2 gesture
+     matchwait
 
 #### RETURNS
 RETURN_CLEAR:

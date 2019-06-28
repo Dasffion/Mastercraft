@@ -331,10 +331,10 @@ put #var MC_Forging_NOWO 0
 #	MC_ENG.PREF: Material type noun i.e. lumber, bone, stone
 #	MC_ENG.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_ENG.DEED: DEED orders instead of bundling items on or off
-put #var MC_ENGINEERING.STORAGE shoulder pack
+put #var MC_ENGINEERING.STORAGE carry-all
 put #var MC_ENG.DISCIPLINE carving
-put #var MC_ENG.MATERIAL wolf-bone
-put #var MC_ENG.PREF bone
+put #var MC_ENG.MATERIAL alabaster
+put #var MC_ENG.PREF stone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
 put #var MC_Engineering_NOWO 0
@@ -425,7 +425,7 @@ put #var MC_PLIERS hooked pliers
 put #var MC_BELLOWS corrugated-hide bellows
 put #var MC_STIRROD stirring rod
 #ENGINEERING
-put #var MC_CHISEL iron chisel
+put #var MC_CHISEL short chisel
 put #var MC_SAW bone saw
 put #var MC_RASP iron rasp
 put #var MC_RIFFLER square riffler
