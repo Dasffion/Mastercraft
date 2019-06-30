@@ -871,7 +871,7 @@ parts.inv:
      action (outfitting) math small.padding.count add 1 when (a|some) small \S+ \S+ padding
      action (outfitting) math long.cord.count add 1 when a long \S+ cord
      action (outfitting) math short.cord.count add 1 when a short \S+ cord
-     action (outfitting) math pins.count add 1 when some straight iron pins
+     action (outfitting) math pins.count add 1 when some .*?pins
      action (outfitting) math %order.pref.item.count add 1 when ^\s+(?:an?|some) (%work.material).*(%order.pref)
      action (outfitting) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(%order.pref)
      action (engineering) math polish.count add 1 when a jar of surface polish

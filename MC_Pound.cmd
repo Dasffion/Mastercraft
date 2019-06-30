@@ -31,13 +31,14 @@ action var tool tongs when would benefit from some soft reworking\.|could use so
 action var tool shovel when dies down and appears to need some more fuel|^The fire needs more fuel before you can do that\.|^As you complete working the fire dies down and needs more fuel|PUSH FUEL with a SHOVEL
 action var tool tub when ready for a quench hardening in the slack tub\.|^The metal now appears ready for cooling in the slack tub\.|^ You can PUSH the TUB to reposition it and quench the hot metal\.|PUSH the TUB
 action var tool oil when some oil to preserve and protect it.$|POUR OIL on .* to complete the forging process\.$
-action var tool analyze when ^The .* now appears ready for grinding and polishing on a grinding wheel\.|^Applying the final touches |^That tool does not seem suitable for that task\.
+action var tool analyze when ^Applying the final touches |^That tool does not seem suitable for that task\.
 action var tool hammer when push my bellows|turn .* with my tongs|push fuel with my shovel|push fuel with my tongs|pull .* with my pliers$|push tub|looks ready to be pounded with a forging hammer.|You do not see anything that would obstruct pounding of the metal with a forging hammer
 action var tool rehammer when ^The .* appears ready for pounding
 action var tool pliers when (with the|using) pliers to (stitch|pull|rivet) them together\.$|appear ready for bending using a pair of pliers\.|are now ready for (stitching|riveting) together using pliers\.$|Just pull the .* with the pliers|(bending|weaving) of .* into and around it\.|The links appear ready to be woven into and around
 action var tool assemble when ^\[Ingredients can
 action var excessloc $2 when and so you split the ingot and leave the portion you won't be using (on the|in your|at your) (\S+).$
 action var tool done when ^Applying the final touches, you complete|TURN the GRINDSTONE several times|This appears to be a type of finished|^The workmanship
+action put #parse TURN the GRINDSTONE several times when ^The .* now appears ready for grinding and polishing on a grinding wheel\.
 action var item.anvil 1 when ^On the iron anvil you see
 #action (work) goto Retry when \.\.\.wait|type ahead
 action (work) off

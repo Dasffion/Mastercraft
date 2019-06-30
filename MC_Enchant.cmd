@@ -15,9 +15,9 @@ action var special focus when The .* struggles to accept the sigil scribing
 action var special fount when You need another mana fount to continue crafting
 action var special loop when You notice many of the scribed sigils are slowly merging back
 action var tool restudy when You must first study instructions regarding the enchantment you wish to begin
-action var tool scribe when more permanently with a burin
+action var tool scribe when more permanently with a burin|^You do not see anything that would prevent scribing additional sigils
 action var tool sigil;var sigil $1 when ^You need another (\S+) .*sigil to continue the enchanting process
-action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.
+action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.|^The.*?requires an application of an imbue spell to advance the enchanting process.
 action var tool done when With the enchantment complete|With the enchanting process completed|With enchanting complete
 action put #tvar prepared 1 when ^You feel fully prepared
 action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*)\.
@@ -37,13 +37,19 @@ CleanBrazier_1:
 		
 unfinished:
 	 var tool analyze
-	 matchre analyze1 $MC.order.noun
-	 matchre clean unfinished .+ (\S+)\.
+	 matchre braziercheck On the enchanter's brazier you see (.*?)\.
 	 matchre start.enchant There is nothing on there
-	 matchre stow.fount fount
 	 send look on brazier
 	 matchwait 
-	 
+ 
+braziercheck:
+     var brazier $0
+	if matchre("%brazier", "$MC.order.noun") then goto analyze1
+     if matchre("%brazier", "unfinished .+ (\S+))\.") then goto clean
+     if matchre("%brazier", "fount") then goto stow.fount
+     goto start.enchant
+
+     
 stow.fount:
 	gosub GET fount
 	gosub PUT_IT fount in %main.storage

@@ -841,6 +841,7 @@ var society.type Alchemy
 return
 
 none:
+if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "MC_.*?\.cmd"))) then return
 if matchre("$scriptlist", "mastercraft") then 
 	{
 	put #echo You are not in a valid society
