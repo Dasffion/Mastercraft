@@ -485,7 +485,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
-put #var MC_Engineering_NOWO 0
+put #var MC_Engineering_NOWO 1
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
