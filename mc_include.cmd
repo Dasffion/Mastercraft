@@ -1,43 +1,4 @@
-#MasterCraft - by the player of Jaervin Ividen
-# A crafting script suite...
-#v 0.1.6
-#
-# Script Usage: .mastercraft								--to only do one work order
-#				.mastercraft <no. of orders>				--to perform more than one
-#				.mastercraft <no. of orders> <difficulty>	--to quickly change your order difficulty because of new skill range (not added yet)
-#
-# 	Welcome to the include file!
-#
-#	This is where you set up your character's crafting profile. Since there are many different crafts and some people like to do orders from many,
-#	the personal variables are set by which type of society you're in so you don't have to edit them so often. Each character can have its own
-#	crafting profile, so you may change these variables to your own personal liking for each character you use this script with.
-#	
-#	Here's a breakdown of each variable:																		Used In:
-#	forging.storage		--Container for forging (tools, deeds, spare parts, etc.) 								pound, grind
-#	outfitting.storage	--Container for outfitting equipment (tools, deeds, spare parts, etc.)					sew, knit
-#	engineering.storage	--Container for engineering equipment (tools, deeds, spare parts, etc.)					carve
-#	remnant.storage		--Container for putting failed items, materials too small to make stuff with.			mastercraft
-#	work.material		--The stocked material type for orders. Be specific (ie. bronze-alloy, gargoyle-hide.)	mastercraft
-#	discipline		-- "blacksmith, armor, weapon, tailor, carving"
-#
-#	These variables must be set -to the letter-. Yes, this means they are case-sensitive:
-#	repair			--"on" or "off" ONLY. Set if you want to repair your tools. If repair is on and auto-repair is off it will use the Engineering tool repair. Only works in Crossing right now.						mastercraft
-#	auto.repair		--"on" or "off" ONLY. Set if you want to repair your own metal tools (must have techs.)			mastercraft
-#	reclaim.metal		--"on" or "off" ONLY. Set if you have flux and wish to reclaim failed items.				mastercraft
-#	deed.order		--"on" or "off" ONLY. Set if your products are heavy(ie. armor, stone furniture.)			mastercraft
-#	MC.Mark			--"on" or "off" ONLY. Set if you have a maker's mark you wish to use.						mastercraft, pound, grind, sew, carve, knit
-#	discipline		--"weapon", "armor", "blacksmith", "tailor", "carving" ONLY.								mastercraft
-#	work.difficulty		--"easy", "challenging", "hard" ONLY. Used for asking for work orders.						mastercraft
-#	order.pref		--"cloth", "leather", "knitted", "stone", "bone" ONLY. Determines the orders you keep.		mastercraft
-#	get.coin		--"on" or "off ONLY. Set if you want to withdraw coins to repurchase supplies. Only works if teller is in the same map
-#	reorder			--"on" or "off ONLY. Set if you want to buy new material if you do not have enough
-#	SmallOrders		--"1" or "0" ONLY. 1 is on 0 is off. Set if you want to only take forging work orders at or under 5 volume
-#
-#	Be sure to complete your character's crafting profile before running any of the included scripts. There are some things scripting
-#	cannot do for you, such as make personal decisions.
-#	
-#	Each script can be run completely standalone from Mastercraft if you want to create multiple items or just individual orders. Using them
-#	as such will require you to be responsible for your own material management and quality control.
+#Setup Your variables in the MC_SETUP file
 #
 # Happy Crafting!
 gosub location.vars
