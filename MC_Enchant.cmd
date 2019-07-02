@@ -16,9 +16,11 @@ action var special fount when You need another mana fount to continue crafting
 action var special loop when You notice many of the scribed sigils are slowly merging back
 action var tool restudy when You must first study instructions regarding the enchantment you wish to begin
 action var tool scribe when more permanently with a burin|^You do not see anything that would prevent scribing additional sigils
-action var tool sigil;var sigil $1 when ^You need another (\S+) .*sigil to continue the enchanting process
+action var tool sigil;var sigil $1 when ^You need another (?!primary)(\S+) .*sigil to continue the enchanting process
+action var tool sigil when ^You need another primary sigil to continue the enchanting process
 action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.|^The.*?requires an application of an imbue spell to advance the enchanting process.
 action var tool done when With the enchantment complete|With the enchanting process completed|With enchanting complete
+action goto clean when It does not seem possible to continue with the enchanting process, and you will need to start over.
 action put #tvar prepared 1 when ^You feel fully prepared
 action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*)\.
 action (work) off
@@ -41,7 +43,15 @@ unfinished:
 	 matchre start.enchant There is nothing on there
 	 send look on brazier
 	 matchwait 
- 
+clean:
+     gosub GET fount from brazier
+     gosub PUT_IT fount in main storage
+     pause 0.5
+     put clean brazier
+     pause 0.5
+     put clean brazier
+     pause 0.5
+     pause 0.5
 braziercheck:
      var brazier $0
 	if matchre("%brazier", "$MC.order.noun") then goto analyze1
@@ -49,6 +59,12 @@ braziercheck:
      if matchre("%brazier", "fount") then goto stow.fount
      goto start.enchant
 
+clean:
+     put clean brazier
+     pause 0.5
+     put clean brazier
+     pause 0.5
+     pause 0.5
      
 stow.fount:
 	gosub GET fount
