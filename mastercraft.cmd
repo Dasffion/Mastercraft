@@ -1110,7 +1110,7 @@ purchase.assemble2:
      pause .2
      if "%assemble2" != "mechanism" then 
           {
-               if "%discipline" = "artif" then gosub PUT_IT my sigil in my %mainstorage
+               if "%discipline" = "artif" then gosub PUT_IT my sigil in my %main.storage
                else gosub PUT_IT my %assemble2 in my %main.storage
           }
      if "%assemble2" = "mechanism" then gosub PUT_IT my ingot in my %main.storage
