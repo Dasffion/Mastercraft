@@ -856,29 +856,29 @@ parts.inv:
      var lenses.count 0
      var salt.count
      action (forging) math ingot.item.count add 1 when ^\s*(?:an?|some)(?! deed).*(%work.material) ingot
-     action (forging) math %order.pref.deed.count add 1 when \s+a deed for (?:an?|some).*(%work.material).*(ingot)
-     action (forging) math long.pole.count add 1 when a long \S+ pole
-     action (forging) math short.pole.count add 1 when a short \S+ pole
-     action (forging) math handle.count add 1 when (a|an) \S+ shield handle
-     action (forging) math hilt.count add 1 when a \S+ \S+ hilt
-     action (forging) math haft.count add 1 when a \S+ \S+ haft
-     action (forging) math oil.count add 1 when a flask of(?: azure| violet)? oil
-     action (outfitting) math large.backing.count add 1 when a large \S+ backing
-     action (outfitting) math small.backing.count add 1 when a small \S+ backing
-     action (outfitting) math large.padding.count add 1 when (a|some) large \S+ padding
-     action (outfitting) math small.padding.count add 1 when (a|some) small \S+ padding
-     action (outfitting) math large.padding.count add 1 when (a|some) large \S+ \S+ padding
-     action (outfitting) math small.padding.count add 1 when (a|some) small \S+ \S+ padding
-     action (outfitting) math long.cord.count add 1 when a long \S+ cord
-     action (outfitting) math short.cord.count add 1 when a short \S+ cord
-     action (outfitting) math pins.count add 1 when some .*?pins
+     action (forging) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(ingot)
+     action (forging) math long.pole.count add 1 when ^\s+a long \S+ pole
+     action (forging) math short.pole.count add 1 when ^\s+a short \S+ pole
+     action (forging) math handle.count add 1 when ^\s+(a|an) \S+ shield handle
+     action (forging) math hilt.count add 1 when ^\s+a \S+ \S+ hilt
+     action (forging) math haft.count add 1 when ^\s+a \S+ \S+ haft
+     action (forging) math oil.count add 1 when ^\s+a flask of(?: azure| violet)? oil
+     action (outfitting) math large.backing.count add 1 when ^\s+a large \S+ backing
+     action (outfitting) math small.backing.count add 1 when ^\s+a small \S+ backing
+     action (outfitting) math large.padding.count add 1 when ^\s+(a|some) large \S+ padding
+     action (outfitting) math small.padding.count add 1 when ^\s+(a|some) small \S+ padding
+     action (outfitting) math large.padding.count add 1 when ^\s+(a|some) large \S+ \S+ padding
+     action (outfitting) math small.padding.count add 1 when ^\s+(a|some) small \S+ \S+ padding
+     action (outfitting) math long.cord.count add 1 when ^\s+a long \S+ cord
+     action (outfitting) math short.cord.count add 1 when ^\s+a short \S+ cord
+     action (outfitting) math pins.count add 1 when ^\s+some .*?pins
      action (outfitting) math %order.pref.item.count add 1 when ^\s+(?:an?|some) (%work.material).*(%order.pref)
      action (outfitting) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(%order.pref)
-     action (engineering) math polish.count add 1 when a jar of surface polish
-     action (engineering) math stain.count add 1 when some wood stain
-     action (engineering) math string.count add 1 when some bow string
-     action (engineering) math mechanism.count add 1 when some (\S+) mechanism
-     action (engineering) math lenses.count add 1 when some lenses
+     action (engineering) math polish.count add 1 when ^\s+a jar of surface polish
+     action (engineering) math stain.count add 1 when ^\s+some wood stain
+     action (engineering) math string.count add 1 when ^\s+some bow string
+     action (engineering) math mechanism.count add 1 when ^\s+(?:an?|some) (\S+) mechanism
+     action (engineering) math lenses.count add 1 when ^\s+some lenses
      action (engineering) math %order.pref.item.count add 1 when ^\s+(?:an?|some) (%work.material).*(%order.pref|stack)
      action (engineering) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(%order.pref|stack)
      action (alchemy) math %herb1.item.count add 1 when ^\s+(?:an?|some).*(%herb1)(?! ?(salve|ointment|ungent|potion|poultices|draught|elixir|tonic|salve|wash|balm))
@@ -1022,7 +1022,7 @@ manual.count:
                     gosub PUT_IT $righthand in my %main.storage
                }
           gosub GET %ordinal(%bagcount) %work.material %count in my %main.storage
-          if !contains("$lefthand", "yardstick") then gosub GET yard from my %main.storage
+          if !contains("$lefthand", "yardstick") then gosub GET yard from my %tool.storage
           send measure my %work.material %count with my yardstick
           math temp subtract 1
           pause 1
@@ -1036,7 +1036,7 @@ manual.count:
                     unvar temp
                     unvar count
                     unvar bagcount
-                    gosub PUT_IT yard in %main.storage
+                    gosub PUT_IT yard in %tool.storage
                     gosub GET %rightsave from my %main.storage
                     unvar rightsave
                     return
