@@ -846,6 +846,11 @@ find.room.wait:
      return
 
 find.master:
+     if (def(automapper.typeahead) && ($automapper.typeahead != 0) then
+          {
+          var currenttypeahead $automapper.typeahead
+          put #var automapper.typeahead 0
+          }
      action (master) put #script abort automapper when eval matchre("$roomobjs", "%master")
      action (master) put #parse YOU HAVE ARRIVED when eval matchre("$monsterlist", "%master")
      gosub check.location
@@ -861,6 +866,7 @@ find.master:
                unvar temp
                unvar temp.max
                action (master) off
+               if (def(automapper.typeahead)) then put #var automapper.typeahead %currenttypeahead
                return
           }
 find.master2:
@@ -870,6 +876,7 @@ find.master2:
                unvar temp
                unvar temp.max
                action (master) off
+               if (def(automapper.typeahead)) then put #var automapper.typeahead %currenttypeahead
                return
 		}
      gosub automove $master.room(%temp)
@@ -881,6 +888,7 @@ find.master2:
                unvar temp
                unvar temp.max
                action (master) off
+               if (def(automapper.typeahead)) then put #var automapper.typeahead %currenttypeahead
                return
 		}
      math temp add 1
