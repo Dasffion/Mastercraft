@@ -1068,6 +1068,11 @@ automovecont:
      match automovecont1 YOU HAVE FAILED
      put #goto %toroom
      matchwait 90
+     if $roomid = 0 then 
+          {
+          gosub door
+          }
+     
      put #mapper reset
      goto automovecont
 
