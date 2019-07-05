@@ -43,28 +43,26 @@ unfinished:
 	 matchre start.enchant There is nothing on there
 	 send look on brazier
 	 matchwait 
-clean:
-     gosub GET fount from brazier
-     gosub PUT_IT fount in main storage
-     pause 0.5
-     put clean brazier
-     pause 0.5
-     put clean brazier
-     pause 0.5
-     pause 0.5
+
 braziercheck:
      var brazier $0
 	if matchre("%brazier", "$MC.order.noun") then goto analyze1
-     if matchre("%brazier", "unfinished .+ (\S+))\.") then goto clean
+     if matchre("%brazier", "unfinished .+ (\S+)\.") then goto clean
      if matchre("%brazier", "fount") then goto stow.fount
      goto start.enchant
 
 clean:
-     put clean brazier
-     pause 0.5
-     put clean brazier
      pause 0.5
      pause 0.5
+     if ("$MC.order.noun" != "fount") then
+          {
+               gosub GET fount from brazier
+               gosub PUT_IT fount in main storage
+          }
+     gosub GET "$MC.order.noun" from brazier
+     gosub PUT_IT $MC.order.noun in bin
+     pause 0.5
+     goto unfinished
      
 stow.fount:
 	gosub GET fount
@@ -113,7 +111,7 @@ imbue:
                gosub prepare imbue $MC_IMBUE.MANA
                }
 		if !$prepared then waitfor You feel fully prepared 
-		gosub CAST_TARGET $MC.order.noun on braz
+		gosub SPELL_CAST_TARGET $MC.order.noun on braz
           put #tvar prepared 0
 		}
 	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my imbue rod in my %tool.storage
@@ -190,12 +188,15 @@ repeat:
 done:
 	gosub EMPTY_HANDS
 	gosub GET $MC.order.noun
-	gosub GET fount
-	gosub PUT_IT fount in my %main.storage
+	if ("$MC.order.noun" != "fount") then
+          {
+               gosub GET fount
+               gosub PUT_IT fount in my %main.storage
+          }
 	if %enchant.repeat > 1 then 
 		{
-		gosub PUT_IT $MC.order.noun in %main.storage 
-		goto repeat
+               gosub PUT_IT $MC.order.noun in %main.storage 
+               goto repeat
 		}
 	put #parse ENCHANTING DONE
 	exit
