@@ -356,7 +356,7 @@ identify.order:
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a cambrinth retuner|a flash trinket|a wind trinket|an earth trinket)
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (training ritual focus|basic lunar ritual focus|basic elemental ritual focus|basic life ritual focus|basic holy ritual focus)
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (common material minor fount|common material lesser fount|common material greater fount)
-               matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|burden runestone|manifest force runestone|strange arrow runestone|gauage flow runestone|dispel runestone|lay ward runestone)
+               matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|(?<!ease )burden runestone|manifest force runestone|strange arrow runestone|gauage flow runestone|dispel runestone|lay ward runestone)
                put read my %society.type logbook
                matchwait 1
                goto new.order.wait
