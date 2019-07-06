@@ -1623,7 +1623,8 @@ order.summary:
 turn.in:
      if !matchre("$roomid", "$master.room") then 
           {
-               gosub automove $master.room(1)
+               if "$zoneid" = "67" then gosub automove $master.room
+               else gosub automove $master.room(1)
           }
      gosub find.master
      if matchre("$lefthand", "logbook") then put swap
