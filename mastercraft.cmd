@@ -479,7 +479,7 @@ turn.page:
      gosub GET my %discipline book
      gosub PUT turn my book to chapter %order.chapter
      send read my book
-     waitforre (?<!Page).*Page (\d+):.*%full.order.noun
+     waitforre (?<!Page).*Page (\d+): %full.order.noun
      var page $1
      gosub PUT turn my book to page %page
      if $MC_%society.type_NOWO = 1 then goto calc.material
