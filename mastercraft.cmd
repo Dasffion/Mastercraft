@@ -110,7 +110,7 @@ include mc_include.cmd
      var assemble NULL
      var assemble2 NULL
      var difficultytry add 0
-     var NOWO MC_%society.type_NOWO
+     var NOWO $MC_%society.type_NOWO
      gosub clearvolume
 
 
@@ -1320,7 +1320,7 @@ process.order:
                send .MC_enchant %order.pref $MC.order.noun
                waitforre ^ENCHANTING DONE
           }
-     if (($MC_END.EARLY = 1) || ($MC_%society.type_NOWO = 1)) then gosub expcheck
+     if (($MC_END.EARLY = 1) || (%NOWO = 1)) then gosub expcheck
      gosub bundle.order
      if %order.quantity = 0 then 
           {
