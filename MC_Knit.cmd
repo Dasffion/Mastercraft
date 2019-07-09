@@ -80,7 +80,6 @@ repeat:
 done:
 	 gosub mark
 	 if %sew.repeat > 1 then goto repeat
-	send put my needle in my %tool.storage
-	waitforre ^You put
+	gosub STOW my needle in my %tool.storage
 	put #parse KNITTING DONE
 	exit

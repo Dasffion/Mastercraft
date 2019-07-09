@@ -110,6 +110,7 @@ include mc_include.cmd
      var assemble NULL
      var assemble2 NULL
      var difficultytry add 0
+     var NOWO MC_%society.type_NOWO
      gosub clearvolume
 
 
@@ -482,9 +483,9 @@ turn.page:
      waitforre (?<!Page).*Page (\d+): %full.order.noun
      var page $1
      gosub PUT turn my book to page %page
-     if $MC_%society.type_NOWO = 1 then goto calc.material
+     if %NOWO then goto calc.material
      gosub STUDY my book
-     if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+     if (($MC_DIFFICULTY < 4) && (!$MC_%NOWO)) then 
           {
                math difficultytry add 1
                pause 0.5
@@ -590,7 +591,7 @@ calc.material:
                var volume $1
                action (book) off          
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub PUT_IT my book in my %main.storage
                          math difficultytry add 1
@@ -1144,7 +1145,7 @@ process.order:
                gosub GET my %discipline book
                gosub STUDY my book
                pause .5
-               if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub GET %work.material ingot on anvil
                          gosub PUT_IT ingot in $MC_FORGING.STORAGE
@@ -1172,7 +1173,7 @@ process.order:
                          if %volume > $1 then gosub small.mat %order.pref
                          gosub GET my %discipline book
                          gosub STUDY my book
-                         if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                               {
                                    gosub PUT_IT %work.material %order.pref in my %main.storage
                                    math difficultytry add 1
@@ -1190,7 +1191,7 @@ process.order:
                          if %volume > $1 then gosub small.mat yarn
                          gosub GET my %discipline book
                          gosub STUDY my book
-                         if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                               {
                                    gosub PUT_IT %work.material yarn in my %main.storage
                                    math difficultytry add 1
@@ -1216,7 +1217,7 @@ process.order:
                          if %volume > $1 then gosub small.mat stack
                          gosub GET my %discipline book
                          gosub STUDY my book
-                         if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                               {
                                    gosub PUT_IT %work.material stack in my %main.storage
                                    math difficultytry add 1
@@ -1250,7 +1251,7 @@ process.order:
                     }
                gosub GET my %discipline book
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
@@ -1272,7 +1273,7 @@ process.order:
                if %volume > $1 then gosub small.mat %order.pref
                gosub GET my %discipline book
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
@@ -1292,7 +1293,7 @@ process.order:
                if %volume > $1 then gosub small.mat %herb1
                gosub GET my %discipline book
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
@@ -1309,7 +1310,7 @@ process.order:
                gosub gather.material %order.pref
                gosub GET my %discipline book
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!$MC_%society.type_NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub PUT_IT %order.pref in my %main.storage
                          math difficultytry add 1
@@ -1323,7 +1324,7 @@ process.order:
      gosub bundle.order
      if %order.quantity = 0 then 
           {
-               if $MC_%society.type_NOWO then goto endearly
+               if %NOWO then goto endearly
                goto order.summary
           }
      goto process.order
@@ -1333,6 +1334,7 @@ expcheck:
      if (matchre("%discipline", "tailor") && ($Outfitting.LearningRate > 25)) then goto endearly
      if (matchre("%discipline", "carving|shaping|tinkering") && ($Engineering.LearningRate > 25)) then goto endearly
      if (matchre("%discipline", "remed") && ($Alchemy.LearningRate > 25)) then goto endearly
+     if (matchre("%discipline", "aritf") && ($Enchanting.LearningRate > 25)) then goto endearly
      return
 
 endearly:
@@ -1396,6 +1398,7 @@ bundle.order:
           {
                if matchre("$roomobjs", "(bucket|bin)" then gosub PUT_IT my $MC.order.noun in $1
                else gosub PUT drop my $MC.order.noun
+               var NOWO 1
           }
      gosub EMPTY_HANDS
      return
@@ -1652,6 +1655,7 @@ turn.in1:
      if ((matchre("carving|shaping|tinkering", "%discipline")) && ($Engineering.LearningRate < 20)) then goto new.order
      if (("%discipline" = "tailor") && ($Outfitting.LearningRate < 20)) then goto new.order
      if (("%discipline" = "remed") && ($Alchemy.LearningRate < 20)) then goto new.order
+     if (("%discipline" = "artif") && ($Enchanting.LearningRate < 20)) then goto new.order
      gosub PUT_IT my logbook in my %main.storage
      put #parse MASTERCRAFT DONE
      exit
@@ -1741,7 +1745,7 @@ repair.tool_1:
                echo ***  You should probably repair all of your relevant tools while you're there.
                echo ***  Type GOGO in your original crafting hall to resume script...
                put #parse GO REPAIR
-               waitforre /gogo/i
+               waitforre (?i)gogo
                return
           }
      return
