@@ -300,6 +300,14 @@ location.vars:
      var FA.master.room 190|191|192|193|194|195
      var FA.work.room 190|191
      
+     #Hibarnhivdar Enchanting
+     var FENT.tools.room 235
+     var FENT.supplies.room 236
+     var FENT.books.room 234
+     var FENT.work.room 441|442|443|444
+     var FENT.room.list 232|233|234|235|236|237|238|239|240|241
+     var FENT.master.room 232|233|234|235|236|237
+     
      #Muspari Forging
      var MUF.room.list 504|505|506|507|508|509|510|511|512|513|514|515|516|517|518|519|520
      var MUF.master.room 504|505|506|507|508|509|510|511|512|513|514
@@ -370,6 +378,7 @@ check.location:
 	if $zoneid = 150 && matchre("%FF.room.list", "$roomid") then var society Fang.Forging
 	if $zoneid = 150 && matchre("%FO.room.list", "$roomid") then var society Fang.Outfitting
 	if $zoneid = 150 && matchre("%FA.room.list", "$roomid") then var society Fang.Alchemy
+	if $zoneid = 150 && matchre("%FENT.room.list", "$roomid") then var society Fang.Enchanting
      if $zoneid = 47 && matchre("%MUF.room.list", "$roomid") then var society Muspari.Forging
      if $zoneid = 47 && matchre("%MUE.room.list", "$roomid") then var society Muspari.Engineering
      if $zoneid = 47 && matchre("%MUO.room.list", "$roomid") then var society Muspari.Outfitting
@@ -748,6 +757,16 @@ put #tvar work.room %FA.work.room
 put #tvar supply.room 194
 put #tvar tool.room 193
 var society.type Alchemy
+return
+
+Haven.Enchanting:
+var master Trainer
+put #tvar master.room %FENT.master.room
+put #tvar work.room %FENT.work.room
+put #tvar supply.room 236
+put #tvar part.room 236
+put #tvar tool.room 235
+var society.type Enchanting
 return
 
 Muspari.Engineering:
