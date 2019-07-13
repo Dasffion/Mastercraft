@@ -1206,11 +1206,9 @@ manualalcohol:
 #### EMPTY HANDS SUB
 EMPTY_HANDS:
      pause 0.0001
-     if (("$righthand" != "Empty") && (matchre("%alltools", "$righthandnoun"))) then gosub PUT_IT $righthandnoun in my %tool.storage
-     if (("$righthand" != "Empty") && (matchre("%alltools", "$lefthandnoun"))) then gosub PUT_IT $lefthandnoun in my %tool.storage
-     if ("$righthand" != "Empty") then gosub PUT_IT $righthandnoun in %main.storage
-     if ("$lefthand" != "Empty") then gosub PUT_IT $lefthandnoun in %main.storage
-     return
+     gosub STOW_RIGHT
+     gosub STOW_LEFT
+	return
      
 ToolCheckRight:
 	var tools $0
@@ -1457,7 +1455,7 @@ GET:
      matchre RETURN ^What were you referring to\?
      matchre RETURN ^You grab .*(?:\.|\!|\?)
      matchre RETURN ^As best it can\, .* moves in your direction\.
-     matchre UNTIE ^You pull at it
+     matchre UNTIE ^You pull at it|^You pull at
      send get %Get
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET! (utility.inc) ***
@@ -1534,7 +1532,7 @@ STOW_LEFT:
 		if %BELTTOOLS = 1 then 
 			{
 			var BELTTOOLS 0
-			send tie my $lefthandnoun to my belt
+			send tie my $lefthandnoun to my $MC_TOOLBELT
 			pause 0.5
 			if "$lefthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %tool.storage
 			}
@@ -1549,7 +1547,7 @@ STOW_RIGHT:
 		if %BELTTOOLS = 1 then 
 			{
 			var BELTTOOLS 0
-			send tie my $righthandnoun to my belt
+			send tie my $righthandnoun to my %MC_TOOLBELT
 			pause 0.5
 			if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %tool.storage
 			}
