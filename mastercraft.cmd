@@ -1626,7 +1626,7 @@ order.summary:
 turn.in:
      if !matchre("$roomid", "$master.room") then 
           {
-               if "$zoneid" = "67" then gosub automove $master.room
+               if (("$zoneid" = "67") && ("%discipline" = "artif")) then gosub automove $master.room
                else gosub automove $master.room(1)
           }
      gosub find.master

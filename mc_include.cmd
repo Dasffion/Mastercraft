@@ -1404,6 +1404,7 @@ PUT_IT:
      matchre IMMOBILE ^You don't seem to be able to move to do that
      matchre WEBBED ^You can't do that while entangled in a web
      matchre STUNNED ^You are still stunned
+     matchre RETURN ^With a flick
      matchre RETURN ^You (?:put|drop) .*\.
      matchre RETURN ^Please rephrase that command\.
      matchre RETURN ^.* what\?
