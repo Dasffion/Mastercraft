@@ -121,6 +121,8 @@ put #var MC_MIN.ORDER 3
 #######################################################################
 ## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
 ## hand and #echo $righthand copy what is shown and paste that.
+#Toolbelts/Straps only necessary if you have one.
+put #var MC_TOOLBELT agonite toolstrap
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL glaes-edged shovel
@@ -268,6 +270,10 @@ put #var MC_MIN.ORDER 3
 #######################################################################
 ##########################  TOOL VARIABLES  ###########################
 #######################################################################
+## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
+## hand and #echo $righthand copy what is shown and paste that.
+#Toolbelts/Straps only necessary if you have one.
+put #var MC_TOOLBELT agonite toolstrap
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -417,6 +423,10 @@ put #var MC_MIN.ORDER 3
 #######################################################################
 ##########################  TOOL VARIABLES  ###########################
 #######################################################################
+## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
+## hand and #echo $righthand copy what is shown and paste that.
+#Toolbelts/Straps only necessary if you have one.
+put #var MC_TOOLBELT agonite toolstrap
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -499,7 +509,7 @@ put #var MC_OUTFITTING.STORAGE satchel
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
-put #var MC_OUT.DIFFICULTY hard
+put #var MC_OUT.DIFFICULTY challenging
 put #var MC_OUT.DEED off
 put #var MC_Outfitting_NOWO 0
 #######################################################################
@@ -565,6 +575,10 @@ put #var MC_MIN.ORDER 1
 #######################################################################
 ##########################  TOOL VARIABLES  ###########################
 #######################################################################
+## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
+## hand and #echo $righthand copy what is shown and paste that.
+#Toolbelts/Straps only necessary if you have one.
+put #var MC_TOOLBELT agonite toolstrap
 #FORGING
 put #var MC_HAMMER ball-peen hammer
 put #var MC_SHOVEL curved shovel
@@ -713,6 +727,10 @@ put #var MC_MIN.ORDER 3
 #######################################################################
 ##########################  TOOL VARIABLES  ###########################
 #######################################################################
+## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
+## hand and #echo $righthand copy what is shown and paste that.
+#Toolbelts/Straps only necessary if you have one.
+put #var MC_TOOLBELT agonite toolstrap
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
