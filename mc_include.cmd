@@ -759,7 +759,7 @@ put #tvar tool.room 193
 var society.type Alchemy
 return
 
-Haven.Enchanting:
+Fang.Enchanting:
 var master Trainer
 put #tvar master.room %FENT.master.room
 put #tvar work.room %FENT.work.room
