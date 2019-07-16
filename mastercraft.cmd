@@ -159,7 +159,7 @@ include mc_include.cmd
      action instant math coin.intake add $1 when You hand .* your logbook and bundled items, and are given (\d+)
      action instant math coin.intake subtract $1 when pay the sales clerk (\d+)
      action instant math coin.intake subtract %coin.temp when takes some coins from you and hands you.*\.$
-     action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*)\.
+     action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\))?\.
      action instant var tool.gone 1; var oil.gone 1 when The oil is all used up, so you toss
      action instant var tool.gone 1; var brush.gone 1 when The brush is all used up, so you toss
      action instant var grind 1 when TURN the GRINDSTONE several times
@@ -674,6 +674,7 @@ calc.material:
                if matchre("%full.order.noun", "a neck potion|some neck tonic") then var herb1 riolur
                if matchre("%full.order.noun", "a chest potion|some chest tonic") then var herb1 root
                if matchre("%full.order.noun", "a back potion|some back tonic") then var herb1 junliar
+               if (("$zoneid" = "150") && (matchre("%full.order.noun", "a back potion|some back tonic"))) then var herb1 junilar
                if matchre("%full.order.noun", "an eye potion|some eye tonic") then var herb1 aevaes
                if matchre("%full.order.noun", "some face ointment|some face poultices") then var herb1 pollen
                if matchre("%full.order.noun", "some body ointment|some body poultices") then var herb1 genich
@@ -1970,6 +1971,7 @@ lack.material:
                if "%order.type" = "georin" then var order.num 7
                if "%order.type" = "riolur" then var order.num 8
                if "%order.type" = "junliar" then var order.num 9
+               if "%order.type" = "junilar" then var order.num 9
                if "%order.type" = "aevaes" then var order.num 10
                if "%order.type" = "genich" then var order.num 11
                if "%order.type" = "ojhenik" then var order.num 12
