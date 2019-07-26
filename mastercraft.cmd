@@ -126,7 +126,11 @@ include mc_include.cmd
      if "%discipline" = "carving" then
           {
                if "%order.pref" = "stone" then var work.tools $MC_CHISEL|$MC_RIFFLER|$MC_RASP
-               if "%order.pref" = "bone" then var work.tools $MC_SAW|$MC_RIFFLER|$MC_RASP
+               if "%order.pref" = "bone" then 
+                    {
+                         var order.pref stack
+                         var work.tools $MC_SAW|$MC_RIFFLER|$MC_RASP
+                    }
           }
      if "%discipline" = "shaping" then
           {
@@ -423,7 +427,7 @@ chapter.5:
      
 chapter.6:
      var full.order.noun $1
-     if "%discipline" = "carving" then var order.type bone
+     if "%discipline" = "carving" then var order.type stack
      if "%discipline" = "shaping" then var order.type lumber
      var order.chapter 6
      pause .5
@@ -441,7 +445,7 @@ chapter.7:
 chapter.8:
      var full.order.noun $1
      if "%discipline" = "tailor" then var order.type leather
-     if "%discipline" = "carving" then var order.type bone
+     if "%discipline" = "carving" then var order.type stack
      if "%discipline" = "shaping" then var order.type lumber
      var order.chapter 8
      pause .5
@@ -450,7 +454,7 @@ chapter.8:
 chapter.9:
      var full.order.noun $1
      if "%discipline" = "tailor" then var order.type leather
-     if "%discipline" = "carving" then var order.type bone
+     if "%discipline" = "carving" then var order.type stack
      if "%discipline" = "shaping" then var order.type lumber
      var order.chapter 9
      pause .5
@@ -459,7 +463,7 @@ chapter.9:
 chapter.10:
      var full.order.noun $1
      if "%discipline" = "tailor" then var order.type leather
-     if "%discipline" = "carving" then var order.type bone
+     if "%discipline" = "carving" then var order.type stack
      if "%discipline" = "shaping" then var order.type lumber
      var order.chapter 10
      pause .5
@@ -580,7 +584,7 @@ calc.material:
                     gosub PUT_IT my pin in my %main.storage
                }
           }
-     if (("%discipline" = "carving") && ("%order.pref" = "bone")) then
+     if (("%discipline" = "carving") && ("%order.pref" = "stack")) then
           {
                pause .1
                action (book) on
@@ -859,21 +863,21 @@ parts.inv:
      var salt.count
      action (forging) math ingot.item.count add 1 when ^\s*(?:an?|some)(?! deed).*(%work.material) ingot
      action (forging) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(ingot)
-     action (forging) math long.pole.count add 1 when ^\s+a long \S+ pole
-     action (forging) math short.pole.count add 1 when ^\s+a short \S+ pole
-     action (forging) math handle.count add 1 when ^\s+(a|an) \S+ shield handle
-     action (forging) math hilt.count add 1 when ^\s+a \S+ \S+ hilt
-     action (forging) math haft.count add 1 when ^\s+a \S+ \S+ haft
-     action (forging) math oil.count add 1 when ^\s+a flask of(?: azure| violet)? oil
-     action (outfitting) math large.backing.count add 1 when ^\s+a large \S+ backing
-     action (outfitting) math small.backing.count add 1 when ^\s+a small \S+ backing
-     action (outfitting) math large.padding.count add 1 when ^\s+(a|some) large \S+ padding
-     action (outfitting) math small.padding.count add 1 when ^\s+(a|some) small \S+ padding
-     action (outfitting) math large.padding.count add 1 when ^\s+(a|some) large \S+ \S+ padding
-     action (outfitting) math small.padding.count add 1 when ^\s+(a|some) small \S+ \S+ padding
-     action (outfitting) math long.cord.count add 1 when ^\s+a long \S+ cord
-     action (outfitting) math short.cord.count add 1 when ^\s+a short \S+ cord
-     action (outfitting) math pins.count add 1 when ^\s+some .*?pins
+     action (assemble) math long.pole.count add 1 when ^\s+a long \S+ pole
+     action (assemble) math short.pole.count add 1 when ^\s+a short \S+ pole
+     action (assemble) math handle.count add 1 when ^\s+(a|an) \S+ shield handle
+     action (assemble) math hilt.count add 1 when ^\s+a \S+ \S+ hilt
+     action (assemble) math haft.count add 1 when ^\s+a \S+ \S+ haft
+     action (assemble) math oil.count add 1 when ^\s+a flask of(?: azure| violet)? oil
+     action (assemble) math large.backing.count add 1 when ^\s+a large \S+ backing
+     action (assemble) math small.backing.count add 1 when ^\s+a small \S+ backing
+     action (assemble) math large.padding.count add 1 when ^\s+(a|some) large \S+ padding
+     action (assemble) math small.padding.count add 1 when ^\s+(a|some) small \S+ padding
+     action (assemble) math large.padding.count add 1 when ^\s+(a|some) large \S+ \S+ padding
+     action (assemble) math small.padding.count add 1 when ^\s+(a|some) small \S+ \S+ padding
+     action (assemble) math long.cord.count add 1 when ^\s+a long \S+ cord
+     action (assemble) math short.cord.count add 1 when ^\s+a short \S+ cord
+     action (assemble) math pins.count add 1 when ^\s+some .*?pins
      action (outfitting) math %order.pref.item.count add 1 when ^\s+(?:an?|some) (%work.material).*(%order.pref)
      action (outfitting) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(%order.pref)
      action (engineering) math polish.count add 1 when ^\s+a jar of surface polish
@@ -910,6 +914,7 @@ parts.inv:
      if matchre("%discipline", "carving|shaping|tinkering") then action (engineering) off
      if "%discipline" = "remed" then action (alchemy) off
      if "%discipline" = "artif" then action (enchanting) off
+     action (assemble) off
      return     
 
 count.material:
@@ -1055,16 +1060,19 @@ purchase.assemble_1:
      gosub ORDER
      action (order) off
 purchase.assemble_2:
-     if "%discipline" = "tailor" then
+     if !matchre("%discipline", "tailor|artif") then gosub ORDER %assemble
+     else if matchre("%discipline", "tailor|artif") then
           {
-               if "%assemble" = "handle" then gosub ORDER $handle.order
-               if "%assemble" = "large padding" then gosub ORDER $l.padding.order
+               if "%discipline" = "tailor" then 
+                    {
+                         if "%assemble" = "handle" then gosub ORDER $handle.order
+                         if "%assemble" = "large padding" then gosub ORDER $l.padding.order
+                    }
+               if "%discipline" = "artif" then
+                    {
+                         gosub ORDER $%assemble.order
+                    }
           }
-     if "%discipline" = "artif" then
-          {
-               gosub ORDER $%assemble.order
-          }
-     else gosub ORDER %assemble
      math asmCount1 subtract 1
      pause .2
      if "%discipline" = "artif" then gosub PUT_IT my sigil in my %main.storage
@@ -1205,12 +1213,11 @@ process.order:
           }
      if "%discipline" = "carving" then
           {
-               if "%order.pref" = "bone then put store custom %work.material stack in %main.storage
-               else put store custom %work.material %order.pref in %main.storage
+               put store custom %work.material %order.pref in %main.storage
                if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
                gosub EMPTY_HANDS
                pause 2
-               if "%order.pref" = "bone" then
+               if "%order.pref" = "stack" then
                     {
                          gosub gather.material stack
                          send count my stack
@@ -1496,6 +1503,23 @@ gather.material:
                if "%order.pref" = "sphere" then var work.material small
           }
 #     if "%get.mat" = "stone" then {}
+     var itemno 1
+gather.material_1:
+     if %volume.%ordinal(%itemno) >= %volume then 
+          {
+               gosub GET %ordinal(%itemno) %work.material %get.mat from my %main.storage
+               var itemchange %ordinal(%itemno)
+               evalmath newvolume %volume.%ordinal(%itemno) - %volume
+               goto itemchange
+          }
+     math itemno add 1
+     if %itemno > %%get.mat.item.count then 
+          {
+               gosub lack.material
+               goto calc.material
+          }
+     goto gather.material_1
+
      send get %work.material %get.mat from my %main.storage
      waitforre ^(You get|What were)
      var temp $1
@@ -1519,6 +1543,27 @@ gather.material:
      gosub lack.material
      goto calc.material
 
+itemchange:
+     var tempchange %%get.mat.item.count
+     if %volume.%itemchange = %volume then 
+          {
+               var old %%get.mat.item.count
+               evalmath %get.mat.item.count %%get.mat.item.count - 1
+          }
+     var new %%get.mat.item.count
+itemchange1:
+     if %new < 1 then 
+          {
+               if %new != %old then var volume.%ordinal(%old)
+               return
+          }
+     var volume.%ordinal(%new) %oldvolume.%ordinal(%tempchange)
+     math tempchange subtract 1
+     if "%ordinal(%tempchange)" = "%itemchange" then math tempchange subtract 1
+     math new subtract 1
+     if ((%tempchange < 1) && (%newvolume != 0)) then var volume.first %newvolume
+     goto itemchange1
+
 small.mat:
      var tempitem $0
      gosub combine.check "%main.storage" %tempitem
@@ -1532,7 +1577,7 @@ small.mat:
 combine.check:
      var combine.storage $1
      var combine.temp $2
-     if "%order.pref" = "bone" then var combine.temp stack
+     #if "%order.pref" = "bone" then var combine.temp stack
      if contains("$righthand|$lefthand", "book") then gosub PUT_IT book in %main.storage
      if matchre("%discipline", "weapon|armor|blacksmith") then
           {
@@ -1888,7 +1933,7 @@ lack.material:
           }
      if "%discipline" = "carving" then
           {
-               if "%order.pref" = "bone" then
+               if "%order.pref" = "stack" then
                     {
                          if "%work.material" = "deer-bone" then var order.num 7
                          if "%work.material" = "wolf-bone" then var order.num 8

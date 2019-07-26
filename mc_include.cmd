@@ -17,7 +17,7 @@ eval auto.repair tolower($MC_AUTO.REPAIR)
 eval get.coin tolower($MC_GET.COIN)
 eval reorder tolower($MC_REORDER)
 var alltools $MC_HAMMER|$MC_SHOVEL|$MC_TONGS|$MC_PLIERS|$MC_BELLOWS|$MC_STIRROD|$MC_CHISEL|$MC_SAW|$MC_RASP|$MC_RIFFLER|$MC_TINKERTOOL|$MC_CARVINGKNIFE|$MC_SHAPER|$MC_DRAWKNIFE|$MC_CLAMP|$MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_YARDSTICK|$MC_AWL|$MC_BOWL|$MC_MORTAR|$MC_STICK|$MC_PESTLE|$MC_SIEVE|$MC_BURIN|$MC_LOOP
-eval alltools tolower(%alltools)
+eval alltools tolower("%alltools")
 eval alltools replacere("%alltools", "\|+", "|")
 eval alltools replacere("%alltools", "^\|", "")
 eval alltools replacere("%alltools", "\|$", "")
@@ -350,39 +350,39 @@ check.location:
 	#gosub Crossing.%current.lore
 	#return
 	var society none
-	if $zoneid = 30 && matchre("%HF.room.list", "$roomid") then var society Haven.Forging
-	if $zoneid = 30 && matchre("%HO.room.list", "$roomid") then var society Haven.Outfitting
-	if $zoneid = 30 && matchre("%HE.room.list", "$roomid") then var society Haven.Engineering
-	if $zoneid = 30 && matchre("%HA.room.list", "$roomid") then var society Haven.Alchemy
-	if $zoneid = 30 && matchre("%HENT.room.list", "$roomid") then var society Haven.Enchanting
-	if $zoneid = 1 && matchre("%CF.room.list", "$roomid") then var society Crossing.Forging
-	if $zoneid = 1 && matchre("%CO.room.list", "$roomid") then var society Crossing.Outfitting
-	if $zoneid = 1 && matchre("%CE.room.list", "$roomid") then var society Crossing.Engineering
-	if $zoneid = 1 && matchre("%CA.room.list", "$roomid") then var society Crossing.Alchemy
-     if $zoneid = 1 && matchre("%CENT.room.list", "$roomid") then var society Crossing.Enchanting
-	if $zoneid = 90 && matchre("%RF.room.list", "$roomid") then var society Ratha.Forging
-	if $zoneid = 90 && matchre("%RO.room.list", "$roomid") then var society Ratha.Outfitting
-	if $zoneid = 90 && matchre("%RE.room.list", "$roomid") then var society Ratha.Engineering
-	if $zoneid = 90 && matchre("%RA.room.list", "$roomid") then var society Ratha.Alchemy
-	if $zoneid = 67 && matchre("%SF.room.list", "$roomid") then var society Shard.Forging
-	if $zoneid = 67 && matchre("%SA.room.list", "$roomid") then var society Shard.Alchemy
-	if $zoneid = 67 && matchre("%SE.room.list", "$roomid") then var society Shard.Engineering
-	if $zoneid = 67 && matchre("%SO.room.list", "$roomid") then var society Shard.Outfitting
-     if $zoneid = 67 && matchre("%SENT.room.list", "$roomid") then var society Shard.Enchanting
-	if $zoneid = 116 && matchre("%HibF.room.list", "$roomid") then var society Hib.Forging
-     if $zoneid = 116 && matchre("%HIBENT.room.list", "$roomid") then var society Hib.Enchanting
-	if $zoneid = 107 && matchre("%MKF.room.list", "$roomid") then var society MerKresh.Forging
-	if $zoneid = 7 && matchre("%LvF.room.list", "$roomid") then var society Lava.Forge
-	if $zoneid = 61 && matchre("%LPF.room.list", "$roomid") then var society Leth.Premie.Forge
-	if $zoneid = 150 && matchre("%FE.room.list", "$roomid") then var society Fang.Engineering
-	if $zoneid = 150 && matchre("%FF.room.list", "$roomid") then var society Fang.Forging
-	if $zoneid = 150 && matchre("%FO.room.list", "$roomid") then var society Fang.Outfitting
-	if $zoneid = 150 && matchre("%FA.room.list", "$roomid") then var society Fang.Alchemy
-	if $zoneid = 150 && matchre("%FENT.room.list", "$roomid") then var society Fang.Enchanting
-     if $zoneid = 47 && matchre("%MUF.room.list", "$roomid") then var society Muspari.Forging
-     if $zoneid = 47 && matchre("%MUE.room.list", "$roomid") then var society Muspari.Engineering
-     if $zoneid = 47 && matchre("%MUO.room.list", "$roomid") then var society Muspari.Outfitting
-     if $zoneid = 47 && matchre("%MUA.room.list", "$roomid") then var society Muspari.Alchemy
+	if $zoneid = 30 && matchre("%HF.room.list", "\b$roomid\b") then var society Haven.Forging
+	if $zoneid = 30 && matchre("%HO.room.list", "\b$roomid\b") then var society Haven.Outfitting
+	if $zoneid = 30 && matchre("%HE.room.list", "\b$roomid\b") then var society Haven.Engineering
+	if $zoneid = 30 && matchre("%HA.room.list", "\b$roomid\b") then var society Haven.Alchemy
+	if $zoneid = 30 && matchre("%HENT.room.list", "\b$roomid\b") then var society Haven.Enchanting
+	if $zoneid = 1 && matchre("%CF.room.list", "\b$roomid\b") then var society Crossing.Forging
+	if $zoneid = 1 && matchre("%CO.room.list", "\b$roomid\b") then var society Crossing.Outfitting
+	if $zoneid = 1 && matchre("%CE.room.list", "\b$roomid\b") then var society Crossing.Engineering
+	if $zoneid = 1 && matchre("%CA.room.list", "\b$roomid\b") then var society Crossing.Alchemy
+     if $zoneid = 1 && matchre("%CENT.room.list", "\b$roomid\b") then var society Crossing.Enchanting
+	if $zoneid = 90 && matchre("%RF.room.list", "\b$roomid\b") then var society Ratha.Forging
+	if $zoneid = 90 && matchre("%RO.room.list", "\b$roomid\b") then var society Ratha.Outfitting
+	if $zoneid = 90 && matchre("%RE.room.list", "\b$roomid\b") then var society Ratha.Engineering
+	if $zoneid = 90 && matchre("%RA.room.list", "\b$roomid\b") then var society Ratha.Alchemy
+	if $zoneid = 67 && matchre("%SF.room.list", "\b$roomid\b") then var society Shard.Forging
+	if $zoneid = 67 && matchre("%SA.room.list", "\b$roomid\b") then var society Shard.Alchemy
+	if $zoneid = 67 && matchre("%SE.room.list", "\b$roomid\b") then var society Shard.Engineering
+	if $zoneid = 67 && matchre("%SO.room.list", "\b$roomid\b") then var society Shard.Outfitting
+     if $zoneid = 67 && matchre("%SENT.room.list", "\b$roomid\b") then var society Shard.Enchanting
+	if $zoneid = 116 && matchre("%HibF.room.list", "\b$roomid\b") then var society Hib.Forging
+     if $zoneid = 116 && matchre("%HIBENT.room.list", "\b$roomid\b") then var society Hib.Enchanting
+	if $zoneid = 107 && matchre("%MKF.room.list", "\b$roomid\b") then var society MerKresh.Forging
+	if $zoneid = 7 && matchre("%LvF.room.list", "\b$roomid\b") then var society Lava.Forge
+	if $zoneid = 61 && matchre("%LPF.room.list", "\b$roomid\b") then var society Leth.Premie.Forge
+	if $zoneid = 150 && matchre("%FE.room.list", "\b$roomid\b") then var society Fang.Engineering
+	if $zoneid = 150 && matchre("%FF.room.list", "\b$roomid\b") then var society Fang.Forging
+	if $zoneid = 150 && matchre("%FO.room.list", "\b$roomid\b") then var society Fang.Outfitting
+	if $zoneid = 150 && matchre("%FA.room.list", "\b$roomid\b") then var society Fang.Alchemy
+	if $zoneid = 150 && matchre("%FENT.room.list", "\b$roomid\b") then var society Fang.Enchanting
+     if $zoneid = 47 && matchre("%MUF.room.list", "\b$roomid\b") then var society Muspari.Forging
+     if $zoneid = 47 && matchre("%MUE.room.list", "\b$roomid\b") then var society Muspari.Engineering
+     if $zoneid = 47 && matchre("%MUO.room.list", "\b$roomid\b") then var society Muspari.Outfitting
+     if $zoneid = 47 && matchre("%MUA.room.list", "\b$roomid\b") then var society Muspari.Alchemy
 	pause 1
 	assembleloc:
 	# if $zoneid = 116 then
@@ -1271,7 +1271,7 @@ ORDER:
      matchre RETURN ^The attendant takes some coins from you and hands you .*\.
      matchre RETURN pay the sales clerk
      matchre RETURN ^\[You may purchase items from the shopkeeper with ORDER
-        if %need.coin = 1 then
+     if %need.coin = 1 then
         {
         var temp.room $roomid
         gosub lack.coin
@@ -1535,7 +1535,7 @@ STOW_LEFT:
 			var BELTTOOLS 0
 			send tie my $lefthandnoun to my $MC_TOOLBELT
 			pause 0.5
-			if "$lefthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %tool.storage
+			if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %tool.storage
 			}
 		else gosub PUT_IT my $lefthandnoun in my %tool.storage
 		}

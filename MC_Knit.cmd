@@ -53,19 +53,17 @@ first.cut:
 	matchwait
 
 excess:
-	 send put my yarn in my %outfitting.storage
-	waitforre ^You put
+     gosub PUT_IT my yarn in my %outfitting.storage
+	
 	
 KnitAction:
 	action (work) on
-	save %Action
 	if "%Action" = "done" then goto done
 	gosub Action %Action my needle
 	goto KnitAction
 
 Retry:
 	pause 1
-	var Action %s
 	goto KnitAction
 
 repeat:
