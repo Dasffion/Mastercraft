@@ -1528,33 +1528,39 @@ STOW:
      return
      
 STOW_LEFT:
-	if matchre("%alltools", "$lefthandnoun") then 
-		{
-		if %BELTTOOLS = 1 then 
-			{
-			var BELTTOOLS 0
-			send tie my $lefthandnoun to my $MC_TOOLBELT
-			pause 0.5
-			if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %tool.storage
-			}
-		else gosub PUT_IT my $lefthandnoun in my %tool.storage
-		}
-	else gosub PUT_IT my $lefthandnoun in my %main.storage
+     if "$lefthandnoun" != "" then
+          {
+               if matchre("%alltools", "$lefthandnoun") then 
+                    {
+                    if %BELTTOOLS = 1 then 
+                         {
+                         var BELTTOOLS 0
+                         send tie my $lefthandnoun to my $MC_TOOLBELT
+                         pause 0.5
+                         if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %tool.storage
+                         }
+                    else gosub PUT_IT my $lefthandnoun in my %tool.storage
+                    }
+               else gosub PUT_IT my $lefthandnoun in my %main.storage
+          }
 	return
      
 STOW_RIGHT:
-	if matchre("%alltools", "$righthandnoun") then 		
-		{
-		if %BELTTOOLS = 1 then 
-			{
-			var BELTTOOLS 0
-			send tie my $righthandnoun to my %MC_TOOLBELT
-			pause 0.5
-			if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %tool.storage
-			}
-		else gosub PUT_IT my $righthandnoun in my %tool.storage
-		}
-	else gosub PUT_IT my $righthandnoun in my %main.storage
+     if "$righthandnoun" != "" then
+          {
+               if matchre("%alltools", "$righthandnoun") then 		
+                    {
+                    if %BELTTOOLS = 1 then 
+                         {
+                         var BELTTOOLS 0
+                         send tie my $righthandnoun to my %MC_TOOLBELT
+                         pause 0.5
+                         if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %tool.storage
+                         }
+                    else gosub PUT_IT my $righthandnoun in my %tool.storage
+                    }
+               else gosub PUT_IT my $righthandnoun in my %main.storage
+          }
 	return
      
 		
