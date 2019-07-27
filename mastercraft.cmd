@@ -1501,6 +1501,9 @@ gather.material:
                if "%order.pref" = "wand" then var work.material rosewood
                if "%order.pref" = "runestone" then var work.material basic
                if "%order.pref" = "sphere" then var work.material small
+               evalmath %get.mat.item.count %%get.mat.item.count - 1
+               gosub GET %work.material %get.mat
+               return
           }
 #     if "%get.mat" = "stone" then {}
      var itemno 1
