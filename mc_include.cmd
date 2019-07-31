@@ -245,7 +245,7 @@ location.vars:
      var SA.work.room 700|701|702|703|704|705
      #Shard Engineering
      var SE.room.list 711|712|713|714|715|716|717|718
-     var SE.master.room 711|716|717|718
+     var SE.master.room 711|712|713|714|715|716|717|718
      var SE.work.room 712|713|714|715
      #Shard Outfitting
      var SO.room.list 719|720|721|722|723|724|725|726|727|728|729|730|731

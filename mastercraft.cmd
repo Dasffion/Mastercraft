@@ -489,7 +489,7 @@ turn.page:
      gosub PUT turn my book to page %page
      if %NOWO then goto calc.material
      gosub STUDY my book
-     if (($MC_DIFFICULTY < 4) && (!$MC_%NOWO)) then 
+     if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
           {
                math difficultytry add 1
                pause 0.5
@@ -906,7 +906,7 @@ parts.inv:
      if matchre("%discipline", "carving|shaping|tinkering") then action (engineering) on
      if "%discipline" = "remed" then action (alchemy) on
      if "%discipline" = "artif" then action (enchanting) on
-     send inv %main.storage
+     send inv my %main.storage
      waitforre INVENTORY HELP
      pause 2
      if ("%discipline" = "tailor") then action (outfitting) off
