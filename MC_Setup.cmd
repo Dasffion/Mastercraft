@@ -69,7 +69,7 @@ put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_Alchemy_NOWO 1
 #######################################################################
-########################  ALCHEMY VARIABLES  #######################
+########################  ENCHANTING VARIABLES  #######################
 #######################################################################
 #	Variables are case sensitive
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
@@ -220,7 +220,7 @@ put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_Alchemy_NOWO 0
 #######################################################################
-########################  ALCHEMY VARIABLES  #######################
+########################  ENCHANTING VARIABLES  #######################
 #######################################################################
 #	Variables are case sensitive
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
@@ -371,7 +371,7 @@ put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_Alchemy_NOWO 0
 #######################################################################
-########################  ALCHEMY VARIABLES  #######################
+########################  ENCHANTING VARIABLES  #######################
 #######################################################################
 #	Variables are case sensitive
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
@@ -495,7 +495,7 @@ put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
 put #var MC_ENG.DIFFICULTY hard
 put #var MC_ENG.DEED off
-put #var MC_Engineering_NOWO 1
+put #var MC_Engineering_NOWO 0
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -560,7 +560,7 @@ put #var MC_Enchanting_NOWO 0
 # 	MC_MIN.ORDER: Minimum number of items to craft, will get a new work order if below this number
 put #var MC_TOOL.STORAGE satchel
 put #var MC_REPAIR on
-put #var MC_AUTO.REPAIR off
+put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
 put #var MC_REORDER on
 put #var MC.Mark off
@@ -676,7 +676,7 @@ put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_Alchemy_NOWO 0
 #######################################################################
-########################  ALCHEMY VARIABLES  #######################
+########################  ENCHANTING VARIABLES  #######################
 #######################################################################
 #	Variables are case sensitive
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
