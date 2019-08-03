@@ -482,16 +482,19 @@ keep.order:
 turn.page:
      gosub PUT_IT my %society.type logbook in my %main.storage
      gosub GET my %discipline book
+     action (book) on
      gosub PUT turn my book to chapter %order.chapter
      send read my book
      waitforre (?<!Page).*Page (\d+): %full.order.noun
      var page $1
      gosub PUT turn my book to page %page
+     action (book) off
      if %NOWO then goto calc.material
      gosub STUDY my book
      if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
           {
                math difficultytry add 1
+               put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                pause 0.5
                goto new.order
           }
@@ -599,6 +602,7 @@ calc.material:
                     {
                          gosub PUT_IT my book in my %main.storage
                          math difficultytry add 1
+                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                pause 0.1
@@ -1159,6 +1163,7 @@ process.order:
                          gosub GET %work.material ingot on anvil
                          gosub PUT_IT ingot in $MC_FORGING.STORAGE
                          math difficultytry add 1
+                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                send .MC_Pound
@@ -1186,6 +1191,7 @@ process.order:
                               {
                                    gosub PUT_IT %work.material %order.pref in my %main.storage
                                    math difficultytry add 1
+                                   put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                                    goto new.order
                               }
                          gosub PUT_IT my book in my %main.storage
@@ -1204,6 +1210,7 @@ process.order:
                               {
                                    gosub PUT_IT %work.material yarn in my %main.storage
                                    math difficultytry add 1
+                                   put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                                    goto new.order
                               }
                          gosub PUT_IT my book in my %main.storage
@@ -1228,6 +1235,7 @@ process.order:
                          if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                               {
                                    gosub PUT_IT %work.material stack in my %main.storage
+                                   put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                                    math difficultytry add 1
                                    goto new.order
                               }
@@ -1263,6 +1271,7 @@ process.order:
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
+                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
@@ -1284,6 +1293,7 @@ process.order:
                if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
+                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          math difficultytry add 1
                          goto new.order
                     }
@@ -1305,6 +1315,7 @@ process.order:
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
+                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
@@ -1322,6 +1333,7 @@ process.order:
                     {
                          gosub PUT_IT %order.pref in my %main.storage
                          math difficultytry add 1
+                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
@@ -1627,6 +1639,7 @@ combine.end:
    
 fail:
     pause 1
+    put #echo >Log Failed to craft %full.order.noun, you might need %technique technique.
     if matchre("$roomobjs", "(bucket|bin)") then gosub PUT_IT my $MC.order.noun in $1
     else gosub PUT drop my $MC.order.noun
     math fail add 1
