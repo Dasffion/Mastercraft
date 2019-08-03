@@ -53,6 +53,7 @@ action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-sc
 action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
  
 #### Identifying extra pieces from the instruction book
+action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (\S+) shield (handle)$
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* wooden (hilt|haft)$
