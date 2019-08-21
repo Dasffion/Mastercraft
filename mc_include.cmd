@@ -1536,7 +1536,7 @@ STOW_LEFT:
                     if %BELTTOOLS = 1 then 
                          {
                          var BELTTOOLS 0
-                         send tie my $lefthandnoun to my $MC_TOOLBELT
+                         send tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
                          pause 0.5
                          if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %tool.storage
                          }
@@ -1554,7 +1554,7 @@ STOW_RIGHT:
                     if %BELTTOOLS = 1 then 
                          {
                          var BELTTOOLS 0
-                         send tie my $righthandnoun to my %MC_TOOLBELT
+                         send tie my $righthandnoun to my $MC_TOOLBELT_%society.type
                          pause 0.5
                          if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %tool.storage
                          }
