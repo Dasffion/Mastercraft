@@ -103,7 +103,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_NOWO: Set to 1 if you don't want to do work orders. This will still ask the master for a work order to get an item name, it just won't bundle
 #	MC_MAX.ORDER: Maximum number of items to craft, will get a new work order if above this number
 # 	MC_MIN.ORDER: Minimum number of items to craft, will get a new work order if below this number
-put #var MC_TOOL.STORAGE shoulder pack
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
@@ -122,6 +121,9 @@ put #var MC_MIN.ORDER 3
 ## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
+#GENERAL
+# An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
+put #var MC_TIED.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL glaes-edged shovel
@@ -130,6 +132,7 @@ put #var MC_PLIERS hooked pliers
 put #var MC_BELLOWS leather bellows
 put #var MC_STIRROD stirring rod
 put #var MC_TOOLBELT_Forging NULL
+put #var MC_TOOL.STORAGE_Forging pack
 #ENGINEERING
 put #var MC_CHISEL iron chisel
 put #var MC_SAW bone saw
@@ -141,6 +144,7 @@ put #var MC_SHAPER wood shaper
 put #var MC_DRAWKNIFE metal drawknife
 put #var MC_CLAMP metal clamps
 put #var MC_TOOLBELT_Engineering NULL
+put #var MC_TOOL.STORAGE_Engineering pack
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
 put #var MC_SCISSORS ka'hurst scissors
@@ -148,17 +152,20 @@ put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
 put #var MC_AWL uthamar awl
 put #var MC_TOOLBELT_Outfitting NULL
+put #var MC_TOOL.STORAGE_Outfitting pack
 #ALCHEMY
 put #var MC_BOWL purpleheart bowl
 put #var MC_MORTAR stone mortar
 put #var MC_STICK mixing stick
 put #var MC_PESTLE belzune pestle
 put #var MC_SIEVE wirework sieve
-put #VAR MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOL.STORAGE_Alchemy pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
 put #var MC_TOOLBELT_Enchanting NULL
+put #var MC_TOOL.STORAGE_Enchanting pack
 goto endsetup
 
 #######################################################################
@@ -258,7 +265,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_NOWO: Set to 1 if you don't want to do work orders. This will still ask the master for a work order to get an item name, it just won't bundle
 #	MC_MAX.ORDER: Maximum number of items to craft, will get a new work order if above this number
 # 	MC_MIN.ORDER: Minimum number of items to craft, will get a new work order if below this number
-put #var MC_TOOL.STORAGE shoulder pack
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
@@ -277,7 +283,9 @@ put #var MC_MIN.ORDER 3
 ## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
-put #var MC_TOOLBELT agonite toolstrap
+#GENERAL
+# An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
+put #var MC_TIED.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -286,6 +294,7 @@ put #var MC_PLIERS hooked pliers
 put #var MC_BELLOWS corrugated-hide bellows
 put #var MC_STIRROD stirring rod
 put #var MC_TOOLBELT_Forging NULL
+put #var MC_TOOL.STORAGE_Forging shoulder pack
 #ENGINEERING
 put #var MC_CHISEL iron chisel
 put #var MC_SAW bone saw
@@ -297,6 +306,7 @@ put #var MC_SHAPER wood shaper
 put #var MC_DRAWKNIFE metal drawknife
 put #var MC_CLAMP metal clamps
 put #var MC_TOOLBELT_Engineering NULL
+put #var MC_TOOL.STORAGE_Engineering shoulder pack
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
 put #var MC_SCISSORS ka'hurst scissors
@@ -304,17 +314,20 @@ put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
 put #var MC_AWL uthamar awl
 put #var MC_TOOLBELT_Outfitting NULL
+put #var MC_TOOL.STORAGE_Outfitting shoulder pack
 #ALCHEMY
 put #var MC_BOWL alabaster bowl
 put #var MC_MORTAR stone mortar
 put #var MC_STICK mixing stick
 put #var MC_PESTLE grooved pestle
 put #var MC_SIEVE wire sieve
-put #VAR MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
 put #var MC_TOOLBELT_Enchanting NULL
+put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup
 
 #######################################################################
@@ -415,7 +428,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_NOWO: Set to 1 if you don't want to do work orders. This will still ask the master for a work order to get an item name, it just won't bundle
 #	MC_MAX.ORDER: Maximum number of items to craft, will get a new work order if above this number
 # 	MC_MIN.ORDER: Minimum number of items to craft, will get a new work order if below this number
-put #var MC_TOOL.STORAGE shoulder pack
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
@@ -435,7 +447,9 @@ put #var MC_MIN.ORDER 3
 ## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
-put #var MC_TOOLBELT agonite toolstrap
+#GENERAL
+# An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
+put #var MC_TIED.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -444,6 +458,7 @@ put #var MC_PLIERS hooked pliers
 put #var MC_BELLOWS corrugated-hide bellows
 put #var MC_STIRROD stirring rod
 put #var MC_TOOLBELT_Forging NULL
+put #var MC_TOOL.STORAGE_Forging shoulder pack
 #ENGINEERING
 put #var MC_CHISEL short chisel
 put #var MC_SAW bone saw
@@ -455,6 +470,7 @@ put #var MC_SHAPER wood shaper
 put #var MC_DRAWKNIFE metal drawknife
 put #var MC_CLAMP metal clamps
 put #var MC_TOOLBELT_Engineering NULL
+put #var MC_TOOL.STORAGE_Engineering shoulder pack
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
 put #var MC_SCISSORS ka'hurst scissors
@@ -462,6 +478,7 @@ put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
 put #var MC_AWL uthamar awl
 put #var MC_TOOLBELT_Outfitting NULL
+put #var MC_TOOL.STORAGE_Outfitting shoulder pack
 #ALCHEMY
 put #var MC_BOWL alabaster bowl
 put #var MC_MORTAR stone mortar
@@ -469,10 +486,12 @@ put #var MC_STICK mixing stick
 put #var MC_PESTLE grooved pestle
 put #var MC_SIEVE wire sieve
 put #VAR MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
 put #var MC_TOOLBELT_Enchanting NULL
+put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup
 
 #######################################################################
@@ -572,7 +591,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_NOWO: Set to 1 if you don't want to do work orders. This will still ask the master for a work order to get an item name, it just won't bundle
 #	MC_MAX.ORDER: Maximum number of items to craft, will get a new work order if above this number
 # 	MC_MIN.ORDER: Minimum number of items to craft, will get a new work order if below this number
-put #var MC_TOOL.STORAGE satchel
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
@@ -592,7 +610,9 @@ put #var MC_MIN.ORDER 1
 ## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
-put #var MC_TOOLBELT agonite toolstrap
+#GENERAL
+# An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
+put #var MC_TIED.TOOLS NULL
 #FORGING
 put #var MC_HAMMER ball-peen hammer
 put #var MC_SHOVEL curved shovel
@@ -601,6 +621,7 @@ put #var MC_PLIERS hooked pliers
 put #var MC_BELLOWS leather bellows
 put #var MC_STIRROD stirring rod
 put #var MC_TOOLBELT_Forging NULL
+put #var MC_TOOL.STORAGE_Forging satchel
 #ENGINEERING
 put #var MC_CHISEL sharpened chisel
 put #var MC_SAW serrated saw
@@ -612,6 +633,7 @@ put #var MC_SHAPER wood shaper
 put #var MC_DRAWKNIFE metal drawknife
 put #var MC_CLAMP metal clamps
 put #var MC_TOOLBELT_Engineering NULL
+put #var MC_TOOL.STORAGE_Engineering satchel
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
 put #var MC_SCISSORS ka'hurst scissors
@@ -619,17 +641,20 @@ put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
 put #var MC_AWL uthamar awl
 put #var MC_TOOLBELT_Outfitting NULL
+put #var MC_TOOL.STORAGE_Outfitting satchel
 #ALCHEMY
 put #var MC_BOWL large bowl
 put #var MC_MORTAR iron mortar
 put #var MC_STICK mixing stick
 put #var MC_PESTLE iron pestle
 put #var MC_SIEVE metal sieve
-put #VAR MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOL.STORAGE_Alchemy satchel
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
 put #var MC_TOOLBELT_Enchanting NULL
+put #var MC_TOOL.STORAGE_Enchanting satchel
 goto endsetup
 
 #######################################################################
@@ -730,7 +755,6 @@ put #var MC_Enchanting_NOWO 0
 #	MC_NOWO: Set to 1 if you don't want to do work orders. This will still ask the master for a work order to get an item name, it just won't bundle
 #	MC_MAX.ORDER: Maximum number of items to craft, will get a new work order if above this number
 # 	MC_MIN.ORDER: Minimum number of items to craft, will get a new work order if below this number
-put #var MC_TOOL.STORAGE shoulder pack
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
@@ -749,7 +773,9 @@ put #var MC_MIN.ORDER 3
 ## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
-put #var MC_TOOLBELT agonite toolstrap
+#GENERAL
+# An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
+put #var MC_TIED.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -758,6 +784,7 @@ put #var MC_PLIERS hooked pliers
 put #var MC_BELLOWS corrugated-hide bellows
 put #var MC_STIRROD stirring rod
 put #var MC_TOOLBELT_Forging NULL
+put #var MC_TOOL.STORAGE_Forging shoulder pack
 #ENGINEERING
 put #var MC_CHISEL iron chisel
 put #var MC_SAW bone saw
@@ -769,6 +796,7 @@ put #var MC_SHAPER wood shaper
 put #var MC_DRAWKNIFE metal drawknife
 put #var MC_CLAMP metal clamps
 put #var MC_TOOLBELT_Engineering NULL
+put #var MC_TOOL.STORAGE_Engineering shoulder pack
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
 put #var MC_SCISSORS ka'hurst scissors
@@ -776,17 +804,20 @@ put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
 put #var MC_AWL uthamar awl
 put #var MC_TOOLBELT_Outfitting NULL
+put #var MC_TOOL.STORAGE_Outfitting shoulder pack
 #ALCHEMY
 put #var MC_BOWL alabaster bowl
 put #var MC_MORTAR stone mortar
 put #var MC_STICK mixing stick
 put #var MC_PESTLE grooved pestle
 put #var MC_SIEVE wire sieve
-put #VAR MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
 put #var MC_TOOLBELT_Enchanting NULL
+put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup
 
 endsetup:

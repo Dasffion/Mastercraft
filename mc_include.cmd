@@ -10,8 +10,8 @@ eval engineering.storage tolower($MC_ENGINEERING.STORAGE)
 eval alchemy.storage tolower($MC_ALCHEMY.STORAGE)
 eval remnant.storage tolower($MC_REMNANT.STORAGE)
 eval enchanting.storage tolower($MC_ENCHANTING.STORAGE)
-eval tool.storage tolower($MC_TOOL.STORAGE)
-put #var MC.Mark off
+eval tool.storage tolower($MC_TOOL.STORAGE_%society.type)
+eval tiedtools tolower($MC_TIED.TOOLS)
 eval repair tolower($MC_REPAIR)
 eval auto.repair tolower($MC_AUTO.REPAIR)
 eval get.coin tolower($MC_GET.COIN)
@@ -80,7 +80,6 @@ if "%society.type" = "Forging" then
      eval work.material tolower($MC_FORGING.MATERIAL)
      eval order.pref tolower(ingot)
      eval main.storage tolower(%forging.storage)
-     put #var MC.Mark off
      eval deed.order tolower($MC_FORGING.DEED)
 	}
 #Outfitting settings
@@ -92,7 +91,6 @@ if "%society.type" = "Outfitting" then
      eval work.material tolower($MC_OUT.MATERIAL)
      eval order.pref tolower($MC_OUT.PREF)
      eval main.storage tolower(%outfitting.storage)
-     put #var MC.Mark off
      eval deed.order tolower($MC_OUT.DEED)
 	}
 #Engineering settings
@@ -105,7 +103,6 @@ if "%society.type" = "Engineering" then
      eval deed.size
      eval order.pref tolower($MC_ENG.PREF)
      eval main.storage tolower(%engineering.storage)
-     put #var MC.Mark off
      eval deed.order tolower($MC_ENG.DEED)
 	}
 #Alchemy Settings
@@ -118,7 +115,6 @@ if "%society.type" = "Alchemy" then
      var deed.size
      var order.pref 
      eval main.storage tolower(%alchemy.storage)
-     put #var MC.Mark off
      var deed.order 
 	}
 #Enchanting Settings
@@ -131,7 +127,6 @@ if "%society.type" = "Enchanting" then
      var deed.size
      var order.pref 
      eval main.storage tolower(%enchanting.storage)
-     put #var MC.Mark off
      var deed.order 
 	}
 goto endinclude
@@ -1109,9 +1104,7 @@ automovecont2:
      return
 
 mark:
-	if "$MC.Mark" = "off" then return
-	if "$MC.Mark" = "on" then
-	{
+	if matchre("$MC.Mark", "(?i)off") then return
      send get my stamp
      waitforre ^You get
      send mark $MC.order.noun with my stamp
@@ -1457,7 +1450,7 @@ GET:
      matchre RETURN ^What were you referring to\?
      matchre RETURN ^You grab .*(?:\.|\!|\?)
      matchre RETURN ^As best it can\, .* moves in your direction\.
-     matchre UNTIE ^You pull at it|^You pull at
+     matchre UNTIE ^You pull at it|^You pull at|^You should untie
      send get %Get
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET! (utility.inc) ***
@@ -1533,9 +1526,8 @@ STOW_LEFT:
           {
                if matchre("%alltools", "$lefthandnoun") then 
                     {
-                    if %BELTTOOLS = 1 then 
+                    if matchre("%tiedtools", "$lefthandnoun") then 
                          {
-                         var BELTTOOLS 0
                          send tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
                          pause 0.5
                          if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %tool.storage
@@ -1551,9 +1543,8 @@ STOW_RIGHT:
           {
                if matchre("%alltools", "$righthandnoun") then 		
                     {
-                    if %BELTTOOLS = 1 then 
+                    if matchre("%tiedtools", "$righthandnoun") then 
                          {
-                         var BELTTOOLS 0
                          send tie my $righthandnoun to my $MC_TOOLBELT_%society.type
                          pause 0.5
                          if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %tool.storage
