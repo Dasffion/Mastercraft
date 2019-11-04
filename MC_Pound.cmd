@@ -1,4 +1,4 @@
-#debug 10
+debug 10
 #MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
 #v 0.1.6
@@ -95,7 +95,7 @@ small.ingot:
 
 ingot.grab:
 	 pause 1
-	 gosub PUT_IT my $MC_HAMMER in my %tool.storage
+	 if $MC_TOOLBELT_FORGING != NULL then gosub STOW_RIGHT else gosub PUT_IT my $MC_HAMMER in my %tool.storage
 	if "%excessloc" != "feet" then gosub GET ingot from my %excessloc
 	if "%excessloc" = "feet" then gosub STOW feet
 	if %small.ingot = 1 then
