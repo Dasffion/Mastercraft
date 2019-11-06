@@ -1,7 +1,5 @@
 #Setup Your variables in the MC_SETUP file
-# REVELER EDITS 9/23/19
-# KZIN EDITS 10/24/19
-
+#
 # Happy Crafting!
 gosub location.vars
 gosub check.location
@@ -32,7 +30,7 @@ put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFIC
 put #trigger {comprehend all but several minor details in the text\.$} {#var MC_DIFFICULTY 5}
 put #trigger {confidently discern most of the design's minutiae\.$} {#var MC_DIFFICULTY 4}
 put #trigger {interpret many of the design's finer points\.$} {#var MC_DIFFICULTY 3}
-put #trigger {absorb a handful of the design's finer point\.$} {#var MC_DIFFICULTY 2}
+put #trigger {abosrb a handful of the design's finer point\.$} {#var MC_DIFFICULTY 2}
 put #trigger {fail to grasp all but the simplest diagrams on the page\.$} {#var MC_DIFFICULTY 1}
 put #trigger {quickly realize the design is far beyond your abilities\.$} {#var MC_DIFFICULTY 0}
 #### Finding Ordering Numbers
@@ -75,7 +73,6 @@ action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* (mechanism)$
 ###########################################################################
 ### Character Profiles. Please edit these for your character(s). 
 ###########################################################################
-
 if $MC_TOOLBELT_%society.type != NULL then
 	{
 		echo Toolbelt for %society.type configured
@@ -89,7 +86,6 @@ if "%society.type" = "Forging" then
      eval work.material tolower($MC_FORGING.MATERIAL)
      eval order.pref tolower(ingot)
      eval main.storage tolower(%forging.storage)
-     
      eval deed.order tolower($MC_FORGING.DEED)
 	}
 #Outfitting settings
@@ -101,7 +97,6 @@ if "%society.type" = "Outfitting" then
      eval work.material tolower($MC_OUT.MATERIAL)
      eval order.pref tolower($MC_OUT.PREF)
      eval main.storage tolower(%outfitting.storage)
-     
      eval deed.order tolower($MC_OUT.DEED)
 	}
 #Engineering settings
@@ -114,7 +109,6 @@ if "%society.type" = "Engineering" then
      eval deed.size
      eval order.pref tolower($MC_ENG.PREF)
      eval main.storage tolower(%engineering.storage)
-     
      eval deed.order tolower($MC_ENG.DEED)
 	}
 #Alchemy Settings
@@ -127,7 +121,6 @@ if "%society.type" = "Alchemy" then
      var deed.size
      var order.pref 
      eval main.storage tolower(%alchemy.storage)
-     
      var deed.order 
 	}
 #Enchanting Settings
@@ -140,7 +133,6 @@ if "%society.type" = "Enchanting" then
      var deed.size
      var order.pref 
      eval main.storage tolower(%enchanting.storage)
-     
      var deed.order 
 	}
 goto endinclude
@@ -1118,9 +1110,7 @@ automovecont2:
      return
 
 mark:
-	if matchre("$MC.Mark","(?i)off") then return
-	
-	
+	if matchre("$MC.Mark", "(?i)off") then return
      send get my stamp
      waitforre ^You get
      send mark $MC.order.noun with my stamp
@@ -1128,9 +1118,6 @@ mark:
      send stow my stamp
      waitforre ^You put
      return
-	
-	
-	
 
 anvilcheck:
 	var anvilingot 0
@@ -1345,7 +1332,6 @@ PUT:
      matchre RETURN ^In the .* you see .*\.
      matchre RETURN ^Searching methodically
      matchre RETURN ^This spell cannot be targeted\.
-     matchre RETURN ^You attach
      matchre RETURN ^You cannot figure out how to do that\.
      matchre RETURN ^You will now store .* in your .*\.
      matchre RETURN ^You.*analyze
@@ -1379,7 +1365,7 @@ PUT:
      put #echo >$Log Crimson $datetime Command = %Command
      put #log $datetime MISSING MATCH IN PUT (utility.inc)
      return
-
+     
      
 STUDY:
      var Study $0
@@ -1431,7 +1417,7 @@ PUT_IT:
      put #echo >$Log Crimson $datetime PutIt = %PutIt
      put #log $datetime MISSING MATCH IN PUT_IT (utility.inc)
      return
-
+     
 TRASH:
      if matchre("$roomobjs", "(bucket|bin)") then gosub PUT_IT %rawmat in bin
      else put drop %rawmat
@@ -1543,13 +1529,10 @@ STOW_LEFT:
           {
                if matchre("%tiedtools", "$lefthandnoun") then 
                     {
-						pause 0.5
-                        send tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
-                        # pause 0.5
-                        # if ("$lefthand" != "Empty") then gosub PUT_IT my $lefthandnoun in my %tool.storage	
+                    send tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
                     }
-                else
-					{
+               else 
+                         {
 						if matchre("%alltools", "$lefthandnoun") then 
 							{
 								gosub PUT_IT my $lefthandnoun in my %tool.storage
@@ -1565,26 +1548,21 @@ STOW_LEFT:
 STOW_RIGHT:
      if "$righthandnoun" != "" then
           {
-               if matchre("%tiedtools", "$righthandnoun") then 		
+               if matchre("%tiedtools", "$righthandnoun") then 
                     {
-                         pause 0.1
-                         gosub PUT tie my $righthandnoun to my $MC_TOOLBELT_%society.type
-                         # pause 0.5
-                         # if ("$righthand" != "Empty") then gosub PUT_IT my $righthandnoun in my %tool.storage
+                    send tie my $righthandnoun to my $MC_TOOLBELT_%society.type
                     }
-                else 
-					{
+               else 
+                         {
 						if matchre("%alltools", "$righthandnoun") then 
 							{
 								gosub PUT_IT my $righthandnoun in my %tool.storage
 							}
-						else 
+						else
 							{
 								gosub PUT_IT my $righthandnoun in my %main.storage
 							}
 					}
-                    
-               
           }
 	return
      
