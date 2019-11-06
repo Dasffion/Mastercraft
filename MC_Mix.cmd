@@ -173,32 +173,37 @@ if contains("$scriptlist", "mastercraft") then
 	{
 	action (work) off
 	var temp.room $roomid
+     if ((%water.gone = 1) || (%alcohol.gone = 1) || (%catalyst.gone = 1)) then
+          {
+               if ("$righthandnoun" = "%bowl") then gosub STOW_RIGHT)
+               if ("$lefthandnoun" = "%bowl") then gosub STOW_LEFT)
+          }
 	if %water.gone = 1 then
 	{
 		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then send put my %bowl in my %tool.storage
 		gosub summonwater
-		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
+		if (("$righthandnoun" != "%bowl") && ("$lefthandnoun" != "%bowl")) then send get my %bowl from my %tool.storage
 		pause .5
 		var water.gone 0
 	}
 	if %alcohol.gone = 1 then
 	{
-		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then send put my %bowl in my %tool.storage
+		if (("$righthand" != "Empty") || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
 		gosub summonalcohol
-		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
+		if (("$righthandnoun" != "%bowl") && ("$lefthandnoun" != "%bowl")) then send get my %bowl from my %tool.storage
 		var alcohol.gone 0
 	}
 	if %catalyst.gone = 1 then
 	{
 		gosub automove Forging suppl
-		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then send put my %bowl in my %tool.storage
+		if (("$righthand" != "Empty" || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
 		action (order) on
 		pause 1
 		gosub ORDER
 		action (order) off
 		gosub ORDER %catalyst.order
 		gosub PUT_IT my nugget in my %alchemy.storage
-		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
+		if (("$righthandnoun" != "%bowl") && ("$lefthandnoun" != "%bowl")) then send get my %bowl from my %tool.storage
 		var catalyst.gone 0
 	}
 	gosub automove %temp.room
