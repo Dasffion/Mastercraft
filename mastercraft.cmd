@@ -2198,7 +2198,6 @@ first.order:
                gosub EMPTY_HANDS
                if %reqd.order >= 1 then    
                     { 
-					#Kzin check here for problem with sigil order
                          gosub ORDER %order.num
                          #gosub combine.order
                          math reqd.order subtract 1
