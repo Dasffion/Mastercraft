@@ -173,17 +173,14 @@ if contains("$scriptlist", "mastercraft") then
 	{
 	action (work) off
 	var temp.room $roomid
-	if (%water.gone = 1 || %alcohol.gone = 1 || %catalyst.gone = 1) then
-	{
-		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then 
-		{
-			if $MC_TOOLBELT_ALCHEMY != NULL then gosub PUT tie my %bowl to my %tool.storage else gosub PUT put my %bowl in my %tool.storage
-		}
-	}
+	if ((%water.gone = 1) || (%alcohol.gone = 1) || (%catalyst.gone = 1)) then
+        {
+                if ("$righthandnoun" = "%bowl") then gosub STOW_RIGHT)
+                if ("$lefthandnoun" = "%bowl") then gosub STOW_LEFT)
+        }
 	if %water.gone = 1 then
 	{
 		gosub summonwater
-		#if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
 		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then gosub GET my %bowl from my %tool.storage
 		pause .5
 		var water.gone 0
@@ -191,7 +188,6 @@ if contains("$scriptlist", "mastercraft") then
 	if %alcohol.gone = 1 then
 	{
 		gosub summonalcohol
-		#if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
 		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then gosub GET my %bowl from my %tool.storage
 		var alcohol.gone 0
 	}
@@ -204,7 +200,6 @@ if contains("$scriptlist", "mastercraft") then
 		gosub ORDER %catalyst.order
 		action (order) off
 		gosub PUT_IT my nugget in my %alchemy.storage
-		#if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then send get my %bowl from my %tool.storage
 		if "$righthandnoun" != "%bowl" && "$lefthandnoun" != "%bowl" then gosub GET my %bowl from my %tool.storage
 		var catalyst.gone 0
 	}
