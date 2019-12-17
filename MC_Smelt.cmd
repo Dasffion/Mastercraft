@@ -1,5 +1,5 @@
 #Metal Smelting
-debug 10
+#debug 10
 if_1 goto Continue
 echo Usage is: .smelt <material>
 echo To smelt more than one material separate them by a space .smelt <material> <material>
@@ -54,23 +54,25 @@ itemcountclear_1:
      var %material(%c)nugget 0
      var %material(%c)ingot 0
      var %material(%c)bar 0
+	 var %material(%c)lump 0
      counter add 1
      goto itemcountclear_1
 
 SmeltStart:
      counter set 0
      action (settype) on
-     action (settype) math $1$2 add 1 when (%material) (ingot|nugget)
+     action (settype) math $1$2 add 1 when (%material) (ingot|nugget|bar|lump)
      put inv $MC_FORGING.STORAGE
      waitfor [Type INVENTORY
      action (settype) off
-     evalmath check %%material(0)nugget + %%material(0)ingot + %%material(0)bar
+     evalmath check %%material(0)nugget + %%material(0)ingot + %%material(0)bar + %%material(0)lump
      if %check = 0 then goto end
 SmeltStart_1:
      if %c > %matcount then goto gettool
      gosub GetMat nugget
      gosub GetMat ingot
      gosub GetMat bar
+	 gosub GetMat lump
      counter add 1
      goto SmeltStart_1
 

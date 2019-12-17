@@ -87,7 +87,7 @@ include mc_include.cmd
 
 
 
-
+    
      
 ####################################################################################################
 #### Various variables and actions needed for script functionality. Most are just initializing for later manipulation.
@@ -105,6 +105,7 @@ include mc_include.cmd
      var tool.repair 0
      var order.type 0
      var diff.change 0
+     var braz.room NULL
      var ordinal zeroth|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh
      var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eightteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four|twenty-five|twenty-six|twenty-seven|twenty-eight|twenty-nine|thirty
      var assemble NULL
@@ -113,7 +114,21 @@ include mc_include.cmd
      var NOWO $MC_%society.type_NOWO
      gosub clearvolume
 
+     ### If main.storage is added to tied tools, assume it is tied.
+     if matchre("%tiedtools", %main.storage) then
+     {
+          put tap bag
+          match untiebag toolbelt
+          match donebag wearing
+          matchwait
 
+          untiebag:
+          gosub PUT untie %main.storage 
+          gosub PUT wear %main.storage
+
+          donebag:
+          
+     }
       
      if matchre("%discipline", "weapon|blacksmith") then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD
      if "%discipline" = "armor" then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
@@ -485,7 +500,7 @@ turn.page:
      gosub GET my %discipline book
      action (book) on
      gosub PUT turn my book to chapter %order.chapter
-     send read my book
+     put read my book
      waitforre (?<!Page).*Page (\d+): %full.order.noun
      var page $1
      gosub PUT turn my book to page %page
@@ -519,7 +534,7 @@ calc.material:
                pause .1
                action (book) on
                if !matchre("$righthand", "book") then gosub GET my %discipline book
-               send read my book
+               PUT read my book
                waitforre metal ingot .(\d+) volume
                var volume $1
                action (book) off
@@ -559,7 +574,7 @@ calc.material:
                action (book) on     
                if !matchre("$righthand", "book") then gosub GET my tailoring book
                pause .5
-               send read my book
+               PUT read my book
                waitforre .*(cloth|leather|yarn).*\((\d+) yards?\)
                var volume $2
                action (book) off
@@ -594,7 +609,7 @@ calc.material:
                action (book) on
                pause .5
                if !matchre("$righthand", "book") then gosub GET my carving book
-               send read my book
+               PUT read my book
                waitforre .*bone stack.*\((\d+) (piece|pieces)\)
                var volume $1
                action (book) off          
@@ -631,13 +646,13 @@ calc.material:
                          gosub PUT_IT my polish in my %main.storage
                     }
           }
-     if ((matchre("%discipline", "tinkering|shaping")) && ("%order.pref" = lumber")) then
+     if ((matchre("%discipline", "tinkering|shaping")) && ("%order.pref" = "lumber")) then
           {
                pause .1
                action (book) on
                pause .5
                if !matchre("$righthand", "book") then gosub GET my %discipline book
-               send read my book
+               PUT read my book
                waitforre .*lumber.*\((\d+) (piece|pieces)\)
                var volume $1
                action (book) off
@@ -670,7 +685,7 @@ calc.material:
                var herb2 NULL
                var herb1.volume 5
                if %order.chapter = 2 then var herb2.volume 1
-               if matchre("%full.order.noun", "some blister cream|some moisturizing ointment|some itch salve|some lip balm") then var herb1 red.flowers
+               if matchre("%full.order.noun", "some blister cream|some moisturizing ointment|some itch salve|some lip balm") then var herb1 flowers
                if "%full.order.noun" = "some blister cream" then var herb2 nemoih
                if "%full.order.noun" = "some moisturizing ointment" then var herb2 plovik
                if "%full.order.noun" = "some itch salve" then var herb2 jadice
@@ -750,7 +765,7 @@ calc.material:
           action var sigil %sigil|$1 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
           pause .5
           if !matchre("$righthand", "book") then gosub GET my %discipline book
-          send read my book
+          PUT read my book
           pause 2
           action (book) off
           pause 0.1
@@ -1325,7 +1340,17 @@ process.order:
           }
      if "%discipline" = "artif" then
           {
-               #if $MC_WORK.OUTSIDE = 0 && !matchre($work.room, $roomid) then gosub find.room $work.room
+               if $braz.room = NULL && $MC_PREFERRED.ROOM.ARTIF != NULL && $MC_BRAZIER != NULL)  then 
+               {
+                    if !matchre($MC_PREFERRED.ROOM.ARTIF, $roomid then
+                    {
+                         gosub find.room $MC_PREFERRED.ROOM.ARTIF
+                    }
+                    gosub GET my $MC_BRAZIER 
+                    gosub PUT drop my $MC_BRAZIER
+                    set braz.room $roomid
+                    put #echo >Log Dropping $MC_BRAZIER in Room $roomid. Don't forget it!
+               }
                gosub EMPTY_HANDS
                gosub gather.material %order.pref
                gosub GET my %discipline book
@@ -1363,6 +1388,27 @@ endearly:
      if matchre("$righthand|$lefthand", "$MC.order.noun") then gosub PUT drop my $MC.order.noun
      gosub untie.early
      gosub PUT_IT my %society.type logbook in my %main.storage
+
+     # If we used our own Brazier, pick it back up
+     if $MC_BRAZIER != NULL then 
+     {
+          if !matchre($MC_PREFERRED.ROOM.ARTIF, $roomid) then 
+          {
+               gosub find.room $MC_PREFERRED.ROOM.ARTIF
+          }
+     
+          gosub GET $MC_BRAZIER 
+          gosub PUT put my $MC_BRAZIER in my %main.storage
+          put #echo >Log Grabbed $MC_BRAZIER from Room $roomid. 
+          set braz.room NULL
+     } 
+     # Re-tie main storage if was tied
+     if matchre("%tiedtools", %main.storage) then
+     {
+          gosub PUT rem %main.storage
+          gosub PUT tie %main.storage to my $MC_TOOLBELT_%society.type
+     }
+
      put #parse MASTERCRAFT DONE
      exit
      
@@ -1515,7 +1561,8 @@ gather.material:
                if "%order.pref" = "runestone" then var work.material basic
                if "%order.pref" = "sphere" then var work.material small
                evalmath %get.mat.item.count %%get.mat.item.count - 1
-               gosub GET %work.material %get.mat
+			   # Kzin added "from my %main.storage" to prevent grabbing things from the bin.
+               gosub GET %work.material %get.mat from my %main.storage
                return
           }
      if ("%discipline" = "remed") then 
@@ -1692,7 +1739,7 @@ diff.change:
 order.summary:
      pause 1
      gosub GET my %society.type logbook from my %main.storage
-     send read my %society.type logbook
+     gosub PUT read my %society.type logbook
      pause 1
      if %order.quantity > 0 then goto turn.page
      else goto turn.in
@@ -1731,6 +1778,25 @@ turn.in1:
      if (("%discipline" = "remed") && ($Alchemy.LearningRate < 20)) then goto new.order
      if (("%discipline" = "artif") && ($Enchanting.LearningRate < 20)) then goto new.order
      gosub PUT_IT my logbook in my %main.storage
+     # Grab Braz if set
+     if $MC_BRAZIER != NULL then 
+     {
+          if !matchre($MC_PREFERRED.ROOM.ARTIF, $roomid) then 
+          {
+               gosub find.room $MC_PREFERRED.ROOM.ARTIF
+          }
+     
+          gosub GET $MC_BRAZIER 
+          gosub PUT put my $MC_BRAZIER in my %main.storage
+          put #echo >Log Grabbed $MC_BRAZIER from Room $roomid. 
+          set braz.room NULL
+     } 
+	### re-tie bag
+     if matchre("%tiedtools", %main.storage) then
+     {
+          gosub PUT rem %main.storage
+          gosub PUT tie %main.storage to my $MC_TOOLBELT_%society.type
+     }
      put #parse MASTERCRAFT DONE
      exit
 
@@ -2037,6 +2103,7 @@ lack.material:
           }
      if "%discipline" = "remed" then
           {
+			   			   if "%order.type" = NULL then return
                if "%order.type" = "nemoih" then var order.num 3
                if "%order.type" = "plovik" then var order.num 4
                if "%order.type" = "jadice" then var order.num 5
@@ -2049,6 +2116,7 @@ lack.material:
                if "%order.type" = "genich" then var order.num 11
                if "%order.type" = "ojhenik" then var order.num 12
                if "%order.type" = "red.flowers" then var order.num 13
+			   if "%order.type" = "flowers" then var order.num 13
                if "%order.type" = "root" then var order.num 14
                if "%order.type" = "pollen" then var order.num 15     
                if !matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/25)
@@ -2071,6 +2139,7 @@ lack.material:
 purchase.material:
      var purchaselabel purchase.material
      action var need.coin 1 when ^The attendant shrugs and says, "Ugh, you don't have enough
+     #" ### This endquote fixes highlighting problems from the above line
      if $roomid != $supply.room then gosub automove $supply.room
 first.order:
      if matchre("%discipline", "carving|shaping|tailor|tinkering") then
@@ -2128,7 +2197,8 @@ first.order:
           {
                gosub EMPTY_HANDS
                if %reqd.order >= 1 then    
-                    {
+                    { 
+					#Kzin check here for problem with sigil order
                          gosub ORDER %order.num
                          #gosub combine.order
                          math reqd.order subtract 1

@@ -85,6 +85,7 @@ put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
+put #var MC_PREFERRED.ROOM.ARTIF NULL
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -164,6 +165,7 @@ put #var MC_TOOL.STORAGE_Alchemy pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting pack
 goto endsetup
@@ -247,6 +249,7 @@ put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
+put #var MC_PREFERRED.ROOM.ARTIF NULL
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -326,6 +329,7 @@ put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup
@@ -410,6 +414,7 @@ put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
+put #var MC_PREFERRED.ROOM.ARTIF NULL
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -485,11 +490,12 @@ put #var MC_MORTAR stone mortar
 put #var MC_STICK mixing stick
 put #var MC_PESTLE grooved pestle
 put #var MC_SIEVE wire sieve
-put #VAR MC_TOOLBELT_Alchemy NULL
+put #var MC_TOOLBELT_Alchemy NULL
 put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup
@@ -573,6 +579,7 @@ put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
+put #var MC_PREFERRED.ROOM.ARTIF NULL
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -653,6 +660,7 @@ put #var MC_TOOL.STORAGE_Alchemy satchel
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting satchel
 goto endsetup
@@ -737,6 +745,7 @@ put #var MC_IMBUE.MANA 50
 put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
 #put #var MC_FOCUS.WAND wood wand
+put #var MC_PREFERRED.ROOM.ARTIF NULL
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -816,6 +825,7 @@ put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup

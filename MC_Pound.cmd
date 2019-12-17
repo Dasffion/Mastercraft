@@ -95,7 +95,7 @@ small.ingot:
 
 ingot.grab:
 	 pause 1
-	 gosub STOW_RIGHT
+	 if $MC_TOOLBELT_FORGING != NULL then gosub STOW_RIGHT else gosub PUT_IT my $MC_HAMMER in my %tool.storage
 	if "%excessloc" != "feet" then gosub GET ingot from my %excessloc
 	if "%excessloc" = "feet" then gosub STOW feet
 	if %small.ingot = 1 then
