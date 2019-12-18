@@ -1289,6 +1289,7 @@ ORDER:
      matchre WEBBED ^You can't do that while entangled in a web
      matchre STUNNED ^You are still stunned
      matchre ORDER_1 ^The attendant says\,\s*\"You (can|may) purchase .*\.\s*Just order it again and we'll see it done\!\" 
+     #" To fix highlighting
      matchre fullhands ^You realize your hands are full, and stop\.
      matchre lack.coin you don't have enough coins|you don't have that much
      matchre RETURN ^The attendant takes some coins from you and hands you .*\.
@@ -1370,6 +1371,8 @@ PUT:
      matchre RETURN ^You are now
      matchre RETURN ^You search
      matchre RETURN ^You get
+     matchre RETURN ^You sling
+     matchre RETURN ^You tie
      matchre RETURN ^You have nothing to 
      matchre RETURN ^There isn't any more room in .* for that\.
      matchre RETURN ^You are already focusing your appraisal on a subject\.
@@ -1380,6 +1383,7 @@ PUT:
      matchre RETURN (bundle them with your logbook and then give|you trace|you just received a work order|You hand|You slide|You place)
      matchre RETURN ^(You have no idea how to craft|The book is already turned|You turn your book|You realize you have items bundled with the logbook)
      matchre RETURN (You measure out|You carefully break off|^You hand|"There isn't a scratch on that|"I don't repair those here\.")
+     # " To fix highlighting
      matchre RETURN (Just give it to me again if you want|completely undamaged and does not need repair|not damaged enough to warrant repair)
      matchre RETURN ^(You find your jar|The (\S+) can only hold)
      matchre RETURN ^(You .*open|You .*close|That is already open|That is already closed)

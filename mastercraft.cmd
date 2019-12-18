@@ -54,7 +54,6 @@
 include MC_SETUP.cmd
 include mc_include.cmd
 
-
 #TO-DO LIST
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Look at way to change thread in sew based on thickness
@@ -85,9 +84,6 @@ include mc_include.cmd
 #Fixed error in pound.cmd that wouldn't always leave product in hand when finished.
 #Also fixed a bellows call after analyzing in pound.cmd.
 
-
-
-    
      
 ####################################################################################################
 #### Various variables and actions needed for script functionality. Most are just initializing for later manipulation.
@@ -115,16 +111,17 @@ include mc_include.cmd
      gosub clearvolume
 
      ### If main.storage is added to tied tools, assume it is tied.
-     if matchre("%tiedtools", %main.storage) then
+     if matchre("%tiedtools", $MC_TOOL.STORAGE_CONTAINER) then
      {
-          put tap bag
+          put tap $MC_TOOL.STORAGE_CONTAINER
           match untiebag toolbelt
           match donebag wearing
+          match untiebag you are holding
           matchwait
 
           untiebag:
-          gosub PUT untie %main.storage 
-          gosub PUT wear %main.storage
+          gosub PUT untie $MC_TOOL.STORAGE_CONTAINER 
+          gosub PUT wear $MC_TOOL.STORAGE_CONTAINER
 
           donebag:
           
@@ -1390,7 +1387,7 @@ endearly:
      gosub PUT_IT my %society.type logbook in my %main.storage
 
      # If we used our own Brazier, pick it back up
-     if $MC_BRAZIER != NULL then 
+     if $MC_BRAZIER != NULL && "%discipline" = "artif" then 
      {
           if !matchre($MC_PREFERRED.ROOM.ARTIF, $roomid) then 
           {
@@ -1403,10 +1400,10 @@ endearly:
           set braz.room NULL
      } 
      # Re-tie main storage if was tied
-     if matchre("%tiedtools", %main.storage) then
+     if matchre("%tiedtools", $MC_TOOL.STORAGE_CONTAINER) then
      {
-          gosub PUT rem %main.storage
-          gosub PUT tie %main.storage to my $MC_TOOLBELT_%society.type
+          gosub PUT rem $MC_TOOL.STORAGE_CONTAINER
+          gosub PUT tie $MC_TOOL.STORAGE_CONTAINER to my $MC_TOOL.STORAGE_CONTAINER_TOOLBELT
      }
 
      put #parse MASTERCRAFT DONE
@@ -1779,7 +1776,7 @@ turn.in1:
      if (("%discipline" = "artif") && ($Enchanting.LearningRate < 20)) then goto new.order
      gosub PUT_IT my logbook in my %main.storage
      # Grab Braz if set
-     if $MC_BRAZIER != NULL then 
+     if $MC_BRAZIER != NULL && "%discipline" = "artif" then 
      {
           if !matchre($MC_PREFERRED.ROOM.ARTIF, $roomid) then 
           {
@@ -1792,10 +1789,10 @@ turn.in1:
           set braz.room NULL
      } 
 	### re-tie bag
-     if matchre("%tiedtools", %main.storage) then
+     if matchre("%tiedtools", $MC_TOOL.STORAGE_CONTAINER) then
      {
-          gosub PUT rem %main.storage
-          gosub PUT tie %main.storage to my $MC_TOOLBELT_%society.type
+          gosub PUT rem $MC_TOOL.STORAGE_CONTAINER
+          gosub PUT tie $MC_TOOL.STORAGE_CONTAINER to my $MC_TOOL.STORAGE_CONTAINER_TOOLBELT
      }
      put #parse MASTERCRAFT DONE
      exit
@@ -2198,6 +2195,7 @@ first.order:
                gosub EMPTY_HANDS
                if %reqd.order >= 1 then    
                     { 
+					#Kzin check here for problem with sigil order
                          gosub ORDER %order.num
                          #gosub combine.order
                          math reqd.order subtract 1

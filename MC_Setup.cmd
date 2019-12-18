@@ -125,6 +125,9 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+put #var MC_TOOL.STORAGE_CONTAINER NULL
+put #var MC_TOOL.STORAGE_CONTAINER_TOOLBELT NULL
+
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL glaes-edged shovel
@@ -289,6 +292,8 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+put #var MC_TOOL.STORAGE_CONTAINER NULL
+put #var MC_TOOL.STORAGE_CONTAINER_TOOLBELT NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -455,6 +460,8 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+put #var MC_TOOL.STORAGE_CONTAINER NULL
+put #var MC_TOOL.STORAGE_CONTAINER_TOOLBELT NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -620,6 +627,8 @@ put #var MC_MIN.ORDER 1
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+put #var MC_TOOL.STORAGE_CONTAINER NULL
+put #var MC_TOOL.STORAGE_CONTAINER_TOOLBELT NULL
 #FORGING
 put #var MC_HAMMER ball-peen hammer
 put #var MC_SHOVEL curved shovel
@@ -785,6 +794,8 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+put #var MC_TOOL.STORAGE_CONTAINER NULL
+put #var MC_TOOL.STORAGE_CONTAINER_TOOLBELT NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
