@@ -1561,10 +1561,8 @@ STOW_LEFT:
           {
                if matchre("%tiedtools", "$lefthandnoun") then 
                     {
-						pause 0.5
-                        gosub PUT tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
-                        # pause 0.5
-                        # if ("$lefthand" != "Empty") then gosub PUT_IT my $lefthandnoun in my %tool.storage	
+				     pause 0.5
+                         gosub PUT tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
                     }
                 else
 					{
@@ -1587,8 +1585,6 @@ STOW_RIGHT:
                     {
                          pause 0.1
                          gosub PUT tie my $righthandnoun to my $MC_TOOLBELT_%society.type
-                         # pause 0.5
-                         # if ("$righthand" != "Empty") then gosub PUT_IT my $righthandnoun in my %tool.storage
                     }
                 else 
 					{
