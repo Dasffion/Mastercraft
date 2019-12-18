@@ -1373,6 +1373,7 @@ PUT:
      matchre RETURN ^You get
      matchre RETURN ^You sling
      matchre RETURN ^You tie
+     matchre RETURN ^You untie
      matchre RETURN ^You have nothing to 
      matchre RETURN ^There isn't any more room in .* for that\.
      matchre RETURN ^You are already focusing your appraisal on a subject\.

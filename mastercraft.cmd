@@ -1,4 +1,4 @@
-#debug 10
+debug 10
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
@@ -1337,7 +1337,7 @@ process.order:
           }
      if "%discipline" = "artif" then
           {
-               if $braz.room = NULL && $MC_PREFERRED.ROOM.ARTIF != NULL && $MC_BRAZIER != NULL)  then 
+               if %braz.room = NULL && $MC_PREFERRED.ROOM.ARTIF != NULL && $MC_BRAZIER != NULL)  then 
                {
                     if !matchre($MC_PREFERRED.ROOM.ARTIF, $roomid then
                     {
@@ -1558,7 +1558,6 @@ gather.material:
                if "%order.pref" = "runestone" then var work.material basic
                if "%order.pref" = "sphere" then var work.material small
                evalmath %get.mat.item.count %%get.mat.item.count - 1
-			   # Kzin added "from my %main.storage" to prevent grabbing things from the bin.
                gosub GET %work.material %get.mat from my %main.storage
                return
           }
@@ -1785,7 +1784,7 @@ turn.in1:
      
           gosub GET $MC_BRAZIER 
           gosub PUT put my $MC_BRAZIER in my %main.storage
-          put #echo >Log Grabbed $MC_BRAZIER from Room $roomid. 
+          put #echo >Log Tried to grab $MC_BRAZIER from Room $roomid. 
           set braz.room NULL
      } 
 	### re-tie bag
