@@ -115,6 +115,7 @@ imbue:
           put #tvar prepared 0
 		}
 	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my imbue rod in my %tool.storage
+     var tool analyze
 	goto work
 	
 sigil:

@@ -58,7 +58,7 @@ action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
-action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (\S+) shield (handle)$
+action (book) var assemble $2; var asmCount1 $1 when .*(\d).* \S+ shield (handle)$
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* wooden (hilt|haft)$
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (lenses)
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (large) cloth (padding)$
@@ -665,6 +665,7 @@ Shard.Outfitting:
 var master Jakke
 put #tvar master.room %SO.master.room
 put #tvar work.room %SO.work.room
+put #tvar part.room 653
 put #tvar supply.room 724
 put #tvar tool.room 723
 put #tvar repair.room %shard.repair.room

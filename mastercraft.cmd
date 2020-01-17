@@ -1914,7 +1914,7 @@ lack.coin:
      action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
      if matchre("90|116", "\b$zoneid\b") then gosub automove 1teller
      else gosub automove teller
-     gosub PUT withd 5 gold
+     gosub PUT withd $MC_WITHD.AMOUNT
      gosub automove %temp.room
      var need.coin 0
      action remove (^The clerk flips through her ledger|^The clerk tells you)

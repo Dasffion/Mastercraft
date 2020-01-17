@@ -93,6 +93,7 @@ put #var MC_Enchanting_NOWO 0
 # 	MC_REPAIR: For repairing your tools, if MC_AUTO.REPAIR is off you will go to the repair shop, on or off
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
+#    MC_WITHD.AMOUNT: Amount of money to withdraw for WOs, enter amount and type, i.e. 5 gold
 #	MC_REORDER: For repurchasing mats, on or off
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
@@ -106,6 +107,7 @@ put #var MC_Enchanting_NOWO 0
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
+put #var MC_WITHD.AMOUNT 5 gold
 put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
@@ -255,6 +257,7 @@ put #var MC_Enchanting_NOWO 0
 # 	MC_REPAIR: For repairing your tools, if MC_AUTO.REPAIR is off you will go to the repair shop, on or off
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
+#    MC_WITHD.AMOUNT: Amount of money to withdraw for WOs, enter amount and type, i.e. 5 gold
 #	MC_REORDER: For repurchasing mats, on or off
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
@@ -268,6 +271,7 @@ put #var MC_Enchanting_NOWO 0
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
+put #var MC_WITHD.AMOUNT 5 gold
 put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
@@ -418,6 +422,7 @@ put #var MC_Enchanting_NOWO 0
 # 	MC_REPAIR: For repairing your tools, if MC_AUTO.REPAIR is off you will go to the repair shop, on or off
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
+#    MC_WITHD.AMOUNT: Amount of money to withdraw for WOs, enter amount and type, i.e. 5 gold
 #	MC_REORDER: For repurchasing mats, on or off
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
@@ -431,6 +436,7 @@ put #var MC_Enchanting_NOWO 0
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
+put #var MC_WITHD.AMOUNT 5 gold
 put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
@@ -581,6 +587,7 @@ put #var MC_Enchanting_NOWO 0
 # 	MC_REPAIR: For repairing your tools, if MC_AUTO.REPAIR is off you will go to the repair shop, on or off
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
+#    MC_WITHD.AMOUNT: Amount of money to withdraw for WOs, enter amount and type, i.e. 5 gold
 #	MC_REORDER: For repurchasing mats, on or off
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
@@ -594,6 +601,7 @@ put #var MC_Enchanting_NOWO 0
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
+put #var MC_WITHD.AMOUNT 5 gold
 put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
@@ -745,6 +753,7 @@ put #var MC_Enchanting_NOWO 0
 # 	MC_REPAIR: For repairing your tools, if MC_AUTO.REPAIR is off you will go to the repair shop, on or off
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
+#    MC_WITHD.AMOUNT: Amount of money to withdraw for WOs, enter amount and type, i.e. 5 gold
 #	MC_REORDER: For repurchasing mats, on or off
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
@@ -758,6 +767,7 @@ put #var MC_Enchanting_NOWO 0
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
+put #var MC_WITHD.AMOUNT 5 gold
 put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
