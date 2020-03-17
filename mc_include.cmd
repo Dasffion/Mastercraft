@@ -61,6 +61,7 @@ action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wo
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* \S+ shield (handle)$
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* wooden (hilt|haft)$
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (lenses)
+action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (backer)
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (large) cloth (padding)$
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (large) leather (backing)$
 action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (string)$

@@ -62,7 +62,7 @@ SmeltStart:
      action (settype) on
      action (settype) math $1$2 add 1 when (%material) (ingot|nugget)
      put inv $MC_FORGING.STORAGE
-     waitfor [Type INVENTORY
+     waitfor [Use INVENTORY
      action (settype) off
      evalmath check %%material(0)nugget + %%material(0)ingot + %%material(0)bar
      if %check = 0 then goto end

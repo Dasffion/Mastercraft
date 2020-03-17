@@ -14,6 +14,7 @@ action var special meditate when The traced sigil pattern blurs before your eyes
 action var special focus when The .* struggles to accept the sigil scribing
 action var special fount when You need another mana fount to continue crafting
 action var special loop when You notice many of the scribed sigils are slowly merging back
+action var tool scribe;var special fount when by pushing it with an augmenting loop may reveal the ideal way to tie these off
 action var tool restudy when You must first study instructions regarding the enchantment you wish to begin
 action var tool scribe when more permanently with a burin|^You do not see anything that would prevent scribing additional sigils
 action var tool sigil;var sigil $1 when ^You need another (?!primary)(\S+) .*sigil to continue the enchanting process
