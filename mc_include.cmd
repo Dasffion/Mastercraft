@@ -1174,7 +1174,7 @@ manualwater:
      pause 0.5
 	gosub ORDER
 	action (order) off
-	gosub ORDER $water.order
+	gosub ORDER 1
 	gosub PUT_IT my water in my %main.storage
 	var water.gone 0
 	return
