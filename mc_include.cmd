@@ -307,7 +307,7 @@ location.vars:
      var FENT.tools.room 235
      var FENT.supplies.room 236
      var FENT.books.room 234
-     var FENT.work.room 441|442|443|444
+     var FENT.work.room 241|240|238|239
      var FENT.room.list 232|233|234|235|236|237|238|239|240|241
      var FENT.master.room 232|233|234|235|236|237
      
