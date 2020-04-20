@@ -1,4 +1,5 @@
 debug 10
+### Thanks to Usrnme for the udpates to the script
 var mix.repeat 0
 var current.lore ENCHANTING
 if_1 var rawmat %1
@@ -58,7 +59,7 @@ clean:
      if ("$MC.order.noun" != "fount") then
           {
                gosub GET fount from brazier
-               gosub PUT_IT fount in main storage
+               gosub PUT_IT fount in %main.storage
           }
      gosub GET "$MC.order.noun" from brazier
      gosub PUT_IT $MC.order.noun in bin
@@ -73,8 +74,9 @@ stow.fount:
 
 start.enchant:
 	put #tvar prepared 0
-	if "$MC_IMBUE" = "SPELL" then gosub PREPARE imbue $MC_IMBUE.MANA
+	if "$MC_IMBUE" = "SPELL|spell" then gosub PREPARE imbue $MC_IMBUE.MANA
 	if !matchre("$righthand|$lefthand", "%rawmat") then gosub GET my %rawmat from %main.storage
+  if !matchre("$righthand|$lefthand", "%rawmat") then goto RESTARTENCHANT
 	gosub PUT_IT my %rawmat on brazier
 	goto work
 	
@@ -101,9 +103,10 @@ imbue:
 	gosub specialcheck
 	if "$MC_IMBUE" = "ROD" then
 		{
-		gosub GET imbue rod
-		gosub Action wave rod at $MC.order.noun on braz
+		gosub GET $imbue.rod
+		gosub Action wave $MC_IMBUE.ROD at $MC.order.noun on braz
 		}
+	if "%tool" = "sigil" then goto sigil	
 	if ("$MC_IMBUE" = "SPELL") then 
 		{
           if "$preparedspell" != "Imbue" then 
@@ -115,7 +118,8 @@ imbue:
 		gosub SPELL_CAST_TARGET $MC.order.noun on braz
           put #tvar prepared 0
 		}
-	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my imbue rod in my %tool.storage
+	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my $MC_IMBUE.ROD in my %tool.storage
+	if "%tool" = "done" then goto done
      var tool analyze
 	goto work
 	
@@ -182,7 +186,7 @@ repeat:
 	gosub GET my artif book
 	gosub STUDY my book
 	gosub PUT_IT my book in my %main.storage
-	gosub GET my %rawmat
+	gosub GET my %rawmat from %main.storage
 	var tool scribe
 	goto start.enchant
 	
@@ -202,3 +206,5 @@ done:
 		}
 	put #parse ENCHANTING DONE
 	exit
+RESTARTENCHANT:
+SEND .MASTERCRAFT

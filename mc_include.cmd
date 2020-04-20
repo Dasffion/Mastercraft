@@ -1410,7 +1410,7 @@ PUT_IT:
      matchre RETURN ^I could not find what you were referring to\.
      matchre RETURN ^What were you referring to\?     
      matchre RETURN ^The (\S+) can only hold
-     matchre TRASH ^This appears too far altered to enchant
+     matchre TRASH ^This appears too far altered to enchant|^The %rawmat is already enchanted|^You have no idea how to craft
      matchre BAG_FULL no matter how you arrange it
      matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
      send put %PutIt

@@ -76,6 +76,7 @@ put #var MC_Alchemy_NOWO 1
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
 # 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
 put #var MC_ENCHANTING.STORAGE shoulder pack
@@ -84,6 +85,7 @@ put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
 put #var MC_Enchanting_NOWO 0
+put #var MC_IMBUE.ROD fey-bone rod
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -240,6 +242,7 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
 # 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
 put #var MC_ENCHANTING.STORAGE shoulder pack
@@ -247,8 +250,9 @@ put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
-put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
+put #var MC_IMBUE.ROD fey-bone rod
+#put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
 #######################################################################
@@ -404,6 +408,7 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
 # 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
 put #var MC_ENCHANTING.STORAGE shoulder pack
@@ -411,8 +416,8 @@ put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
-put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
+put #var MC_IMBUE.ROD fey-bone rod
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -569,6 +574,7 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
 # 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
 put #var MC_ENCHANTING.STORAGE shoulder pack
@@ -576,8 +582,8 @@ put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
-put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
+put #var MC_IMBUE.ROD fey-bone rod
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
@@ -735,6 +741,7 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
 # 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
 put #var MC_ENCHANTING.STORAGE shoulder pack
@@ -742,8 +749,8 @@ put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
 put #var MC_IMBUE.MANA 50
-put #var MC_FOCUS.WAND wood wand
 put #var MC_Enchanting_NOWO 0
+put #var MC_IMBUE.ROD fey-bone rod
 #put #var MC_FOCUS.WAND wood wand
 #######################################################################
 ##########################  MISC VARIABLES  ###########################
