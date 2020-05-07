@@ -344,6 +344,8 @@ location.vars:
      var shard.repair clerk
      var muspari.repair.room 506
      var muspari.repair Rokumru
+     var fang.repair.room 205
+     var fang.repair clerk
 
      var Master.Found 0
      action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than 
@@ -728,6 +730,8 @@ put #tvar supply.room 208
 put #tvar part.room 208
 put #tvar tool.room 209
 put #tvar ingot.buy 200
+put #tvar repair.room %fang.repair.room
+put #tvar repair.clerk %fang.repair
 var society.type Engineering
 return
 
@@ -741,6 +745,8 @@ put #tvar supply.room 200
 put #tvar part.room 215
 put #tvar tool.room 215
 put #tvar smelt.room %FF.smelt.room
+put #tvar repair.room %fang.repair.room
+put #tvar repair.clerk %fang.repair
 var society.type Forging
 return
 
@@ -751,6 +757,8 @@ put #tvar work.room %FO.work.room
 put #tvar supply.room 187
 put #tvar part.room 187
 put #tvar tool.room 186
+put #tvar repair.room %fang.repair.room
+put #tvar repair.clerk %fang.repair
 var society.type Outfitting
 return
 
@@ -760,6 +768,8 @@ put #tvar master.room %FA.master.room
 put #tvar work.room %FA.work.room
 put #tvar supply.room 194
 put #tvar tool.room 193
+put #tvar repair.room %fang.repair.room
+put #tvar repair.clerk %fang.repair
 var society.type Alchemy
 return
 
@@ -770,6 +780,8 @@ put #tvar work.room %FENT.work.room
 put #tvar supply.room 236
 put #tvar part.room 236
 put #tvar tool.room 235
+put #tvar repair.room %fang.repair.room
+put #tvar repair.clerk %fang.repair
 var society.type Enchanting
 return
 
