@@ -668,7 +668,7 @@ Shard.Outfitting:
 var master Jakke
 put #tvar master.room %SO.master.room
 put #tvar work.room %SO.work.room
-put #tvar part.room 653
+put #tvar part.room 724
 put #tvar supply.room 724
 put #tvar tool.room 723
 put #tvar repair.room %shard.repair.room
