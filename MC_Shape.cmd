@@ -21,6 +21,7 @@ var enhance OFF
 var MarkIt YES
 var ArrowheadTool Katar
 var ArrowheadMats (tooth|fang|horn|claw|tusk)
+if !matchre("$scriptlist", "mastercraft") then var society.type Engineering
 
 include mc_include.cmd
 if_1 put #var MC.order.noun %1

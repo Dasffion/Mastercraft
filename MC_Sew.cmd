@@ -16,6 +16,7 @@
 
 var sew.repeat 0
 var current.lore Outfitting
+if !matchre("$scriptlist", "mastercraft") then var society.type Outfitting
 include mc_include.cmd
 if_2 var material %2
 if_3 var sew.repeat %3

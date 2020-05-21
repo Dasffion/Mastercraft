@@ -16,6 +16,7 @@
 var sew.repeat 0
 if_2 var sew.repeat %2
 if_1 put #var MC.order.noun %1
+if !matchre("$scriptlist", "mastercraft") then var society.type Outfitting
 include mc_include.cmd
 
 
