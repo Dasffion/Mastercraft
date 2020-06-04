@@ -103,7 +103,7 @@ imbue:
 	gosub specialcheck
 	if "$MC_IMBUE" = "ROD" then
 		{
-		gosub GET $imbue.rod
+		gosub GET $MC_IMBUE.ROD
 		gosub Action wave $MC_IMBUE.ROD at $MC.order.noun on braz
 		}
 	if "%tool" = "sigil" then goto sigil	
