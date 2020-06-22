@@ -2,7 +2,7 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 1.2.1
+#v 1.2.3
 #
 # Script Usage: .mastercraft                                        --to only do one work order
 #                    .mastercraft <no. of orders>                    --to perform more than one
@@ -1075,7 +1075,8 @@ purchase.assemble_2:
                     }
                if "%discipline" = "artif" then
                     {
-                         gosub ORDER $%assemble.order
+                         if (($zoneid = 150) && ("%assemble" = "abolition")) then gosub order $abolution.order
+                         else gosub ORDER $%assemble.order
                     }
           }
      math asmCount1 subtract 1
@@ -1117,7 +1118,8 @@ purchase.assemble2:
                     }
                if "%discipline" = "artif" then
                     {
-                         gosub ORDER $%assemble2.order
+                         if (($zoneid = 150) && ("%assemble2" = "abolition")) then gosub order $abolution.order
+                         else gosub ORDER $%assemble2.order
                     }
           }
      else gosub ORDER %assemble2
@@ -2027,11 +2029,24 @@ lack.material:
           }
      if matchre("%discipline", "tinkering|shaping") then
           {
-               if "%work.material" = "pine" then var order.num 9
-               if "%work.material" = "maple" then var order.num 10
-               if "%work.material" = "balsa" then var order.num 11
-               evalmath reqd.order (%mass.volume-%material.volume)/5
-               evalmath reqd.order ceiling(%reqd.order)
+               if "%work.material" = "pine" then 
+                    {
+                         var order.num 9
+                         evalmath reqd.order (%mass.volume-%material.volume)/5
+                         evalmath reqd.order ceiling(%reqd.order)
+                    }
+               if "%work.material" = "maple" then 
+                    {
+                         var order.num 10
+                         evalmath reqd.order (%mass.volume-%material.volume)/5
+                         evalmath reqd.order ceiling(%reqd.order)
+                    }
+               if "%work.material" = "balsa" then  
+                    {
+                         var order.num 11
+                         evalmath reqd.order (%mass.volume-%material.volume)/10
+                         evalmath reqd.order ceiling(%reqd.order)
+                    }
                var main.storage $MC_ENGINEERING.STORAGE
                goto purchase.material
           }
@@ -2082,7 +2097,11 @@ first.order:
                          math reqd.order subtract 1
                          gosub PUT_IT my %order.type in my %main.storage
                          math %order.pref.item.count add 1
-                         if matchre("%order.type", "lumber") then math material.volume add 5
+                         if matchre("%order.type", "lumber") then 
+                              {
+                                   if "%work.material" = "balsa" then math material.volume add 10
+                                   else math material.volume add 5
+                              }
                          if matchre("%order.type", "leather|cloth|stack") then math material.volume add 10
                          if matchre("%order.type", "yarn") then math material.volume add 100
                          if ("%discipline" = "remed") then math %herb1.material.volume add 25

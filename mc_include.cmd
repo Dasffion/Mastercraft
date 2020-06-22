@@ -1258,9 +1258,11 @@ matchre Analyze ^That tool does not seem suitable for that task\.
 matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
 send %command
 matchwait 10
+var got.analyze NO
 return
 
 Analyze:
+     var got.analyze YES
      gosub Action analyze $MC.order.noun
 	return
 
