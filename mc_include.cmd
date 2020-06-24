@@ -837,13 +837,13 @@ var society.type Alchemy
 return
 
 none:
-if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "MC_.*?\.cmd"))) then 
+if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "(?i)(MC_.*?\.cmd)"))) then 
      {
-     if matchre("$scriptlist", "Smelt|Pound|Grind") then var society.type Forging
-     if matchre("$scriptlist", "Sew|Spin|Knit|Weave") then var society.type Outfitting
-     if matchre("$scriptlist", "Carve|Tinker|Shape") then var society.type Engineering
-     if matchre("$scriptlist", "Mix") then var society.type Alchemy
-     if matchre("$scriptlist", "Enchant") then var society.type Enchanting
+     if matchre("$scriptlist", "(?i)(Smelt|Pound|Grind)") then var society.type Forging
+     if matchre("$scriptlist", "(?i)(Sew|Spin|Knit|Weave)") then var society.type Outfitting
+     if matchre("$scriptlist", "(?i)(Carve|Tinker|Shape)") then var society.type Engineering
+     if matchre("$scriptlist", "(?i)Mix") then var society.type Alchemy
+     if matchre("$scriptlist", "(?i)Enchant") then var society.type Enchanting
      return
      }
 if matchre("$scriptlist", "mastercraft") then 
