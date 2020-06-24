@@ -837,7 +837,15 @@ var society.type Alchemy
 return
 
 none:
-if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "MC_.*?\.cmd"))) then return
+if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "MC_.*?\.cmd"))) then 
+     {
+     if matchre("$scriptlist", "Smelt|Pound|Grind") then var society.type Forging
+     if matchre("$scriptlist", "Sew|Spin|Knit|Weave") then var society.type Outfitting
+     if matchre("$scriptlist", "Carve|Tinker|Shape") then var society.type Engineering
+     if matchre("$scriptlist", "Mix") then var society.type Alchemy
+     if matchre("$scriptlist", "Enchant") then var society.type Enchanting
+     return
+     }
 if matchre("$scriptlist", "mastercraft") then 
 	{
 	put #echo You are not in a valid society
