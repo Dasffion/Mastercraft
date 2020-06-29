@@ -45,7 +45,7 @@ action var pressoff 0;var Action plierspress when ^The gear press shakes back to
 action var Action shovel when ^You dial the device to
 action var Action pull when ^The unfinished mechanism
 action var Action done when ^The metal quickly cools
-action var mechs $1 when ^There(?:'s only| are) (\S+) ((?:parts? left of the (?:\S+) mechanism(?:s)?)|(?:mechanism(?:s)? left for use with))
+action var mechs $1 when ^There(?:'s only| are| is) (\S+) ((?:parts? left of the (?:\S+) mechanism(?:s)?)|(?:mechanism(?:s)? left for use with))
 
 action var assemble $1 when another finished bow (string)
 action var assemble mechanism when You need another finished mechanism to continue crafting
