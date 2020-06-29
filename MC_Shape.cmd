@@ -125,7 +125,7 @@ excess:
 	pause
 	 gosub STOW_RIGHT
 	 wait
-	 gosub GET %excessmats
+	 gosub GET my %excessmats
 	 wait
 	 gosub PUT_IT my %excessmats in my $MC_ENGINEERING.STORAGE
 	 wait

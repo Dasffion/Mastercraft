@@ -990,7 +990,7 @@ count.material:
                          var mechnumber 0
                          return
                     }
-               action var mechs $1 when ^There(?:'s only| are) (\S+) ((?:parts? left of the (?:\S+) mechanism(?:s)?)|(?:mechanism(?:s)? left for use with))
+               action var mechs $1 when ^There(?:'s only| are| is) (\S+) ((?:parts? left of the (?:\S+) mechanism(?:s)?)|(?:mechanism(?:s)? left for use with))
                var i 0
                send count my mech
                pause 1
