@@ -41,6 +41,7 @@ action (order) put #tvar s.padding.order $1 when (\d+)\)\..*some.*small.*padding
 action (order) put #tvar pins.order $1 when (\d+)\)\..*some straight iron pins.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar polish.order $1 when (\d+)\)\..*jar of surface polish.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar oil.order $1 when (\d+)\)\.\s+a flask of oil.*(Lirums|Kronars|Dokoras)
+action (order) put #tvar stain.order $1 when (\d+)\)\.\s+some wood stain.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar brush.order $1 when (\d+)\)\.\s+an iron wire brush.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar burlap.order $1 when (\d+)\)\..*yards of burlap cloth.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar wool.order $1 when (\d+)\)\..*yards of wool cloth.*(Lirums|Kronars|Dokoras)
@@ -68,6 +69,8 @@ action (book) var assemble $2; var asmCount1 $1 when .*(\d).* (string)$
 action (book) var assemble2 $2 $3; var asmCount2 $1 when .*(\d).* (small) cloth (padding)$
 action (book) var assemble2 $2 $3; var asmCount2 $1 when .*(\d).* (small) leather (backing)$
 action (book) var assemble2 $2 $3; var asmCount2 $1 when .*(\d).* (long|short) leather (cord)$
+action (book) var assemble2 backer; var asmCount2 $1 when .*(\d).* backing material
+action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* leather (strips)$
 action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* (mechanism)$
 
 
@@ -276,8 +279,12 @@ location.vars:
      var HIBENT.master.room 435|436|437|438|439|440
      
 	#Mer'Kresh Forging
-     var MKF.room.list 334|335|336|337|338|339|340|341|342|343|344|345|346|347|348
-     var MKF.master.room 334|335|336|337|338
+     var MKF.room.list 332|333|334|335|336|337|338|339|340|341|342|343|344|345|346|347|348
+     var MKF.tools.room 335
+	 var MKF.supplies.room 334
+     var MKF.books.room 333
+     var MKF.master.room 333|334|335|336|337|338
+	 var MKF.smelt.room 337|338|339|340|341
      var MKF.work.room 344|345|346|347|348
      var MKF.grind.room %MKF.work.room
      
@@ -716,9 +723,10 @@ put #tvar master.room %MKF.master.room
 put #tvar grind.room %MKF.grind.room
 put #tvar work.room %MKF.work.room
 put #tvar deed.room 336
-put #tvar supply.room 336
-put #tvar part.room 337
-put #tvar tool.room 337
+put #tvar supply.room %MKF.supplies.room
+put #tvar part.room %MKF.tools.room
+put #tvar tool.room %MKF.tools.room
+put #tvar smelt.room %MKF.smelt.room
 var society.type Forging
 return
 
@@ -1317,7 +1325,7 @@ fullhands:
 WAIT:
      pause 0.0001
      pause 0.1
-     if (!$standing) then gosub STAND
+     if (!$standing) then put STAND
      goto %LOCATION
  
 #### PUT SUB
@@ -1443,7 +1451,8 @@ PUT_IT:
      return
      
 TRASH:
-     if matchre("$roomobjs", "(bucket|bin)") then gosub PUT_IT %rawmat in bin
+     if matchre("$roomobjs", "(bucket|bin)") then 		if !matchre("%rawmat", "%work.tools") then gosub PUT_IT %rawmat in bin
+
      else put drop %rawmat
      gosub clear
      goto start.enchant
