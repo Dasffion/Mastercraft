@@ -1648,9 +1648,9 @@ smelt_2:
      return
      
 combine:
-     if !matchre("$righthand|$lefthand", "%combine.temp") then gosub GET %combine.temp from my %combine.storage
-     if %%order.pref.item.count <= 1 then goto combine.end
-     gosub GET %combine.temp from %combine.storage
+     if !matchre("$righthand|$lefthand", "%combine.temp") then gosub GET my %combine.temp
+#     if %%order.pref.item.count <= 1 then goto combine.end
+     gosub GET my %combine.temp from %combine.storage
 	 combine2:
 	 matchre combine.end You must be holding both substances to combine them.  For more information, see HELP VERB COMBINE.
 	 matchre combine.continue You combine
