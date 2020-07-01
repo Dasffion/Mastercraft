@@ -71,6 +71,8 @@ unfinished:
           {
           if %tongs.adj = 1 then send adjust my $MC_TONGS
           }
+      pause 0.5
+      pause 0.5
 	 matchre work $MC.order.noun
 	 matchre clean unfinished .+ (\S+)\.
 	 matchre first.pound (a|an) .+ ingot
