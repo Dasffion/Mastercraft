@@ -55,6 +55,7 @@ action (order) put #tvar alcohol.order $1 when (\d+)\)\..*10 splashes of grain a
 action (order) put #tvar catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
+action (order) put #tvar stain.order $1 when (\d+)\)\..*some wood stain.*(Lirums|Kronars|Dokoras)
  
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
