@@ -364,7 +364,7 @@ identify.order:
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a cambrinth retuner|a flash trinket|a wind trinket|an earth trinket)
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (training ritual focus|basic lunar ritual focus|basic elemental ritual focus|basic life ritual focus|basic holy ritual focus)
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (common material minor fount|common material lesser fount|common material greater fount)
-               matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|(?<!ease )burden runestone|manifest force runestone|strange arrow runestone|gauage flow runestone|dispel runestone|lay ward runestone)
+               matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|(?<!ease )burden runestone|manifest force runestone|strange arrow runestone|gauge flow runestone|dispel runestone|lay ward runestone)
                put read my %society.type logbook
                matchwait 1
                goto new.order.wait
@@ -783,8 +783,11 @@ calc.material:
           if (%order.quantity > %%order.pref.item.count) then gosub lack.material
           pause 0.5
           echo Number of Items Req'd: %order.quantity
-          if %fount.count < 1 then
+          if ("%discipline" = "artif") then gosub count.material fount
+          if %fount.uses < %order.quantity then
                {
+			        gosub get my fount
+					put drop my fount
                     gosub automove enchanting tool
                     if %fount.count < 1 then 
                               {
@@ -829,7 +832,7 @@ calc.parts:
      if matchre("%assemble", "(\S+)\s(\S+)") then math asmCount1 subtract %$1.$2.count
      if (matchre("%assemble2", "(\S+)") && ("%assemble2" != "mechanism")) then math asmCount2 subtract %$1.count
      if matchre("%assemble2", "(\S+)\s(\S+)") then math asmCount2 subtract %$1.$2.count
-     if matchre("%assemble2", "(\S+)") then math asmCount2 subtract %$1.count
+#     if matchre("%assemble2", "(\S+)") then math asmCount2 subtract %$1.count
      if "%assemble2" = "mechanism" then 
           {
                put #tvar totalmechanisms %asmCount2
@@ -855,6 +858,7 @@ parts.inv:
      var permutation.count 0
      var rarefaction.count 0
      var fount.count 0
+	 var fount.uses 0
      var water.count 0
      var alcohol.count 0
      var coal.count 0
@@ -997,6 +1001,22 @@ count.material:
                gosub mechcount
                return
           }
+	 if "%count" = "fount" then
+	      {
+               if %fount.count = 0 then 
+                    {
+                         var fount.uses 0
+                         return
+                    }
+		       action (fountcount) var fount.uses $1 when approximately (\d+) uses? remaining
+			   action (fountcount) on
+			   var i 0
+			   gosub get my fount
+			   send anal my fount
+			   pause .5
+			   action (fountcount) off
+			   return
+		  }
 count.material2:
      action (count) on
      pause 1
@@ -1655,7 +1675,7 @@ combine:
 	 matchre combine.end You must be holding both substances to combine them.  For more information, see HELP VERB COMBINE.
 	 matchre combine.continue You combine
      send combine
-	 matchwait 3
+	 matchwait 5
 	 combine.continue:
      math %order.pref.item.count subtract 1
      if !matchre("$lefthand|$righthand", "Empty") then goto combine.end
