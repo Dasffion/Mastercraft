@@ -1115,6 +1115,7 @@ automove:
           put #mapper reset
           }
 automovecont:
+     pause 0.1
      match automovecont2 Bonk! You smash your nose.
      match return YOU HAVE ARRIVED
      match automovecont1 YOU HAVE FAILED
