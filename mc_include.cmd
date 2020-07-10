@@ -73,6 +73,7 @@ action (book) var assemble2 $2 $3; var asmCount2 $1 when .*(\d).* (long|short) l
 action (book) var assemble2 backer; var asmCount2 $1 when .*(\d).* backing material
 action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* leather (strips)$
 action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* (mechanism)$
+action (book) var fount.need $1 when .*(\d).* mana fount$
 
 
 ###########################################################################
@@ -346,7 +347,7 @@ location.vars:
      var crossing.repair Rangu
      var haven.repair.room 398
      var haven.repair clerk
-     var ratha.repair.room 854
+     var ratha.repair.room 855
      var ratha.repair Glarstan
      var shard.repair.room Forging Clerk
      var shard.repair clerk
@@ -1319,7 +1320,7 @@ ORDER:
      put #echo >$Log Crimson $datetime Order = %Order
      put #log $datetime MISSING MATCH IN ORDER! (utility.inc)
      return
-     
+
 fullhands:
 	gosub EMPTY_HANDS
 	goto ORDER_1
@@ -1564,6 +1565,8 @@ STOW_LEFT:
           {
                if matchre("%tiedtools", "$lefthandnoun") then 
                     {
+					pause .05
+					pause .5
                     send tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
                     }
                else 
@@ -1585,6 +1588,8 @@ STOW_RIGHT:
           {
                if matchre("%tiedtools", "$righthandnoun") then 
                     {
+					pause .05
+					pause .5
                     send tie my $righthandnoun to my $MC_TOOLBELT_%society.type
                     }
                else 
