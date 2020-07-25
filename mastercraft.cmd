@@ -546,7 +546,7 @@ calc.material:
                echo Inventory: %material.volume volumes
                if %oil.count < 1 then
                {
-                    gosub automove $tool.room
+                    gosub automove $oil.room
                     action (order) on
                     gosub ORDER
                     pause .5
@@ -788,9 +788,10 @@ calc.material:
                {
 			        gosub get my fount
 					put drop my fount
-                    gosub automove enchanting tool
+					math fount.count subtract 1
                     if %fount.count < 1 then 
                               {
+								   gosub automove enchanting tool
                                    gosub ORDER 3
                                    gosub PUT_IT my fount in my %main.storage
                               }
@@ -890,7 +891,7 @@ parts.inv:
      action (assemble) math handle.count add 1 when ^\s+(a|an) \S+ shield handle
      action (assemble) math hilt.count add 1 when ^\s+a \S+ \S+ hilt
      action (assemble) math haft.count add 1 when ^\s+a \S+ \S+ haft
-     action (assemble) math oil.count add 1 when ^\s+a flask of(?: azure| violet)? oil
+     action (assemble) math oil.count add 1 when ^\s+a(?: big)? flask of(?: azure| violet)? oil
      action (assemble) math large.backing.count add 1 when ^\s+a large \S+ backing
      action (assemble) math small.backing.count add 1 when ^\s+a small \S+ backing
      action (assemble) math large.padding.count add 1 when ^\s+(a|some) large \S+ padding
@@ -1013,8 +1014,9 @@ count.material:
 			   var i 0
 			   gosub get my fount
 			   send anal my fount
-			   pause .5
+			   waitforre ^You.*analyze
 			   action (fountcount) off
+			   gosub PUT_IT my fount in my %main.storage
 			   return
 		  }
 count.material2:
@@ -1121,7 +1123,7 @@ purchase.assemble_2:
      pause .2
      if "%discipline" = "artif" then gosub PUT_IT my sigil in my %main.storage
      else gosub PUT_IT my %assemble in my %main.storage
-     if %asmCount1 = 0 then return
+     if %asmCount1 <= 0 then return
      goto purchase.assemble_2
 
 purchase.assemble2:
@@ -1169,7 +1171,7 @@ purchase.assemble2:
                else gosub PUT_IT my %assemble2 in my %main.storage
           }
      if "%assemble2" = "mechanism" then gosub PUT_IT my ingot in my %main.storage
-     if %asmCount2 = 0 then return
+     if %asmCount2 <= 0 then return
      goto purchase.assemble2_2
 
 
@@ -1966,7 +1968,10 @@ lack.coin:
      var need.coin 0
      action remove (^The clerk flips through her ledger|^The clerk tells you)
      pause 1
-     goto purchase.material
+     if %reqd.order > 0 then goto purchase.material
+     if %asmCount1 > 0 then gosub purchase.assemble
+     if %asmCount2 > 0 then gosub purchase.assemble2
+	 goto purchase.material
 
 lack.coin.exit:
      echo You need some startup coin to purchase stuff! Go to the bank and try again!

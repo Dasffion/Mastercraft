@@ -440,6 +440,7 @@ put #tvar deed.room 442
 put #tvar supply.room 400
 put #tvar part.room 399
 put #tvar tool.room 399
+put #tvar oil.room 399
 put #tvar repair.room %haven.repair.room
 put #tvar repair.clerk %haven.repair
 var society.type Forging
@@ -453,6 +454,7 @@ put #tvar supply.room 450
 put #tvar part.room 450
 #order parts
 put #tvar tool.room 451
+put #tvar oil.room 399
 put #tvar repair.room %haven.repair.room
 put #tvar repair.clerk %haven.repair
 var society.type Outfitting
@@ -466,6 +468,7 @@ put #tvar supply.room 466
 put #tvar part.room 465
 put #tvar tool.room 465
 put #tvar ingot.buy 399
+put #tvar oil.room 399
 put #tvar repair.room %haven.repair.room
 put #tvar repair.clerk %haven.repair
 var society.type Engineering
@@ -477,6 +480,7 @@ put #tvar master.room %HA.master.room
 put #tvar work.room %HA.work.room
 put #tvar supply.room 472
 put #tvar tool.room 470
+put #tvar oil.room 399
 put #tvar repair.room %haven.repair.room
 put #tvar repair.clerk %haven.repair
 var society.type Alchemy
@@ -489,6 +493,7 @@ put #tvar work.room %HENT.work.room
 put #tvar supply.room 532
 put #tvar part.room 532
 put #tvar tool.room 533
+put #tvar oil.room 399
 put #tvar repair.room %haven.repair.room
 put #tvar repair.clerk %haven.repair
 var society.type Enchanting
@@ -504,6 +509,7 @@ put #tvar deed.room 906
 put #tvar supply.room 906
 put #tvar part.room 905
 put #tvar tool.room 905
+put #tvar oil.room 905
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
 var society.type Forging
@@ -517,6 +523,7 @@ put #tvar supply.room 914
 put #tvar part.room 914
 #order parts
 put #tvar tool.room 913
+put #tvar oil.room 905
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
 var society.type Outfitting
@@ -530,6 +537,7 @@ put #tvar supply.room 874
 put #tvar part.room 874
 put #tvar tool.room 851
 put #tvar ingot.buy 906
+put #tvar oil.room 905
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
 var society.type Engineering
@@ -541,6 +549,7 @@ put #tvar master.room %CA.master.room
 put #tvar work.room %CA.work.room
 put #tvar supply.room 933
 put #tvar tool.room 931
+put #tvar oil.room 905
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
 var society.type Alchemy
@@ -553,6 +562,7 @@ put #tvar work.room %CENT.work.room
 put #tvar supply.room 996
 put #tvar part.room 996
 put #tvar tool.room 997
+put #tvar oil.room 905
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
 var society.type Enchanting
@@ -568,6 +578,7 @@ put #tvar deed.room 775
 put #tvar supply.room 775
 put #tvar part.room 777
 put #tvar tool.room 777
+put #tvar oil.room 777
 var society.type Forging
 return
 
@@ -580,6 +591,7 @@ put #tvar deed.room 248
 put #tvar supply.room 248
 put #tvar part.room 248
 put #tvar tool.room 238
+put #tvar oil.room 238
 var society.type Forging
 return
 
@@ -592,6 +604,7 @@ put #tvar deed.room 829
 put #tvar supply.room 829
 put #tvar part.room 819
 put #tvar tool.room 819
+put #tvar oil.room 819
 put #tvar smelt.room 826|827|828
 put #tvar repair.room %ratha.repair.room
 put #tvar repair.clerk %ratha.repair
@@ -605,6 +618,7 @@ put #tvar work.room %RO.work.room
 put #tvar supply.room 844
 put #tvar part.room 844
 put #tvar tool.room 842
+put #tvar oil.room 819
 put #tvar repair.room %ratha.repair.room
 put #tvar repair.clerk %ratha.repair
 var society.type Outfitting
@@ -618,6 +632,7 @@ put #tvar supply.room 858
 put #tvar part.room 858
 put #tvar tool.room 857
 put #tvar ingot.buy 829
+put #tvar oil.room 819
 put #tvar repair.room %ratha.repair.room
 var #tvar repair.clerk %ratha.repair
 var society.type Engineering
@@ -629,6 +644,7 @@ put #tvar master.room %RA.master.room
 put #tvar work.room %RA.work.room
 put #tvar supply.room 865
 put #tvar tool.room 864
+put #tvar oil.room 819
 put #tvar repair.room %ratha.repair.room
 var repair.clerk %ratha.repair
 var society.type Alchemy
@@ -644,6 +660,7 @@ put #tvar deed.room 661
 put #tvar supply.room 658
 put #tvar part.room 653
 put #tvar tool.room 653
+put #tvar oil.room 653
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
 var society.type Forging
@@ -655,6 +672,7 @@ put #tvar master.room %SA.master.room
 put #tvar work.room %SA.work.room
 put #tvar supply.room 701
 put #tvar tool.room 703
+put #tvar oil.room 653
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
 var society.type Alchemy
@@ -668,6 +686,7 @@ put #tvar supply.room 711
 put #tvar part.room 711
 put #tvar tool.room 718
 put #tvar ingot.buy 658
+put #tvar oil.room 653
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
 var society.type Engineering
@@ -680,6 +699,7 @@ put #tvar work.room %SO.work.room
 put #tvar part.room 724
 put #tvar supply.room 724
 put #tvar tool.room 723
+put #tvar oil.room 653
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
 var society.type Outfitting
@@ -692,6 +712,7 @@ put #tvar work.room %SENT.work.room
 put #tvar supply.room %SENT.supplies.room
 put #tvar part.room %SENT.supplies.room
 put #tvar tool.room %SENT.tools.room
+put #tvar oil.room 653
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
 var society.type Enchanting
@@ -706,6 +727,7 @@ put #tvar deed.room 415
 put #tvar supply.room 415
 put #tvar part.room 413
 put #tvar tool.room 413
+put #tvar oil.room 413
 var society.type Forging
 return
 
@@ -716,6 +738,7 @@ put #tvar work.room %HIBENT.work.room
 put #tvar supply.room %HIBENT.supplies.room
 put #tvar part.room %HIBENT.supplies.room
 put #tvar tool.room %HIBENT.tools.room
+put #tvar oil.room 413
 var society.type Enchanting
 return
 
@@ -728,6 +751,7 @@ put #tvar deed.room 336
 put #tvar supply.room %MKF.supplies.room
 put #tvar part.room %MKF.tools.room
 put #tvar tool.room %MKF.tools.room
+put #tvar oil.room %MKF.tools.room
 put #tvar smelt.room %MKF.smelt.room
 var society.type Forging
 return
@@ -740,6 +764,7 @@ put #tvar supply.room 208
 put #tvar part.room 208
 put #tvar tool.room 209
 put #tvar ingot.buy 200
+put #tvar oil.room 215
 put #tvar repair.room %fang.repair.room
 put #tvar repair.clerk %fang.repair
 var society.type Engineering
@@ -754,6 +779,7 @@ put #tvar deed.room 203
 put #tvar supply.room 200
 put #tvar part.room 215
 put #tvar tool.room 215
+put #tvar oil.room 215
 put #tvar smelt.room %FF.smelt.room
 put #tvar repair.room %fang.repair.room
 put #tvar repair.clerk %fang.repair
@@ -767,6 +793,7 @@ put #tvar work.room %FO.work.room
 put #tvar supply.room 187
 put #tvar part.room 187
 put #tvar tool.room 186
+put #tvar oil.room 215
 put #tvar repair.room %fang.repair.room
 put #tvar repair.clerk %fang.repair
 var society.type Outfitting
@@ -778,6 +805,7 @@ put #tvar master.room %FA.master.room
 put #tvar work.room %FA.work.room
 put #tvar supply.room 194
 put #tvar tool.room 193
+put #tvar oil.room 215
 put #tvar repair.room %fang.repair.room
 put #tvar repair.clerk %fang.repair
 var society.type Alchemy
@@ -790,6 +818,7 @@ put #tvar work.room %FENT.work.room
 put #tvar supply.room 236
 put #tvar part.room 236
 put #tvar tool.room 235
+put #tvar oil.room 215
 put #tvar repair.room %fang.repair.room
 put #tvar repair.clerk %fang.repair
 var society.type Enchanting
@@ -802,6 +831,7 @@ put #tvar work.room %MUE.work.room
 put #tvar supply.room 525
 put #tvar part.room 525
 put #tvar tool.room 526
+put #tvar oil.room 510
 put #tvar ingot.buy 511
 put #tvar repair.room %muspari.repair.room
 put #tvar repair.clerk %muspari.repair
@@ -817,6 +847,7 @@ put #tvar deed.room 509
 put #tvar supply.room 511
 put #tvar part.room 510
 put #tvar tool.room 510
+put #tvar oil.room 510
 put #tvar repair.room %muspari.repair.room
 put #tvar repair.clerk %muspari.repair
 put #tvar smelt.room %MUF.smelt.room
@@ -830,6 +861,7 @@ put #tvar work.room %MUO.work.room
 put #tvar supply.room 493
 put #tvar part.room 493
 put #tvar tool.room 495
+put #tvar oil.room 510
 put #tvar repair.room %muspari.repair.room
 put #tvar repair.clerk %muspari.repair
 var society.type Outfitting
@@ -841,6 +873,7 @@ put #tvar master.room %MUA.master.room
 put #tvar work.room %MUA.work.room
 put #tvar supply.room 532
 put #tvar tool.room 534
+put #tvar oil.room 510
 put #tvar repair.room %muspari.repair.room
 put #tvar repair.clerk %muspari.repair
 var society.type Alchemy
