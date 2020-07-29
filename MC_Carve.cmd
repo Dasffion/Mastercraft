@@ -206,7 +206,7 @@ return:
 done:
 	if %polish.gone = 1 then gosub new.tool
 	gosub STOW_RIGHT
-	 wait
+	pause 0.5
 	if "$lefthandnoun" = "$MC.order.noun" then gosub PUT swap
 	pause 1
 	 gosub mark
