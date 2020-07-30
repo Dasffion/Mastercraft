@@ -2220,7 +2220,7 @@ combine.order:
      matchwait
      
 stowright:
-     gosub PUT_IT $righthandnoun in %main.storage
+     gosub PUT_IT #$righthandid in %main.storage
      gosub GET %order.type from %main.storage
      goto combine.order
      

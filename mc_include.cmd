@@ -1606,11 +1606,11 @@ STOW_LEFT:
                          {
 						if matchre("%alltools", "$lefthandnoun") then 
 							{
-								gosub PUT_IT my $lefthandnoun in my %tool.storage
+								gosub PUT_IT my #$lefthandid in my %tool.storage
 							}
 						else
 							{
-								gosub PUT_IT my $lefthandnoun in my %main.storage
+								gosub PUT_IT my #$lefthandid in my %main.storage
 							}
 					}
           }
@@ -1629,11 +1629,11 @@ STOW_RIGHT:
                          {
 						if matchre("%alltools", "$righthandnoun") then 
 							{
-								gosub PUT_IT my $righthandnoun in my %tool.storage
+								gosub PUT_IT my #$righthandid in my %tool.storage
 							}
 						else
 							{
-								gosub PUT_IT my $righthandnoun in my %main.storage
+								gosub PUT_IT my #$righthandid in my %main.storage
 							}
 					}
           }
