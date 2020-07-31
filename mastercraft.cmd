@@ -1401,8 +1401,13 @@ expcheck:
      return
 
 endearly:
-     if matchre("$roomobjs", "(bucket|bin)") then gosub PUT_IT my $MC.order.noun in $1
-     if matchre("$righthand|$lefthand", "$MC.order.noun") then gosub PUT drop my $MC.order.noun
+     if matchre("$roomobjs", "(bucket|bin)") then
+          {
+          if matchre("$lefthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
+          if matchre("$righthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
+          }
+     if matchre("$lefthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
+     if matchre("$righthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
      gosub untie.early
      gosub PUT_IT my %society.type logbook in my %main.storage
      put #parse MASTERCRAFT DONE
@@ -1416,8 +1421,13 @@ untie.early:
 
 trash.early:
      var trash $1
-     if matchre("$roomobjs", "(bucket|bin)") then gosub PUT_IT my %trash in $1
-     if matchre("$righthand|$lefthand", "%trash") then gosub PUT drop my %trash
+     if matchre("$roomobjs", "(bucket|bin)") then
+          {
+          if matchre("$lefthand", "%trash") then gosub PUT_IT #$lefthandid in $1
+          if matchre("$righthand", "%trash") then gosub PUT_IT #$lefthandid in $1
+          }
+     if matchre("$lefthand", "%trash") then gosub PUT drop #$lefthandid
+     if matchre("$righthand", "%trash") then gosub PUT drop #$lefthandid
      goto untie.early
 
 
@@ -1432,13 +1442,20 @@ codex:
 bundle.order:
      if $MC_%society.type_NOWO then 
           {
-               if matchre("$roomobjs", "(bucket|bin)") then gosub PUT_IT my $MC.order.noun in $1
-               if matchre("$righthand|$lefthand", "$MC.order.noun") then gosub PUT drop my $MC.order.noun
+               if matchre("$roomobjs", "(bucket|bin)") then
+                    {
+                    if matchre("$lefthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
+                    if matchre("$righthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
+                    }
+               if matchre("$lefthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
+               if matchre("$righthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
                math order.quantity subtract 1
                return
           }
      action (analyze) on
      math order.quantity subtract 1
+     if matchre("$lefthand", "$MC.order.noun") then send analyze #$lefthandid
+     if matchre("$righthand", "$MC.order.noun") then send analyze #$righthandid
      send analyze my $MC.order.noun
      waitforre ^You.*analyze
      pause .5
@@ -1459,8 +1476,13 @@ bundle.order:
      gosub PUT_IT my %society.type logbook in my %main.storage
      if contains("$righthand|$lefthand", "$MC.order.noun") then
           {
-               if matchre("$roomobjs", "(bucket|bin)" then gosub PUT_IT my $MC.order.noun in $1
-               else gosub PUT drop my $MC.order.noun
+               if matchre("$roomobjs", "(bucket|bin)") then
+                    {
+                    if matchre("$lefthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
+                    if matchre("$righthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
+                    }
+               if matchre("$lefthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
+               if matchre("$righthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
                var NOWO 1
           }
      gosub EMPTY_HANDS
