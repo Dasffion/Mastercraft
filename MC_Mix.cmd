@@ -249,11 +249,11 @@ repeat:
 	math mix.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my %alchemy.storage
 	gosub GET my remedy book
-	gosub STUDY study my book
+	gosub STUDY my book
 	gosub PUT_IT my book in my %alchemy.storage
 	gosub GET my %material
 	var tool mix
-	goto first.cut
+	goto first.mix
 	
 	
 done:
