@@ -1456,7 +1456,6 @@ bundle.order:
      math order.quantity subtract 1
      if matchre("$lefthand", "$MC.order.noun") then send analyze #$lefthandid
      if matchre("$righthand", "$MC.order.noun") then send analyze #$righthandid
-     send analyze my $MC.order.noun
      waitforre ^You.*analyze
      pause .5
      action (analyze) off
