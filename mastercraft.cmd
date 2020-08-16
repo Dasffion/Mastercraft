@@ -115,7 +115,7 @@ include mc_include.cmd
      var difficultytry add 0
      var NOWO $MC_%society.type_NOWO
      gosub clearvolume
-
+	 var all.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS|$MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_AWL|$MC_CHISEL|$MC_RIFFLER|$MC_RASP|$MC_SAW|$MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_TINKERTOOL|$MC_CARVINGKNIFE|$MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE|$MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
 
       
      if matchre("%discipline", "weapon|blacksmith") then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD
@@ -149,7 +149,7 @@ include mc_include.cmd
           }
      if "%discipline" = "artif" then
           {
-               var work.tools $MC_LOOP
+               var work.tools $MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
           }
      if $MC_END.EARLY = 1 then 
           {
@@ -173,6 +173,8 @@ include mc_include.cmd
      action goto lack.coin when ^LACK COIN
      action (analyze) off
 
+	 if (matchre("(%clerktools)", "%work.tools") && (%gottools = 0)) then gosub get.tools
+	 var gottools 1
 
 ##############################
 #
@@ -350,8 +352,8 @@ identify.order:
           {
                action var volume $1 when ^The notes indicate that remedies such as this must be bundled in quantities containing exactly (\d+) uses
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (some blister cream|some moisturizing ointment|some itch salve|some lip balm)
-               matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb ungent|some neck salve|some abdominal salve|some chest salve|some neck ungent|some abdominal ungent|some chest ungent|some head ungent)
-               matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic)
+               matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb ungent|some neck salve|some abdominal salve|some chest salve|some neck ungent|some abdominal ungent|some chest ungent|some head ungent|some head salve)
+               matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic|a back potion)
                matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices)
                matchre chapter.6 This logbook is tracking a work order requiring you to craft (a body draught|a body elixer)
                put read my %society.type logbook
@@ -1410,6 +1412,7 @@ endearly:
      if matchre("$righthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
      gosub untie.early
      gosub PUT_IT my %society.type logbook in my %main.storage
+	 if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
      put #parse MASTERCRAFT DONE
      exit
      
@@ -1578,7 +1581,7 @@ gather.material:
                if "%order.pref" = "runestone" then var work.material basic
                if "%order.pref" = "sphere" then var work.material small
                evalmath %get.mat.item.count %%get.mat.item.count - 1
-               gosub GET %work.material %get.mat
+               gosub GET %work.material %get.mat from my %main.storage
                return
           }
      if ("%discipline" = "remed") then 
@@ -1589,7 +1592,7 @@ gather.material:
                     gosub lack.material
                     }
                evalmath %get.mat.material.volume %%get.mat.material.volume - 25
-               gosub GET %get.mat
+               gosub GET %get.mat from my %main.storage
                return
           }
 #     if "%get.mat" = "stone" then {}
@@ -1696,6 +1699,7 @@ combine:
      gosub GET my %combine.temp from %combine.storage
 	 combine2:
 	 matchre combine.end You must be holding both substances to combine them.  For more information, see HELP VERB COMBINE.
+	 matchre combine.end ^That (.*) is too large to add more to\.
 	 matchre combine.continue You combine
      send combine
 	 matchwait 5
@@ -1795,6 +1799,7 @@ turn.in1:
      if (("%discipline" = "remed") && ($Alchemy.LearningRate < 20)) then goto new.order
      if (("%discipline" = "artif") && ($Enchanting.LearningRate < 20)) then goto new.order
      gosub PUT_IT my logbook in my %main.storage
+	 if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
      put #parse MASTERCRAFT DONE
      exit
 
@@ -1814,6 +1819,45 @@ deed.order:
 #  Commonly referenced Gosubs
 #
 #################################
+
+get.tools:
+     var temp.room $roomid
+	 gosub automove $repair.room
+     var toolcount 0
+     eval toolstotal count("%work.tools","|")
+	 gosub EMPTY_HANDS
+get.tools1:
+     if matchre ("%work.tools(%toolcount)", "%clerktools") then 
+	 {
+          matchre got.tool \"Ah, yes, we have one of your tools like that.\" 
+          matchre missing.tool \"It doesn't look like we have anything like that of yours here.\"
+          matchre tool.error \"Well, you need a free hand if I'm going to help you.\"
+          put ask $repair.clerk for %work.tools(%toolcount)
+          matchwait 10
+     }
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then goto clerk.tools.done
+     goto get.tools1
+
+tool.error:
+     echo >log green MASTERCRAFT: Error getting tools from clerk - hands full even after clearing
+	 goto clerk.tools.done
+
+missing.tool:
+     put #echo >log green MASTERCRAFT: %work.tools(%toolcount) tool not in storage?
+     math toolcount add 1
+     if %toolcount > %toolstotal then goto clerk.tools.done
+     goto get.tools1
+
+got.tool:
+     gosub EMPTY_HANDS
+     math toolcount add 1
+     if %toolcount > %toolstotal then goto clerk.tools.done
+     goto get.tools1
+	 
+clerk.tools.done:
+     gosub automove %temp.room
+	 return
 
 check.tools:
      evalmath lastToolRepairTime $gametime - $last%society.typeRepair
@@ -1954,6 +1998,7 @@ new.tool:
      action (order) on
      gosub ORDER
      action (order) off
+     if %oil.gone = 1 then gosub summonoil
      if %oil.gone = 1 then
           {
                gosub ORDER $oil.order
@@ -2254,7 +2299,45 @@ switch:
 lack.material.exit:
          echo Not Enough Material To Make %order.quantity $MC.order.noun !
          put #parse Need material
+	     if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
          exit
+
+return.tools:
+	 gosub automove $repair.room
+     var toolcount 0
+     eval toolstotal count("%work.tools","|")
+	 gosub EMPTY_HANDS
+return.tools1:
+     if matchre ("%work.tools(%toolcount)", "%clerktools") then 
+	 {
+		  gosub GET %work.tools(%toolcount)
+          matchre next.tool ^What were you referring to?
+          matchre next.tool \"Feel free to come back for your item any time,\"
+          matchre not.a.tool \"This isn't the kind of thing I store
+          matchre no.clerk.room \"You don't have enough space in your storage.  Clear some things out first.\"
+          put put my %work.tools(%toolcount) on counter
+          matchwait 10
+		  put #echo >log green MASTERCRAFT: Missing match in return.tools
+     }
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then return
+     goto return.tools1
+
+next.tool:
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then return
+     goto return.tools1
+
+not.a.tool:
+	 put #echo >log green MASTERCRAFT: %work.tools(%toolcount) is not a tool that can be stored - adjust your variables
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then return
+     goto return.tools1
+
+no.clerk.room:
+     put #echo >log green MASTERCRAFT: Ran out of room with clerk - adjust your variables
+     return
+
 
 return:
      return

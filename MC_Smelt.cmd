@@ -53,6 +53,7 @@ itemcountclear_1:
      if %c > %matcount then return
      var %material(%c)nugget 0
      var %material(%c)ingot 0
+     var %material(%c)fragment 0
      var %material(%c)bar 0
      counter add 1
      goto itemcountclear_1
@@ -60,16 +61,17 @@ itemcountclear_1:
 SmeltStart:
      counter set 0
      action (settype) on
-     action (settype) math $1$2 add 1 when (%material) (ingot|nugget)
+     action (settype) math $1$2 add 1 when (%material) (ingot|nugget|fragment)
      put inv $MC_FORGING.STORAGE
-     waitfor INVENTORY HELP
+     waitfor [Use INVENTORY
      action (settype) off
-     evalmath check %%material(0)nugget + %%material(0)ingot + %%material(0)bar
+     evalmath check %%material(0)nugget + %%material(0)ingot + %%material(0)bar + %%material(0)fragment
      if %check = 0 then goto end
 SmeltStart_1:
      if %c > %matcount then goto gettool
      gosub GetMat nugget
      gosub GetMat ingot
+     gosub GetMat fragment
      gosub GetMat bar
      counter add 1
      goto SmeltStart_1

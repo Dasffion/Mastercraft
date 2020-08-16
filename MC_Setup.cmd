@@ -128,6 +128,8 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+# An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
+put #var MC_CLERK.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL glaes-edged shovel
@@ -294,6 +296,8 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+# An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
+put #var MC_CLERK.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -334,6 +338,7 @@ put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup
@@ -461,6 +466,8 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+# An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
+put #var MC_CLERK.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -501,6 +508,7 @@ put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup
@@ -519,7 +527,8 @@ CHARACTER4:
 #	MC_FORGING.DEED: DEED orders instead of bundling items on or off
 #	MC_SMALL.ORDERS: For only working orders 5 volumes or smaller, 0 for off, 1 for on
 put #var MC_FORGING.STORAGE carry-all
-put #var MC_FORGING.MATERIAL steel
+put #var MC_FORGING.DISCIPLINE blacksmith
+put #var MC_FORGING.MATERIAL steel								   
 put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
@@ -627,6 +636,8 @@ put #var MC_MIN.ORDER 1
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+# An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
+put #var MC_CLERK.TOOLS NULL
 #FORGING
 put #var MC_HAMMER ball-peen hammer
 put #var MC_SHOVEL curved shovel
@@ -667,6 +678,7 @@ put #var MC_TOOL.STORAGE_Alchemy satchel
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting satchel
 goto endsetup
@@ -793,6 +805,8 @@ put #var MC_MIN.ORDER 3
 #GENERAL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
+# An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
+put #var MC_CLERK.TOOLS NULL
 #FORGING
 put #var MC_HAMMER silversteel mallet
 put #var MC_SHOVEL wide shovel
@@ -833,6 +847,7 @@ put #var MC_TOOL.STORAGE_Alchemy shoulder pack
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting shoulder pack
 goto endsetup

@@ -175,8 +175,8 @@ if contains("$scriptlist", "mastercraft") then
 	var temp.room $roomid
      if ((%water.gone = 1) || (%alcohol.gone = 1) || (%catalyst.gone = 1)) then
           {
-               if ("$righthandnoun" = "%bowl") then gosub STOW_RIGHT
-               if ("$lefthandnoun" = "%bowl") then gosub STOW_LEFT
+               if matchre("$righthand", "%bowl") then gosub PUT_IT #$righthandid in my %tool.storage
+               if matchre("$lefthand", "%bowl") then gosub PUT_IT #$lefthandid in my %tool.storage
           }
 	if %water.gone = 1 then
 	{

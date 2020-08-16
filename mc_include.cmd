@@ -15,6 +15,10 @@ eval tiedtools tolower("$MC_TIED.TOOLS")
 eval tiedtools replacere("%tiedtools", "\|+", "|")
 eval tiedtools replacere("%tiedtools", "^\|", "")
 eval tiedtools replacere("%tiedtools", "\|$", "")
+eval clerktools tolower("$MC_CLERK.TOOLS")
+eval clerktools replacere("%clerktools", "\|+", "|")
+eval clerktools replacere("%clerktools", "^\|", "")
+eval clerktools replacere("%clerktools", "\|$", "")
 eval repair tolower($MC_REPAIR)
 eval auto.repair tolower($MC_AUTO.REPAIR)
 eval get.coin tolower($MC_GET.COIN)
@@ -25,7 +29,7 @@ eval alltools replacere("%alltools", "\|+", "|")
 eval alltools replacere("%alltools", "^\|", "")
 eval alltools replacere("%alltools", "\|$", "")
 #var alltools saw|chisel|carving knife|rasp|riffler|clamp|needles|drawknife|slickstone|hammer|tongs|bellows|pliers|shovel|bowl|mixing stick|pestle|mortar|sieve|loop|burin|yardstick|tools|awl|rod
-put #unvar repair.room
+#put #unvar repair.room
 put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 6}
 put #trigger {comprehend all but several minor details in the text\.$} {#var MC_DIFFICULTY 5}
 put #trigger {confidently discern most of the design's minutiae\.$} {#var MC_DIFFICULTY 4}
@@ -55,7 +59,6 @@ action (order) put #tvar alcohol.order $1 when (\d+)\)\..*10 splashes of grain a
 action (order) put #tvar catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar stain.order $1 when (\d+)\)\..*some wood stain.*(Lirums|Kronars|Dokoras)
  
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
@@ -347,7 +350,7 @@ location.vars:
      var crossing.repair Rangu
      var haven.repair.room 398
      var haven.repair clerk
-     var ratha.repair.room 855
+     var ratha.repair.room 854
      var ratha.repair Glarstan
      var shard.repair.room Forging Clerk
      var shard.repair clerk
@@ -915,6 +918,7 @@ find.room2:
 		}
      math temp add 1
      if %temp > %temp.max then gosub find.room.wait
+	 pause 0.2
      goto find.room2
 	return
 	
@@ -1142,6 +1146,7 @@ MOVE_RETURN:
      return
      
 automove:
+	 pause 0.2
      var toroom $0
      if $roomid = 0 then 
           {
@@ -1149,7 +1154,7 @@ automove:
           put #mapper reset
           }
 automovecont:
-     pause 0.1
+     pause 0.2
      match automovecont2 Bonk! You smash your nose.
      match return YOU HAVE ARRIVED
      match automovecont1 YOU HAVE FAILED
@@ -1232,6 +1237,19 @@ summonwater2:
 	var water.gone 0
 	return
 	
+summonoil:
+	match summonoil2 Brushing your fingers
+	match RETURN What were you referring
+	match RETURN Rub what?
+	match RETURN Lacking the power to activate
+    send rub my oilskin pouch
+	matchwait
+summonoil2:
+    gosub GET oil from oilskin pouch
+	gosub PUT_IT my oil in my %main.storage
+	var oil.gone 0
+	return
+
 manualwater:
 	gosub automove alchemy suppl
 	action (order) on
@@ -1469,6 +1487,7 @@ PUT_IT:
      matchre IMMOBILE ^You don't seem to be able to move to do that
      matchre WEBBED ^You can't do that while entangled in a web
      matchre STUNNED ^You are still stunned
+	 matchre RETURN ^That's too heavy to go in there\!
      matchre RETURN ^With a flick
      matchre RETURN ^You (?:put|drop) .*\.
      matchre RETURN ^Please rephrase that command\.
@@ -1487,9 +1506,16 @@ PUT_IT:
      return
      
 TRASH:
-     if matchre("$roomobjs", "(bucket|bin)") then 		if !matchre("%rawmat", "%work.tools") then gosub PUT_IT %rawmat in bin
-
-     else put drop %rawmat
+     if matchre("$roomobjs", "(bucket|bin)") then
+		{
+		if !matchre("%rawmat", "%all.tools") then gosub PUT_IT %rawmat in bin
+		else goto endearly
+		}
+     else 
+	    {
+		if !matchre("%rawmat", "%all.tools") then gosub PUT_IT drop %rawmat
+		else goto endearly
+		}
      gosub clear
      goto start.enchant
      
