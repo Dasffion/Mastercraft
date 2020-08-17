@@ -1521,9 +1521,9 @@ TRASH:
      
 BAG_FULL:
     gosub combine.check "%main.storage" %order.pref
-    send open $MC_REMNANT.STORAGE
-    gosub combine.check "$MC_REMNANT.STORAGE" %order.pref
-    send close $MC_REMNANT.STORAGE
+    #send open $MC_REMNANT.STORAGE
+    #gosub combine.check "$MC_REMNANT.STORAGE" %order.pref
+    #send close $MC_REMNANT.STORAGE
     pause 1    
     RETURN
 	
