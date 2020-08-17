@@ -30,8 +30,9 @@ action (work) off
 var main.storage $MC_ENCHANTING.STORAGE
 
 GetBrazier:
-	if matchre("%usebrazier","") then goto NoBrazier
-    gosub get my %usebrazier from my $MC_TOOL.STORAGE
+    if (!def(MC_BRAZIER) || matchre("$MC_BRAZIER", "(?i)NULL")) then goto NoBrazier	
+    var usebrazier $MC_BRAZIER
+    gosub get my %usebrazier from my %tool.storage
     if matchre("$lefthandnoun", "brazier") then var lower left
     if matchre("$righthandnoun", "brazier") then var lower right
 LowerBrazier:
@@ -212,7 +213,7 @@ repeat:
 	
 done:
 	gosub EMPTY_HANDS
-    if (def(MC_BRAZIER) && !matchre("MC_BRAZIER", "(?i)NULL")) then 
+    if (def(MC_BRAZIER) && !matchre("$MC_BRAZIER", "(?i)NULL")) then 
 	{
 		gosub GET %usebrazier
 		gosub EMPTY_HANDS
