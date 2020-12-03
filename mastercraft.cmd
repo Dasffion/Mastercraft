@@ -1025,7 +1025,7 @@ count.material:
 count.material2:
      action (count) on
      pause 1
-     if "%ordinal(%tempcount)" = "zeroth" then math temp add 1
+     if "%ordinal(%tempcount)" = "zeroth" then math tempcount add 1
      send %c.action %ordinal(%tempcount) %work.material %count in my %main.storage
      pause 1
      if %manual =  1 then 
@@ -1703,7 +1703,7 @@ combine:
      gosub GET my %combine.temp from %combine.storage
 	 combine2:
 	 matchre combine.end You must be holding both substances to combine them.  For more information, see HELP VERB COMBINE.
-	 matchre combine.end ^That (.*) is too large to add more to\.
+	 matchre combine.end ^That (.*) is too large to add more to\.|^The resulting
 	 matchre combine.continue You combine
      send combine
 	 matchwait 5
@@ -1831,7 +1831,7 @@ get.tools:
      eval toolstotal count("%work.tools","|")
 	 gosub EMPTY_HANDS
 get.tools1:
-     if matchre ("%work.tools(%toolcount)", "%clerktools") then 
+     if matchre ("(?i)%work.tools(%toolcount)", "(?i)%clerktools") then 
 	 {
           matchre got.tool \"Ah, yes, we have one of your tools like that.\" 
           matchre missing.tool \"It doesn't look like we have anything like that of yours here.\"

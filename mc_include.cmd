@@ -34,7 +34,7 @@ put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFIC
 put #trigger {comprehend all but several minor details in the text\.$} {#var MC_DIFFICULTY 5}
 put #trigger {confidently discern most of the design's minutiae\.$} {#var MC_DIFFICULTY 4}
 put #trigger {interpret many of the design's finer points\.$} {#var MC_DIFFICULTY 3}
-put #trigger {abosrb a handful of the design's finer point\.$} {#var MC_DIFFICULTY 2}
+put #trigger {absorb a handful of the design's finer point\.$} {#var MC_DIFFICULTY 2}
 put #trigger {fail to grasp all but the simplest diagrams on the page\.$} {#var MC_DIFFICULTY 1}
 put #trigger {quickly realize the design is far beyond your abilities\.$} {#var MC_DIFFICULTY 0}
 #### Finding Ordering Numbers
@@ -299,11 +299,11 @@ location.vars:
      var FE.work.room 220|221
      
      #Fang Cove Forging
-     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219
+     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248
      var FF.master.room 196|197|198|199|200|201|202|203|204
-     var FF.work.room 217|219
-     var FF.grind.room 217|219
-     var FF.smelt.room 216|218
+     var FF.work.room 217|219|248
+     var FF.grind.room 217|219|248
+     var FF.smelt.room 216|218|247
 
      #Fang Cove Outfitting
      var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
@@ -1333,7 +1333,8 @@ return
 
 Analyze:
      var got.analyze YES
-     gosub Action analyze $MC.order.noun
+	 if %society.type = Enchanting then gosub Action analyze $MC.order.noun on brazier
+     else gosub Action analyze $MC.order.noun
 	return
 
 return
@@ -1622,7 +1623,7 @@ STOW:
 STOW_LEFT:
      if "$lefthandnoun" != "" then
           {
-               if matchre("%tiedtools", "$lefthandnoun") then 
+               if matchre("%tiedtools", "$lefthand") then 
                     {
 					pause .05
 					pause .5
@@ -1645,7 +1646,7 @@ STOW_LEFT:
 STOW_RIGHT:
      if "$righthandnoun" != "" then
           {
-               if matchre("%tiedtools", "$righthandnoun") then 
+               if matchre("%tiedtools", "$righthand") then 
                     {
 					pause .05
 					pause .5
