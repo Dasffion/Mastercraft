@@ -2,7 +2,7 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 1.2.3
+# many versions later - Latest updates 02/07/2021
 #
 # Script Usage: .mastercraft                                        --to only do one work order
 #                    .mastercraft <no. of orders>                    --to perform more than one
@@ -32,17 +32,17 @@
 #     Included in this suite:
 #          mastercraft.cmd
 #          mc_include.cmd
-#          pound.cmd
-#          sew.cmd
-#          knit.cmd
-#          carve.cmd
-#          enchant.cmd
-#          shape.cmd
-#          smelt.cmd
-#          grind.cmd
-#          weave.cmd
-#          spin.cmd
-#          tinker.cmd
+#          mc_pound.cmd
+#          mc_sew.cmd
+#          mc_knit.cmd
+#          mc_carve.cmd
+#          mc_enchant.cmd
+#          mc_shape.cmd
+#          mc_smelt.cmd
+#          mc_grind.cmd
+#          mc_weave.cmd
+#          mc_spin.cmd
+#          mc_tinker.cmd
 #     
 #     Each script can be run completely standalone from Mastercraft if you want to create multiple items or just individual orders. Using them
 #     as such will require you to be responsible for your own material management and quality control. Be sure to read the beginning section for
@@ -1714,6 +1714,7 @@ combine:
      goto combine
 
 combine.end:
+	 var vol.first %material.volume
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
      gosub GET %discipline book from %main.storage
@@ -1942,7 +1943,9 @@ toolcheck:
      action var brush.gone 0 when ^You tap an iron wire brush
      action var oil.gone 0 when ^You tap a flask of oil
      gosub put tap brush
+	 gosub put tap brush in portal
      gosub put tap oil
+	 gosub put tap oil in portal
      pause 0.5
      if ((%brush.gone = 1) || (%oil.gone = 1)) then gosub new.tool
      return
@@ -2207,16 +2210,18 @@ purchase.material:
      var purchaselabel purchase.material
      action var need.coin 1 when ^The attendant shrugs and says, "Ugh, you don't have enough
      if $roomid != $supply.room then gosub automove $supply.room
+	 gosub EMPTY_HANDS
 first.order:
      if matchre("%discipline", "carving|shaping|tailor|tinkering") then
           {
-               gosub EMPTY_HANDS
+               if (!matchre("$righthand", "Empty") && !matchre("$lefthand", "Empty")) then gosub EMPTY_HANDS
                if %reqd.order >= 1 then    
                     {
                          gosub ORDER %order.num
                          math reqd.order subtract 1
-                         gosub PUT_IT my %order.type in my %main.storage
+#                         gosub PUT_IT my %order.type in my %main.storage
                          math %order.pref.item.count add 1
+						 gosub combine.order
                          if matchre("%order.type", "lumber") then 
                               {
                                    if "%work.material" = "balsa" then math material.volume add 10
@@ -2225,7 +2230,11 @@ first.order:
                          if matchre("%order.type", "leather|cloth|stack") then math material.volume add 10
                          if matchre("%order.type", "yarn") then math material.volume add 100
                          if ("%discipline" = "remed") then math %herb1.material.volume add 25
-                         if %reqd.order < 1 then return
+                         if %reqd.order < 1 then 
+							{
+								gosub PUT_IT my %order.type in my %main.storage
+								return
+							}
                          goto first.order
                     }
                else return
@@ -2280,14 +2289,21 @@ first.order:
      return
      
 combine.order:
+	 gosub GET my %work.material %order.type from my %main.storage
+	 if ("$righthand" != "$lefthand") then 
+		{
+			gosub EMPTY_HANDS
+			return
+		}
      matchre combine.order ^\.\.\.wait|^Sorry
-     match return You combine
-     match switch too large
+     match combine.order.return You combine
+     match return too large
      match return You must be holding
-     match stowright You must be holding
-     match stowright You must be holding
-     put comb %order.type with %order.type
+     put combine
      matchwait
+combine.order.return:
+     math %order.pref.item.count subtract 1
+	 return
      
 stowright:
      gosub PUT_IT #$righthandid in %main.storage

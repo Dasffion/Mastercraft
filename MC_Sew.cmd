@@ -1,10 +1,11 @@
 #debug 10
-#MasterCraft - by the player of Jaervin Ividen
+# Mastercraft by Dasffion
+# Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 0.1.6
+# many versions later - Latest updates 02/07/2021
 #
-# Script Usage: .sew <item>						--sews the item
-#				.sew <item> <no. of times>		--to sew more than one, assuming you have enough material
+# Script Usage: .mc_sew <item>						--sews the item
+#				.mc_sew <item> <no. of times>		--to sew more than one, assuming you have enough material
 #
 #   This script is used in conjunction with the mastercraft.cmd script, and is used to produce cloth and leather items. To use it, hold the
 #	material to be used, study your instructions, then start the script. Be sure to have all the relevant tailoring tools in your outfitting bag,
@@ -36,7 +37,7 @@ action var tool done when Applying the final touches, you complete working
 action var excessloc $2 when You carefully cut off the excess material and set it (on the|in your|at your) (\S+).$
 action var tool needle when ^measure my \S+ with my yardstick|^rub my \S+ with my slickstone|poke my \S+ with my pins|^poke my \S+ with my awl|^cut my \S+ with my scissors|pushing it with a needle and thread
 #action GOTO unfinished when That tool does not seem suitable for that task.
-action send get $MC.order.noun when ^You must be holding the .* to do that\.
+action send get my $MC.order.noun when ^You must be holding the .* to do that\.
 #action (work) goto Retry when \.\.\.wait|type ahead
 action (work) off
 
@@ -58,7 +59,7 @@ unfinished:
 	{
 		send analyze my $MC.order.noun
 		waitforre ^You.*analyze
-		if !contains("$righthandnoun", "$MC.order.noun") then send swap
+		if matchre("$lefthandnoun", "$MC.order.noun") then send swap
 		pause 1
 		goto work
 	}
@@ -67,7 +68,7 @@ first.cut:
 	if (contains("$righthandnoun", "cloth") || contains("$lefthandnoun", "cloth")) then var material cloth
 	if (contains("$righthandnoun", "leather") || contains("$lefthandnoun", "leather")) then var material leather
 	pause 1
-	if !contains("leather|cloth", "$righthandnoun") then send swap
+	if !matchre("leather|cloth", "$righthandnoun") then send swap
 	pause 1
 	gosub ToolCheckLeft $MC_SCISSORS
 	var tool needle
@@ -79,7 +80,8 @@ first.cut:
 excess:
 	pause 1
 	if "$lefthand" != "Empty" then gosub STOW_LEFT
-	gosub GET %material
+	gosub STOW feet
+	gosub GET my %material
 	gosub PUT_IT %material in my $MC_OUTFITTING.STORAGE
 
 work:
@@ -117,6 +119,7 @@ pins:
 	{
 	if "$lefthand" != "Empty" then gosub STOW_LEFT
 		gosub GET my pins
+		if !matchre("$righthand|$lefthand", "pins") then gosub GET my pins from my portal
 	}
 	var tool needle
 	gosub Action poke my $MC.order.noun with my pins
@@ -142,6 +145,7 @@ assemble:
 		pause 1
 	if "$lefthand" != "Empty" then gosub STOW_LEFT
 		gosub GET my %assemble
+		if !matchre("$righthand|$lefthand","%assemble") then gosub GET my %assemble from my portal
 	}
 	send assemble my $MC.order.noun with my %assemble
 	pause 1
@@ -194,6 +198,11 @@ put #parse SEWING DONE
 exit
 } 
 
+lack.coin:
+	 if contains("$scriptlist", "mastercraft.cmd") then put #parse LACK COIN
+	 else echo *** You need some startup coin to purchase stuff! Go to the bank and try again!
+	exit
+
 
 return:
 return
@@ -206,9 +215,11 @@ repeat:
 	math sew.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my $MC_OUTFITTING.STORAGE
 	gosub GET my tailor book
+	if !matchre("$lefthand|$righthand", "book") then gosub GET my tailor book from my portal
 	gosub Study my book
 	gosub PUT_IT my book in my $MC_OUTFITTING.STORAGE
 	gosub GET my %material
+	if !matchre("$lefthand|$righthand", "%material") then gosub GET my %material from my portal
 	var tool needle
 	goto first.cut
 
