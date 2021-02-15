@@ -59,6 +59,7 @@ action (order) put #tvar alcohol.order $1 when (\d+)\)\..*10 splashes of grain a
 action (order) put #tvar catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
+action var need.coin 1 when you don't have enough coins|you don't have that much
  
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
@@ -1363,7 +1364,6 @@ ORDER:
      matchre STUNNED ^You are still stunned
      matchre ORDER_1 ^The attendant says\,\s*\"You (can|may) purchase .*\.\s*Just order it again and we'll see it done\!\" 
      matchre fullhands ^You realize your hands are full, and stop\.
-     matchre lack.coin you don't have enough coins|you don't have that much
      matchre RETURN ^The attendant takes some coins from you and hands you .*\.
      matchre RETURN pay the sales clerk
      matchre RETURN ^\[You may purchase items from the shopkeeper with ORDER
@@ -1380,6 +1380,12 @@ ORDER:
 		else send Order
 		}
      matchwait 15
+     if %need.coin = 1 then
+        {
+        var temp.room $roomid
+        gosub lack.coin
+        goto ORDER_1
+        }
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN ORDER! (utility.inc) ***
      put #echo >$Log Crimson $datetime Order = %Order
      put #log $datetime MISSING MATCH IN ORDER! (utility.inc)
