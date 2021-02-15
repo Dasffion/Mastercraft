@@ -1386,7 +1386,7 @@ process.order:
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
-               send .MC_enchant %order.pref $MC.order.noun
+               send .MC_enchant "%work.material %order.pref" $MC.order.noun
                waitforre ^ENCHANTING DONE
           }
      if (($MC_END.EARLY = 1) || (%NOWO = 1)) then gosub expcheck
@@ -2041,6 +2041,7 @@ lack.coin:
      var need.coin 0
      action remove (^The clerk flips through her ledger|^The clerk tells you)
      pause 1
+     if matchre("$scriptlist", "MC_") then return
      if %reqd.order > 0 then goto purchase.material
      if %asmCount1 > 0 then gosub purchase.assemble
      if %asmCount2 > 0 then gosub purchase.assemble2
@@ -2375,4 +2376,3 @@ clearvolume:
      var vol.tenth
      var vol.eleventh
      return
-
