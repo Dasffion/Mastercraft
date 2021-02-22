@@ -300,11 +300,11 @@ location.vars:
      var FE.work.room 220|221
      
      #Fang Cove Forging
-     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248
+     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|248|249
      var FF.master.room 196|197|198|199|200|201|202|203|204
      var FF.work.room 217|219|248
      var FF.grind.room 217|219|248
-     var FF.smelt.room 216|218|247
+     var FF.smelt.room 216|218|248
 
      #Fang Cove Outfitting
      var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
