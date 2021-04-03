@@ -97,6 +97,7 @@ first.carve:
 			
 			pause 1
 			gosub GET my shafts
+			if !matchre ("$righthand|$lefthand", "shafts") then gosub GET my shafts from my portal
 			pause 2
 			
 			if contains("$righthandnoun", "shafts") then gosub PUT swap
@@ -177,6 +178,7 @@ assemble:
 	 pause 1
 	 gosub STOW_RIGHT
 	 gosub GET my %assemble
+ 	 if !matchre ("$righthand|$lefthand", "%assemble") then gosub GET my %assemble from my portal
 	}
 	 ###send assemble my $MC.order.noun with my %assemble
 	 send assemble my %assemble with my $MC.order.noun
@@ -202,8 +204,11 @@ glue:
 	
 shaft:
 	if !matchre("$righthand|$lefthand", "lumber") then gosub GET my lumber
+	if !matchre("$righthand|$lefthand", "lumber") then gosub GET my lumber from my portal
+	if !matchre("$righthand|$lefthand", "lumber") then goto done
 	pause 0.5
 	gosub GET my $MC_SHAPER
+	if !matchre("$righthand|$lefthand", "$MC_SHAPER") then gosub GET my $MC_SHAPER from my portal
 	pause 0.5
 	shapeshaft:
 	pause 0.5
@@ -212,10 +217,7 @@ shaft:
 	pause 0.5
 	gosub PUT_IT my shafts in my $MC_ENGINEERING.STORAGE
 	repeat:
-	match done What were you referring to
-	matchre shapeshaft You get|You pickup
-	send get lumber
-	matchwait
+	goto shaft
 	
 arrowheads:
 	gosub GET my %ArrowheadTool
@@ -278,10 +280,10 @@ return:
 repeat:
 	math shape.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my $MC_ENGINEERING.STORAGE
-	gosub GET my shaping book
+	gosub GET my shaping book from my $MC_ENGINEERING.STORAGE
 	gosub STUDY my book
 	gosub PUT_IT my book in my $MC_ENGINEERING.STORAGE
-	gosub GET my lumber
+	gosub GET my lumber from my $MC_ENGINEERING.STORAGE
 	var Action drawknife
 	goto first.carve
 

@@ -32,6 +32,7 @@ gosub ToolCheckLeft $MC_NEEDLES
 pause .5
 if matchre("$MC_NEEDLES", "$righthandnoun") then send swap
 if !matchre("$righthand", "yarn") then send get my yarn
+if !matchre("$righthand", "yarn") then send get my yarn from my portal
 
 unfinished:
 	send look on my needle

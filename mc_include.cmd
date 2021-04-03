@@ -263,6 +263,13 @@ location.vars:
      var SO.room.list 719|720|721|722|723|724|725|726|727|728|729|730|731
      var SO.master.room 719|720|721|722|723|724|725
      var SO.work.room 726|727|728|729|730|731
+	#Reach Forge
+     var Reach.room.list 196|202|199|198|203|200|194|195|226
+     var Reach.master.room 
+     var Reach.work.room 196|202|199
+     var Reach.grind.room %Reach.work.room
+     var Reach.smelt.room 198|203|200
+
      #Shard Enchanting
      var SENT.tools.room 757
      var SENT.supplies.room 758
@@ -302,8 +309,8 @@ location.vars:
      #Fang Cove Forging
      var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|248|249
      var FF.master.room 196|197|198|199|200|201|202|203|204
-     var FF.work.room 217|219|248
-     var FF.grind.room 217|219|248
+     var FF.work.room 217|219|249
+     var FF.grind.room 217|219|249
      var FF.smelt.room 216|218|248
 
      #Fang Cove Outfitting
@@ -387,6 +394,7 @@ check.location:
 	if $zoneid = 67 && matchre("%SE.room.list", "\b$roomid\b") then var society Shard.Engineering
 	if $zoneid = 67 && matchre("%SO.room.list", "\b$roomid\b") then var society Shard.Outfitting
      if $zoneid = 67 && matchre("%SENT.room.list", "\b$roomid\b") then var society Shard.Enchanting
+	if $zoneid = 68 && matchre("%Reach.room.list", "\b$roomid\b") then var society Reach.Forging
 	if $zoneid = 116 && matchre("%HibF.room.list", "\b$roomid\b") then var society Hib.Forging
      if $zoneid = 116 && matchre("%HIBENT.room.list", "\b$roomid\b") then var society Hib.Enchanting
 	if $zoneid = 107 && matchre("%MKF.room.list", "\b$roomid\b") then var society MerKresh.Forging
@@ -720,6 +728,22 @@ put #tvar oil.room 653
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
 var society.type Enchanting
+return
+
+Reach.Forging:
+var master None
+put #tvar master.room %Reach.master.room
+put #tvar grind.room %Reach.grind.room
+put #tvar work.room %Reach.work.room
+put #tvar smelt.room %Reach.smelt.room
+put #tvar deed.room 226
+put #tvar supply.room 195
+put #tvar part.room 195
+put #tvar tool.room 226
+put #tvar oil.room 226
+put #tvar repair.room 226
+put #tvar repair.clerk 226
+var society.type Forging
 return
 
 Hib.Forging:
@@ -1379,7 +1403,7 @@ ORDER:
 		if matchre("%Order", "\w+") then send buy %Order
 		else send Order
 		}
-     matchwait 15
+     matchwait 5
      if %need.coin = 1 then
         {
         var temp.room $roomid
@@ -1472,6 +1496,20 @@ PUT:
      return
      
      
+READ:
+     var LOCATION READ
+     var Read $0
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre READ_RETURN (?<!Page).*Page (\d+): %Read
+     send read my book
+     matchwait
+READ_RETURN:
+	 var page $1
+	 return
+	 
 STUDY:
      var Study $0
      var LOCATION STUDY_1

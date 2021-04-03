@@ -1,7 +1,7 @@
 #Metal Smelting
-debug 10
+#debug 10
 if_1 goto Continue
-echo Usage is: .smelt <material>
+echo Usage is: .mc_smelt <material>
 echo To smelt more than one material separate them by a space .smelt <material> <material>
 exit
 Continue:
@@ -79,9 +79,11 @@ SmeltStart_1:
 GetMat:
      var mattype $1
      if %%material(%c)%mattype < 1 then return
+	 GetMat2:
      match putmat You get
      match return What do you want to get
      match return What were you referring
+     match GetMat2 ...wait
      send get my %material(%c) %mattype
      matchwait
 
@@ -132,6 +134,7 @@ Turn:
      goto stir
 
 Finish:
+	 pause 0.1
      if matchre("$righthand|$lefthand", "ingot") then gosub PUT_IT ing in my $MC_FORGING.STORAGE
      gosub STOW_RIGHT
      goto end

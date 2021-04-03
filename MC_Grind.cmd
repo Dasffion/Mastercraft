@@ -24,6 +24,7 @@ if !matchre("$lefthand|$righthand", "$MC.order.noun") then
 	 gosub EMPTY_HANDS
 	 pause .5
 	 send get $MC.order.noun
+	 if !matchre("$lefthand|$righthand", "$MC.order.noun") then send get $MC.order.noun from my portal
 	}
 
 pause .5	
@@ -47,6 +48,7 @@ push:
 oil:
 	pause .5
 	 gosub GET my oil
+	 if !matchre ("$righthand|$lefthand", "oil") then gosub GET my oil from my portal
 	 gosub Action pour my oil on my $MC.order.noun
 	return
 

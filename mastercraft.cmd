@@ -170,7 +170,7 @@ include mc_include.cmd
      action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
      action instant var grind 1 when TURN the GRINDSTONE several times
      action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
-     action goto lack.coin when ^LACK COIN
+#     action goto lack.coin when ^LACK COIN
      action (analyze) off
 
 	 if (matchre("(%clerktools)", "%work.tools") && (%gottools = 0)) then gosub get.tools
@@ -489,12 +489,13 @@ turn.page:
      gosub GET my %discipline book
      action (book) on
      gosub PUT turn my book to chapter %order.chapter
-     send read my book
-     waitforre (?<!Page).*Page (\d+): %full.order.noun
-     var page $1
+     gosub READ %full.order.noun
+#     waitforre (?<!Page).*Page (\d+): %full.order.noun
+#     var page $1
      gosub PUT turn my book to page %page
      action (book) off
      if %NOWO then goto calc.material
+	 if !matchre("$righthand|$lefthand", book) then gosub GET %discipline book
      gosub STUDY my book
      if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
           {
@@ -523,6 +524,8 @@ calc.material:
                pause .1
                action (book) on
                if !matchre("$righthand", "book") then gosub GET my %discipline book
+			   pause .5
+			   pause .1
                send read my book
                waitforre metal ingot .(\d+) volume
                var volume $1
@@ -563,6 +566,7 @@ calc.material:
                action (book) on     
                if !matchre("$righthand", "book") then gosub GET my tailoring book
                pause .5
+			   pause .1
                send read my book
                waitforre .*(cloth|leather|yarn).*\((\d+) yards?\)
                var volume $2
@@ -613,6 +617,7 @@ calc.material:
                pause 0.1
                var mass.volume %volume
                math mass.volume multiply %order.quantity
+   			   if (("%order.pref" = "stack") && (%mass.volume > 99)) then goto new.order
                gosub parts.inv          
                if %%order.pref.item.count > 11 then var %%order.pref.item.count 11
                if %%order.pref.item.count > 0 then gosub count.material stack
@@ -764,6 +769,7 @@ calc.material:
           action var sigil %sigil|$1 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
           pause .5
           if !matchre("$righthand", "book") then gosub GET my %discipline book
+		  pause .1
           send read my book
           pause 2
           action (book) off
@@ -1461,10 +1467,13 @@ bundle.order:
           }
      action (analyze) on
      math order.quantity subtract 1
+	 bundle.order2:
+	 matchre bundle.order2 ^\.\.\.wait|^Sorry
+	 matchre bundle.order3 ^You analyze
      if matchre("$lefthand", "$MC.order.noun") then send analyze #$lefthandid
      if matchre("$righthand", "$MC.order.noun") then send analyze #$righthandid
-     waitforre ^You.*analyze
-     pause .5
+     matchwait 5
+	 bundle.order3:
      action (analyze) off
      if contains("$MC.order.quality.fail", "%item.quality") then
           {
@@ -1717,7 +1726,6 @@ combine.end:
 	 var vol.first %material.volume
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
-     gosub GET %discipline book from %main.storage
      unvar combine.temp
      unvar combine.storage
      return
@@ -2041,11 +2049,12 @@ lack.coin:
      var need.coin 0
      action remove (^The clerk flips through her ledger|^The clerk tells you)
      pause 1
-     if matchre("$scriptlist", "MC_") then return
-     if %reqd.order > 0 then goto purchase.material
-     if %asmCount1 > 0 then gosub purchase.assemble
-     if %asmCount2 > 0 then gosub purchase.assemble2
-	 goto purchase.material
+#     if matchre("$scriptlist", "MC_") then return
+#     if %reqd.order > 0 then goto purchase.material
+#     if %asmCount1 > 0 then gosub purchase.assemble
+#     if %asmCount2 > 0 then gosub purchase.assemble2
+#	 goto purchase.material
+	 return
 
 lack.coin.exit:
      echo You need some startup coin to purchase stuff! Go to the bank and try again!

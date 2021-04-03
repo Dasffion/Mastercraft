@@ -280,6 +280,7 @@ assemble:
 	 if (!matchre("$MC_TONGS", "$lefthandnoun") && %worn.tongs = 1) then send wear my $MC_TONGS
 	 else gosub STOW_LEFT
 	 gosub GET my $MC.order.noun
+	 if !matchre ("$righthand|$lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun from my portal
 	}
 	 send assemble my $MC.order.noun with my %assemble
 	 pause 1
@@ -295,8 +296,10 @@ repeat:
 	 math pound.repeat subtract 1
 	 gosub PUT_IT my $MC.order.noun in my %forging.storage
 	 gosub GET my book
+	 if !matchre ("$righthand|$lefthand", "book") then gosub GET my book from my portal
 	 gosub STUDY my book
 	 gosub GET my ingot
+	 if !matchre ("$righthand|$lefthand", "ingot") then gosub GET my ingot from my portal
 	 gosub PUT_IT ingot on anvil
 	goto first.pound
 

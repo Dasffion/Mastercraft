@@ -184,6 +184,7 @@ if contains("$scriptlist", "mastercraft.cmd") then
 		waitforre ^You carefully thread
 		var thread.gone 0
 	}
+	if %pins.gone = 1 || %thread.gone = 1 then goto new.tool
 	gosub automove %temp.room
 	if !matchre("$righthand|$lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun from my $MC_OUTFITTING.STORAGE
 	pause 0.5
@@ -199,9 +200,22 @@ exit
 } 
 
 lack.coin:
-	 if contains("$scriptlist", "mastercraft.cmd") then put #parse LACK COIN
-	 else echo *** You need some startup coin to purchase stuff! Go to the bank and try again!
+	if "%get.coin" = "off" then goto lack.coin.exit
+	action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
+	gosub automove teller
+	send withd 5 gold
+	waitforre The clerk counts|You count out
+	gosub automove %temp.room
+	var need.coin 0
+	action remove (^The clerk flips through her ledger|^The clerk tells you)
+	pause 1
+	return
+
+lack.coin.exit:
+	echo You need some startup coin to purchase stuff! Go to the bank and try again!
+	put #parse Need coin
 	exit
+
 
 
 return:

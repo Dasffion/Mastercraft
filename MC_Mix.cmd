@@ -23,6 +23,7 @@ action var tool smell when As you finish, the mixture begins to transition color
 action var tool smell when takes on an odd hue
 action var tool sieve when ^Upon completion you see (?:some )?particulate clouding up the mixture
 action var tool sieve when ^A thick froth coats
+action var water.gone 1 when ^But there are no liquids
 action var special water when ^You need another splash of water to continue crafting
 action var special alcohol when  ^You need another splash of alcohol to continue crafting
 action var special catalyst when ^You need another catalyst material to
@@ -72,6 +73,7 @@ unfinished:
 		{
 		put tilt %bowl
 		put tilt %bowl
+		pause 2
 		}
 
 first.mix:
@@ -83,6 +85,7 @@ first.mix:
 	if "$lefthand" != "Empty" then gosub STOW_LEFT
 	pause 0.5
 	gosub GET my %mixer
+	if !matchre("$lefthand|$righthand", "%mixer") then gosub GET my mixer from my portal
 	pause 0.5
 	if "%tool.mix" = "crush" then gosub Action %tool.mix %herb1 in my %bowl with my %mixer
 	else gosub Action %tool.mix my %bowl with my %mixer
@@ -225,7 +228,7 @@ lack.coin:
 	action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
 	gosub automove teller
 	send withd 5 gold
-	waitfor The clerk counts
+	waitfor The clerk counts|You count out
 	gosub automove %temp.room
 	var need.coin 0
 	action remove (^The clerk flips through her ledger|^The clerk tells you)
@@ -249,9 +252,11 @@ repeat:
 	math mix.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my %alchemy.storage
 	gosub GET my remedy book
+	if !matchre("$righthand|$lefthand", "book") then gosub GET my remedy book from my portal
 	gosub STUDY my book
 	gosub PUT_IT my book in my %alchemy.storage
 	gosub GET my %material
+	if !matchre("$righthand|$lefthand", "%material") then gosub GET my %material from my portal
 	var tool mix
 	goto first.mix
 	
