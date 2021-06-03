@@ -23,7 +23,7 @@ include mc_include.cmd
 action var Action knit when ^push my needle|^turn my needle|^cast my needle|^knit my needle|^The .* need of more knitting
 action var Action push when addition of some purl stitching|some purl stitches|^Some purl stitching
 action var Action turn when add some ribbing|Some ribbing should be added|so ribbing can be added to the knitting process
-action var Action cast when be cast off the needles
+action var Action cast when be cast off the needles|cast to finish binding the knit yarn
 #action (work) goto Retry when \.\.\.wait|type ahead
 action var Action done when ^Applying the final touches
 action (work) off
