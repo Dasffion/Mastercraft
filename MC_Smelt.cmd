@@ -61,7 +61,7 @@ itemcountclear_1:
 SmeltStart:
      counter set 0
      action (settype) on
-     action (settype) math $1$2 add 1 when (%material) (ingot|nugget|fragment)
+     action (settype) math $1$2 add 1 when (%material) (ingot|nugget|fragment|bar)
      put inv $MC_FORGING.STORAGE
      waitfor [Use INVENTORY
      action (settype) off
