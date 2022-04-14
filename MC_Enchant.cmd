@@ -1,4 +1,4 @@
-debug 10
+#debug 10
 ### Thanks to Usrnme for the udpates to the script
 var mix.repeat 0
 var current.lore ENCHANTING
@@ -32,7 +32,9 @@ var main.storage $MC_ENCHANTING.STORAGE
 GetBrazier:
     if (!def(MC_BRAZIER) || matchre("$MC_BRAZIER", "(?i)NULL")) then goto NoBrazier	
     var usebrazier $MC_BRAZIER
-    gosub get my %usebrazier from my %tool.storage
+    gosub ToolCheckRight %usebrazier
+	pause 0.5
+	pause 0.5
     if matchre("$lefthandnoun", "brazier") then var lower left
     if matchre("$righthandnoun", "brazier") then var lower right
 LowerBrazier:
@@ -45,7 +47,7 @@ NoBrazier:
      var usebrazier brazier
 
 CleanBrazier:
-     send analyze %usebrazier
+     send analyze my %usebrazier
      pause 0.5
      pause 0.5
      pause 0.5
@@ -123,7 +125,7 @@ imbue:
 	gosub specialcheck
 	if "$MC_IMBUE" = "ROD" then
 		{
-		gosub GET $MC_IMBUE.ROD
+		gosub ToolCheckRight $MC_IMBUE.ROD
 		gosub Action wave $MC_IMBUE.ROD at $MC.order.noun on %usebrazier
 		}
 	if "%tool" = "sigil" then goto sigil	
@@ -138,7 +140,7 @@ imbue:
 		gosub SPELL_CAST_TARGET $MC.order.noun on %usebrazier
           put #tvar prepared 0
 		}
-	if "$MC_IMBUE" = "ROD" then gosub PUT_IT my $MC_IMBUE.ROD in my %tool.storage
+	if "$MC_IMBUE" = "ROD" then gosub STOW_LEFT
 	if "%tool" = "done" then goto done
      var tool analyze
 	goto work
@@ -173,7 +175,7 @@ focus:
      if !def(MC_FOCUS.WAND) then put #var MC_FOCUS.WAND NULL
 	if matchre("$MC_FOCUS.WAND", "WAND") then
 		{
-		gosub GET $MC_FOCUS.WAND
+		gosub ToolCheckRight $MC_FOCUS.WAND
 		gosub Action wave $MC_FOCUS.WAND at $MC.order.noun on %usebrazier
 		gosub PUT_IT $MC_FOCUS.WAND in %tool.storage
 		}
@@ -218,7 +220,9 @@ done:
 		gosub GET %usebrazier
 		gosub EMPTY_HANDS
 	}
-	gosub GET $MC.order.noun
+	gosub GET my $MC.order.noun
+	pause 0.1
+	pause 0.1
 	if ("$MC.order.noun" != "fount") then
           {
                gosub GET fount

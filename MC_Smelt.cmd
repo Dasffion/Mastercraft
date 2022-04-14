@@ -63,6 +63,7 @@ SmeltStart:
      action (settype) on
      action (settype) math $1$2 add 1 when (%material) (ingot|nugget|fragment|bar)
      put inv $MC_FORGING.STORAGE
+     if matchre("$MC_FORGING.STORAGE", "(?i)portal") then send inv my eddy
      waitfor [Use INVENTORY
      action (settype) off
      evalmath check %%material(0)nugget + %%material(0)ingot + %%material(0)bar + %%material(0)fragment
@@ -81,10 +82,20 @@ GetMat:
      if %%material(%c)%mattype < 1 then return
 	 GetMat2:
      match putmat You get
+     match GetMat3 What do you want to get
+     match GetMat3 What were you referring
+     match GetMat2 ...wait
+     send get my %material(%c) %mattype
+     matchwait
+GetMat3:
+     var mattype $1
+     if %%material(%c)%mattype < 1 then return
+	 GetMat2:
+     match putmat You get
      match return What do you want to get
      match return What were you referring
      match GetMat2 ...wait
-     send get my %material(%c) %mattype
+     send get my %material(%c) %mattype from my portal
      matchwait
 
 PutMat:
@@ -99,7 +110,7 @@ TooMuch:
      goto gettool
 
 GetTool:
-     gosub GET my $MC_STIRROD
+     gosub ToolCheckRight $MC_STIRROD
      goto stir
 
 Stir:

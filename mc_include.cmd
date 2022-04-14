@@ -23,11 +23,12 @@ eval repair tolower($MC_REPAIR)
 eval auto.repair tolower($MC_AUTO.REPAIR)
 eval get.coin tolower($MC_GET.COIN)
 eval reorder tolower($MC_REORDER)
-var alltools $MC_HAMMER|$MC_SHOVEL|$MC_TONGS|$MC_PLIERS|$MC_BELLOWS|$MC_STIRROD|$MC_CHISEL|$MC_SAW|$MC_RASP|$MC_RIFFLER|$MC_TINKERTOOL|$MC_CARVINGKNIFE|$MC_SHAPER|$MC_DRAWKNIFE|$MC_CLAMP|$MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_YARDSTICK|$MC_AWL|$MC_BOWL|$MC_MORTAR|$MC_STICK|$MC_PESTLE|$MC_SIEVE|$MC_BURIN|$MC_LOOP
+var alltools $MC_HAMMER|$MC_SHOVEL|$MC_TONGS|$MC_PLIERS|$MC_BELLOWS|$MC_STIRROD|$MC_CHISEL|$MC_SAW|$MC_RASP|$MC_RIFFLER|$MC_TINKERTOOL|$MC_CARVINGKNIFE|$MC_SHAPER|$MC_DRAWKNIFE|$MC_CLAMP|$MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_YARDSTICK|$MC_AWL|$MC_BOWL|$MC_MORTAR|$MC_STICK|$MC_PESTLE|$MC_SIEVE|$MC_BURIN|$MC_LOOP|$MC_BRAZIER
 eval alltools tolower("%alltools")
 eval alltools replacere("%alltools", "\|+", "|")
 eval alltools replacere("%alltools", "^\|", "")
 eval alltools replacere("%alltools", "\|$", "")
+var LastHalo NULL
 #var alltools saw|chisel|carving knife|rasp|riffler|clamp|needles|drawknife|slickstone|hammer|tongs|bellows|pliers|shovel|bowl|mixing stick|pestle|mortar|sieve|loop|burin|yardstick|tools|awl|rod
 #put #unvar repair.room
 put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 6}
@@ -263,13 +264,6 @@ location.vars:
      var SO.room.list 719|720|721|722|723|724|725|726|727|728|729|730|731
      var SO.master.room 719|720|721|722|723|724|725
      var SO.work.room 726|727|728|729|730|731
-	#Reach Forge
-     var Reach.room.list 196|202|199|198|203|200|194|195|226
-     var Reach.master.room 
-     var Reach.work.room 196|202|199
-     var Reach.grind.room %Reach.work.room
-     var Reach.smelt.room 198|203|200
-
      #Shard Enchanting
      var SENT.tools.room 757
      var SENT.supplies.room 758
@@ -307,11 +301,11 @@ location.vars:
      var FE.work.room 220|221
      
      #Fang Cove Forging
-     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|248|249
+     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248
      var FF.master.room 196|197|198|199|200|201|202|203|204
-     var FF.work.room 217|219|249
-     var FF.grind.room 217|219|249
-     var FF.smelt.room 216|218|248
+     var FF.work.room 217|219|248
+     var FF.grind.room 217|219|248
+     var FF.smelt.room 216|218|247
 
      #Fang Cove Outfitting
      var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
@@ -394,7 +388,6 @@ check.location:
 	if $zoneid = 67 && matchre("%SE.room.list", "\b$roomid\b") then var society Shard.Engineering
 	if $zoneid = 67 && matchre("%SO.room.list", "\b$roomid\b") then var society Shard.Outfitting
      if $zoneid = 67 && matchre("%SENT.room.list", "\b$roomid\b") then var society Shard.Enchanting
-	if $zoneid = 68 && matchre("%Reach.room.list", "\b$roomid\b") then var society Reach.Forging
 	if $zoneid = 116 && matchre("%HibF.room.list", "\b$roomid\b") then var society Hib.Forging
      if $zoneid = 116 && matchre("%HIBENT.room.list", "\b$roomid\b") then var society Hib.Enchanting
 	if $zoneid = 107 && matchre("%MKF.room.list", "\b$roomid\b") then var society MerKresh.Forging
@@ -728,22 +721,6 @@ put #tvar oil.room 653
 put #tvar repair.room %shard.repair.room
 put #tvar repair.clerk %shard.repair
 var society.type Enchanting
-return
-
-Reach.Forging:
-var master None
-put #tvar master.room %Reach.master.room
-put #tvar grind.room %Reach.grind.room
-put #tvar work.room %Reach.work.room
-put #tvar smelt.room %Reach.smelt.room
-put #tvar deed.room 226
-put #tvar supply.room 195
-put #tvar part.room 195
-put #tvar tool.room 226
-put #tvar oil.room 226
-put #tvar repair.room 226
-put #tvar repair.clerk 226
-var society.type Forging
 return
 
 Hib.Forging:
@@ -1321,6 +1298,7 @@ manualalcohol:
 	var water.gone 0
 	return
 	
+
 #### EMPTY HANDS SUB
 EMPTY_HANDS:
      pause 0.0001
@@ -1333,12 +1311,14 @@ ToolCheckRight:
 	if "$righthand" = "Empty" then
 		{
 		gosub GET MY %tools
+          if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
 		return
 		}
 	if !matchre("%tools", "$righthandnoun") then
 		{
 		gosub STOW_RIGHT
 		gosub GET my %tools
+          if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
 		}
 	return
 	
@@ -1348,21 +1328,190 @@ ToolCheckLeft:
 		{
 		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
 		else gosub GET MY %tools
+          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
 		return
 		}
 	if !matchre("%tools", "$lefthandnoun") then
 		{
 		gosub STOW_LEFT
 		gosub GET my %tools
+          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
 		}
-	return	
-	
+	return
+#### KERTIGEN HALO HANDLING
+#### HALO REMOVE TOOLS
+HALO_REMOVE:
+     echo
+     echo *** REMOVING TOOLS FROM HALO
+     echo
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_RIGHT
+     if !matchre("$righthand", "halo") then gosub GET my kertigen halo
+     pause 0.1
+     if !matchre("$righthand", "halo") then gosub GET my halo from my portal
+     pause 0.1
+     if (matchre("%discipline", "weapon|armor|blacksmith") || matchre("$roomname", "Forging Society")) then
+          {
+               gosub HALO_SHIFT $MC_HAMMER
+               gosub HALO_SHIFT $MC_TONGS
+               gosub HALO_SHIFT $MC_PLIERS
+               gosub HALO_SHIFT $MC_BELLOWS
+               gosub HALO_SHIFT $MC_STIRROD
+               gosub HALO_SHIFT $MC_HAMMER
+          }
+     if (matchre("%discipline", "tailor") || matchre("$roomname", "Outfitting Society")) then
+          {
+               gosub HALO_SHIFT $MC_NEEDLES
+               gosub HALO_SHIFT $MC_SCISSORS
+               gosub HALO_SHIFT $MC_YARDSTICK
+               gosub HALO_SHIFT $MC_AWL
+               gosub HALO_SHIFT $MC_SLICKSTONE
+          }
+     if (matchre("%discipline", "carving|shaping|tinkering") || matchre("$roomname", "Engineering Society")) then
+          {
+               gosub HALO_SHIFT $MC_CHISEL
+               gosub HALO_SHIFT $MC_SAW
+               gosub HALO_SHIFT $MC_RASP
+               gosub HALO_SHIFT $MC_RIFFLER
+               gosub HALO_SHIFT $MC_SHAPER
+               gosub HALO_SHIFT $MC_DRAWKNIFE
+          }
+     if (matchre("%discipline", "remedy") || matchre("$roomname", "Alchemy Society")) then
+          {
+               gosub HALO_SHIFT $MC_BOWL
+               gosub HALO_SHIFT $MC_MORTAR
+               gosub HALO_SHIFT $MC_STICK
+               gosub HALO_SHIFT $MC_PESTLE
+               gosub HALO_SHIFT $MC_SIEVE
+          }
+     if (matchre("%discipline", "aritf") || matchre("$roomname", "Enchanting Society")) then
+          {
+               gosub HALO_SHIFT $MC_BURIN
+               gosub HALO_SHIFT $MC_LOOP
+               gosub HALO_SHIFT $MC_BRAZIER
+          }
+     if matchre("$lefthand", "halo") then gosub STOW_LEFT
+     if matchre("$righthand", "halo") then gosub STOW_RIGHT
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_RIGHT
+     return
+HALO_SHIFT:
+     var shifting $0
+     pause 0.001
+     if !matchre("$righthand $lefthand", "(%LastHalo|halo)") then goto HALO_ERROR
+     matchre HALO_SUCCESS ^Your Kertigen halo flares brightly
+     matchre HALO_ERROR ^What tool did you want\?
+     put turn my halo to %shifting
+     matchwait 7
+HALO_SUCCESS:
+     pause 0.001
+     echo
+     echo *** Shifted Halo to %shifting
+     echo
+     pause 0.001
+     if matchre("$lefthand", "%shifting") then var LastHalo $lefthandnoun
+     if matchre("$righthand", "%shifting") then var LastHalo $righthandnoun
+     pause 0.1
+     echo ** LastHalo: %LastHalo
+     pause 0.001
+     put pull my kertigen halo
+     pause 0.5
+     pause 0.1
+     var LastHalo halo
+     pause 0.1
+     if !matchre("$lefthand", "(halo|Empty)") then gosub STOW_LEFT
+     if !matchre("$righthand", "(halo|Empty)") then gosub STOW_RIGHT
+     return
+HALO_ERROR:
+     echo
+     echo *** %shifting not found in Halo
+     echo
+     return
+     
+HALO_RESTACK:
+     echo
+     echo *** RE-ADDING TOOLS TO HALO
+     echo
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_RIGHT
+     if (matchre("%discipline", "weapon|armor|blacksmith") || matchre("$roomname", "Forging Society")) then
+          {
+               gosub HALO_STACK $MC_HAMMER
+               gosub HALO_STACK $MC_TONGS
+               gosub HALO_STACK $MC_PLIERS
+               gosub HALO_STACK $MC_BELLOWS
+               gosub HALO_STACK $MC_STIRROD
+          }
+     if (matchre("%discipline", "tailor") || matchre("$roomname", "Outfitting Society")) then
+          {
+               gosub HALO_STACK $MC_NEEDLES
+               gosub HALO_STACK $MC_SCISSORS
+               gosub HALO_STACK $MC_YARDSTICK
+               gosub HALO_STACK $MC_AWL
+               gosub HALO_STACK $MC_SLICKSTONE
+          }
+     if (matchre("%discipline", "carving|shaping|tinkering") || matchre("$roomname", "Engineering Society")) then
+          {
+               gosub HALO_STACK $MC_CHISEL
+               gosub HALO_STACK $MC_SAW
+               gosub HALO_STACK $MC_RASP
+               gosub HALO_STACK $MC_RIFFLER
+               gosub HALO_STACK $MC_SHAPER
+               gosub HALO_STACK $MC_DRAWKNIFE
+          }
+     if (matchre("%discipline", "remedy") || matchre("$roomname", "Alchemy Society")) then
+          {
+               gosub HALO_STACK $MC_BOWL
+               gosub HALO_STACK $MC_MORTAR
+               gosub HALO_STACK $MC_STICK
+               gosub HALO_STACK $MC_PESTLE
+               gosub HALO_STACK $MC_SIEVE
+          }
+     if (matchre("%discipline", "aritf") || matchre("$roomname", "Enchanting Society")) then
+          {
+               gosub HALO_STACK $MC_BURIN
+               gosub HALO_STACK $MC_LOOP
+               gosub HALO_STACK $MC_BRAZIER
+          }
+     if matchre("$lefthand", "halo") then gosub STOW_LEFT
+     if matchre("$righthand", "halo") then gosub STOW_RIGHT
+     return
+     
+HALO_STACK:
+     var item $0
+     pause 0.001
+     if !matchre("$righthand", "(%LastHalo|Empty|halo)") then gosub STOW_RIGHT
+     if !matchre("$righthand", "(%LastHalo|halo)") then gosub GET my kertigen halo
+     pause 0.1
+     if !matchre("$righthand", "(%LastHalo|halo)") then gosub GET my halo from my portal
+     pause 0.1
+     gosub GET my %item
+     pause 0.2
+     if !matchre("$righthand $lefthand", "(?i)%item") then return
+     send put my halo on my %item
+     pause 0.5
+     pause 0.3
+     if matchre("$lefthand", "(?i)%item") then gosub STOW_LEFT
+     return
+     
+SWAP:
+     pause 0.0001
+     send swap
+     pause 0.1
+     pause 0.3
+     return
+     
+Action_My:
+var command analyze $MC.order.noun on my brazier
+goto Action_1
 Action:
 var command $0
 Action_1:
 matchre Action_1 ^\.\.\.wait|type ahead
 matchre Analyze ^That tool does not seem suitable for that task\.
+matchre Analyze appear suitable for working
 matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
+matchre Action_My ^Analyze what\?
 send %command
 matchwait 10
 var got.analyze NO
@@ -1370,7 +1519,7 @@ return
 
 Analyze:
      var got.analyze YES
-	 if %society.type = Enchanting then gosub Action analyze $MC.order.noun on brazier
+	if %society.type = Enchanting then gosub Action analyze $MC.order.noun on brazier
      else gosub Action analyze $MC.order.noun
 	return
 
@@ -1403,16 +1552,16 @@ ORDER:
 		if matchre("%Order", "\w+") then send buy %Order
 		else send Order
 		}
-     matchwait 5
+     matchwait 15
      if %need.coin = 1 then
         {
         var temp.room $roomid
         gosub lack.coin
         goto ORDER_1
         }
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN ORDER! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN ORDER! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Order = %Order
-     put #log $datetime MISSING MATCH IN ORDER! (utility.inc)
+     put #log $datetime MISSING MATCH IN ORDER! (mc_include.cmd)
      return
 
 fullhands:
@@ -1490,11 +1639,10 @@ PUT:
      matchre RETURN ^\s*Encumbrance\s*\:
      send %Command
      matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Command = %Command
-     put #log $datetime MISSING MATCH IN PUT (utility.inc)
+     put #log $datetime MISSING MATCH IN PUT (mc_include.cmd)
      return
-     
      
 READ:
      var LOCATION READ
@@ -1509,7 +1657,8 @@ READ:
 READ_RETURN:
 	 var page $1
 	 return
-	 
+     
+     
 STUDY:
      var Study $0
      var LOCATION STUDY_1
@@ -1552,14 +1701,15 @@ PUT_IT:
      matchre RETURN ^I could not find what you were referring to\.
      matchre RETURN ^What were you referring to\?     
      matchre RETURN ^The (\S+) can only hold
+     matchre RETURN ^Perhaps you should
      matchre TRASH ^This appears too far altered to enchant|^The %rawmat is already enchanted|^You have no idea how to craft
      matchre BAG_FULL no matter how you arrange it
      matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
      send put %PutIt
      matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT_IT! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT_IT! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime PutIt = %PutIt
-     put #log $datetime MISSING MATCH IN PUT_IT (utility.inc)
+     put #log $datetime MISSING MATCH IN PUT_IT (mc_include.cmd)
      return
      
 TRASH:
@@ -1570,7 +1720,7 @@ TRASH:
 		}
      else 
 	    {
-		if !matchre("%rawmat", "%all.tools") then gosub PUT_IT drop %rawmat
+		if !matchre("%rawmat", "%all.tools") then gosub PUT drop %rawmat
 		else goto endearly
 		}
      gosub clear
@@ -1601,22 +1751,65 @@ GET:
      matchre RETURN ^You carefully remove .* from the bundle\.
      matchre RETURN ^You are already holding that\.
      matchre RETURN ^Get what\?
+     matchre RETURN ^You grab .*(?:\.|\!|\?)
+     matchre RETURN ^As best it can\, .* moves in your direction\.
+     matchre RETURN ^You need a free hand to pick that up\.
+     matchre UNTIE ^You pull at it|^You pull at|^You should untie
+     matchre GET_DOUBLECHECK ^I could not find what you were referring to\.
+     matchre GET_DOUBLECHECK ^What were you referring to\?
+     matchre GET_DOUBLECHECK ^Perhaps you should
+	matchre WRONG_ITEM ^That is far too dangerous to remove
+     send get %Get
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Get = %Get
+     put #log $datetime MISSING MATCH IN GET (mc_include.cmd)
+     return
+GET_DOUBLECHECK:
+     var LOCATION GET_2
+     pause 0.0001
+     put look in my portal
+     pause 0.001
+     pause 0.001
+     pause 0.001
+     GET_2:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre HOLD_1 ^But that is already in your inventory\.
+     matchre RETURN ^You get .*\.
+     matchre RETURN ^You pick up .*\.
+     matchre RETURN ^You carefully remove .* from the bundle\.
+     matchre RETURN ^You are already holding that\.
+     matchre RETURN ^Get what\?
      matchre RETURN ^I could not find what you were referring to\.
      matchre RETURN ^What were you referring to\?
      matchre RETURN ^You grab .*(?:\.|\!|\?)
      matchre RETURN ^As best it can\, .* moves in your direction\.
+     matchre RETURN ^You need a free hand to pick that up\.
+     matchre RETURN ^Perhaps you should
      matchre UNTIE ^You pull at it|^You pull at|^You should untie
-     send get %Get
+	matchre WRONG_ITEM ^That is far too dangerous to remove
+     send get %Get from my portal
      matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET2! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Get = %Get
-     put #log $datetime MISSING MATCH IN GET (utility.inc)
+     put #log $datetime MISSING MATCH IN GET2 (mc_include.cmd)
      return
 
 UNTIE:
 	send untie %Get
 	var BELTTOOLS 1
 	return
+	
+WRONG_ITEM:
+	matchre WRONG_ITEM ^\.\.\.wait|^Sorry\,
+	send get my %Get
+	matchwait 5
+	return
+	
  
 #### HOLD SUB
 HOLD:
@@ -1646,9 +1839,9 @@ HOLD:
      matchre GET_1 ^Perhaps you should be holding that
      send hold %Get
      matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN HOLD! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN HOLD! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Get = %Get
-     put #log $datetime MISSING MATCH IN HOLD (utility.inc)
+     put #log $datetime MISSING MATCH IN HOLD (mc_include.cmd)
      return
  
 #### STOW SUB
@@ -1671,9 +1864,9 @@ STOW:
      matchre STOW.UNLOAD ^You should unload
      send stow %Stow
      matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN STOW! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN STOW! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Stow = %Stow
-     put #log $datetime MISSING MATCH IN STOW (utility.inc)
+     put #log $datetime MISSING MATCH IN STOW (mc_include.cmd)
      return
      
 STOW_LEFT:
@@ -1683,7 +1876,7 @@ STOW_LEFT:
                     {
 					pause .05
 					pause .5
-                    send tie my $lefthandnoun to my $MC_TOOLBELT_%society.type
+                    send tie #$lefthandid to my $MC_TOOLBELT_%society.type
                     }
                else 
                          {
@@ -1710,6 +1903,11 @@ STOW_RIGHT:
                     }
                else 
                          {
+                              if matchre("$righthand", "crafting book") then
+                                   {
+                                        put wear book
+                                        pause 0.5
+                                   }
 						if matchre("%alltools", "$righthandnoun") then 
 							{
 								gosub PUT_IT #$righthandid in my %tool.storage
@@ -1750,9 +1948,9 @@ WEAR:
      matchre RETURN ^Wear what\?
      send wear %Stow
      matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN WEAR! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN WEAR! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Stow = %Stow
-     put #log $datetime MISSING MATCH IN WEAR (utility.inc)
+     put #log $datetime MISSING MATCH IN WEAR (mc_include.cmd)
      return
      
 #### SPELL CASTING
@@ -1804,9 +2002,9 @@ PREPARE_1:
      matchre SPELL_CAST_FAIL ^You have to strain to harness the energy for this spell, and you aren't sure you can get enough to cast it\.
      send prepare %Prepare
      matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PREPARE! (utility.inc) ***
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PREPARE! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Prepare = %Prepare
-     put #log $datetime MISSING MATCH IN PREPARE! (utility.inc)
+     put #log $datetime MISSING MATCH IN PREPARE! (mc_include.cmd)
      goto SPELL_CAST_RETURN
 
 SPELL_CAST_DONE:

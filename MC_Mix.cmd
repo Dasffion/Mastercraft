@@ -42,6 +42,7 @@ var solid cream|salve|balm|poultices|ungent|ointment
 
 if matchre("$MC.order.noun", "%liquid") then
 		{
+          echo * LIQUID
 		var mixer $MC_STICK
 		var bowl $MC_BOWL
 		var tool.mix mix
@@ -49,12 +50,12 @@ if matchre("$MC.order.noun", "%liquid") then
 		}
 if matchre("$MC.order.noun", "%solid") then
 		{
+          echo * SOLID
 		var mixer $MC_PESTLE
 		var bowl $MC_MORTAR
 		var tool.mix crush
 		var water water
-		}
-		
+		}	
 unfinished:
 	gosub ToolCheckRight %bowl
 	if matchre("%bowl", "$lefthand") then gosub PUT swap

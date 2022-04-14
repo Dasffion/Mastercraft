@@ -164,7 +164,7 @@ Retool:
 
 
 hammer:
-	 gosub poundcheck
+	gosub poundcheck
 	if %swap.tongs = 1 then
           {
           if %tongs.adj = 1 then send adjust my $MC_TONGS

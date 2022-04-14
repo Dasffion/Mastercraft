@@ -2,7 +2,7 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# many versions later - Latest updates 02/07/2021
+# many versions later - Latest updates 02/26/2022
 #
 # Script Usage: .mc_sew <item>						--sews the item
 #				.mc_sew <item> <no. of times>		--to sew more than one, assuming you have enough material
@@ -16,6 +16,8 @@
 #
 
 var sew.repeat 0
+var thread.gone 0
+var pins.gone 0
 var current.lore Outfitting
 if !matchre("$scriptlist", "mastercraft") then var society.type Outfitting
 include mc_include.cmd
@@ -40,7 +42,7 @@ action var tool needle when ^measure my \S+ with my yardstick|^rub my \S+ with m
 action send get my $MC.order.noun when ^You must be holding the .* to do that\.
 #action (work) goto Retry when \.\.\.wait|type ahead
 action (work) off
-
+action goto done when The .+ is far too damaged to be used for that\.
 action (order) var thread.order $1 when (\d+)\)\..*yards of cotton thread.*(Lirums|Kronars|Dokoras)
 action (order) var pins.order $1 when (\d+)\)\..*some straight iron pins.*(Lirums|Kronars|Dokoras)
 action var pins.gone 1 when ^The pins is all used up, so you toss it away.
@@ -90,11 +92,14 @@ work:
 	if "%tool" = "done" then goto done
 	gosub %tool
 	goto work
-
+     
 needle:
 	if "%assemble" != "" then gosub assemble
-	if %thread.gone = 1 then gosub new.tool
-	gosub ToolCheckLeft $MC_NEEDLES
+     if %thread.gone = 1 then gosub new.tool
+     gosub ToolCheckLeft $MC_NEEDLES
+     if matchre("$righthand", "$MC_NEEDLES") then gosub SWAP
+     if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
+     if "$righthand" = "Empty" then gosub GET my $MC.order.noun
 	gosub Action push my $MC.order.noun with my $MC_NEEDLES
 	return
 
@@ -102,6 +107,9 @@ yardstick:
 	if "%assemble" != "" then gosub assemble
 	gosub ToolCheckLeft $MC_YARDSTICK
 	var tool needle
+     if matchre("$righthand", "$MC_YARDSTICK") then gosub SWAP
+     if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
+     if "$righthand" = "Empty" then gosub GET my $MC.order.noun
 	gosub Action measure my $MC.order.noun with my $MC_YARDSTICK
 	return
 
@@ -109,6 +117,9 @@ slickstone:
 	if "%assemble" != "" then gosub assemble
 	gosub ToolCheckLeft $MC_SLICKSTONE
 	var tool needle
+     if matchre("$righthand", "$MC_SLICKSTONE") then gosub SWAP
+     if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
+     if "$righthand" = "Empty" then gosub GET my $MC.order.noun
 	gosub Action rub my $MC.order.noun with my $MC_SLICKSTONE
 	return
 
@@ -122,13 +133,20 @@ pins:
 		if !matchre("$righthand|$lefthand", "pins") then gosub GET my pins from my portal
 	}
 	var tool needle
+     if matchre("$righthand", "pins") then gosub SWAP
+     if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
+     if "$righthand" = "Empty" then gosub GET my $MC.order.noun
 	gosub Action poke my $MC.order.noun with my pins
 	return
 	
 scissors:
 	if "%assemble" != "" then gosub assemble
+     if "$lefthand" != "Empty" then gosub STOW_LEFT
 	gosub ToolCheckLeft $MC_SCISSORS
 	var tool needle
+     if matchre("$righthand", "$MC_SCISSORS") then gosub SWAP
+     if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
+     if "$righthand" = "Empty" then gosub GET my $MC.order.noun
 	gosub Action cut my $MC.order.noun with my $MC_SCISSORS
 	return
 
@@ -136,6 +154,9 @@ awl:
 	if "%assemble" != "" then gosub assemble
 	gosub ToolCheckLeft $MC_AWL
 	var tool needle
+     if matchre("$righthand", "$MC_AWL") then gosub SWAP
+     if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
+     if "$righthand" = "Empty" then gosub GET my $MC.order.noun
 	gosub Action poke my $MC.order.noun with my $MC_AWL
 	return
 	
@@ -228,6 +249,7 @@ Retry:
 repeat:
 	math sew.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my $MC_OUTFITTING.STORAGE
+     gosub check.tools
 	gosub GET my tailor book
 	if !matchre("$lefthand|$righthand", "book") then gosub GET my tailor book from my portal
 	gosub Study my book
