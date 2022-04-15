@@ -1675,6 +1675,7 @@ STUDY:
      match STUDY_END Why do you need to study this chart again?
      matchre STUDY_NEXT (^With|^In) a sudden moment of clarity
      matchre GET_BOOK ^But you are not holding it
+     matchre GET_BOOK ^But you're not holding it 
      matchre RETURN You study|You scan|You notate|You review
      matchre RETURN ^You now feel ready to begin the crafting process.
      send study %Study
