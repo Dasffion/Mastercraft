@@ -1752,6 +1752,12 @@ gather.material_1:
      if %vol.%ordinal(%itemno) >= %volume then 
           {
                gosub GET %ordinal(%itemno) %work.material %get.mat from my %main.storage
+               if ("%discipline" = "tailor") then
+                    {
+                         gosub get %work.material %get.mat from my %main.storage
+                         gosub combine.check "%main.storage" %get.mat
+                         gosub get %work.material %get.mat from my %main.storage
+                    }
                var itemchange %ordinal(%itemno)
                evalmath newvolume %vol.%ordinal(%itemno) - %volume
                goto itemchange
@@ -1830,7 +1836,7 @@ combine.check:
           }
      var combine.parts 0
 	 if contains("$righthand|$lefthand", "book") then gosub PUT_IT book in %main.storage
-	 gosub combine
+	gosub combine
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT my %combine.temp in my %combine.storage
      return
 
@@ -2377,6 +2383,7 @@ lack.material:
 purchase.material:
      var purchaselabel purchase.material
      action var need.coin 1 when ^The attendant shrugs and says, "Ugh, you don't have enough
+     #"
      if $roomid != $supply.room then gosub automove $supply.room
 	 gosub EMPTY_HANDS
 first.order:
@@ -2387,7 +2394,7 @@ first.order:
                     {
                          gosub ORDER %order.num
                          math reqd.order subtract 1
-#                         gosub PUT_IT my %order.type in my %main.storage
+#                        gosub PUT_IT my %order.type in my %main.storage
                          math %order.pref.item.count add 1
 						 gosub combine.order
                          if matchre("%order.type", "lumber") then 

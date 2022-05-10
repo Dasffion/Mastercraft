@@ -201,7 +201,7 @@ if contains("$scriptlist", "mastercraft.cmd") then
 		action (order) off
 		gosub ORDER %thread.order
 		pause 1
-		send put my thread on my needles
+		send put my thread on my needles;-0.5 put my thread on my needles in my port
 		waitforre ^You carefully thread
 		var thread.gone 0
 	}

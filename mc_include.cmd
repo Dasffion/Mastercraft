@@ -80,7 +80,9 @@ action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* leather (strips)$
 action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* (mechanism)$
 action (book) var fount.need $1 when .*(\d).* mana fount$
 
-
+### KERTIGEN HALO IDENTIFICATION
+var HaloType NULL
+action var HaloType $1 when (\w+) with a gleaming Kertigen halo
 ###########################################################################
 ### Character Profiles. Please edit these for your character(s). 
 ###########################################################################
@@ -955,7 +957,7 @@ find.master:
           var currenttypeahead $automapper.typeahead
           put #var automapper.typeahead 0
           }
-     action (master) put #script abort automapper when eval matchre("$roomobjs", "%master")
+     # action (master) put #script abort automapper when eval matchre("$roomobjs", "%master")
      action (master) put #parse YOU HAVE ARRIVED when eval matchre("$monsterlist", "%master")
      gosub check.location
      var Master.Found 0
@@ -1339,15 +1341,35 @@ ToolCheckLeft:
 		}
 	return
 #### KERTIGEN HALO HANDLING
-#### HALO REMOVE TOOLS
+#### INITIAL HALO HANDLING TO REMOVE TOOLS
 HALO_REMOVE:
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_RIGHT
      echo
      echo *** REMOVING TOOLS FROM HALO
      echo
+     pause 0.1
+     put look in my %tool.storage
+     pause 2
+     pause 2
+     pause 0.1
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_RIGHT
+     if !matchre("%HaloType", "NULL") then
+          {
+               gosub GET my %HaloType from my %tool.storage
+               pause 0.5
+               pause 0.5
+               pause 0.1
+               send pull halo
+               wait
+               pause 0.5
+               put stow %HaloType
+               pause 0.3
+          }
      if !matchre("$righthand", "halo") then gosub GET my kertigen halo
      pause 0.1
+     if !matchre("$righthand", "halo") then gosub GET my halo from my portal
      if !matchre("$righthand", "halo") then gosub GET my halo from my portal
      pause 0.1
      if (matchre("%discipline", "weapon|armor|blacksmith") || matchre("$roomname", "Forging Society")) then
@@ -1383,6 +1405,7 @@ HALO_REMOVE:
                gosub HALO_SHIFT $MC_STICK
                gosub HALO_SHIFT $MC_PESTLE
                gosub HALO_SHIFT $MC_SIEVE
+               gosub HALO_SHIFT stick
           }
      if (matchre("%discipline", "aritf") || matchre("$roomname", "Enchanting Society")) then
           {
@@ -1408,13 +1431,15 @@ HALO_SUCCESS:
      echo
      echo *** Shifted Halo to %shifting
      echo
-     pause 0.001
+     pause 0.1
+     pause 0.2
      if matchre("$lefthand", "%shifting") then var LastHalo $lefthandnoun
      if matchre("$righthand", "%shifting") then var LastHalo $righthandnoun
-     pause 0.1
+     pause 0.2
+     pause 0.5
      echo ** LastHalo: %LastHalo
      pause 0.001
-     put pull my kertigen halo
+     send pull my kertigen halo
      pause 0.5
      pause 0.1
      var LastHalo halo

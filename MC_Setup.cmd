@@ -63,7 +63,7 @@ put #var MC_Outfitting_NOWO 1
 #######################################################################
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
-#	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard"
+#	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
 put #var MC_ALCHEMY.STORAGE portal
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY easy
@@ -121,7 +121,7 @@ put #var MC_MAX.ORDER 5
 put #var MC_MIN.ORDER 2
 #######################################################################
 ##########################  TOOL VARIABLES  ###########################
-#######################################################################
+########################################################################
 ## These should match what is shown in your hands. If you're having trouble knowing what to put hold it in your right
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
@@ -190,7 +190,7 @@ CHARACTER2:
 #	MC_FORGING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_FORGING.DEED: DEED orders instead of bundling items on or off
 #	MC_SMALL.ORDERS: For only working orders 5 volumes or smaller, 0 for off, 1 for on
-put #var MC_FORGING.STORAGE shoulder pack
+put #var MC_FORGING.STORAGE shadows
 put #var MC_FORGING.DISCIPLINE weapon
 put #var MC_FORGING.MATERIAL steel
 put #var MC_FORGING.DIFFICULTY hard
@@ -206,7 +206,7 @@ put #var MC_Forging_NOWO 0
 #	MC_ENG.PREF: Material type noun i.e. lumber, bone, stone
 #	MC_ENG.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_ENG.DEED: DEED orders instead of bundling items on or off
-put #var MC_ENGINEERING.STORAGE shoulder pack
+put #var MC_ENGINEERING.STORAGE shadows
 put #var MC_ENG.DISCIPLINE carving
 put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
@@ -222,7 +222,7 @@ put #var MC_Engineering_NOWO 0
 #	MC_OUT.PREF: Material type noun i.e. yarn, cloth, leather
 #	MC_OUT.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_OUT.DEED: DEED orders instead of bundling items on or off
-put #var MC_OUTFITTING.STORAGE satchel
+put #var MC_OUTFITTING.STORAGE shadows
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
@@ -235,7 +235,7 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-put #var MC_ALCHEMY.STORAGE shoulder pack
+put #var MC_ALCHEMY.STORAGE shadows
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_Alchemy_NOWO 0
@@ -250,7 +250,7 @@ put #var MC_Alchemy_NOWO 0
 # MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
 
-put #var MC_ENCHANTING.STORAGE shoulder pack
+put #var MC_ENCHANTING.STORAGE shadows
 put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
 put #var MC_IMBUE ROD
