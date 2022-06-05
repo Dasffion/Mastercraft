@@ -178,10 +178,9 @@ include mc_include.cmd
      action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
 #     action goto lack.coin when ^LACK COIN
      action (analyze) off
-
 	 if (matchre("(%clerktools)", "%work.tools") && (%gottools = 0)) then gosub get.tools
 	 var gottools 1
-
+      put #var MC_WORK.TOOLS %work.tools
 ##############################
 #
 #  Obtaining an order
@@ -1273,7 +1272,8 @@ process.order:
                          gosub GET %work.material ingot on anvil
                          gosub PUT_IT ingot in $MC_FORGING.STORAGE
                          math difficultytry add 1
-                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         #put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                send .MC_Pound
@@ -1310,7 +1310,8 @@ process.order:
                               {
                                    gosub PUT_IT %work.material %order.pref in my %main.storage
                                    math difficultytry add 1
-                                   put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                                   echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                                   #put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                                    goto new.order
                               }
                          gosub PUT_IT my book in my %main.storage
@@ -1340,7 +1341,8 @@ process.order:
                               {
                                    gosub PUT_IT %work.material yarn in my %main.storage
                                    math difficultytry add 1
-                                   put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                                   echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                                   #put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                                    goto new.order
                               }
                          gosub PUT_IT my book in my %main.storage
@@ -1376,7 +1378,8 @@ process.order:
                          if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                               {
                                    gosub PUT_IT %work.material stack in my %main.storage
-                                   put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                                   echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                                   #put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                                    math difficultytry add 1
                                    goto new.order
                               }
@@ -1423,7 +1426,8 @@ process.order:
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
-                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         #put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
@@ -1456,7 +1460,8 @@ process.order:
                if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
-                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         #put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          math difficultytry add 1
                          goto new.order
                     }
@@ -1483,7 +1488,8 @@ process.order:
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
-                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         # put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
@@ -1512,7 +1518,8 @@ process.order:
                     {
                          gosub PUT_IT %order.pref in my %main.storage
                          math difficultytry add 1
-                         put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
+                         # put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
@@ -1521,6 +1528,7 @@ process.order:
           }
      if (($MC_END.EARLY = 1) || (%NOWO = 1)) then gosub expcheck
      gosub bundle.order
+     if "%repair" = "on" then gosub check.tools
      if %order.quantity = 0 then 
           {
                if %NOWO then goto endearly
@@ -1595,6 +1603,7 @@ bundle.order:
 	 bundle.order2:
 	 matchre bundle.order2 ^\.\.\.wait|^Sorry
 	 matchre bundle.order3 ^You analyze
+     if !matchre("$righthand $lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun
      if matchre("$lefthand", "$MC.order.noun") then send analyze #$lefthandid
      if matchre("$righthand", "$MC.order.noun") then send analyze #$righthandid
      matchwait 5
@@ -1627,6 +1636,7 @@ bundle.order:
                var NOWO 1
           }
      gosub EMPTY_HANDS
+     if "%repair" = "on" then gosub check.tools
      return
 
 grind:
@@ -1990,240 +2000,6 @@ deed.order:
 #  Commonly referenced Gosubs
 #
 #################################
-
-get.tools:
-     var temp.room $roomid
-	 gosub automove $repair.room
-     var toolcount 0
-     eval toolstotal count("%work.tools","|")
-	 gosub EMPTY_HANDS
-get.tools1:
-     if matchre ("(?i)%work.tools(%toolcount)", "(?i)%clerktools") then 
-	 {
-          matchre got.tool \"Ah, yes, we have one of your tools like that.\" 
-          matchre missing.tool \"It doesn't look like we have anything like that of yours here.\"
-          matchre tool.error \"Well, you need a free hand if I'm going to help you.\"
-          put ask $repair.clerk for %work.tools(%toolcount)
-          matchwait 10
-     }
-     math toolcount add 1
-     if (%toolcount > %toolstotal) then goto clerk.tools.done
-     goto get.tools1
-
-tool.error:
-     echo >log green MASTERCRAFT: Error getting tools from clerk - hands full even after clearing
-	 goto clerk.tools.done
-
-missing.tool:
-     put #echo >log green MASTERCRAFT: %work.tools(%toolcount) tool not in storage?
-     math toolcount add 1
-     if %toolcount > %toolstotal then goto clerk.tools.done
-     goto get.tools1
-
-got.tool:
-     gosub EMPTY_HANDS
-     math toolcount add 1
-     if %toolcount > %toolstotal then goto clerk.tools.done
-     goto get.tools1
-	 
-clerk.tools.done:
-     gosub automove %temp.room
-	 return
-
-check.tools:
-     evalmath lastToolRepairTime $gametime - $last%society.typeRepair
-     if %lastToolRepairTime < 3600 then return
-     var temp 0
-     eval temp.max count("%work.tools","|")
-check.tools2:
-     gosub ToolCheckRight %work.tools(%temp)
-     gosub repair.tool %work.tools(%temp)
-     unvar repair.temp
-     gosub STOW_RIGHT
-     math temp add 1
-     if %temp > %temp.max then
-          {
-               unvar temp
-               unvar temp.max
-               return
-          }
-     gosub check.tools2
-     if $MC.Mark = "on" then
-          {
-               gosub GET my stamp from my %main.storage
-               gosub repair.tool stamp
-               gosub PUT_IT my stamp in my %main.storage
-          }
-     put #var last%society.typeRepair $gametime
-     return
-
-repair.tool:
-     var repair.temp $0
-repair.tool_1:
-     if %tool.gone = 1 then gosub new.tool
-     send analyze my %repair.temp
-     pause 1
-     if "%tool.repair" = "in pristine condition" || "%tool.repair" = "practically in mint condition" then return
-     pause .1
-     if "%auto.repair" = "off" then
-          {
-               if !def(repair.room) then return
-               var temp.room $roomid
-               gosub automove $repair.room
-               gosub RepairAllItems
-               gosub ReturnAllItems
-               gosub automove %temp.room
-               return
-          }
-     send craft blacksmith
-     waitforre ^From the blacksmithing crafting discipline you have been trained in (.*)\.$
-     var repair.techs $0
-     pause .5
-     if (contains("%repair.techs", "Tool Repair") then
-          {
-               gosub toolcheck
-               pause .5
-               if !matchre("$righthand|$lefthand", "%repair.temp") then gosub GET my %repair.temp
-               gosub GET my wire brush
-               gosub PUT rub my %repair.temp with my brush
-               gosub PUT_IT my wire brush in my %main.storage
-               gosub GET my oil
-               gosub PUT pour my oil on my %repair.temp
-               gosub PUT_IT my oil in my %main.storage
-               goto repair.tool_1
-          }
-     else
-          {
-               echo ***  Pausing script for you to get %repair.temp repaired!
-               echo ***  You should probably repair all of your relevant tools while you're there.
-               echo ***  Type GOGO in your original crafting hall to resume script...
-               put #parse GO REPAIR
-               waitforre (?i)gogo
-               return
-          }
-     return
-     
-toolcheck:
-     var brush.gone 1
-     var oil.gone 1
-     action var brush.gone 0 when ^You tap an iron wire brush
-     action var oil.gone 0 when ^You tap a flask of oil
-     gosub put tap brush
-	 gosub put tap brush in portal
-     gosub put tap oil
-	 gosub put tap oil in portal
-     pause 0.5
-     if ((%brush.gone = 1) || (%oil.gone = 1)) then gosub new.tool
-     return
-
-RepairAllItems:
-     if "$righthand" != "Empty" then gosub RepairItem $righthandnoun
-     eval totaltool count("%work.tools", "|")
-     var currenttool 0
-RepairAllItems_1:
-     if %currenttool > %totaltool then return
-     gosub RepairItem %work.tools(%currenttool)
-     math currenttool add 1
-     goto RepairAllItems_1
-     return
-
-RepairItem:
-     var item $0
-     gosub GET my %item
-     pause .2
-     if "$righthand $lefthand" == "Empty Empty" then return
-     gosub PUT give $repair.clerk
-     gosub PUT give $repair.clerk
-     gosub STOW_RIGHT
-     wait
-     pause .2
-     return
-
-ReturnAllItems:
-     match ticket You get
-     match ReturnAllItems2 I could not find
-     match ReturnAllItems2 What were you referring to
-     send get my ticket
-     matchwait
-ReturnAllItems2:
-     match ticket You get
-     match return I could not find
-     match return What were you referring to
-     send get my ticket from my portal
-     matchwait
-
-Ticket:
-     match tool.store You hand
-     match tool.store What is it
-     send give ticket to $repair.clerk
-     matchwait 15
-
-ticket.pause:
-     pause 60
-     goto ticket
-
-tool.store:
-     gosub STOW_RIGHT
-     goto ReturnAllItems
-     
-
-new.tool:
-     var temp.room $roomid
-     gosub STOW_RIGHT
-     gosub GET %work.material
-     gosub PUT_IT %work.material in my %main.storage
-     var temp.room $roomid
-     gosub automove $tool.room
-     action (order) on
-     gosub ORDER
-     action (order) off
-     if %oil.gone = 1 then gosub summonoil
-     if %oil.gone = 1 then
-          {
-               gosub ORDER $oil.order
-               gosub PUT_IT my oil in my %main.storage
-               var oil.gone 0
-          }
-     if %stain.gone = 1 then
-          {
-               gosub ORDER $stain.order
-               gosub PUT_IT my oil in my %main.storage
-               var stain.gone 0
-          }
-     if %brush.gone = 1 then
-          {
-               gosub ORDER $brush.order
-               gosub PUT_IT my brush in my %main.storage
-               var brush.gone 0
-          }
-     gosub automove %temp.room
-     unvar temp.room
-     var tool.gone 0
-     return
-     
-
-lack.coin:
-     if "%get.coin" = "off" then goto lack.coin.exit
-     var temp.room $roomid
-     action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
-     if matchre("116", "\b$zoneid\b") then gosub automove 1teller
-     else gosub automove teller
-     gosub PUT withd $MC_WITHD.AMOUNT
-     gosub automove %temp.room
-     var need.coin 0
-     action remove (^The clerk flips through her ledger|^The clerk tells you)
-     pause 1
-#     if matchre("$scriptlist", "MC_") then return
-#     if %reqd.order > 0 then goto purchase.material
-#     if %asmCount1 > 0 then gosub purchase.assemble
-#     if %asmCount2 > 0 then gosub purchase.assemble2
-#	 goto purchase.material
-	 return
-
-lack.coin.exit:
-     echo You need some startup coin to purchase stuff! Go to the bank and try again!
-     put #parse Need coin
-     exit
 buyingvolumechange:
      var oldnumber %ingot.item.count
      evalmath tempnumber %ingot.item.count + %reqd.order
@@ -2496,43 +2272,6 @@ lack.material.exit:
          put #parse Need material
 	     if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
          exit
-
-return.tools:
-	 gosub automove $repair.room
-     var toolcount 0
-     eval toolstotal count("%work.tools","|")
-	 gosub EMPTY_HANDS
-return.tools1:
-     if matchre ("%work.tools(%toolcount)", "%clerktools") then 
-	 {
-		  gosub GET %work.tools(%toolcount)
-          matchre next.tool ^What were you referring to?
-          matchre next.tool \"Feel free to come back for your item any time,\"
-          matchre not.a.tool \"This isn't the kind of thing I store
-          matchre no.clerk.room \"You don't have enough space in your storage.  Clear some things out first.\"
-          put put my %work.tools(%toolcount) on counter
-          matchwait 10
-		  put #echo >log green MASTERCRAFT: Missing match in return.tools
-     }
-     math toolcount add 1
-     if (%toolcount > %toolstotal) then return
-     goto return.tools1
-
-next.tool:
-     math toolcount add 1
-     if (%toolcount > %toolstotal) then return
-     goto return.tools1
-
-not.a.tool:
-	 put #echo >log green MASTERCRAFT: %work.tools(%toolcount) is not a tool that can be stored - adjust your variables
-     math toolcount add 1
-     if (%toolcount > %toolstotal) then return
-     goto return.tools1
-
-no.clerk.room:
-     put #echo >log green MASTERCRAFT: Ran out of room with clerk - adjust your variables
-     return
-
 
 return:
      return

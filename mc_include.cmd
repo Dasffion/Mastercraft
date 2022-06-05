@@ -83,6 +83,29 @@ action (book) var fount.need $1 when .*(\d).* mana fount$
 ### KERTIGEN HALO IDENTIFICATION
 var HaloType NULL
 action var HaloType $1 when (\w+) with a gleaming Kertigen halo
+
+#### MIGRATED FROM MASTERCRAFT MAIN SCRIPT SO THAT TOOL REPAIR WORKS IN ALL SCRIPTS
+if $MC_END.EARLY = 1 then 
+     {
+         action instant var order.quantity 1 when You must bundle and deliver (\d+) more within
+         action instant var order.quantity 1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
+     }
+else 
+     {
+         action instant var order.quantity $1 when You must bundle and deliver (\d+) more within
+         action instant var order.quantity $1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
+     }
+action instant var (analyze) item.quality $2 when (is|are|have|has) (riddled with mistakes and practically|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality|of exceptional quality|of outstanding quality|masterfully-crafted)
+action instant var coin.temp $1 when You can purchase.*for (\d+) (Lirums|Kronars|Dokoras)\.
+action instant math coin.intake add $1 when You hand .* your logbook and bundled items, and are given (\d+)
+action instant math coin.intake subtract $1 when pay the sales clerk (\d+)
+action instant math coin.intake subtract %coin.temp when takes some coins from you and hands you.*\.$
+action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\))?\.
+action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
+action instant var grind 1 when TURN the GRINDSTONE several times
+action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
+#     action goto lack.coin when ^LACK COIN
+     action (analyze) off
 ###########################################################################
 ### Character Profiles. Please edit these for your character(s). 
 ###########################################################################
@@ -303,11 +326,11 @@ location.vars:
      var FE.work.room 220|221
      
      #Fang Cove Forging
-     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248
+     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248|249
      var FF.master.room 196|197|198|199|200|201|202|203|204
-     var FF.work.room 217|219|248
-     var FF.grind.room 217|219|248
-     var FF.smelt.room 216|218|247
+     var FF.work.room 217|219|249
+     var FF.grind.room 217|219|249
+     var FF.smelt.room 216|218|248
 
      #Fang Cove Outfitting
      var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
@@ -1300,7 +1323,298 @@ manualalcohol:
 	var water.gone 0
 	return
 	
+##############################
+### MIGRATED FROM MASTERCRAFT - TO WORK WITH ALL INDIVIDUAL SCRIPTS
+get.tools:
+     var temp.room $roomid
+	 gosub automove $repair.room
+     var toolcount 0
+     eval toolstotal count("$MC_WORK.TOOLS","|")
+	 gosub EMPTY_HANDS
+get.tools1:
+     if matchre ("(?i)$MC_WORK.TOOLS(%toolcount)", "(?i)%clerktools") then 
+	 {
+          matchre got.tool \"Ah, yes, we have one of your tools like that.\" 
+          matchre missing.tool \"It doesn't look like we have anything like that of yours here.\"
+          matchre tool.error \"Well, you need a free hand if I'm going to help you.\"
+          put ask $repair.clerk for $MC_WORK.TOOLS(%toolcount)
+          matchwait 10
+     }
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then goto clerk.tools.done
+     goto get.tools1
 
+tool.error:
+     echo >log green MASTERCRAFT: Error getting tools from clerk - hands full even after clearing
+	 goto clerk.tools.done
+
+missing.tool:
+     put #echo >log green MASTERCRAFT: $MC_WORK.TOOLS(%toolcount) tool not in storage?
+     math toolcount add 1
+     if %toolcount > %toolstotal then goto clerk.tools.done
+     goto get.tools1
+
+got.tool:
+     gosub EMPTY_HANDS
+     math toolcount add 1
+     if %toolcount > %toolstotal then goto clerk.tools.done
+     goto get.tools1
+	 
+clerk.tools.done:
+     gosub automove %temp.room
+	 return
+
+check.tools:
+     evalmath lastToolRepairTime $gametime - $last%society.typeRepair
+     if %lastToolRepairTime < 100 then return
+     var temp 0
+     eval MaxTemp count("$MC_WORK.TOOLS","|")
+check.tools2:
+     gosub ToolCheckRight $MC_WORK.TOOLS(%temp)
+     gosub repair.tool $MC_WORK.TOOLS(%temp)
+     unvar repair.temp
+     gosub STOW_RIGHT
+     math temp add 1
+     if %temp > %MaxTemp then
+          {
+               unvar temp
+               unvar MaxTemp
+               return
+          }
+     gosub check.tools2
+     if $MC.Mark = "on" then
+          {
+               gosub GET my stamp from my %main.storage
+               gosub repair.tool stamp
+               gosub PUT_IT my stamp in my %main.storage
+          }
+     put #var last%society.typeRepair $gametime
+     return
+
+repair.tool:
+     var repair.temp $0
+repair.tool_1:
+     var too.damaged 0
+     if %tool.gone = 1 then gosub new.tool
+     send analyze my %repair.temp
+     pause 1
+     if "%tool.repair" = "in pristine condition" || "%tool.repair" = "practically in mint condition" then return
+     pause .1
+     if "%auto.repair" = "off" then
+          {
+               if !def(repair.room) then return
+               var temp.room $roomid
+               gosub automove $repair.room
+               gosub RepairAllItems
+               gosub ReturnAllItems
+               gosub automove %temp.room
+               return
+          }
+     action var auto.repair off;var too.damaged 1 when ^The .+ has suffered too much damage and needs to be repaired at a crafting repair shop
+     send craft blacksmith
+     waitforre ^From the blacksmithing crafting discipline you have been trained in (.*)\.$
+     var repair.techs $0
+     pause .5
+     if (contains("%repair.techs", "Tool Repair") then
+          {
+               gosub toolcheck
+               pause .5
+               if !matchre("$righthand|$lefthand", "%repair.temp") then gosub GET my %repair.temp
+               if "$lefthand" != "Empty" then gosub PUT_IT $lefthandnoun in my %main.storage
+               gosub GET my wire brush
+               gosub PUT rub my %repair.temp with my brush
+               gosub PUT_IT my wire brush in my %main.storage
+               if (%too.damaged = 1) then goto repair.tool_1
+               gosub GET my oil
+               gosub PUT pour my oil on my %repair.temp
+               gosub PUT_IT my oil in my %main.storage
+               goto repair.tool_1
+          }
+     else
+          {
+               echo ***  Pausing script for you to get %repair.temp repaired!
+               echo ***  You should probably repair all of your relevant tools while you're there.
+               echo ***  Type GOGO in your original crafting hall to resume script...
+               put #parse GO REPAIR
+               waitforre (?i)gogo
+               return
+          }
+     return
+     
+toolcheck:
+     var brush.gone 1
+     var oil.gone 1
+     action var brush.gone 0 when ^You tap an iron wire brush
+     action var oil.gone 0 when ^You tap a flask of oil
+     gosub put tap brush
+	gosub put tap brush in portal
+     gosub put tap oil
+	gosub put tap oil in portal
+     pause 0.5
+     if ((%brush.gone = 1) || (%oil.gone = 1)) then gosub new.tool
+     return
+
+RepairAllItems:
+     if "$righthand" != "Empty" then gosub RepairItem $righthandnoun
+     eval totaltool count("$MC_WORK.TOOLS", "|")
+     var currenttool 0
+RepairAllItems_1:
+     if %currenttool > %totaltool then return
+     gosub RepairItem $MC_WORK.TOOLS(%currenttool)
+     math currenttool add 1
+     goto RepairAllItems_1
+     return
+
+RepairItem:
+     var item $0
+     gosub GET my %item
+     pause .2
+     if "$righthand $lefthand" == "Empty Empty" then return
+     gosub PUT give $repair.clerk
+     gosub PUT give $repair.clerk
+     gosub STOW_RIGHT
+     wait
+     pause .2
+     return
+
+ReturnAllItems:
+     match ticket You get
+     match ReturnAllItems2 I could not find
+     match ReturnAllItems2 What were you referring to
+     send get my ticket
+     matchwait
+ReturnAllItems2:
+     match ticket You get
+     match return I could not find
+     match return What were you referring to
+     send get my ticket from my portal
+     matchwait
+
+Ticket:
+     match tool.store You hand
+     match tool.store What is it
+     send give ticket to $repair.clerk
+     matchwait 15
+
+ticket.pause:
+     pause 60
+     goto ticket
+
+tool.store:
+     gosub STOW_RIGHT
+     goto ReturnAllItems
+     
+
+new.tool:
+     var temp.room $roomid
+     gosub STOW_RIGHT
+     gosub GET %work.material
+     gosub PUT_IT %work.material in my %main.storage
+     var temp.room $roomid
+     gosub automove $tool.room
+     action (order) on
+     gosub ORDER
+     action (order) off
+     if %oil.gone = 1 then gosub summonoil
+     if %stain.gone = 1 then
+          {
+               gosub automove $tool.room
+               action (order) on
+               pause 0.5
+               gosub ORDER
+               action (order) off
+               gosub ORDER $stain.order
+               gosub PUT_IT my stain in my %main.storage
+               var stain.gone 0
+          }
+     if %oil.gone = 1 then
+          {
+               gosub automove $oil.room
+               action (order) on
+               pause 0.5
+               gosub ORDER
+               gosub ORDER $oil.order
+               gosub PUT_IT my oil in my %main.storage
+               var oil.gone 0
+          }
+     if %brush.gone = 1 then
+          {
+               gosub automove $oil.room
+               action (order) on
+               pause 0.5
+               gosub ORDER
+               action (order) off
+               gosub ORDER $brush.order
+               gosub PUT_IT my brush in my %main.storage
+               var brush.gone 0
+          }
+     gosub automove %temp.room
+     unvar temp.room
+     var tool.gone 0
+     return
+     
+
+lack.coin:
+     if "%get.coin" = "off" then goto lack.coin.exit
+     var temp.room $roomid
+     action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
+     if matchre("116", "\b$zoneid\b") then gosub automove 1teller
+     else gosub automove teller
+     gosub PUT withd $MC_WITHD.AMOUNT
+     gosub automove %temp.room
+     var need.coin 0
+     action remove (^The clerk flips through her ledger|^The clerk tells you)
+     pause 1
+#     if matchre("$scriptlist", "MC_") then return
+#     if %reqd.order > 0 then goto purchase.material
+#     if %asmCount1 > 0 then gosub purchase.assemble
+#     if %asmCount2 > 0 then gosub purchase.assemble2
+#	 goto purchase.material
+	 return
+
+lack.coin.exit:
+     echo You need some startup coin to purchase stuff! Go to the bank and try again!
+     put #parse Need coin
+     exit
+     
+return.tools:
+	 gosub automove $repair.room
+     var toolcount 0
+     eval toolstotal count("$MC_WORK.TOOLS","|")
+	 gosub EMPTY_HANDS
+return.tools1:
+     if matchre ("$MC_WORK.TOOLS(%toolcount)", "%clerktools") then 
+	 {
+		gosub GET $MC_WORK.TOOLS(%toolcount)
+          matchre next.tool ^What were you referring to?
+          matchre next.tool \"Feel free to come back for your item any time,\"
+          matchre not.a.tool \"This isn't the kind of thing I store
+          matchre no.clerk.room \"You don't have enough space in your storage.  Clear some things out first.\"
+          put put my $MC_WORK.TOOLS(%toolcount) on counter
+          matchwait 10
+		put #echo >log green MASTERCRAFT: Missing match in return.tools
+     }
+     #"
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then return
+     goto return.tools1
+
+next.tool:
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then return
+     goto return.tools1
+
+not.a.tool:
+	 put #echo >log green MASTERCRAFT: $MC_WORK.TOOLS(%toolcount) is not a tool that can be stored - adjust your variables
+     math toolcount add 1
+     if (%toolcount > %toolstotal) then return
+     goto return.tools1
+
+no.clerk.room:
+     put #echo >log green MASTERCRAFT: Ran out of room with clerk - adjust your variables
+     return
+
+##############################
 #### EMPTY HANDS SUB
 EMPTY_HANDS:
      pause 0.0001
@@ -1461,6 +1775,7 @@ HALO_RESTACK:
      if ("$lefthand" != "Empty") then gosub STOW_RIGHT
      if (matchre("%discipline", "weapon|armor|blacksmith") || matchre("$roomname", "Forging Society")) then
           {
+               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_HAMMER
                gosub HALO_STACK $MC_TONGS
                gosub HALO_STACK $MC_PLIERS
@@ -1469,6 +1784,7 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "tailor") || matchre("$roomname", "Outfitting Society")) then
           {
+               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_NEEDLES
                gosub HALO_STACK $MC_SCISSORS
                gosub HALO_STACK $MC_YARDSTICK
@@ -1477,6 +1793,7 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "carving|shaping|tinkering") || matchre("$roomname", "Engineering Society")) then
           {
+               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_CHISEL
                gosub HALO_STACK $MC_SAW
                gosub HALO_STACK $MC_RASP
@@ -1486,6 +1803,7 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "remedy") || matchre("$roomname", "Alchemy Society")) then
           {
+               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_BOWL
                gosub HALO_STACK $MC_MORTAR
                gosub HALO_STACK $MC_STICK
@@ -1494,6 +1812,7 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "aritf") || matchre("$roomname", "Enchanting Society")) then
           {
+               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_BURIN
                gosub HALO_STACK $MC_LOOP
                gosub HALO_STACK $MC_BRAZIER
@@ -1629,6 +1948,9 @@ PUT:
      matchre RETURN ^Maybe you should stand up\.
      matchre RETURN ^You sense a successful empathic link has been forged|^Touch what|^I could not find
      matchre RETURN ^The clerk counts out .*\.
+     matchre RETURN ^A clerk says politely
+     matchre RETURN ^A clerk shakes his head
+     matchre RETURN ^The .+ has suffered too much damage and needs to be repaired at a crafting repair shop
      matchre RETURN ^The .* is not damaged enough to warrant repair\.
      matchre RETURN ^There is no more room in .*\.
      matchre RETURN ^There is nothing in there\.
@@ -1780,6 +2102,9 @@ GET:
      matchre RETURN ^You grab .*(?:\.|\!|\?)
      matchre RETURN ^As best it can\, .* moves in your direction\.
      matchre RETURN ^You need a free hand to pick that up\.
+     matchre RETURN ^That can't be picked up\.
+     matchre RETURN ^Please rephrase
+     matchre RETURN ^Analyze what
      matchre UNTIE ^You pull at it|^You pull at|^You should untie
      matchre GET_DOUBLECHECK ^I could not find what you were referring to\.
      matchre GET_DOUBLECHECK ^What were you referring to\?

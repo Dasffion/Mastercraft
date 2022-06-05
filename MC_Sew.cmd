@@ -249,7 +249,7 @@ Retry:
 repeat:
 	math sew.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my $MC_OUTFITTING.STORAGE
-     gosub check.tools
+     if "%repair" = "on" then gosub check.tools
 	gosub GET my tailor book
 	if !matchre("$lefthand|$righthand", "book") then gosub GET my tailor book from my portal
 	gosub Study my book

@@ -71,6 +71,7 @@ Retry:
 repeat:
 	math sew.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my %outfitting.storage
+     if "%repair" = "on" then gosub check.tools
 	gosub GET my tailor book
 	gosub STUDY my book
 	gosub PUT_IT my book in my %outfitting.storage

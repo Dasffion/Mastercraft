@@ -42,7 +42,9 @@ var solid cream|salve|balm|poultices|ungent|ointment
 
 if matchre("$MC.order.noun", "%liquid") then
 		{
-          echo * LIQUID
+          echo
+          echo * LIQUID - Using Stick/Bowl
+          echo
 		var mixer $MC_STICK
 		var bowl $MC_BOWL
 		var tool.mix mix
@@ -50,8 +52,10 @@ if matchre("$MC.order.noun", "%liquid") then
 		}
 if matchre("$MC.order.noun", "%solid") then
 		{
-          echo * SOLID
-		var mixer $MC_PESTLE
+          echo
+          echo * SOLID - Using Mortar/Pestle
+		echo
+          var mixer $MC_PESTLE
 		var bowl $MC_MORTAR
 		var tool.mix crush
 		var water water
@@ -252,7 +256,8 @@ Retry:
 repeat:
 	math mix.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my %alchemy.storage
-	gosub GET my remedy book
+	if ("%repair" = "on") then gosub check.tools
+     gosub GET my remedy book
 	if !matchre("$righthand|$lefthand", "book") then gosub GET my remedy book from my portal
 	gosub STUDY my book
 	gosub PUT_IT my book in my %alchemy.storage
@@ -274,6 +279,7 @@ done:
 		goto repeat
 		}
 	if "$righthand" != "Empty" then gosub STOW_RIGHT
+     if ("%repair" = "on") then gosub check.tools
 	gosub countcheck
 	put #parse ALCHEMY DONE
 	exit

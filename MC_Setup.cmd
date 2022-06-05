@@ -25,7 +25,7 @@ put #var MC_FORGING.MATERIAL steel
 put #var MC_FORGING.DIFFICULTY challenging
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
-put #var MC_Forging_NOWO 1
+put #var MC_Forging_NOWO 0
 #######################################################################
 ###################  ENGINEERING VARIABLES  ###########################
 #######################################################################
@@ -39,9 +39,9 @@ put #var MC_ENGINEERING.STORAGE portal
 put #var MC_ENG.DISCIPLINE carving
 put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
-put #var MC_ENG.DIFFICULTY hard
+put #var MC_ENG.DIFFICULTY challenging
 put #var MC_ENG.DEED off
-put #var MC_Engineering_NOWO 1
+put #var MC_Engineering_NOWO 0
 #######################################################################
 ########################  OUTFITTING VARIABLES  #######################
 #######################################################################
@@ -55,9 +55,9 @@ put #var MC_OUTFITTING.STORAGE portal
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
-put #var MC_OUT.DIFFICULTY hard
+put #var MC_OUT.DIFFICULTY challenging
 put #var MC_OUT.DEED off
-put #var MC_Outfitting_NOWO 1
+put #var MC_Outfitting_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
@@ -67,7 +67,7 @@ put #var MC_Outfitting_NOWO 1
 put #var MC_ALCHEMY.STORAGE portal
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY easy
-put #var MC_Alchemy_NOWO 1
+put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
 #######################################################################
@@ -107,7 +107,7 @@ put #var MC_IMBUE.ROD imbuement rod
 #	MC_MAX.ORDER: Maximum number of items to craft, will get a new work order if above this number
 # 	MC_MIN.ORDER: Minimum number of items to craft, will get a new work order if below this number
 put #var MC_REPAIR on
-put #var MC_AUTO.REPAIR off
+put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
 put #var MC_WITHD.AMOUNT 5 gold
 put #var MC_REORDER on

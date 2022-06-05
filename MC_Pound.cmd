@@ -295,6 +295,7 @@ Retry:
 repeat:
 	 math pound.repeat subtract 1
 	 gosub PUT_IT my $MC.order.noun in my %forging.storage
+      if "%repair" = "on" then gosub check.tools
 	 gosub GET my book
 	 if !matchre ("$righthand|$lefthand", "book") then gosub GET my book from my portal
 	 gosub STUDY my book

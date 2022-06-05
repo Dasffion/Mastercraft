@@ -205,6 +205,7 @@ Retry:
 repeat:
 	math enchant.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my %main.storage
+     if ("%repair" = "on") then gosub check.tools
 	gosub GET my artif book
 	gosub STUDY my book
 	gosub PUT_IT my book in my %main.storage

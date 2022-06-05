@@ -209,6 +209,7 @@ done:
 	pause 0.5
 	if "$lefthandnoun" = "$MC.order.noun" then gosub PUT swap
 	pause 1
+     if ("%repair" = "on") then gosub check.tools
 	 gosub mark
 	 put #parse CARVING DONE
 	exit
