@@ -66,8 +66,8 @@ put #var MC_Outfitting_NOWO 0
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
 put #var MC_ALCHEMY.STORAGE portal
 put #var MC_ALC.DISCIPLINE remed
-put #var MC_ALC.DIFFICULTY easy
-put #var MC_Alchemy_NOWO 0
+put #var MC_ALC.DIFFICULTY challenging
+put #var MC_Alchemy_NOWO 1
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
 #######################################################################
@@ -128,6 +128,8 @@ put #var MC_MIN.ORDER 2
 #GENERAL
 # Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
 put #var MC_KERTIGEN.HALO ON
+# Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
+put #var MC_WATERCUBE parry stick
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
 # An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
@@ -172,7 +174,7 @@ put #var MC_TOOL.STORAGE_Alchemy portal
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
-put #var MC_BRAZIER brazier
+put #var MC_BRAZIER NULL
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting portal
 goto endsetup
@@ -297,6 +299,10 @@ put #var MC_MIN.ORDER 3
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
+# Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+put #var MC_KERTIGEN.HALO OFF
+# Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
+put #var MC_WATERCUBE NULL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
 # An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
@@ -467,6 +473,10 @@ put #var MC_MIN.ORDER 3
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
+# Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+put #var MC_KERTIGEN.HALO OFF
+# Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
+put #var MC_WATERCUBE NULL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
 # An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
@@ -637,6 +647,10 @@ put #var MC_MIN.ORDER 1
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
+# Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+put #var MC_KERTIGEN.HALO OFF
+# Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
+put #var MC_WATERCUBE NULL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
 # An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below
@@ -806,6 +820,10 @@ put #var MC_MIN.ORDER 3
 ## hand and #echo $righthand copy what is shown and paste that.
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
+# Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+put #var MC_KERTIGEN.HALO OFF
+# Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
+put #var MC_WATERCUBE NULL
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
 put #var MC_TIED.TOOLS NULL
 # An array of your tools that you keep with the clerk. i.e. silversteel mallet|muracite tongs|stirring rod -- Make sure these match the adjective+noun below

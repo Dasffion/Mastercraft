@@ -10,6 +10,8 @@ var tool scribe
 var fount.gone 0
 var special NULL
 var done 0
+var unknown 0
+var pickup 0
 include mc_include.cmd
 
 action var special meditate when The traced sigil pattern blurs before your eyes, making it difficult to follow
@@ -24,6 +26,8 @@ action var tool sigil when ^You need another primary sigil to continue the encha
 action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.|^The.*?requires an application of an imbue spell to advance the enchanting process.
 action var tool done when With the enchantment complete|With the enchanting process completed|With enchanting complete
 action goto clean when It does not seem possible to continue with the enchanting process, and you will need to start over.
+action var unknown 1 when ^You find it impossible to identify who crafted this item\.|^The .+ appears to be in the process of being enhanced\.
+action var pickup 1 when ^The brazier is not currently lit, and so you feel it is safe to collect anything atop it\.
 action put #tvar prepared 1 when ^You feel fully prepared
 action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*)\.
 action (work) off
@@ -33,8 +37,8 @@ GetBrazier:
     if (!def(MC_BRAZIER) || matchre("$MC_BRAZIER", "(?i)NULL")) then goto NoBrazier	
     var usebrazier $MC_BRAZIER
     gosub ToolCheckRight %usebrazier
-	pause 0.5
-	pause 0.5
+    pause 0.5
+    pause 0.5
     if matchre("$lefthandnoun", "brazier") then var lower left
     if matchre("$righthandnoun", "brazier") then var lower right
 LowerBrazier:
@@ -47,24 +51,31 @@ NoBrazier:
      var usebrazier brazier
 
 CleanBrazier:
-     send analyze my %usebrazier
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               send analyze %usebrazier
+          }
+     else send analyze my %usebrazier
      pause 0.5
      pause 0.5
      pause 0.5
      if (("%tool.repair" = "in pristine condition") || ("%tool.repair" = "practically in mint condition")) then goto unfinished
 CleanBrazier_1:
      gosub GET salt
-     gosub PUT pour salt on %usebrazier
+     gosub PUT pour salt on my %usebrazier
      gosub STOW salt
 		
 unfinished:
-	 var tool analyze
-	 matchre braziercheck On the (.*) brazier you see (.*?)\.
-	 matchre start.enchant There is nothing on there
-	 send look on %usebrazier
-	 matchwait 
+	var tool analyze
+	matchre braziercheck On the (.*) brazier you see (.*?)\.|It may not be fully usable until the process is completed\.
+	matchre start.enchant There is nothing on there
+     if matchre("$MC_BRAZIER", "(?i)NULL") then send look on %usebrazier
+	else send look on my %usebrazier
+	matchwait 
 
 braziercheck:
+     var unknown 0
+     var pickup 0
      var brazier $0
 	if matchre("%brazier", "$MC.order.noun") then goto analyze1
      if matchre("%brazier", "unfinished .+ (\S+)\.") then goto clean
@@ -74,16 +85,36 @@ braziercheck:
 clean:
      pause 0.5
      pause 0.5
-	 put clean %usebrazier
-	 pause .1
-	 put clean %usebrazier
-	 pause .1
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               put clean my %usebrazier
+               pause .1
+               put clean my %usebrazier
+               pause .1
+          }
+	put clean %usebrazier
+	pause .1
+	put clean %usebrazier
+	pause .1
+     if (%pickup = 1) then
+          {
+               echo
+               echo *** Attempting to clean brazier
+               echo
+               gosub GET $MC.order.noun from %usebrazier
+               gosub PUT_IT $MC.order.noun in bin
+               var pickup 0
+          }
      if ("$MC.order.noun" != "fount") then
           {
                gosub GET fount from %usebrazier
                gosub PUT_IT fount in %main.storage
           }
-     gosub GET "$MC.order.noun" from %usebrazier
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               gosub GET $MC.order.noun from %usebrazier
+          }
+     else gosub GET "$MC.order.noun" from my %usebrazier
      gosub PUT_IT $MC.order.noun in bin
      pause 0.5
      goto unfinished
@@ -98,12 +129,14 @@ start.enchant:
 	put #tvar prepared 0
 	if "$MC_IMBUE" = "SPELL|spell" then gosub PREPARE imbue $MC_IMBUE.MANA
 	if !matchre("$righthand|$lefthand", "%rawmat") then gosub GET my %rawmat from %main.storage
-  if !matchre("$righthand|$lefthand", "%rawmat") then goto RESTARTENCHANT
-	gosub PUT_IT my %rawmat on %usebrazier
+     if !matchre("$righthand|$lefthand", "%rawmat") then goto RESTARTENCHANT
+     if matchre("$MC_BRAZIER", "(?i)NULL") then gosub PUT_IT my %rawmat on %usebrazier
+	else gosub PUT_IT my %rawmat on my %usebrazier
 	goto work
 	
 analyze1:
 	gosub analyze
+     if (%unknown = 1) then goto clean
 	goto work
 
 work:
@@ -114,7 +147,8 @@ work:
 	
 restudy:
 	if "$MC_IMBUE" = "SPELL" then put release spell
-	gosub GET %rawmat from %usebrazier
+     if matchre("$MC_BRAZIER", "(?i)NULL") then gosub GET %rawmat from %usebrazier
+	else gosub GET %rawmat from my %usebrazier
 	gosub PUT_IT my %rawmat in %main.storage
 	gosub GET my artif book
 	gosub STUDY my artif book
@@ -126,7 +160,11 @@ imbue:
 	if "$MC_IMBUE" = "ROD" then
 		{
 		gosub ToolCheckRight $MC_IMBUE.ROD
-		gosub Action wave $MC_IMBUE.ROD at $MC.order.noun on %usebrazier
+          if matchre("$MC_BRAZIER", "(?i)NULL") then
+               {
+                    gosub Action wave $MC_IMBUE.ROD at $MC.order.noun on %usebrazier
+               }
+          else gosub Action wave $MC_IMBUE.ROD at $MC.order.noun on my %usebrazier
 		}
 	if "%tool" = "sigil" then goto sigil	
 	if ("$MC_IMBUE" = "SPELL") then 
@@ -136,8 +174,12 @@ imbue:
                if "$preparedspell" != "None" then gosub release spell
                gosub prepare imbue $MC_IMBUE.MANA
                }
-		if !$prepared then waitfor You feel fully prepared 
-		gosub SPELL_CAST_TARGET $MC.order.noun on %usebrazier
+		if !$prepared then waitfor You feel fully prepared
+          if matchre("$MC_BRAZIER", "(?i)NULL") then
+               {
+                    gosub SPELL_CAST_TARGET $MC.order.noun on %usebrazier
+               }
+          else gosub SPELL_CAST_TARGET $MC.order.noun on my %usebrazier
           put #tvar prepared 0
 		}
 	if "$MC_IMBUE" = "ROD" then gosub STOW_LEFT
@@ -148,14 +190,22 @@ imbue:
 sigil:
 	gosub GET %sigil sigil from %main.storage
 	gosub STUDY %sigil sigil
-	gosub PUT trace $MC.order.noun on %usebrazier
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               gosub PUT trace $MC.order.noun on %usebrazier
+          }
+     else gosub PUT trace $MC.order.noun on my %usebrazier
 	var tool scribe
 	goto work
 	
 	
 fount:
 	gosub GET my fount
-	send wave fount at $MC.order.noun on %usebrazier
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               send wave fount at $MC.order.noun on %usebrazier
+          }
+     else send wave fount at $MC.order.noun on my %usebrazier
 	return
 	
 scribe:
@@ -163,11 +213,20 @@ scribe:
 	gosub specialcheck
 	pause 0.5
 	if "%tool" != "scribe" then goto %tool
-	gosub Action scribe $MC.order.noun on %usebrazier with my $MC_BURIN
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               gosub Action scribe $MC.order.noun on %usebrazier with my $MC_BURIN
+          }
+     else gosub Action scribe $MC.order.noun on my %usebrazier with my $MC_BURIN
+	
 	goto work
 	
 meditate:
-	gosub Action meditate fount on %usebrazier
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               gosub Action meditate fount on %usebrazier
+          }
+     else gosub Action meditate fount on my %usebrazier
 	var special NULL
 	return
 	
@@ -176,16 +235,28 @@ focus:
 	if matchre("$MC_FOCUS.WAND", "WAND") then
 		{
 		gosub ToolCheckRight $MC_FOCUS.WAND
-		gosub Action wave $MC_FOCUS.WAND at $MC.order.noun on %usebrazier
-		gosub PUT_IT $MC_FOCUS.WAND in %tool.storage
+          if matchre("$MC_BRAZIER", "(?i)NULL") then
+               {
+                    gosub Action wave $MC_FOCUS.WAND at $MC.order.noun on %usebrazier
+               }
+          else gosub Action wave $MC_FOCUS.WAND at $MC.order.noun on my %usebrazier
 		}
-	else gosub Action focus $MC.order.noun on %usebrazier
+	else 
+          if matchre("$MC_BRAZIER", "(?i)NULL") then
+               {
+                    gosub Action focus $MC.order.noun on %usebrazier
+               }
+          else gosub Action focus $MC.order.noun on my %usebrazier
 	var special NULL
 	return
 
 loop:
 	gosub ToolCheckLeft $MC_LOOP
-	gosub Action push $MC.order.noun on %usebrazier with my $MC_LOOP
+     if matchre("$MC_BRAZIER", "(?i)NULL") then
+          {
+               gosub Action push $MC.order.noun on %usebrazier with my $MC_LOOP
+          }
+     else gosub Action push $MC.order.noun on my %usebrazier with my $MC_LOOP
 	gosub STOW_LEFT
 	var special NULL
 	return

@@ -2,7 +2,7 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# many versions later - Latest updates 02/07/2021
+# many versions later - Latest updates 01/07/2023
 #
 # Script Usage: .mastercraft                                        --to only do one work order
 #                    .mastercraft <no. of orders>                    --to perform more than one
@@ -104,11 +104,11 @@ include mc_include.cmd
      var full.order.noun
      var coin.intake 0
      var orders.completed 0
-	 var gottools 0
+	var gottools 0
      var tool.gone 0
      var oil.gone 0
-	 var polish.gone 0
-	 var stain.gone 0
+	var polish.gone 0
+	var stain.gone 0
      var brush.gone 0
      var fail2 0
      var tool.repair 0
@@ -121,7 +121,7 @@ include mc_include.cmd
      var difficultytry add 0
      var NOWO $MC_%society.type_NOWO
      gosub clearvolume
-	 var all.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS|$MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_AWL|$MC_CHISEL|$MC_RIFFLER|$MC_RASP|$MC_SAW|$MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_TINKERTOOL|$MC_CARVINGKNIFE|$MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE|$MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
+	var all.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS|$MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_AWL|$MC_CHISEL|$MC_RIFFLER|$MC_RASP|$MC_SAW|$MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_TINKERTOOL|$MC_CARVINGKNIFE|$MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE|$MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
 
       
      if matchre("%discipline", "weapon|blacksmith") then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD
@@ -176,18 +176,26 @@ include mc_include.cmd
      action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
      action instant var grind 1 when TURN the GRINDSTONE several times
      action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
-#     action goto lack.coin when ^LACK COIN
+#    action goto lack.coin when ^LACK COIN
      action (analyze) off
-	 if (matchre("(%clerktools)", "%work.tools") && (%gottools = 0)) then gosub get.tools
-	 var gottools 1
-      put #var MC_WORK.TOOLS %work.tools
+##############################
+#
+# Check for Clerk Tickets 
+#
+##############################
+     gosub EMPTY_HANDS
+     gosub GET clerk ticket
+     pause 0.2
+     if matchre("$righthand|$lefthand", "ticket") then gosub repair.start
+############################################################################
+	if (matchre("(%clerktools)", "%work.tools") && (%gottools = 0)) then gosub get.tools
+	var gottools 1
+     put #var MC_WORK.TOOLS %work.tools
 ##############################
 #
 #  Obtaining an order
 #
-
 ##############################
-
 check.for.order:
      if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
      if !matchre("$righthand|$lefthand", "logbook") then
@@ -283,7 +291,7 @@ identify.order:
                matchre chapter.8 This logbook is tracking a work order requiring you to craft (a metal cane|some metal elbow spikes|a metal nightstick|some metal knee spikes|a metal quarterstaff|some spiked metal knuckles|some metal knuckles|some metal hand claws|a metal pike staff) from any material\.
                matchre chapter.9 This logbook is tracking a work order requiring you to craft (a metal throwing spike|a metal boarding axe|a metal bastard sword|a metal half-handled riste|a metal war sword|a thin-bladed metal fan|a metal broadaxe|a metal riste|a metal bar mace|a thick-bladed metal fan|a metal splitting maul) from any material\.
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
           }
      if "%discipline" = "armor" then
@@ -293,7 +301,7 @@ identify.order:
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (a light plate mask|a metal sallet|a light plate aventail|some light plate greaves|a plate mask|a metal great helm|a metal dome helm|some heavy plate greaves|a plate aventail|some heavy plate vambraces|some light plate gauntlets|some plate sleeves|a heavy plate mask|a metal heavy backplate|a metal morion|a heavy plate fauld|a heavy plate aventail|a metal breastplate|some plate gauntlets|a light plate cuirass|a metal bascinet|some heavy plate sleeves|a metal barbute|a heavy breastplate|heavy plate gauntlets|a plate cuirass|a metal visored helm|some light field plate|some light plate vambraces|some light half plate|a light backplate|a heavy plate cuirass|a light plate fauld|some field plate|a metal closed helm|some half plate|a metal armet|some light full plate|some plate greaves|some heavy field plate|some plate vambraces|some full plate|some light plate sleeves|ome heavy half plate|a metal backplate|some heavy full plate|a plate fauld|a light breastplate) from any material\.
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (a metal shield handle|a metal ceremonial shield|a metal shield boss|a metal kite shield|a metal target shield|a metal skirmisher's shield|a metal ordinary shield|a metal jousting shield|a metal round sipar|a metal tower shield|a metal medium shield|a metal warrior's shield|a metal triangular sipar|a metal aegis|a metal targe|a metal heater shield|a metal oval shield|a metal battle shield|a metal medium buckler|a metal war shield|a metal circular buckler|a metal curved shield) from any material\.
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
           }
      if "%discipline" = "blacksmith" then
@@ -304,7 +312,7 @@ identify.order:
                matchre chapter.5 This logbook is tracking a work order requiring you to craft (a small metal brazier|a round mixing stick|a tapered pestle|a round pestle|a flat mixing stick|a grooved pestle|a square wire sieve|an oblong wire sieve|a tapered mixing stick|a grooved mixing stick|a flat pestle|a trapezoidal wire sieve|a metal brazier|a triangular wire sieve) from any material\.
                matchre chapter.6 This logbook is tracking a work order requiring you to craft (a shallow metal cup|a metal rod|a metal lockpick ring|a slender metal rod|a metal herbal case|a tall metal mug|a metal jewelry box|a short metal mug|a metal flights box|a soft metal keyblank|a metal razor|a metal horseshoe|a large metal flask|a back scratcher|a metal armband|some metal barbells|a metal instrument case|a large metal horseshoe|a metal chest|a small metal flask|a metal backtube|a metal ankle band|a metal starchart tube|a metal lockpick case|some metal clippers|a metal origami case|a metal crown|a metal bolt box|a metal torque|a metal talisman case|a metal mask|a metal flask|a metal headdress|a metal oil lantern) from any material\.
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
           }
      if "%discipline" = "tailor" then
@@ -319,7 +327,7 @@ identify.order:
                matchre chapter.9 This logbook is tracking a work order requiring you to craft (a rugged leather mask|a thick leather tasset|a rugged leather aventail|a rugged leather jerkin|a thick leather mask|a coarse leather cowl|a thick leather aventail|some coarse greaves|a rugged leather cap|some coarse vambraces|some rugged gloves|a coarse leather tasset|a coarse leather mask|a thick leather vest|a thick leather cap|some thick leather sleeves|some thick gloves|a thick leather jerkin|a rugged leather helm|a rugged leather robe|a coarse leather aventail|a rugged leather coat|a coarse leather cap|a thick leather mantle|some coarse gloves|a coarse leather vest|a thick leather helm|some coarse leather sleeves|a rugged leather cowl|a coarse leather mantle|some rugged greaves|a coarse leather jerkin|some rugged vambraces|a thick leather coat|a rugged leather tasset|some rugged leathers|a coarse leather helm|a thick leather robe|a thick leather cowl|a coarse leather coat|some thick greaves|some thick leathers|some thick vambraces|a coarse leather robe|some rugged leather sleeves|some coarse leathers|a rugged leather vest|a rugged leather mantle) from any (material|leather)\.
                matchre chapter.10 This logbook is tracking a work order requiring you to craft (a leather shield handle|a leather oval shield|a long leather cord|a leather targe|a leather target shield|a medium leather shield|an ordinary leather shield|a leather kite shield|a leather buckler|a small leather shield) from any (material|leather)\.
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
           }
      if "%discipline" = "carving" then
@@ -335,7 +343,7 @@ identify.order:
                matchre chapter.9 This logbook is tracking a work order requiring you to craft (a bone band|a bone brooch|a bone nose ring|a bone armband|a bone toe ring|a bone belt buckle|a bone bracelet|a bone choker|a bone anklet|a bone locket|a bone pin|a bone tiara|a bone cloak pin|an articulated bone bracelet|a bone hairpin|some bone bangles|a bone tailband|an articulated bone necklace|a shallow bone cup|a bone circlet|a bone pendant|a bone crown|a bone amulet|a bone comb|a bone medallion|a bone haircomb|a pair of bone earrings|a bone earcuff) from any material\.
                matchre chapter.10 This logbook is tracking a work order requiring you to craft (a segmented bone mask|a segmented bone mantle|a segmented bone aventail|a segmented bone tabard|a notched bone mask|a ribbed bone balaclava|a notched bone aventail|some ribbed bone greaves|a segmented bone cap|some ribbed vambraces|some segmented bone gloves|some notched bone sleeves|a ribbed bone mask|a ribbed bone tasset|a ribbed bone aventail|a notched bone vest|a notched bone cap|a notched bone mantle|some notched bone gloves|a notched bone tabard|a segmented bone helm|a segmented bone robe|a ribbed bone cap|a segmented bone coat|some ribbed bone gloves|some ribbed bone sleeves|a notched bone helm|a ribbed bone vest|a segmented bone balaclava|a ribbed bone mantle|some segmented bone greaves|a ribbed bone tabard|some segmented vambraces|a notched bone robe|a segmented bone tasset|a notched bone coat|a ribbed bone helm|a segmented bone hauberk|a notched bone balaclava|a ribbed bone robe|some notched bone greaves|a ribbed bone coat|some notched vambraces|a notched bone hauberk|some segmented bone sleeves|a ribbed bone hauberk|a notched bone tasset|a segmented bone vest) from any material\.
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
           }
      if "%discipline" = "shaping" then
@@ -349,7 +357,7 @@ identify.order:
                matchre chapter.9 This logbook is tracking a work order requiring you to craft (a wood nightstick|a wood cane|a wood walking cane|a wood quarterstaff|a wood crook|a wood bo staff|a weighted staff) from any material\.
                #matchre chapter.10 This logbook is tracking a work order requiring you to craft (a rough wood table|a low wood table|a high wood table|a round wood table|a square wood table|a long wood table|an oval wood table|a wood dining table|a wood buffet table|a wood refectory table|a wood parquet table|a wood meditation table) from any material\.
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
           }
      if "%discipline" = "tinkering" then
@@ -362,7 +370,7 @@ identify.order:
                matchre chapter.9 This logbook is tracking a work order requiring you to craft (a small music box|a simple telescope|a miniature female soldier|a miniature male soldier|a musical box|a telescope|a clockwork telescope)
                
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
           }
      if "%discipline" = "remed" then
@@ -372,9 +380,9 @@ identify.order:
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb ungent|some neck salve|some abdominal salve|some chest salve|some neck ungent|some abdominal ungent|some chest ungent|some head ungent|some head salve)
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic|a back potion|some limb tonic)
                matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices)
-               matchre chapter.6 This logbook is tracking a work order requiring you to craft (a body draught|a body elixer)
+               matchre chapter.6 This logbook is tracking a work order requiring you to craft (a body draught|a body elixir)
                put read my %society.type logbook
-               matchwait 1
+               matchwait 3
                goto new.order.wait
           }
                
@@ -385,7 +393,7 @@ identify.order:
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (common material minor fount|common material lesser fount|common material greater fount)
                matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|(?<!ease )burden runestone|manifest force runestone|strange arrow runestone|gauge flow runestone|dispel runestone|lay ward runestone)
                put read my %society.type logbook
-               matchwait 2
+               matchwait 3
                goto new.order.wait
                }
      echo Discipline is not set properly
@@ -731,20 +739,29 @@ calc.material:
                if "%full.order.noun" = "some moisturizing ointment" then var herb2 plovik
                if "%full.order.noun" = "some itch salve" then var herb2 jadice
                if "%full.order.noun" = "some lip balm" then var herb2 nilos
-               if matchre("%full.order.noun", "some neck salve|some neck ungent") then var herb1 georin
-               if matchre("%full.order.noun", "some abdominal salve|some abdominal ungent") then var herb1 nilos
-               if matchre("%full.order.noun", "some chest salve|some chest ungent") then var herb1 plovik
-               if matchre("%full.order.noun", "some head salve|some head ungent") then var herb1 nemoih
-               if matchre("%full.order.noun", "some limb salve|some limb ungent") then var herb1 jadice 
-               if matchre("%full.order.noun", "a neck potion|some neck tonic") then var herb1 riolur
-               if matchre("%full.order.noun", "a chest potion|some chest tonic") then var herb1 root
-               if matchre("%full.order.noun", "a back potion|some back tonic") then var herb1 junliar
-               if (("$zoneid" = "150") && (matchre("%full.order.noun", "a back potion|some back tonic"))) then var herb1 junliar
-               if (("$zoneid" = "67") && (matchre("%full.order.noun", "a back potion|some back tonic"))) then var herb1 junliar
-               if matchre("%full.order.noun", "an eye potion|some eye tonic") then var herb1 aevaes
-               if matchre("%full.order.noun", "some face ointment|some face poultices") then var herb1 pollen
-               if matchre("%full.order.noun", "some body ointment|some body poultices") then var herb1 genich
-               if matchre("%full.order.noun", "a body draught|a body elixer") then var herb1 ojhenik
+               if matchre("%full.order.noun", "(some neck salve|some neck ungent)") then var herb1 georin
+               if matchre("%full.order.noun", "(some abdominal salve|some abdominal ungent)") then var herb1 nilos
+               if matchre("%full.order.noun", "(some chest salve|some chest ungent)") then var herb1 plovik
+               if matchre("%full.order.noun", "(some head salve|some head ungent)") then var herb1 nemoih
+               if matchre("%full.order.noun", "(some limb salve|some limb ungent)") then var herb1 jadice 
+               if matchre("%full.order.noun", "(a neck potion|some neck tonic)") then var herb1 riolur
+               if matchre("%full.order.noun", "(a chest potion|some chest tonic)") then var herb1 root
+               if matchre("%full.order.noun", "(a back potion|some back tonic)") then var herb1 junliar
+               if (("$zoneid" = "150") && (matchre("%full.order.noun", "(back potion|some back tonic)"))) then var herb1 junliar
+               if (("$zoneid" = "67") && (matchre("%full.order.noun", "(back potion|some back tonic)"))) then var herb1 junliar
+               if matchre("%full.order.noun", "(an eye potion|some eye tonic)") then var herb1 aevaes
+               if matchre("%full.order.noun", "(some face ointment|some face poultices)") then var herb1 pollen
+               if matchre("%full.order.noun", "(some body ointment|some body poultices)") then var herb1 genich
+               #### SPECIAL ORDERS - HERBS THAT HAVE TO BE FORAGED / PROCESSED FIRST 
+               if matchre("%full.order.noun", "(eye ungent|eye salve)") then var herb1 sufil
+               if matchre("%full.order.noun", "(back ungent|back salve)") then var herb1 hulnik
+               if matchre("%full.order.noun", "(a skin potion|some skin tonic)") then var herb1 lujeakave
+               if matchre("%full.order.noun", "(a limb potion|some limb tonic)") then var herb1 yelith
+               if matchre("%full.order.noun", "(a head potion|some head tonic)") then var herb1 eghmok
+               if matchre("%full.order.noun", "(limb elixir|limb draught)") then var herb1 nuloe
+               if matchre("%full.order.noun", "(a body elixir|some body draught)") then var herb1 ojhenik
+               if matchre("%full.order.noun", "(general poultices|general purpose ointment)") then var herb1 dioica
+               if matchre("%full.order.noun", "(skin poultice|skin ointment)") then var herb1 cebi
                var order.pref %herb1
                evalmath mass.volume %volume * %order.quantity * 5
                if %order.chapter = 2 then var mass.volume2 %order.quantity
@@ -829,6 +846,7 @@ calc.material:
                     var assemble2 %sigil(1)
                     var asmCount2 %need.%sigil(1)
                }
+          math asmCount1 add 2
           gosub parts.inv
           if (%order.quantity > %%order.pref.item.count) then gosub lack.material
           pause 0.5
@@ -1247,11 +1265,11 @@ process.order:
                
                put store custom %work.material ingot in %main.storage
                var manual 0
-               if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "\b$roomid\b")) then gosub find.room $work.room
+               if !matchre("$work.room", "\b$roomid\b") then gosub find.room $work.room
                gosub EMPTY_HANDS
                pause 1
                gosub gather.ingot
-               if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "\b$roomid\b")) then gosub find.room $work.room
+               if !matchre("$work.room", "\b$roomid\b") then gosub find.room $work.room
                gosub anvilcheck
                if %anvilingot = 0 then gosub PUT_IT my %work.material ingot on anvil
                gosub GET my %discipline book
@@ -1276,6 +1294,7 @@ process.order:
                          #put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
                          goto new.order
                     }
+               if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                send .MC_Pound
                waitforre ^(POUNDING DONE)|^(SMALL INGOT)
                var tempmessage $1
@@ -1315,6 +1334,7 @@ process.order:
                                    goto new.order
                               }
                          gosub PUT_IT my book in my %main.storage
+                         if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                          send .MC_sew
                          waitforre ^SEWING DONE
                     }
@@ -1346,6 +1366,7 @@ process.order:
                                    goto new.order
                               }
                          gosub PUT_IT my book in my %main.storage
+                         if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                          send .MC_knit
                          waitforre ^KNITTING DONE
                     }
@@ -1385,6 +1406,7 @@ process.order:
                               }
                          gosub PUT_IT my book in my %main.storage
                          if matchre("%full.order.noun", "bead|totem|figurine|statuette|statue") then gosub codex
+                         if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                          send .MC_carve
                          waitforre ^CARVING DONE
                     }
@@ -1432,6 +1454,7 @@ process.order:
                     }
                gosub PUT_IT my book in my %main.storage
                if matchre("%full.order.noun", "bead|totem|figurine|statuette|statue") then gosub codex
+               if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                send .MC_shape
                waitforre ^SHAPING DONE
           }
@@ -1466,6 +1489,7 @@ process.order:
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
+               if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                send .MC_tinker
                waitforre ^TINKERING DONE
           }
@@ -1493,6 +1517,7 @@ process.order:
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
+               if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                send .MC_mix $MC.order.noun 1 %herb1 %herb2
                waitforre ^ALCHEMY DONE
           }
@@ -1523,6 +1548,7 @@ process.order:
                          goto new.order
                     }
                gosub PUT_IT my book in my %main.storage
+               if !matchre("$MC_WATERCUBE", "(?i)(NULL|OFF|^%|^\s*$)") then gosub WATERCUBE_TIMER
                send .MC_enchant "%work.material %order.pref" $MC.order.noun
                waitforre ^ENCHANTING DONE
           }
@@ -2125,6 +2151,7 @@ lack.material:
           }
      if "%discipline" = "remed" then
           {
+               ### ORDERS FROM THE ALCHEMY STORE
                if "%order.type" = "nemoih" then var order.num 3
                if "%order.type" = "plovik" then var order.num 4
                if "%order.type" = "jadice" then var order.num 5
@@ -2138,7 +2165,18 @@ lack.material:
                if "%order.type" = "ojhenik" then var order.num 12
                if "%order.type" = "flowers" then var order.num 13
                if "%order.type" = "root" then var order.num 14
-               if "%order.type" = "pollen" then var order.num 15     
+               if "%order.type" = "pollen" then var order.num 15
+               ### HERBS THAT HAVE TO BE FORAGED!
+               if "%order.type" = "belradi" then gosub GetHerbs belradi moss
+               if "%order.type" = "eghmok moss" then gosub GetHerbs eghmok moss
+               if "%order.type" = "yelith" then gosub GetHerbs yelith root
+               if "%order.type" = "lujeakave" then gosub GetHerbs lujeakave root
+               if "%order.type" = "hulij" then gosub GetHerbs hulij leaf
+               if "%order.type" = "nuloe" then gosub GetHerbs nuloe stem
+               if "%order.type" = "sufil" then gosub GetHerbs sufil sap
+               if "%order.type" = "muljin" then gosub GetHerbs muljin sap
+               if "%order.type" = "cebi" then gosub GetHerbs cebi root
+               if "%order.type" = "hulnik" then gosub GetHerbs hulnik grass
                if !matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/25)
                if matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/4)
                goto purchase.material
