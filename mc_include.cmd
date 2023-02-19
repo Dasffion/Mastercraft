@@ -300,19 +300,39 @@ location.vars:
      var SENT.work.room 762|763|764|765|766|767
      var SENT.room.list 755|756|757|758|759|760|761|762|763|764|765|766|767
      var SENT.master.room 756
-	#Hibarnhivdar Forging
-     var HibF.room.list 407|408|416|417|418|419|409|410|411|412|413|414|415
-     var HibF.master.room 407|408|416|417|418|419|409|410|411|412|413|414|415
-     var HibF.work.room 416|417|418|419
-     var HibF.grind.room 418|419
      
+	#Hibarnhivdar Forging
+     var HibF.room.list 401|402|403|404|405|406|407|408|409|410|411|412|413
+     var HibF.master.room 401|402|403|404|405|406|407|408|409|410|411|412|413
+     var HibF.work.room 403|404|405|406
+     var HibF.grind.room 413|412|411|410
+     #Hibarnhivdar Engineering
+     var HIBE.tools.room 481
+     var HIBE.supplies.room 477
+     var HIBE.books.room 482
+     var HIBE.work.room 479|478|480
+     var HIBE.room.list 478|479|480|481|482|477|476|475
+     var HIBE.master.room 475|476|477|478|479|480|481|482
+     #Hibarnhivdar Alchemy
+     var HIBA.tools.room 464
+     var HIBA.supplies.room 460
+     var HIBA.books.room 459
+     var HIBA.work.room 461|462|463
+     var HIBA.room.list 457|458|459|460|461|462|463|464|465
+     var HIBA.master.room 464|465|457|458|459|460|461|462|463    
      #Hibarnhivdar Enchanting
-     var HIBENT.tools.room 438
-     var HIBENT.supplies.room 439
-     var HIBENT.books.room 437
-     var HIBENT.work.room 441|442|443|444
-     var HIBENT.room.list 435|436|437|438|439|440|441|442|443|444
-     var HIBENT.master.room 435|436|437|438|439|440
+     var HIBENT.tools.room 432
+     var HIBENT.supplies.room 433
+     var HIBENT.books.room 431
+     var HIBENT.work.room 436|437|438|435
+     var HIBENT.room.list 436|437|438|435|430|431|432|433|434|429
+     var HIBENT.master.room 436|437|438|435|430|431|432|433|434|429
+     #Hibarnhivdar Outfitting
+     var HIBO.room.list 466|467|468|469|470|471|472|473|474
+     var HIBO.master.room 466|467|468|469|470|471|472|473|474
+     var HIBO.work.room 469|467|470|468
+     var HIBO.wheel.room 469|467|470|468
+     var HIBO.loom.room 469|467|470|468    
      
 	#Mer'Kresh Forging
      var MKF.room.list 332|333|334|335|336|337|338|339|340|341|342|343|344|345|346|347|348
@@ -420,6 +440,9 @@ check.location:
      if $zoneid = 67 && matchre("%SENT.room.list", "\b$roomid\b") then var society Shard.Enchanting
 	if $zoneid = 116 && matchre("%HibF.room.list", "\b$roomid\b") then var society Hib.Forging
      if $zoneid = 116 && matchre("%HIBENT.room.list", "\b$roomid\b") then var society Hib.Enchanting
+	if $zoneid = 116 && matchre("%HIBA.room.list", "\b$roomid\b") then var society Hib.Alchemy
+	if $zoneid = 116 && matchre("%HIBE.room.list", "\b$roomid\b") then var society Hib.Engineering
+	if $zoneid = 116 && matchre("%HIBO.room.list", "\b$roomid\b") then var society Hib.Outfitting
 	if $zoneid = 107 && matchre("%MKF.room.list", "\b$roomid\b") then var society MerKresh.Forging
 	if $zoneid = 7 && matchre("%LvF.room.list", "\b$roomid\b") then var society Lava.Forge
 	if $zoneid = 61 && matchre("%LPF.room.list", "\b$roomid\b") then var society Leth.Premie.Forge
@@ -753,16 +776,44 @@ put #tvar repair.clerk %shard.repair
 var society.type Enchanting
 return
 
+Hib.Alchemy:
+var master Thynik
+put #tvar master.room %HIBA.master.room
+put #tvar work.room %HIBA.work.room
+put #tvar supply.room %HIBA.supplies.room
+put #tvar tool.room %HIBA.tools.room 
+put #tvar oil.room 407
+put #tvar repair.room 314
+put #tvar repair.clerk Ladar
+var society.type Alchemy
+return
+
+Hib.Engineering:
+var master Master
+put #tvar master.room %HIBE.master.room
+put #tvar work.room %HIBE.work.room
+put #tvar supply.room %HIBE.supplies.room
+put #tvar part.room %HIBE.supplies.room
+put #tvar tool.room %HIBE.tools.room
+put #tvar ingot.buy 409
+put #tvar oil.room 407
+put #tvar repair.room 314
+put #tvar repair.clerk Ladar
+var society.type Engineering
+return
+
 Hib.Forging:
 var master Juln
 put #tvar master.room %HibF.master.room
 put #tvar grind.room %HibF.grind.room
 put #tvar work.room %HibF.work.room
 put #tvar deed.room 415
-put #tvar supply.room 415
+put #tvar supply.room 409
 put #tvar part.room 413
-put #tvar tool.room 413
-put #tvar oil.room 413
+put #tvar tool.room 407
+put #tvar oil.room 407
+put #tvar repair.room 314
+put #tvar repair.clerk Ladar
 var society.type Forging
 return
 
@@ -774,7 +825,23 @@ put #tvar supply.room %HIBENT.supplies.room
 put #tvar part.room %HIBENT.supplies.room
 put #tvar tool.room %HIBENT.tools.room
 put #tvar oil.room 413
+put #tvar repair.room 314
+put #tvar repair.clerk Ladar
 var society.type Enchanting
+return
+
+Hib.Outfitting:
+var master Master
+put #tvar master.room %HIBO.master.room
+put #tvar work.room %HIBO.work.room
+put #tvar supply.room 471
+put #tvar part.room 471
+#order parts
+put #tvar tool.room 473
+put #tvar oil.room 413
+put #tvar repair.room 314
+put #tvar repair.clerk Ladar
+var society.type Outfitting
 return
 
 MerKresh.Forging:
