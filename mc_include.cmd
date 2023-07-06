@@ -1016,7 +1016,7 @@ find.room2:
      pause 0.1
      gosub roomplayerstrip
      echo ROOMID: $roomid
-      if ((matchre("%find.room", "\b$roomid\b")) && matchre("$roomplayers", "(^$)")) then
+      if ((matchre("%find.room", "\b$roomid\b")) && matchre("%tempplayers", "(^$)")) then
 		{
 		unvar temp
 		unvar temp.max
@@ -1031,13 +1031,8 @@ find.room2:
 	return
 	
 roomplayerstrip:
-	eval tempplayers replace("$roomplayers", "Also here: ", "")
-	eval tempplayers replace("$roomplayers", ", ", "|")
-	eval tempplayers replace("%tempplayers", " and " "|")
-     eval tempplayers replace("$roomplayers", "$MC_FRIENDLIST", "")
-     eval tempplayers replace("%tempplayers", "\|+", "|")
-     eval tempplayers replace("%tempplayers", "^\|", "")
-     eval tempplayers replace("%tempplayers", "\|$", "")
+  eval tempplayers replacere("$roomplayers", "(?:Also here: | and |, |\.|who is (?:\w+))", "|")
+  eval tempplayers replacere("%tempplayers", "(\w+ )|$MCFRIENDLIST|\|+", "")
      return
 	
 find.room.wait:
