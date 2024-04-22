@@ -175,7 +175,7 @@ assemble:
 	return
 
 new.tool:
-if contains("$scriptlist", "mastercraft.cmd") then
+if contains("$scriptlist", "mastercraft") then
 	{
 	action (work) off
 	var temp.room $roomid

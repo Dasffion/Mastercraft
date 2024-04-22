@@ -28,7 +28,8 @@ eval alltools tolower("%alltools")
 eval alltools replacere("%alltools", "\|+", "|")
 eval alltools replacere("%alltools", "^\|", "")
 eval alltools replacere("%alltools", "\|$", "")
-var LastHalo NULL
+var HaloType NULL
+var Removing 0
 #var alltools saw|chisel|carving knife|rasp|riffler|clamp|needles|drawknife|slickstone|hammer|tongs|bellows|pliers|shovel|bowl|mixing stick|pestle|mortar|sieve|loop|burin|yardstick|tools|awl|rod
 #put #unvar repair.room
 put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 6}
@@ -82,7 +83,8 @@ action (book) var fount.need $1 when .*(\d).* mana fount$
 
 ### KERTIGEN HALO IDENTIFICATION
 var HaloType NULL
-action var HaloType $1 when (\w+) with a gleaming Kertigen halo
+var HaloRemoved 0
+action var HaloType $1 when (\w+) with a .+ Kertigen halo
 
 ### ELEMENTAL WATER CUBE TIMER SETUP
 if !def(MC.WATERCUBE.TIME) then put #var MC.WATERCUBE.TIME $gametime
@@ -108,8 +110,8 @@ action instant var tool.repair $2 when This appears to be a crafting tool and .*
 action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
 action instant var grind 1 when TURN the GRINDSTONE several times
 action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
-#     action goto lack.coin when ^LACK COIN
-     action (analyze) off
+#action goto lack.coin when ^LACK COIN
+action (analyze) off
 ###########################################################################
 ### Character Profiles. Please edit these for your character(s). 
 ###########################################################################
@@ -218,6 +220,7 @@ location.vars:
      var HENT.work.room 535|536|537|538|539|540|541
      var HENT.room.list 526|527|528|529|530|531|532|533|534|535|536|537|538|539|540
      var HENT.master.room 526|529|530|531|527|528
+     
 	#Crossing Forging
      var CF.room.list 903|865|962|961|960|902|905|904|906|963|907|908|909
      var CF.master.room 903|865|962|961|960|902|905|904|906|963|907|908|909
@@ -245,17 +248,20 @@ location.vars:
      var CENT.work.room 1000|1001|1002|1003
      var CENT.room.list 994|995|996|997|998|999|1000|1001|1002|1003
      var CENT.master.room 994|995|996|997|998|999
+     
 	#Lava Forge
      var LvF.room.list 774|777|776|775|778|782|779|784|780|786|781|783|785
      var LvF.master.room 775|778|782|779|784|780|786
      var LvF.smelt.room 778|779|780
      var LvF.work.room 781|783|785
      var LvF.grind.room 782|786|784
+     
 	#Leth Premie Forge
      var LPF.room.list 248|238|239|240|241|242|243|244|245|246|247|253|252|251|250|249|237
      var LPF.master.room 248|238|239|240|241|242|243|244|245|246|247|253|252
      var LPF.work.room 251|250|249
      var LPF.grind.room 252|253|247
+     
      #Ratha Forging
      var RF.room.list 818|819|820|821|822|823|824|825|826|827|828|829|830|831|832
      var RF.master.room 819|820|821|822|823|824|825|826|827|828|829|830|831|832
@@ -274,7 +280,9 @@ location.vars:
 	#Ratha Alchemy
      var RA.room.list 863|864|865|866|867|868|869|870|871|872|873
      var RA.master.room 863|864|865|866|867|868|869|870
-     var RA.work.room 871|872|873	
+     var RA.work.room 871|872|873
+     
+     
 	#Shard Forging
      var SF.room.list 644|661|645|648|647|649|650|651|652|653|654|655|656|657|658|659|660|646
      var SF.master.room 644|645|649|650|653|654|655|658|646|661
@@ -348,24 +356,20 @@ location.vars:
      var FE.room.list 206|207|208|209|210|220|221|182
      var FE.master.room 206|207|208|209|210|182
      var FE.work.room 220|221
-     
      #Fang Cove Forging
      var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248|249
      var FF.master.room 196|197|198|199|200|201|202|203|204
      var FF.work.room 217|219|249
      var FF.grind.room 217|219|249
      var FF.smelt.room 216|218|248
-
      #Fang Cove Outfitting
      var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
      var FO.master.room 183|184|185|186|187|188|189
      var FO.work.room 211|212|213|214     
-     
      #Fang Cove Alchemy
      var FA.room.list 190|191|192|193|194|195
      var FA.master.room 190|191|192|193|194|195
      var FA.work.room 190|191
-     
      #Fang Cove Enchanting
      var FENT.tools.room 235
      var FENT.supplies.room 236
@@ -380,17 +384,14 @@ location.vars:
      var MUF.work.room 516|518|520
      var MUF.grind.room 516|518|520
      var MUF.smelt.room 515|517|519
-     
      #Muspari Engineering
      var MUE.room.list 521|522|523|524|525|526|527|528|529|530
      var MUE.master.room 521|522|523|524|525|526|527
      var MUE.work.room 528|529|530
-     
      #Muspari Outfitting
      var MUO.room.list 489|490|491|492|493|494|495|496|497|498|499|500|501|502|503
      var MUO.master.room 489|490|491|492|493|494|495|496|497
      var MUO.work.room 498|499|500|501|502|503
-     
      #Muspari Alchemy
      var MUA.room.list 531|532|533|534|535|536|537|538|539
      var MUA.master.room 531|532|533|534|535|536
@@ -982,7 +983,7 @@ var society.type Alchemy
 return
 
 none:
-if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "(?i)(MC_.*?\.cmd)"))) then 
+if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "(?i)(MC_.*?)"))) then 
      {
      if matchre("$scriptlist", "(?i)(Smelt|Pound|Grind)") then var society.type Forging
      if matchre("$scriptlist", "(?i)(Sew|Spin|Knit|Weave)") then var society.type Outfitting
@@ -1031,8 +1032,8 @@ find.room2:
 	return
 	
 roomplayerstrip:
-  eval tempplayers replacere("$roomplayers", "(?:Also here: | and |, |\.|who is (?:\w+))", "|")
-  eval tempplayers replacere("%tempplayers", "(\w+ )|$MCFRIENDLIST|\|+", "")
+     eval tempplayers replacere("$roomplayers", "(?:Also here: | and |, |\.|who is (?:\w+))", "|")
+     eval tempplayers replacere("%tempplayers", "(\w+ )|$MCFRIENDLIST|\|+", "")
      return
 	
 find.room.wait:
@@ -1361,9 +1362,9 @@ summonoil2:
 manualwater:
 	gosub automove alchemy suppl
 	action (order) on
-     pause 0.5
 	gosub ORDER
-     pause 0.2
+     pause 0.9
+     pause 0.5
 	action (order) off
 	gosub ORDER 1
 	gosub PUT_IT my water in my %main.storage
@@ -1387,7 +1388,8 @@ manualalcohol:
 	gosub automove alchemy suppl
 	action (order) on
 	gosub ORDER
-     pause 0.2
+     pause 0.9
+     pause 0.5
 	action (order) off	
 	gosub ORDER $alcohol.order
 	gosub PUT_IT my alcohol in my %main.storage
@@ -1399,11 +1401,14 @@ manualalcohol:
 
 # This sub added for picking up any repair ticket in inventory when MC FIRST STARTS - to get items back
 repair.start:
+     var repairing 1
      var temp.room $roomid
      gosub automove $repair.room
      gosub RepairAllItems
      gosub ReturnAllItems
      gosub automove %temp.room
+     if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 1)) then gosub HALO_REMOVE
+     var repairing 0
      return
 
 get.tools:
@@ -1443,6 +1448,7 @@ got.tool:
 	 
 clerk.tools.done:
      gosub automove %temp.room
+     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
 	return
 
 check.tools:
@@ -1450,16 +1456,31 @@ check.tools:
      if %lastToolRepairTime < 100 then return
      var temp 0
      eval MaxTemp count("$MC_WORK.TOOLS","|")
+     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
 check.tools2:
+     var repairing 1
+     echo * Checking Tools
      gosub ToolCheckRight $MC_WORK.TOOLS(%temp)
      gosub repair.tool $MC_WORK.TOOLS(%temp)
      unvar repair.temp
+     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+          {
+          if !matchre("$righthand", "(halo|Empty)") then
+               {
+                    send push my halo
+                    wait
+                    pause 0.4
+                    if matchre("$righthand", "halo") then var HaloType halo
+               }
+          }
      gosub STOW_RIGHT
      math temp add 1
+     var repairing 0
      if %temp > %MaxTemp then
           {
                unvar temp
                unvar MaxTemp
+               if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 1)) then gosub HALO_REMOVE
                return
           }
      gosub check.tools2
@@ -1470,6 +1491,7 @@ check.tools2:
                gosub PUT_IT my stamp in my %main.storage
           }
      put #var last%society.typeRepair $gametime
+     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
      return
 
 repair.tool:
@@ -1477,11 +1499,16 @@ repair.tool:
 repair.tool_1:
      var too.damaged 0
      if %tool.gone = 1 then gosub new.tool
-     send analyze my %repair.temp
+     send analyze my $righthandnoun
+     # send analyze my %repair.temp
      pause 1
-     if "%tool.repair" = "in pristine condition" || "%tool.repair" = "practically in mint condition" then return
+     if (("%tool.repair" = "in pristine condition") || ("%tool.repair" = "practically in mint condition")) then
+          {
+               echo * Pristine condition
+               return
+          }
      pause .1
-     if "%auto.repair" = "off" then
+     if ("%auto.repair" = "off") then
           {
                if !def(repair.room) then return
                var temp.room $roomid
@@ -1489,19 +1516,47 @@ repair.tool_1:
                gosub RepairAllItems
                gosub ReturnAllItems
                gosub automove %temp.room
+               if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
                return
           }
+repair.tool_2:
      action var auto.repair off;var too.damaged 1 when ^The .+ has suffered too much damage and needs to be repaired at a crafting repair shop
      send craft blacksmith
      waitforre ^From the blacksmithing crafting discipline you have been trained in (.*)\.$
      var repair.techs $0
-     pause .5
+     pause 0.3
      if (contains("%repair.techs", "Tool Repair") then
           {
                gosub toolcheck
-               pause .5
+               pause 0.1
+               echo *** HALO SELF-REPAIR
+               if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+                    {
+                         if !matchre("$righthand", "(%HaloType|%repair.temp|halo)") then
+                              {
+                                   gosub GET my kertigen halo
+                                   pause 0.2
+                              }
+                         if !matchre("$righthand|$lefthand", "(%HaloType|%repair.temp|halo)") then
+                              {
+                                   gosub GET my %repair.temp from my %tool.storage
+                                   pause 0.3
+                              }
+                         if !matchre("$righthand", "(%HaloType|%repair.temp|halo)") then gosub GET my %HaloType
+                         pause 0.1
+                         if !matchre("$righthand|$lefthand", "%repair.temp") then gosub HALO_SHIFT %repair.temp
+                         pause 0.1
+                         if matchre("$righthand|$lefthand", "halo") then gosub PUT_IT halo in my %tool.storage
+                    }
+               if matchre("$lefthand", "%repair.temp") then
+                    {
+                         send swap
+                         pause 0.5
+                    }
+               if !matchre("$righthand|$lefthand", "%repair.temp") then gosub GET my %repair.temp from my %tool.storage
+               pause 0.2
                if !matchre("$righthand|$lefthand", "%repair.temp") then gosub GET my %repair.temp
-               if "$lefthand" != "Empty" then gosub PUT_IT $lefthandnoun in my %main.storage
+               if ("$lefthand" != "Empty") then gosub PUT_IT $lefthandnoun in my %main.storage
                gosub GET my wire brush
                gosub PUT rub my %repair.temp with my brush
                gosub PUT_IT my wire brush in my %main.storage
@@ -1531,7 +1586,7 @@ toolcheck:
 	gosub put tap brush in portal
      gosub put tap oil
 	gosub put tap oil in portal
-     pause 0.5
+     pause 0.1
      if ((%brush.gone = 1) || (%oil.gone = 1)) then gosub new.tool
      return
 
@@ -1541,6 +1596,22 @@ RepairAllItems:
      var currenttool 0
 RepairAllItems_1:
      if %currenttool > %totaltool then return
+     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+          {
+               if !matchre("$righthand|$lefthand", "$MC_WORK.TOOLS(%currenttool)") then gosub GET my $MC_WORK.TOOLS(%currenttool)
+               pause 0.1
+               if !matchre("$righthand", "($MC_WORK.TOOLS(%currenttool)|halo)") then gosub GET my kertigen halo
+               pause 0.1
+               if !matchre("$righthand", "($MC_WORK.TOOLS(%currenttool)|halo)") then gosub GET my %HaloType
+               if !matchre("$righthand|$lefthand", "$MC_WORK.TOOLS(%currenttool)") then gosub HALO_SHIFT $MC_WORK.TOOLS(%currenttool)
+               pause 0.1
+               if matchre("$righthand|$lefthand", "halo") then gosub PUT_IT halo in my %tool.storage
+               if matchre("$lefthand", "$MC_WORK.TOOLS(%currenttool)") then
+                    {
+                         send swap
+                         pause 0.5
+                    }
+          }
      gosub RepairItem $MC_WORK.TOOLS(%currenttool)
      math currenttool add 1
      goto RepairAllItems_1
@@ -1548,9 +1619,11 @@ RepairAllItems_1:
 
 RepairItem:
      var item $0
-     gosub GET my %item
-     pause .2
-     if "$righthand $lefthand" == "Empty Empty" then return
+     if ("$righthand $lefthand" == "Empty Empty") then gosub GET my %item from my %tool.storage
+     pause 0.2
+     if ("$righthand $lefthand" == "Empty Empty") then gosub GET my %item
+     pause 0.2
+     if ("$righthand $lefthand" == "Empty Empty") then return
      gosub PUT give $repair.clerk
      gosub PUT give $repair.clerk
      gosub STOW_RIGHT
@@ -1582,10 +1655,80 @@ ticket.pause:
      goto ticket
 
 tool.store:
+     if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%Removing = 0)) then gosub PUT push my halo
      gosub STOW_RIGHT
      goto ReturnAllItems
      
-
+ToolCheckRight:
+	var tools $0
+     var Removing 1
+	if ("$righthand" = "Empty") then
+		{
+		gosub GET MY %tools
+          # if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
+          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               {
+                    pause 0.001
+                    if matchre("$righthand", "%tools") then return
+                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    pause 0.1
+                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
+                    if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
+               }
+          var Removing 0
+		return
+		}
+	if !matchre("%tools", "$righthandnoun") then
+		{
+		gosub STOW_RIGHT
+		gosub GET my %tools
+          if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
+          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               {
+                    pause 0.001
+                    if matchre("$righthand", "%tools") then return
+                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    pause 0.1
+                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
+                    if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
+               }
+		}
+     var Removing 0
+	return
+	
+ToolCheckLeft:
+	var tools $0
+	if "$lefthand" = "Empty" then
+		{
+		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
+		else gosub GET MY %tools
+          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
+          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               {
+                    if matchre("$lefthand", "%tools") then return
+                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    pause 0.1
+                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
+                    if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
+               }
+		return
+		}
+	if !matchre("%tools", "$lefthandnoun") then
+		{
+		gosub STOW_LEFT
+		gosub GET my %tools
+          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
+          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               {
+                    if matchre("$lefthand", "%tools") then return
+                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    pause 0.1
+                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
+                    if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
+               }
+		}
+	return
+     
 new.tool:
      var temp.room $roomid
      gosub STOW_RIGHT
@@ -1595,15 +1738,16 @@ new.tool:
      gosub automove $tool.room
      action (order) on
      gosub ORDER
+     pause 0.5
      action (order) off
      if %oil.gone = 1 then gosub summonoil
      if %stain.gone = 1 then
           {
                gosub automove $tool.room
                action (order) on
-               pause 0.5
                gosub ORDER
-               pause 0.2
+               pause 0.9
+               pause 0.5
                action (order) off
                gosub ORDER $stain.order
                gosub PUT_IT my stain in my %main.storage
@@ -1613,9 +1757,9 @@ new.tool:
           {
                gosub automove $oil.room
                action (order) on
-               pause 0.5
                gosub ORDER
-               pause 0.2
+               pause 0.9
+               pause 0.5
                action (order) off
                gosub ORDER $oil.order
                gosub PUT_IT my oil in my %main.storage
@@ -1625,9 +1769,9 @@ new.tool:
           {
                gosub automove $oil.room
                action (order) on
-               pause 0.5
                gosub ORDER
-               pause 0.2
+               pause 0.9
+               pause 0.5
                action (order) off
                gosub ORDER $brush.order
                gosub PUT_IT my brush in my %main.storage
@@ -1707,50 +1851,19 @@ EMPTY_HANDS:
      gosub STOW_LEFT
 	return
      
-ToolCheckRight:
-	var tools $0
-	if "$righthand" = "Empty" then
-		{
-		gosub GET MY %tools
-          if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
-		return
-		}
-	if !matchre("%tools", "$righthandnoun") then
-		{
-		gosub STOW_RIGHT
-		gosub GET my %tools
-          if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
-		}
-	return
-	
-ToolCheckLeft:
-	var tools $0
-	if "$lefthand" = "Empty" then
-		{
-		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
-		else gosub GET MY %tools
-          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
-		return
-		}
-	if !matchre("%tools", "$lefthandnoun") then
-		{
-		gosub STOW_LEFT
-		gosub GET my %tools
-          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
-		}
-	return
+
 #### KERTIGEN HALO HANDLING
 #### INITIAL HALO HANDLING TO REMOVE TOOLS
 HALO_REMOVE:
+     var Removing 1
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
      echo
      echo *** REMOVING TOOLS FROM HALO
      echo
-     pause 0.1
+     pause 0.01
      put look in my %tool.storage
-     pause 2
-     pause 2
+     pause 0.2
      pause 0.1
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_RIGHT
@@ -1767,9 +1880,6 @@ HALO_REMOVE:
                pause 0.3
           }
      if !matchre("$righthand", "halo") then gosub GET my kertigen halo
-     pause 0.1
-     if !matchre("$righthand", "halo") then gosub GET my halo from my portal
-     if !matchre("$righthand", "halo") then gosub GET my halo from my portal
      pause 0.1
      if (matchre("%discipline", "weapon|armor|blacksmith") || matchre("$roomname", "Forging Society")) then
           {
@@ -1816,11 +1926,40 @@ HALO_REMOVE:
      if matchre("$righthand", "halo") then gosub STOW_RIGHT
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_RIGHT
+     var Removing 0
+     var HaloRemoved 1
      return
+HALO_REPAIR:
+     var Removing 1
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     echo
+     echo *** REMOVING REPAIR TOOLS FROM HALO
+     echo
+     pause 0.01
+     put look in my %tool.storage
+     pause 0.2
+     pause 0.1
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_RIGHT
+     if !matchre("%HaloType", "NULL") then
+          {
+               gosub GET my %HaloType from my %tool.storage
+               pause 0.5
+               pause 0.5
+               pause 0.1
+               send pull halo
+               wait
+               pause 0.5
+               put stow %HaloType
+               pause 0.3
+          }
+     if !matchre("$righthand", "halo") then gosub GET my kertigen halo
+     pause 0.1     
 HALO_SHIFT:
      var shifting $0
      pause 0.001
-     if !matchre("$righthand $lefthand", "(%LastHalo|halo)") then goto HALO_ERROR
+     if !matchre("$righthand $lefthand", "(%HaloType|halo)") then goto HALO_ERROR
      matchre HALO_SUCCESS ^Your Kertigen halo flares brightly
      matchre HALO_ERROR ^What tool did you want\?
      put turn my halo to %shifting
@@ -1832,19 +1971,26 @@ HALO_SUCCESS:
      echo
      pause 0.1
      pause 0.2
-     if matchre("$lefthand", "%shifting") then var LastHalo $lefthandnoun
-     if matchre("$righthand", "%shifting") then var LastHalo $righthandnoun
+     if matchre("$lefthand", "%shifting") then var HaloType $lefthandnoun
+     if matchre("$righthand", "%shifting") then var HaloType $righthandnoun
      pause 0.2
      pause 0.5
-     echo ** LastHalo: %LastHalo
+     echo ** LastHalo: %HaloType
      pause 0.001
-     send pull my kertigen halo
-     pause 0.5
+     if ((%Removing = 1) && (%repairing = 0)) then 
+          {
+               send pull my kertigen halo
+               var HaloType halo
+               pause 0.5
+               if !matchre("$lefthand", "(halo|Empty)") then gosub STOW_LEFT
+               if !matchre("$righthand", "(halo|Empty)") then gosub STOW_RIGHT
+          }
+     if matchre("$lefthand", "halo") then
+          {
+               send swap
+               pause 0.5
+          }
      pause 0.1
-     var LastHalo halo
-     pause 0.1
-     if !matchre("$lefthand", "(halo|Empty)") then gosub STOW_LEFT
-     if !matchre("$righthand", "(halo|Empty)") then gosub STOW_RIGHT
      return
 HALO_ERROR:
      echo
@@ -1856,11 +2002,37 @@ HALO_RESTACK:
      echo
      echo *** RE-ADDING TOOLS TO HALO
      echo
+     var HaloRemoved 0
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     put look in my %tool.storage
+     pause 0.2
+     pause 0.2
+     if !matchre("%HaloType", "NULL") then
+          {
+               gosub GET my %HaloType from my %tool.storage
+               pause 0.5
+               pause 0.1
+               if !matchre("$righthand", "(halo|Empty)") then
+                    {
+                         send push my HALO
+                         wait
+                         pause 0.3
+                         if matchre("$righthand", "halo") then var HaloType halo
+                    }
+          }
+     if !matchre("$righthand", "halo") then gosub STOW_RIGHT
+     if !matchre("$righthand $lefthand", "halo") then gosub GET my kertigen halo
+     if !matchre("$righthand $lefthand", "halo") then gosub GET my %HaloType
+     if !matchre("$righthand", "(halo|Empty)") then
+          {
+               send push my HALO
+               wait
+               pause 0.3
+               if matchre("$righthand", "halo") then var HaloType halo
+          }
      if (matchre("%discipline", "weapon|armor|blacksmith") || matchre("$roomname", "Forging Society")) then
           {
-               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_HAMMER
                gosub HALO_STACK $MC_TONGS
                gosub HALO_STACK $MC_PLIERS
@@ -1869,7 +2041,6 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "tailor") || matchre("$roomname", "Outfitting Society")) then
           {
-               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_NEEDLES
                gosub HALO_STACK $MC_SCISSORS
                gosub HALO_STACK $MC_YARDSTICK
@@ -1878,7 +2049,6 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "carving|shaping|tinkering") || matchre("$roomname", "Engineering Society")) then
           {
-               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_CHISEL
                gosub HALO_STACK $MC_SAW
                gosub HALO_STACK $MC_RASP
@@ -1888,7 +2058,6 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "remedy") || matchre("$roomname", "Alchemy Society")) then
           {
-               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_BOWL
                gosub HALO_STACK $MC_MORTAR
                gosub HALO_STACK $MC_STICK
@@ -1897,7 +2066,6 @@ HALO_RESTACK:
           }
      if (matchre("%discipline", "aritf") || matchre("$roomname", "Enchanting Society")) then
           {
-               if "%repair" = "on" then gosub check.tools
                gosub HALO_STACK $MC_BURIN
                gosub HALO_STACK $MC_LOOP
                gosub HALO_STACK $MC_BRAZIER
@@ -1905,18 +2073,25 @@ HALO_RESTACK:
      pause 0.001
      put study my halo
      pause 0.5
-     pause 0.2
-     if matchre("$lefthand", "halo") then gosub STOW_LEFT
-     if matchre("$righthand", "halo") then gosub STOW_RIGHT
+     #if matchre("$lefthand", "halo") then gosub STOW_LEFT
+     #if matchre("$righthand", "halo") then gosub STOW_RIGHT
      return
      
 HALO_STACK:
      var item $0
      pause 0.001
-     if !matchre("$righthand", "(%LastHalo|Empty|halo)") then gosub STOW_RIGHT
-     if !matchre("$righthand", "(%LastHalo|halo)") then gosub GET my kertigen halo
+     if !matchre("$righthand", "(%HaloType|Empty|halo)") then gosub STOW_RIGHT
+     if !matchre("$righthand", "(%HaloType|halo)") then gosub GET my kertigen halo
      pause 0.1
-     if !matchre("$righthand", "(%LastHalo|halo)") then gosub GET my halo from my portal
+     if !matchre("$righthand", "(%HaloType|halo)") then gosub GET my %HaloType from my %main.storage
+     pause 0.001
+     if !matchre("$righthand", "(halo|Empty)") then
+          {
+               send push my halo
+               wait
+               pause 0.3
+               if matchre("$righthand", "halo") then var HaloType halo
+          }
      pause 0.1
      gosub GET my %item
      pause 0.2
@@ -1934,8 +2109,8 @@ WATERCUBE_TIMER:
      if ($MC.WATERCUBE.LAST < 900) then
           {
                echo
-               echo *** Cube of Water still on cooldown!
-               echo *** Last use: $MC.WATERCUBE.LAST seconds
+               echo * Cube of Water still on cooldown!
+               echo * Last use: $MC.WATERCUBE.LAST seconds
                echo
           }
      return
@@ -2145,46 +2320,75 @@ PUT:
      matchre STUNNED ^You are still stunned
      matchre PUT_STOW ^You need a free hand
      matchre WAIT ^\[Enter your command again if you want to\.\]
-     matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
-     matchre RETURN ^You sit down
-     matchre RETURN ^I could not find what you were referring to\.
-     matchre RETURN ^Please rephrase that command\.
-     matchre RETURN ^What were you referring to\?
-     matchre RETURN ^.* what\?
-     matchre RETURN ^You find a hole
-     matchre RETURN ^You (?:hand|touch|push|move|put|tap|drop|place|toss|set|swap|add) .*(?:\.|\!|\?)
-     matchre RETURN ^Your .*\.
+     matchre RETURN (^You'?r?e?|^As|^With|^Using).*(?:\.|\!|\?)?
+     matchre RETURN ^You can't pick that up with your hands that damaged\.|^Both your hands are missing\!
+     matchre RETURN (You'?r?e?|As|With|Using) (?:accept|adeptly|add|adjust|allow|already|are|aren't|ask|cut|attach|attempt|.+ to|.+ fan|bash|begin|bend|blow|breathe|briefly|bring|bundle|cannot|can't|carefully|cautiously|chop|circle|clasp|close|collect|collector's|concentrate|corruption|count|combine|come|dance|decide|deduce|dodge|don't|drum|draw|effortlessly|eyes|gracefully|deftly|desire|detach|drop|drape|exhale|fade|fail|fake|feel(?! fully rested)|feint|fill|find|filter|focus|form|fumble|gaze|gesture|giggle|gingerly|get|glance|grab|hand|hang|have|icesteel|inhale|insert|kiss|kneel|knock|leap|lean|let|lose|lift|loosen|lob|load|measure|move|must|mutter|mind|not|now|need|offer|open|parry|place|pick|push|pout|pour|put|pull|prepare|press|quietly|quickly|raise|read|reach|ready|realize|recall|remain|release|remove|retreat|reverently|rock|roll|rub|scan|search|secure|sense|set|sheathe|shield|should|shouldn't|shove|silently|sit|skin|slide|sling|slip|slow|slowly|spin|spread|sprinkle|start|stick|stop|strap|struggle|swap|swiftly|swing|switch|tap|take|the|though|touch|tie|tilt|toss|trace|try|tug|turn|twist|unload|untie|vigorously|wave|wear|weave|whisper|whistle|will|wink|wring|work|yank|yell|you|zills) .*(?:\.|\!|\?)?
+     matchre RETURN ^Brother Durantine|^Durantine|^Mags|^Ylono|^Malik|^Kilam|^Ragge|^Randal|^Catrox|^Kamze|^Unspiek|^Wyla|^Ladar|^Dagul|^Granzer|^Gemsmith|^Fekoeti|^Diwitt|(?:An|The|A) attendant|clerk|Dwarven|spider|^.*He says,
+     matchre RETURN ^The(.*)?(clerk|teller|attendant|mortar|pestle|tongs|bowl|riffler|hammer|gem|book|page|lockpick|sconce|voice|waters|contours|person|is|has|are|slides|fades|hinges|spell|not)
+     matchre RETURN ^It('s)?(?:'s|a|and|the)?\s+?(?:would|will|is|a|already|dead|keen|practiced|graceful|stealthy|resounding|full|has)
+     matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime|\[Roundtime
+     matchre RETURN ^That('s)?\s+?(?:is|has|was|a|cannot|area|can't|won't|would|already|tool|will|cost|too|section)
+     matchre RETURN ^With(?: (a|and|the))?\s+?(?:keen|practiced|graceful|stealthy|resounding)
+     matchre RETURN ^This (is a .+ spell|is an exclusive|spell|ritual)
+     matchre RETURN ^The .*(is|has|are|slides|fades|hinges|spell|not|vines|antique|(.+) spider|pattern)
+     matchre RETURN ^There('s|is)?\s+(?:is(n't)?)?|does(n't)?|already|nothing|not?
+     matchre RETURN ^But (?:that|you|you're|you've|the)
+     matchre RETURN ^Obvious (?:exits|paths)
+     matchre RETURN ^There's no room|any more room|no matter how you arrange|have all been used\.
+     matchre RETURN ^That's too heavy|too thick|too long|too wide|not designed to carry|cannot hold any more
+     matchre RETURN ^(You|I) can't|^Tie what\?|^You just can't|As you attempt to place your
+     matchre RETURN suddenly leaps toward you|and flies towards you|with a flick
+     matchre RETURN ^Brushing your fingers|^Sensing your intent|^Quietly touching your lips
+     matchre RETURN Lucky for you\!\s*That isn't damaged\!|I will not repair something that isn't broken\.
+     matchre RETURN I'm sorry, but I don't work on those|There isn't a scratch on that, and I'm not one to rob you\.
+     matchre RETURN I don't work on those here\.|I don't repair those here|Please don't lose this ticket\!
+     matchre RETURN ^Please rephrase that command\.|^I could not find|^Perhaps you should|^I don't|^Weirdly,|That can't
+     matchre RETURN \[You're|^Your .*\.|\[This is|too injured
+     matchre RETURN ^Moving|Brushing|Recalling|Unaware
+     matchre RETURN ^.*\[Praying for \d+ sec\.\]
+     matchre RETURN ^.+ is not in need|^That is closed\.
+     matchre RETURN ^What (?:were you|is it)
+     matchre RETURN ^In the name of love\?|^Play on|^(.+) what\?
+     matchre RETURN ^It's kind of wet out here\.
+     matchre RETURN ^Some (?:polished|people|tarnished|.* zills)
+     matchre RETURN ^(\S+) has accepted
+     matchre RETURN ^Subservient type|^The shadows|^Close examination|^Try though
+     matchre RETURN ^USAGE\:|^Using your|^You.*analyze
+     matchre RETURN ^Allows a Moon Mage|^Smoking commands are
+     matchre RETURN ^A (?:slit|pair|shadow) .*(?:\.|\!|\?)?
+     matchre RETURN ^Your (?:actions|dance|nerves) .*(?:\.|\!|\?)?
+     matchre RETURN ^Having no further use for .*, you discard it\.
+     matchre RETURN ^After a moment, .*\.
+     matchre RETURN ^.* (?:is|are) not in need of cleaning\.
+     matchre RETURN \[Type INVENTORY HELP for more options\]|\[Use INVENTORY HELP for more options\.\]
+     matchre RETURN ^A vortex|^A chance for|^In a flash|^It is locked|^An aftershock
+     matchre RETURN ^In the .* you see .*\.
+     matchre RETURN .* (?:Dokoras|Kronars|Lirums)
+     matchre RETURN ^You will now store .* in your .*\.
+     matchre RETURN ^\[Ingredients can be added by using ASSEMBLE Ingredient1 WITH Ingredient2\]
+     matchre RETURN ^\s\*LINK ALL CANCEL\s\*- Breaks all links
+     matchre RETURN ^Stalking is an inherently stealthy endeavor, try being out of sight\.
+     matchre RETURN ^You're already stalking|^There aren't any
+     matchre RETURN ^An offer|shakes (his|her) head
+     matchre RETURN ^Tie it off when it's empty\?
+     matchre RETURN ^But the merchant can't see you|are invisible
+     matchre RETURN Page|^As the world|^Obvious|^A ravenous energy
+     matchre RETURN ^In the|^The attendant|^That is already open\.|^Your inner
+     matchre RETURN ^(.+) hands you|^Searching methodically|^But you haven't prepared a symbiosis\!
+     matchre RETURN ^Illustrations of complex,|^It is labeled|^Your nerves
+     matchre RETURN ^The lockpick|^Doing that|is not required to continue crafting
+     matchre RETURN ^Without (any|a|the)|^Wouldn't (it|that|you)
+     matchre RETURN ^Weirdly, you can't manage
+     matchre RETURN ^Hold hands with whom\?
+     matchre RETURN ^Something in the area interferes
+     matchre RETURN ^With a .+ to your voice,
      matchre RETURN ^You don't have a .* coin on you\!\s*The .* spider looks at you in forlorn disappointment\.
-     matchre RETURN ^The .* spider turns away\, looking like it's not hungry for what you're offering\.
-     matchre RETURN ^Brother Durantine nods slowly\.
-     matchre RETURN ^Durantine waves a small censer over a neatly-wrapped package and intones a short prayer before he hands it to you\.
-     matchre RETURN ^After a moment\, .*\.
      matchre RETURN ^Quietly touching your lips with the tips of your fingers as you kneel\, you make the Cleric's sign with your hand\.
      matchre RETURN ^Maybe you should stand up\.
      matchre RETURN ^You sense a successful empathic link has been forged|^Touch what|^I could not find
-     matchre RETURN ^The clerk counts out .*\.
-     matchre RETURN ^A clerk says politely
-     matchre RETURN ^A clerk shakes his head
      matchre RETURN ^The .+ has suffered too much damage and needs to be repaired at a crafting repair shop
      matchre RETURN ^The .* is not damaged enough to warrant repair\.
-     matchre RETURN ^There is no more room in .*\.
-     matchre RETURN ^There is nothing in there\.
-     matchre RETURN ^In the .* you see .*\.
-     matchre RETURN ^Searching methodically
      matchre RETURN ^This spell cannot be targeted\.
-     matchre RETURN ^You cannot figure out how to do that\.
-     matchre RETURN ^You will now store .* in your .*\.
-     matchre RETURN ^You.*analyze
-     matchre RETURN ^You lay your hand upon
-     matchre RETURN ^You glance down .*\.
-     matchre RETURN ^You glance heavenward
-     matchre RETURN ^You turn .*\.
-     matchre RETURN ^You chatter away\.\.\.
-     matchre RETURN ^You are now
-     matchre RETURN ^You search
-     matchre RETURN ^You get
-     matchre RETURN ^You have nothing to 
-     matchre RETURN ^There isn't any more room in .* for that\.
      matchre RETURN ^You are already focusing your appraisal on a subject\.
      matchre RETURN ^You are already under the effects of an appraisal focus\.
      matchre RETURN ^\[Ingredients can be added by using ASSEMBLE Ingredient1 WITH Ingredient2\]
@@ -2196,7 +2400,38 @@ PUT:
      matchre RETURN (Just give it to me again if you want|completely undamaged and does not need repair|not damaged enough to warrant repair)
      matchre RETURN ^(You find your jar|The (\S+) can only hold)
      matchre RETURN ^(You .*open|You .*close|That is already open|That is already closed)
-     matchre RETURN ^You count out
+     matchre RETURN ^Turning your focus solemnly inward
+     matchre RETURN ^Slow, rich tones form a somber introduction
+     matchre RETURN ^Images of streaking stars falling from the heavens
+     matchre RETURN ^Strangely, you don't feel like fighting right now\.
+     matchre RETURN ^With .* movements you prepare your body for the .* spell\.
+     matchre RETURN ^A strong wind swirls around you as you prepare the .* spell\.
+     matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime
+     matchre RETURN ^Shadow and light collide wildly around you as you prepare the .* spell\.
+     matchre RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
+     matchre RETURN ^A soft breeze surrounds your body as you confidently prepare the .* spell\.
+     matchre RETURN ^Light withdraws from around you as you speak arcane words for the .* spell\.
+     matchre RETURN ^Tiny tendrils of lightning jolt between your hands as you prepare the .* spell\.
+     matchre RETURN ^Low, hummed tones form a soft backdrop for the opening notes of the .* enchante\.
+     matchre RETURN ^Heatless orange flames blaze between your fingertips as you prepare the .* spell\.
+     matchre RETURN ^Throwing your head back, you release a savage roar and growl words for the .* spell\.
+     matchre RETURN ^Entering a trance-like state, your hands begin to tremble as you prepare the .* spell\.
+     matchre RETURN ^Glowing geometric patterns arc between your upturned palms as you prepare the .* spell\.
+     matchre RETURN ^Focusing intently, you slice seven straight lines through the air as you invoke the .* spell.\.
+     matchre RETURN ^Accompanied with a flash of light, you clap your hands sharply together in preparation of the .* spell\.
+     matchre RETURN ^Icy blue frost crackles up your arms with the ferocity of a blizzard as you begin to prepare the .* spell\!
+     matchre RETURN ^A radiant glow wreathes your hands as you weave lines of light into the complicated pattern of the .* spell\.
+     matchre RETURN ^Kaleidoscopic ribbons of light swirl between your outstretched hands, coalescing into a spectral wildling spider\.
+     matchre RETURN ^Darkly gleaming motes of sanguine light swirl briefly about your fingertips as you gesture while uttering the .* spell\.
+     matchre RETURN ^As you begin to solemnly intone the .* spell a blue glow swirls about forming a nimbus that surrounds your entire being\.
+     matchre RETURN ^As you slam your fists together and inhale sharply, a glowing outline begins to form and a matrix of blue and white motes surround you\.
+     matchre RETURN ^In one fluid motion, you bring your palms close together and a fiery crimson mist begins to burn within them as you prepare the .* spell\.
+     matchre RETURN ^The first gentle notes of .* waft from you with delicate ease, riddled with low tones that gradually give way to a higher\-pitched theme\.
+     matchre RETURN ^Droplets of water coalesce around your fingertips as your arms undulate like gracefully flowing river currents to form the pattern of the .* spell\.
+     matchre RETURN ^Inhaling deeply, you adopt a cyclical rhythm in your breaths to reflect the ebb and flow of the natural world and steel yourself to prepare the .* spell\.
+     matchre RETURN ^Calmly reaching out with one hand, a silvery-blue beam of light descends from the sky to fill your upturned palm with radiance as you prepare the .* spell\.
+     matchre RETURN ^Turning your head slightly and gazing directly ahead with a calculating stare, tiny sparks of crystalline light flash around your eyes as you prepare the .* spell\.
+     matchre RETURN ^You take up a handful of dirt in your palm to prepare the .* spell\.  As you whisper arcane words, you gently blow the dust away and watch as it becomes swirling motes of 
      # matchre RETURN ^
      matchre RETURN ^\s*Encumbrance\s*\:
      send %Command

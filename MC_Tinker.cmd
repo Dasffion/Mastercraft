@@ -366,7 +366,7 @@ arrowhead_make:
 	goto arrowhead_material
 
 new.tool:
-	if !contains("$scriptlist", "mastercraft.cmd") then return
+	if !contains("$scriptlist", "mastercraft") then return
 	 var temp.room $roomid
 	 gosub location.vars
 	 gosub check.location

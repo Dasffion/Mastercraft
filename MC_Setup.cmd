@@ -1,8 +1,11 @@
-if "$charactername" = "Shroom" then goto CHARACTER1
-if "$charactername" = "Illuminati" then goto CHARACTER2
-if "$charactername" = "Raidboss" then goto CHARACTER3
-if "$charactername" = "Healbot" then goto CHARACTER4
-if "$charactername" = "Aerog" then goto CHARACTER5
+## MC SETUP SCRIPT - CONTAINS ALL YOUR CHARACTERS AND VARIABLES
+## SET YOUR CHARACTER NAMES BELOW - BETWEEN THE QUOTES!
+## CASE SENSITIVE! - FIRST LETTER CAPITOL, REST LOWERCASE
+if ("$charactername" = "Shroom") then goto CHARACTER1
+if ("$charactername" = "Illuminati") then goto CHARACTER2
+if ("$charactername" = "Raidboss") then goto CHARACTER3
+if ("$charactername" = "Healbot") then goto CHARACTER4
+if ("$charactername" = "Aerog") then goto CHARACTER5
 echo You did not set your character name correctly. Please edit MC_SETUP
 exit
 
@@ -53,8 +56,8 @@ put #var MC_Engineering_NOWO 0
 #	MC_OUT.DEED: DEED orders instead of bundling items on or off
 put #var MC_OUTFITTING.STORAGE portal
 put #var MC_OUT.DISCIPLINE tailor
-put #var MC_OUT.MATERIAL wool
-put #var MC_OUT.PREF cloth
+put #var MC_OUT.MATERIAL cougar-pelt
+put #var MC_OUT.PREF leather
 put #var MC_OUT.DIFFICULTY challenging
 put #var MC_OUT.DEED off
 put #var MC_Outfitting_NOWO 0
@@ -66,8 +69,8 @@ put #var MC_Outfitting_NOWO 0
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
 put #var MC_ALCHEMY.STORAGE portal
 put #var MC_ALC.DISCIPLINE remed
-put #var MC_ALC.DIFFICULTY challenging
-put #var MC_Alchemy_NOWO 1
+put #var MC_ALC.DIFFICULTY easy
+put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
 #######################################################################
@@ -109,7 +112,7 @@ put #var MC_IMBUE.ROD imbuement rod
 put #var MC_REPAIR on
 put #var MC_AUTO.REPAIR on
 put #var MC_GET.COIN on
-put #var MC_WITHD.AMOUNT 5 gold
+put #var MC_WITHD.AMOUNT 20 gold
 put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST limb tonic
@@ -136,7 +139,7 @@ put #var MC_TIED.TOOLS NULL
 put #var MC_CLERK.TOOLS NULL
 #FORGING
 put #var MC_HAMMER forging hammer
-put #var MC_SHOVEL shovel
+put #var MC_SHOVEL glaes-edged shovel
 put #var MC_TONGS tongs
 put #var MC_PLIERS silversteel-tipped pliers
 put #var MC_BELLOWS leather bellows
@@ -164,8 +167,8 @@ put #var MC_AWL awl
 put #var MC_TOOLBELT_Outfitting NULL
 put #var MC_TOOL.STORAGE_Outfitting portal
 #ALCHEMY
-put #var MC_BOWL purpleheart bowl
-put #var MC_MORTAR stone mortar
+put #var MC_BOWL starshine bowl
+put #var MC_MORTAR large mortar
 put #var MC_STICK mixing stick
 put #var MC_PESTLE belzune pestle
 put #var MC_SIEVE wirework sieve
@@ -174,7 +177,7 @@ put #var MC_TOOL.STORAGE_Alchemy portal
 #ENCHANTING
 put #var MC_BURIN burin
 put #var MC_LOOP loop
-put #var MC_BRAZIER NULL
+put #var MC_BRAZIER uthamar brazier
 put #var MC_TOOLBELT_Enchanting NULL
 put #var MC_TOOL.STORAGE_Enchanting portal
 goto endsetup
@@ -195,7 +198,7 @@ CHARACTER2:
 put #var MC_FORGING.STORAGE shadows
 put #var MC_FORGING.DISCIPLINE weapon
 put #var MC_FORGING.MATERIAL steel
-put #var MC_FORGING.DIFFICULTY hard
+put #var MC_FORGING.DIFFICULTY challenging
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
 put #var MC_Forging_NOWO 0
@@ -212,7 +215,7 @@ put #var MC_ENGINEERING.STORAGE shadows
 put #var MC_ENG.DISCIPLINE carving
 put #var MC_ENG.MATERIAL wolf-bone
 put #var MC_ENG.PREF bone
-put #var MC_ENG.DIFFICULTY hard
+put #var MC_ENG.DIFFICULTY challenging
 put #var MC_ENG.DEED off
 put #var MC_Engineering_NOWO 0
 #######################################################################
@@ -228,7 +231,7 @@ put #var MC_OUTFITTING.STORAGE shadows
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
-put #var MC_OUT.DIFFICULTY hard
+put #var MC_OUT.DIFFICULTY challenging
 put #var MC_OUT.DEED off
 put #var MC_Outfitting_NOWO 0
 #######################################################################

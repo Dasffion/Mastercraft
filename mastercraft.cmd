@@ -102,6 +102,7 @@ include mc_include.cmd
      var repeat 0
      if_1 var repeat %1
      var full.order.noun
+     var tool.destroyed 0
      var coin.intake 0
      var orders.completed 0
 	var gottools 0
@@ -114,10 +115,12 @@ include mc_include.cmd
      var tool.repair 0
      var order.type 0
      var diff.change 0
+     var repairing 0
      var ordinal zeroth|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh
      var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eightteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four|twenty-five|twenty-six|twenty-seven|twenty-eight|twenty-nine|thirty
      var assemble NULL
      var assemble2 NULL
+     var assemble3 NULL
      var difficultytry add 0
      var NOWO $MC_%society.type_NOWO
      gosub clearvolume
@@ -178,6 +181,12 @@ include mc_include.cmd
      action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
 #    action goto lack.coin when ^LACK COIN
      action (analyze) off
+     #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 5}
+     #trigger {comprehend all but several minor details in the text\.$} {#var MC_DIFFICULTY 4}
+     #trigger {confidently discern most of the design's minutiae\.$} {#var MC_DIFFICULTY 3}
+     #trigger {interpret many of the design's finer points\.$} {#var MC_DIFFICULTY 2}
+     #trigger {fail to grasp all but the simplest diagrams on the page\.$} {#var MC_DIFFICULTY 1}
+     #trigger {quickly realize the design is far beyond your abilities\.$} {#var MC_DIFFICULTY 0}
 ##############################
 #
 # Check for Clerk Tickets 
@@ -197,7 +206,7 @@ include mc_include.cmd
 #
 ##############################
 check.for.order:
-     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
+     if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 1)) then gosub HALO_REMOVE
      if !matchre("$righthand|$lefthand", "logbook") then
           {
                gosub EMPTY_HANDS
@@ -390,7 +399,7 @@ identify.order:
                {
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a cambrinth retuner|a flash trinket|a wind trinket|an earth trinket)
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (training ritual focus|basic lunar ritual focus|basic elemental ritual focus|basic life ritual focus|basic holy ritual focus)
-               matchre chapter.4 This logbook is tracking a work order requiring you to craft (common material minor fount|common material lesser fount|common material greater fount)
+               matchre chapter.4 This logbook is tracking a work order requiring you to craft (common material minor fount|common material lesser fount|common material greater fount|ultra rare material major fount|rare material major fount)
                matchre chapter.6 This logbook is tracking a work order requiring you to craft (a bubble wand|ease burden runestone|seal cambrinth runestone|(?<!ease )burden runestone|manifest force runestone|strange arrow runestone|gauge flow runestone|dispel runestone|lay ward runestone)
                put read my %society.type logbook
                matchwait 3
@@ -551,7 +560,8 @@ calc.material:
      var bigenough 0
      var asmCount1 0
      var asmCount2 0
-     pause 0.5
+     var asmCount3 0
+     pause 0.01
      if matchre("%discipline", "weapon|armor|blacksmith") then
           {
                pause .1
@@ -697,6 +707,7 @@ calc.material:
                if %%order.pref.item.count > 11 then var %%order.pref.item.count 11
                if %%order.pref.item.count > 0 then gosub count.material lumber
                if "%assemble2" = "mechanism" then gosub count.material mechanism
+               if "%assemble3" = "mechanism" then gosub count.material mechanism
                if %%order.pref.deed.count > 11 then var %%order.pref.deed.count 11
                if %%order.pref.deed.count > 0 then gosub count.material deed
                if %mass.volume > %material.volume then gosub lack.material     
@@ -821,7 +832,7 @@ calc.material:
           action (book) on
           var sigil
           action var order.pref $1 when ^\s+\(\d\)\s+[Aa] (?:finished|basic|small).* (runestone|totem|wand|rod|sphere)
-          action var sigil %sigil|$1 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
+          action var sigil %sigil|$1|$2|$3 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
           pause .5
           if !matchre("$righthand", "book") then gosub GET my %discipline book
 		pause .1
@@ -834,17 +845,26 @@ calc.material:
           pause 0.1
           if !matchre("$MC.order.noun", "fount|loop") then put #var MC.order.noun %order.pref
           eval sigil replacere("%sigil", "^\|", "")
+          eval sigil replacere("%sigil", "\|+", "|")
+          eval sigil replacere("%sigil", "\|$", "")
           eval sigil replace("%sigil", "any", "%sigil(0)"
           eval sigil.total count("%sigil", "|")
+          echo SIGILS: %sigil
           gosub sigil.count
           if ((%sigil.total > 0) && ("%sigil(0)" = "%sigil(1)")) then var sigil %sigil(0)
           eval sigil.total count("%sigil", "|")
+          # evalmath sigil.total (%sigil.total + 1)
           var assemble %sigil(0)
           var asmCount1 %need.%sigil(0)
-          if %sigil.total > 0 then 
+          if (%sigil.total > 0) then 
                {
                     var assemble2 %sigil(1)
                     var asmCount2 %need.%sigil(1)
+               }
+          if (%sigil.total > 1) then 
+               {
+                    var assemble3 %sigil(2)
+                    var asmCount3 %need.%sigil(2)
                }
           math asmCount1 add 2
           gosub parts.inv
@@ -896,6 +916,7 @@ calc.parts:
      var temp.room 0
      math asmCount1 multiply %order.quantity
      math asmCount2 multiply %order.quantity
+     math asmCount3 multiply %order.quantity
      if matchre("$righthand|$lefthand", "book") then gosub PUT_IT my book in my %main.storage
      if matchre("%assemble", "(\S+)") then math asmCount1 subtract %$1.count
      if matchre("%assemble", "(\S+)\s(\S+)") then math asmCount1 subtract %$1.$2.count
@@ -913,6 +934,7 @@ calc.parts:
      gosub check.location
      if %asmCount1 > 0 then gosub purchase.assemble
      if %asmCount2 > 0 then gosub purchase.assemble2
+     if %asmCount3 > 0 then gosub purchase.assemble3
      if "%repair" = "on" then gosub check.tools
      goto process.order
 
@@ -926,6 +948,7 @@ parts.inv:
      var congruence.count 0
      var permutation.count 0
      var rarefaction.count 0
+     var ascension.count 0
      var fount.count 0
 	var fount.uses 0
      var water.count 0
@@ -1079,11 +1102,11 @@ count.material:
                          var fount.uses 0
                          return
                     }
-		       action (fountcount) var fount.uses $1 when approximately (\d+) uses? remaining
+		        action (fountcount) var fount.uses $1 when approximately (\d+) uses? remaining
 			   action (fountcount) on
 			   var i 0
 			   gosub get my fount
-			   send anal my fount
+			   send analyze my fount
 			   waitforre ^You.*analyze
 			   action (fountcount) off
 			   gosub PUT_IT my fount in my %main.storage
@@ -1247,6 +1270,57 @@ purchase.assemble2:
      if "%assemble2" = "mechanism" then gosub PUT_IT my ingot in my %main.storage
      if %asmCount2 <= 0 then return
      goto purchase.assemble2_2
+     
+purchase.assemble3:
+     if "%assemble3" = "NULL" then return
+     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble3", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer") then 
+		{
+			if ($roomid != $part.room)) then gosub automove $part.room
+		}
+     elseif $roomid != $supply.room then 
+          {
+               if "%assemble3" = "mechanism" && $roomid != $ingot.buy then gosub automove $ingot.buy
+               if "%assemble3" != "mechanism" then gosub automove $supply.room
+          }
+     purchase.assemble3_1:
+     action (order) on
+     gosub ORDER
+     action (order) off
+     purchase.assemble3_2:
+     if matchre("%discipline", "tailor|tinkering|artif") then
+          {
+               if "%discipline" = "tailor" then
+                    {
+                         action (order) on
+                         gosub ORDER
+                         action (order) off
+                         if "%assemble3" = "small padding" then gosub ORDER $s.padding.order
+                         if "%assemble3" = "small backing" then gosub ORDER $s.backing.order
+                         if "%assemble3" = "long cord" then gosub ORDER $l.cord.order
+                         if "%assemble3" = "short cord" then gosub ORDER $s.cord.order
+                    }
+               if "%assemble3" = "mechanism" then
+                    {
+                         if $roomid != $ingot.buy then gosub automove $ingot.buy
+                         gosub ORDER 11
+                    }
+               if "%discipline" = "artif" then
+                    {
+                         if (($zoneid = 150) && ("%assemble3" = "abolition")) then gosub order $abolition.order
+                         else gosub ORDER $%assemble3.order
+                    }
+          }
+     else gosub ORDER %assemble3
+     math asmCount3 subtract 1
+     pause .2
+     if "%assemble3" != "mechanism" then 
+          {
+               if "%discipline" = "artif" then gosub PUT_IT my sigil in my %main.storage
+               else gosub PUT_IT my %assemble3 in my %main.storage
+          }
+     if "%assemble3" = "mechanism" then gosub PUT_IT my ingot in my %main.storage
+     if %asmCount3 <= 0 then return
+     goto purchase.assemble3_2
 
 
 #################################
@@ -1576,12 +1650,18 @@ endearly:
           if matchre("$lefthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
           if matchre("$righthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
           }
+     if matchre("$lefthand", "parry stick") then gosub PUT_IT #$lefthandid in my %main.storage
+     if matchre("$righthand", "parry stick") then gosub PUT_IT #$righthandid in my %main.storage
      if matchre("$lefthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
      if matchre("$righthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
      gosub untie.early
      gosub PUT_IT my %society.type logbook in my %main.storage
 	if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
-     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
+     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+          {
+               if "%repair" = "on" then gosub check.tools
+               gosub HALO_RESTACK
+          }
      put #parse MASTERCRAFT DONE
      exit
      
@@ -1595,9 +1675,13 @@ trash.early:
      var trash $1
      if matchre("$roomobjs", "(bucket|bin)") then
           {
+          if matchre("$lefthand", "parry stick") then gosub PUT_IT #$lefthandid in my %main.storage
+          if matchre("$righthand", "parry stick") then gosub PUT_IT #$righthandid in my %main.storage
           if matchre("$lefthand", "%trash") then gosub PUT_IT #$lefthandid in $1
           if matchre("$righthand", "%trash") then gosub PUT_IT #$lefthandid in $1
           }
+     if matchre("$lefthand", "parry stick") then gosub PUT_IT #$lefthandid in my %main.storage
+     if matchre("$righthand", "parry stick") then gosub PUT_IT #$righthandid in my %main.storage
      if matchre("$lefthand", "%trash") then gosub PUT drop #$lefthandid
      if matchre("$righthand", "%trash") then gosub PUT drop #$lefthandid
      goto untie.early
@@ -1616,9 +1700,13 @@ bundle.order:
           {
                if matchre("$roomobjs", "(bucket|bin)") then
                     {
+                    if matchre("$lefthand", "parry stick") then gosub PUT_IT #$lefthandid in my %main.storage
+                    if matchre("$righthand", "parry stick") then gosub PUT_IT #$righthandid in my %main.storage
                     if matchre("$lefthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
                     if matchre("$righthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
                     }
+               if matchre("$lefthand", "parry stick") then gosub PUT_IT #$lefthandid in my %main.storage
+               if matchre("$righthand", "parry stick") then gosub PUT_IT #$righthandid in my %main.storage
                if matchre("$lefthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
                if matchre("$righthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
                math order.quantity subtract 1
@@ -1629,6 +1717,9 @@ bundle.order:
 	 bundle.order2:
 	 matchre bundle.order2 ^\.\.\.wait|^Sorry
 	 matchre bundle.order3 ^You analyze
+     if !matchre("$righthand $lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun from my %main.storage
+     pause 0.3
+     if matchre("$righthand $lefthand", "parry stick") then gosub PUT_IT my $MC.order.noun from my %main.storage
      if !matchre("$righthand $lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun
      if matchre("$lefthand", "$MC.order.noun") then send analyze #$lefthandid
      if matchre("$righthand", "$MC.order.noun") then send analyze #$righthandid
@@ -1654,9 +1745,13 @@ bundle.order:
           {
                if matchre("$roomobjs", "(bucket|bin)") then
                     {
+                    if matchre("$lefthand", "parry stick") then gosub PUT_IT #$lefthandid in my %main.storage
+                    if matchre("$righthand", "parry stick") then gosub PUT_IT #$righthandid in my %main.storage
                     if matchre("$lefthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
                     if matchre("$righthand", "$MC.order.noun") then gosub PUT_IT #$lefthandid in $1
                     }
+               if matchre("$lefthand", "parry stick") then gosub PUT_IT #$lefthandid in my %main.storage
+               if matchre("$righthand", "parry stick") then gosub PUT_IT #$righthandid in my %main.storage
                if matchre("$lefthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
                if matchre("$righthand", "$MC.order.noun") then gosub PUT drop #$lefthandid
                var NOWO 1
@@ -1792,6 +1887,7 @@ gather.material_1:
                     {
                          gosub get %work.material %get.mat from my %main.storage
                          gosub combine.check "%main.storage" %get.mat
+                         if (%combine.maxed = 1) then gosub combine.cut
                          gosub get %work.material %get.mat from my %main.storage
                     }
                var itemchange %ordinal(%itemno)
@@ -1863,6 +1959,8 @@ small.mat:
 combine.check:
      var combine.storage $1
      var combine.temp $2
+     var combine.maxed 0
+     action var combine.maxed 1 when ^That (.*) is too large to add more to\.|^The resulting
      #if "%order.pref" = "bone" then var combine.temp stack
      if contains("$righthand|$lefthand", "book") then gosub PUT_IT book in %main.storage
      if matchre("%discipline", "weapon|armor|blacksmith") then
@@ -1871,11 +1969,78 @@ combine.check:
                return
           }
      var combine.parts 0
-	 if contains("$righthand|$lefthand", "book") then gosub PUT_IT book in %main.storage
+	if contains("$righthand|$lefthand", "book") then gosub PUT_IT book in %main.storage
 	gosub combine
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT my %combine.temp in my %combine.storage
      return
-
+     
+combine.cut:
+     var item.number 0
+     pause 0.1
+     if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %main.storage
+     if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %main.storage
+     pause 0.1
+     if !matchre("$righthand|$lefthand", "%combine.temp") then gosub GET my %combine.temp
+combine.cut_go:
+     var temp.volume 0
+     action math temp.volume add $1 when ^You count out (\d+) (piece|pieces|yards)
+     pause 0.2
+     pause 0.2
+     matchre combine.cut_2 ^You count
+     send count my %combine.temp
+     matchwait 5
+combine.cut_2:
+     pause 0.5
+     pause 0.3
+     echo * Volume: %temp.volume
+     if (%temp.volume > 80) then goto cut.material
+     pause 0.1
+     if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %main.storage
+     if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %main.storage
+     math item.number add 1
+     pause 0.1
+     if (%item.number = 1) then gosub GET my second %combine.temp
+     if (%item.number = 2) then gosub GET my third %combine.temp
+     if (%item.number = 3) then gosub GET my fourth %combine.temp
+     if (%item.number = 4) then gosub GET my fifth %combine.temp
+     if (%item.number > 4) then return
+     pause 0.1
+     goto combine.cut_go
+cut.material:
+     if !matchre("$righthand|$lefthand", "yardstick") then gosub GET my yardstick
+     pause 0.2
+     pause 0.3
+     send mark my %combine.temp at 25
+     pause 0.5
+     gosub PUT_IT my yardstick in my %main.storage
+     pause 0.2
+     gosub GET my scissors
+     pause 0.5
+     send cut my %combine.temp with my scissor
+     pause 0.4
+     gosub GET my yardstick
+     pause 0.3
+     send mark my %combine.temp at 25
+     pause 0.5
+     gosub PUT_IT my yardstick in my %main.storage
+     pause 0.2
+     gosub GET my scissors
+     pause 0.5
+     send cut my %combine.temp with my scissor
+     pause 0.5
+     if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %main.storage
+     if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %main.storage
+     pause 0.3
+     gosub GET my %combine.temp
+     pause 0.3
+     if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %main.storage
+     if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %main.storage
+     pause 0.3
+     gosub GET my %combine.temp
+     pause 0.3
+     if "$righthand" != "Empty" then gosub PUT_IT my $righthandnoun in my %main.storage
+     if "$lefthand" != "Empty" then gosub PUT_IT my $lefthandnoun in my %main.storage
+     return
 smelt:
      if !matchre("$smelt.room", "\b$roomid\b") then gosub find.room $smelt.room
      gosub clearvolume
@@ -1916,11 +2081,11 @@ combine.end:
                var combine.temp junilar
                goto combine1
           }
-	 var vol.first %material.volume
+	var vol.first %material.volume
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
-     unvar combine.temp
-     unvar combine.storage
+     # unvar combine.temp
+     # unvar combine.storage
      return
    
 fail:
@@ -2006,7 +2171,11 @@ turn.in1:
      if (("%discipline" = "artif") && ($Enchanting.LearningRate < 20)) then goto new.order
      gosub PUT_IT my logbook in my %main.storage
 	if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
-     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
+     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+          {
+               if "%repair" = "on" then gosub check.tools
+               gosub HALO_RESTACK
+          }
      put #parse MASTERCRAFT DONE
      exit
 
@@ -2184,7 +2353,7 @@ lack.material:
      if "%discipline" = "artif" then
           {
                evalmath reqd.order %order.quantity - %%order.pref.item.count
-               if "%order.pref" = "totem" then var order.num 6
+               if "%order.pref" = "totem" then var order.num 16
                if "%order.pref" = "runestone" then var order.num runestone
                if "%order.pref" = "wand" then var order.num wand
                if "%order.pref" = "sphere" then var order.num sphere
@@ -2198,8 +2367,8 @@ purchase.material:
      var purchaselabel purchase.material
      action var need.coin 1 when ^The attendant shrugs and says, "Ugh, you don't have enough
      #"
-     if $roomid != $supply.room then gosub automove $supply.room
-	 gosub EMPTY_HANDS
+     if ($roomid != $supply.room) then gosub automove $supply.room
+	gosub EMPTY_HANDS
 first.order:
      if matchre("%discipline", "carving|shaping|tailor|tinkering") then
           {

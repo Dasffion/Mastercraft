@@ -53,7 +53,7 @@ oil:
 	return
 
 lack.coin:
-	 if contains("$scriptlist", "mastercraft.cmd") then put #parse LACK COIN
+	 if contains("$scriptlist", "mastercraft") then put #parse LACK COIN
 	 else echo *** You need some startup coin to purchase stuff! Go to the bank and try again!
 	exit
 
