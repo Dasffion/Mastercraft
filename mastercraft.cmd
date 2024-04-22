@@ -2,7 +2,7 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# many versions later - Latest updates 01/07/2023
+# many versions later - Latest updates 04/21/2024
 #
 # Script Usage: .mastercraft                                        --to only do one work order
 #                    .mastercraft <no. of orders>                    --to perform more than one
@@ -117,7 +117,7 @@ include mc_include.cmd
      var diff.change 0
      var repairing 0
      var ordinal zeroth|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh
-     var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eightteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four|twenty-five|twenty-six|twenty-seven|twenty-eight|twenty-nine|thirty
+     var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four|twenty-five|twenty-six|twenty-seven|twenty-eight|twenty-nine|thirty
      var assemble NULL
      var assemble2 NULL
      var assemble3 NULL
