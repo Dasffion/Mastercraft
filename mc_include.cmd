@@ -1587,7 +1587,12 @@ toolcheck:
      gosub put tap oil
 	gosub put tap oil in portal
      pause 0.1
-     if ((%brush.gone = 1) || (%oil.gone = 1)) then gosub new.tool
+     if ((%brush.gone = 1) || (%oil.gone = 1)) then
+          {
+               if (%brush.gone = 1) then echo * MISSING BRUSH
+               if (%oil.gone = 1) then echo * MISSING OIL
+               gosub new.tool
+          }
      return
 
 RepairAllItems:
@@ -1738,10 +1743,11 @@ new.tool:
      gosub automove $tool.room
      action (order) on
      gosub ORDER
+     pause 0.7
      pause 0.5
      action (order) off
-     if %oil.gone = 1 then gosub summonoil
-     if %stain.gone = 1 then
+     if (%oil.gone = 1) then gosub summonoil
+     if (%stain.gone = 1) then
           {
                gosub automove $tool.room
                action (order) on
@@ -1753,7 +1759,7 @@ new.tool:
                gosub PUT_IT my stain in my %main.storage
                var stain.gone 0
           }
-     if %oil.gone = 1 then
+     if (%oil.gone = 1) then
           {
                gosub automove $oil.room
                action (order) on
@@ -1765,7 +1771,7 @@ new.tool:
                gosub PUT_IT my oil in my %main.storage
                var oil.gone 0
           }
-     if %brush.gone = 1 then
+     if (%brush.gone = 1) then
           {
                gosub automove $oil.room
                action (order) on
@@ -2253,6 +2259,10 @@ Analyze:
                          gosub Action analyze $MC.order.noun on brazier
                     }
                else gosub Action analyze $MC.order.noun on my brazier
+          }
+     if (%society.type = Forging) then
+          {
+               if matchre("$righthand $lefthand", "$MC.order.noun") then gosub Action analyze my $MC.order.noun
           }
      else gosub Action analyze $MC.order.noun
 	return
