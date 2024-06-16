@@ -386,7 +386,7 @@ identify.order:
           {
                action var volume $1 when ^The notes indicate that remedies such as this must be bundled in quantities containing exactly (\d+) uses
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (some blister cream|some moisturizing ointment|some itch salve|some lip balm)
-               matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb ungent|some neck salve|some abdominal salve|some chest salve|some neck ungent|some abdominal ungent|some chest ungent|some head ungent|some head salve)
+               matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb unguent|some neck salve|some abdominal salve|some chest salve|some neck unguent|some abdominal unguent|some chest unguent|some head unguent|some head salve)
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic|a back potion|some limb tonic)
                matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices)
                matchre chapter.6 This logbook is tracking a work order requiring you to craft (a body draught|a body elixir)
@@ -750,11 +750,11 @@ calc.material:
                if "%full.order.noun" = "some moisturizing ointment" then var herb2 plovik
                if "%full.order.noun" = "some itch salve" then var herb2 jadice
                if "%full.order.noun" = "some lip balm" then var herb2 nilos
-               if matchre("%full.order.noun", "(some neck salve|some neck ungent)") then var herb1 georin
-               if matchre("%full.order.noun", "(some abdominal salve|some abdominal ungent)") then var herb1 nilos
-               if matchre("%full.order.noun", "(some chest salve|some chest ungent)") then var herb1 plovik
-               if matchre("%full.order.noun", "(some head salve|some head ungent)") then var herb1 nemoih
-               if matchre("%full.order.noun", "(some limb salve|some limb ungent)") then var herb1 jadice 
+               if matchre("%full.order.noun", "(some neck salve|some neck unguent)") then var herb1 georin
+               if matchre("%full.order.noun", "(some abdominal salve|some abdominal unguent)") then var herb1 nilos
+               if matchre("%full.order.noun", "(some chest salve|some chest unguent)") then var herb1 plovik
+               if matchre("%full.order.noun", "(some head salve|some head unguent)") then var herb1 nemoih
+               if matchre("%full.order.noun", "(some limb salve|some limb unguent)") then var herb1 jadice 
                if matchre("%full.order.noun", "(a neck potion|some neck tonic)") then var herb1 riolur
                if matchre("%full.order.noun", "(a chest potion|some chest tonic)") then var herb1 root
                if matchre("%full.order.noun", "(a back potion|some back tonic)") then var herb1 junliar
@@ -764,8 +764,8 @@ calc.material:
                if matchre("%full.order.noun", "(some face ointment|some face poultices)") then var herb1 pollen
                if matchre("%full.order.noun", "(some body ointment|some body poultices)") then var herb1 genich
                #### SPECIAL ORDERS - HERBS THAT HAVE TO BE FORAGED / PROCESSED FIRST 
-               if matchre("%full.order.noun", "(eye ungent|eye salve)") then var herb1 sufil
-               if matchre("%full.order.noun", "(back ungent|back salve)") then var herb1 hulnik
+               if matchre("%full.order.noun", "(eye unguent|eye salve)") then var herb1 sufil
+               if matchre("%full.order.noun", "(back unguent|back salve)") then var herb1 hulnik
                if matchre("%full.order.noun", "(a skin potion|some skin tonic)") then var herb1 lujeakave
                if matchre("%full.order.noun", "(a limb potion|some limb tonic)") then var herb1 yelith
                if matchre("%full.order.noun", "(a head potion|some head tonic)") then var herb1 eghmok
@@ -1005,8 +1005,8 @@ parts.inv:
      action (engineering) math lenses.count add 1 when ^\s+some lenses
      action (engineering) math %order.pref.item.count add 1 when ^\s+(?:an?|some) (%work.material).*(%order.pref|stack)
      action (engineering) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(%order.pref|stack)
-     action (alchemy) math %herb1.item.count add 1 when ^\s+(?:an?|some).*(%herb1)(?! ?(salve|ointment|ungent|potion|poultices|draught|elixir|tonic|salve|wash|balm))
-     action (alchemy) math %herb2.item.count add 1 when ^\s+(?:an?|some).*(%herb2)(?! ?(salve|ointment|ungent|potion|poultices|draught|elixir|tonic|salve|wash|balm))
+     action (alchemy) math %herb1.item.count add 1 when ^\s+(?:an?|some).*(%herb1)(?! ?(salve|ointment|unguent|potion|poultices|draught|elixir|tonic|salve|wash|balm))
+     action (alchemy) math %herb2.item.count add 1 when ^\s+(?:an?|some).*(%herb2)(?! ?(salve|ointment|unguent|potion|poultices|draught|elixir|tonic|salve|wash|balm))
      action (alchemy) math water.count add 1 when ^\s+(?:an?|some) water
      action (alchemy) math alcohol.count add 1 when ^\s+(?:an?|some) grain alcohol
      action (alchemy) math coal.count add 1 when ^\s+(?:an?|some).*coal nugget

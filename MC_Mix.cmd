@@ -38,7 +38,7 @@ action (order) var alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol
 action (order) var catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 
 var liquid tonic|wash|potion|elixir|draught
-var solid cream|salve|balm|poultices|ungent|ointment
+var solid cream|salve|balm|poultices|unguent|ointment
 
 if matchre("$MC.order.noun", "%liquid") then
 		{
