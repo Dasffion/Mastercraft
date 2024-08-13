@@ -2210,7 +2210,7 @@ HerbProcess:
      pause 0.1
      if ("$righthand" != "Empty") then
           {
-          get my %herb from my portal
+          put get my %herb from my portal
           pause 0.6
           pause 0.3             
           }
