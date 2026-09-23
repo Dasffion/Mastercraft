@@ -58,6 +58,10 @@ action var stain.gone 1 when ^The stain is all used up, so you toss it away.
 action (order) var glue.order $1 when (\d+)\)\..*some wood glue.*(Lirums|Kronars|Dokoras)
 action var glue.gone 1 when ^The glue is all used up, so you toss it away.
 
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_PLIERS|$MC_TINKERTOOL|$MC_CARVINGKNIFE
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
 
 unfinished:
 	send glance
@@ -136,6 +140,7 @@ work:
 	action (work) on
 	save %Action
 	gosub %Action
+     if (%need.repair = 1) then goto done
 	goto work
 	
 fouledup:
@@ -188,7 +193,7 @@ assemble:
 	return
 
 stain:
-	if %stain.gone = 1 then gosub new.tool
+	if %stain.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight stain
 	var Action drawknife
 	 gosub action apply my stain to my $MC.order.noun
@@ -196,7 +201,7 @@ stain:
 	return
 
 glue:
-	if %glue.gone = 1 then gosub new.tool
+	if %glue.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight glue
 	var Action drawknife
 	 gosub action apply my glue to my $MC.order.noun
@@ -235,7 +240,7 @@ arrowhead_make:
 	pause 1
 	goto arrowhead_material
 
-new.tool:
+tool.swap:
 	if !contains("$scriptlist", "mastercraft") then return
 	 var temp.room $roomid
 	 gosub location.vars
@@ -279,7 +284,8 @@ return:
 	
 repeat:
 	math shape.repeat subtract 1
-	gosub PUT_IT my $MC.order.noun in my $MC_ENGINEERING.STORAGE
+	if ("%repair" = "on") then gosub check.tools
+     gosub PUT_IT my $MC.order.noun in my $MC_ENGINEERING.STORAGE
 	gosub GET my shaping book from my $MC_ENGINEERING.STORAGE
 	gosub STUDY my book
 	gosub PUT_IT my book in my $MC_ENGINEERING.STORAGE
@@ -289,8 +295,8 @@ repeat:
 
 
 done:
-	if %stain.gone = 1 then gosub new.tool
-	if %glue.gone = 1 then gosub new.tool
+	if %stain.gone = 1 then gosub tool.swap
+	if %glue.gone = 1 then gosub tool.swap
 	 gosub STOW_RIGHT
 	if "$lefthandnoun" = "$MC.order.noun" then gosub PUT swap
 	pause 1
