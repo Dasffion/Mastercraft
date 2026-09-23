@@ -69,7 +69,10 @@ action (order) var glue.order $1 when (\d+)\)\..*some wood glue.*(Lirums|Kronars
 action var glue.gone 1 when ^The glue is all used up, so you toss it away.
 var count zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eightteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four|twenty-five|twenty-six|twenty-seven|twenty-eight|twenty-nine|thirty
 
-
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_PLIERS|$MC_TINKERTOOL|$MC_CARVINGKNIFE
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
 
 unfinished:
 	send glance
@@ -322,14 +325,14 @@ assemblemech:
 	matchwait
 
 stain:
-	if %stain.gone = 1 then gosub new.tool
+	if %stain.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight stain
 	var Action drawknife
 	 gosub Action apply my stain to my $MC.order.noun
 	return
 
 glue:
-	if %glue.gone = 1 then gosub new.tool
+	if %glue.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight glue
 	var Action drawknife
 	 gosub Action apply my glue to my $MC.order.noun
@@ -365,7 +368,7 @@ arrowhead_make:
 	gosub PUT_IT my bolth in my $MC_ENGINEERING.STORAGE
 	goto arrowhead_material
 
-new.tool:
+tool.swap:
 	if !contains("$scriptlist", "mastercraft") then return
 	 var temp.room $roomid
 	 gosub location.vars
@@ -409,8 +412,8 @@ return:
 	return
 
 done:
-	if %stain.gone = 1 then gosub new.tool
-	if %glue.gone = 1 then gosub new.tool
+	if %stain.gone = 1 then gosub tool.swap
+	if %glue.gone = 1 then gosub tool.swap
 	 gosub STOW_RIGHT
 	 wait
 	if "$lefthandnoun" = "$MC.order.noun" then gosub PUT swap
