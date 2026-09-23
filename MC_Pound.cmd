@@ -44,6 +44,11 @@ action var last.tool $1 when ^@(\S+)
 #action (work) goto Retry when \.\.\.wait|type ahead
 action (work) off
 
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
+
 
 action var assemble $1 when another finished \S+ shield (handle)
 action var assemble $1 when another finished wooden (hilt|haft)
@@ -317,7 +322,8 @@ done:
 	pause 1
 	if %item.anvil = 1 then gosub GET $MC.order.noun from anvil
 	var item.anvil 0
-	 pause 1
-	 if %pound.repeat > 1 then goto repeat
-	 put #parse POUNDING DONE
+	pause 1
+	if %pound.repeat > 1 then goto repeat
+     # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
+	put #parse POUNDING DONE
 	exit
