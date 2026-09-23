@@ -1,4 +1,9 @@
 #debug 10
+## STANDALONE SCRIPT RUN EXAMPLE:
+## .MC_Mix unguent 10 jadice coal - Makes 10 Jadice Unguents
+## .MC_Mix <order noun> <count to make> <herb> <catalyst>
+## Make sure to stock up water/alcohol/coal/herbs
+## SET YOUR BOOK TO CORRECT RECIPE AND STUDY BEFORE RUNNING 
 var mix.repeat 0
 var current.lore ALCHEMY
 if_3 var herb1 %3
@@ -9,6 +14,7 @@ var tool mix
 var alcohol.gone 0
 var water.gone 0
 var catalyst.gone 0
+var need.repair 0
 var special NULL
 include mc_include.cmd
 
@@ -38,7 +44,12 @@ action (order) var alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol
 action (order) var catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 
 var liquid tonic|wash|potion|elixir|draught
-var solid cream|salve|balm|poultices|unguent|ointment
+var solid cream|salve|balm|poultices|unguent|ungent|ointment
+
+put #var MC_WORK.TOOLS $MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE
+
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
 
 if matchre("$MC.order.noun", "%liquid") then
 		{
@@ -61,6 +72,7 @@ if matchre("$MC.order.noun", "%solid") then
 		var water water
 		}	
 unfinished:
+     gosub STUDY book
 	gosub ToolCheckRight %bowl
 	if matchre("%bowl", "$lefthand") then gosub PUT swap
 	send look in my %bowl
@@ -87,10 +99,10 @@ first.mix:
 	gosub ToolCheckLeft %herb1
 	gosub PUT_IT my %herb1 in my %bowl
 	pause 0.5
-	if "$lefthand" != "Empty" then gosub STOW_LEFT
+	if ("$lefthand" != "Empty") then gosub STOW_LEFT
 	pause 0.5
 	gosub GET my %mixer
-	if !matchre("$lefthand|$righthand", "%mixer") then gosub GET my mixer from my portal
+	if !matchre("$lefthand|$righthand", "%mixer") then gosub GET my %mixer from my portal
 	pause 0.5
 	if "%tool.mix" = "crush" then gosub Action %tool.mix %herb1 in my %bowl with my %mixer
 	else gosub Action %tool.mix my %bowl with my %mixer
@@ -102,7 +114,9 @@ work:
 	action (work) on
 	save %tool
 	if "%tool" = "done" then goto done
+     if (%need.repair = 1) then goto too.damaged
 	gosub %tool
+     if (%need.repair = 1) then goto too.damaged
 	goto work
 
 
@@ -111,6 +125,7 @@ mix:
 	gosub ToolCheckLeft %mixer
 	if "%tool.mix" = "crush" then gosub Action %tool.mix $MC.order.noun in my %bowl with my %mixer
 	else gosub Action %tool.mix my %bowl with my %mixer
+     if (%need.repair = 1) then goto too.damaged
 	return
 	
 
@@ -134,25 +149,27 @@ turn:
 	return
 	
 water:
-	if %water.gone = 1 then gosub new.tool
+	if %water.gone = 1 then gosub tool.swap
 	gosub ToolCheckLeft water
 	var tool mix
 	send pour part water in my %bowl
 	pause 0.5
 	if !contains("$lefthandnoun", "water") then var water.gone 1
+     if (%need.repair = 1) then goto too.damaged
 	return
 	
 alcohol:
-	if %alcohol.gone = 1 then gosub new.tool
+	if %alcohol.gone = 1 then gosub tool.swap
 	gosub ToolCheckLeft alcohol
 	var tool mix
 	send pour part alcohol in my %bowl
 	pause 0.5
 	if !contains("$lefthandnoun", "alcohol") then var alcohol.gone 1
+     if (%need.repair = 1) then goto too.damaged
 	return
 	
 catalyst:
-	if %catalyst.gone = 1 then gosub new.tool
+	if %catalyst.gone = 1 then gosub tool.swap
 	if !contains("$lefthandnoun", "nugget") then
 	{
 		if "$lefthand" != "Empty" then gosub STOW_LEFT
@@ -176,7 +193,7 @@ specialcheck:
 	var special NULL
 	return
 
-new.tool:
+tool.swap:
 if contains("$scriptlist", "mastercraft") then
 	{
 	action (work) off
@@ -223,6 +240,7 @@ if contains("$scriptlist", "mastercraft") then
 else
 {
 echo *** Out of Water or Alcohol! Go get more!
+if ("%repair" = "on") then gosub check.tools
 put #parse MIX DONE
 put #parse ALCHEMY DONE
 exit
@@ -259,6 +277,7 @@ repeat:
 	if ("%repair" = "on") then gosub check.tools
      gosub GET my remedy book
 	if !matchre("$righthand|$lefthand", "book") then gosub GET my remedy book from my portal
+     if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
 	gosub STUDY my book
 	gosub PUT_IT my book in my %alchemy.storage
 	gosub GET my %material
@@ -266,21 +285,23 @@ repeat:
 	var tool mix
 	goto first.mix
 	
-	
+too.damaged:
+     echo ** TOOL is too damaged to continue! need repairs!
 done:
-	if %water.gone = 1 then gosub new.tool
-	if %catalyst.gone = 1 then gosub new.tool
-	if %alcohol.gone = 1 then gosub new.tool
-	if "$lefthand" != "Empty" then gosub STOW_LEFT
+	if (%water.gone = 1) then gosub tool.swap
+	if (%catalyst.gone = 1) then gosub tool.swap
+	if (%alcohol.gone = 1) then gosub tool.swap
+	if ("$lefthand" != "Empty") then gosub STOW_LEFT
 	gosub GET my $MC.order.noun from my %bowl
-	if %mix.repeat > 1 then 
+	if ((%mix.repeat > 1) && (%need.repair = 0)) then 
 		{
 		gosub PUT_IT $MC.order.noun in %alchemy.storage 
 		goto repeat
 		}
-	if "$righthand" != "Empty" then gosub STOW_RIGHT
+	if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("%repair" = "on") then gosub check.tools
-	gosub countcheck
+	# if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
+     gosub countcheck
 	put #parse ALCHEMY DONE
 	exit
 	
@@ -288,7 +309,7 @@ countcheck:
 if $MC_NOWO then return
 action var temprem $1 when ^You count out (\d+) uses remaining\.
 gosub PUT count my $MC.order.noun
-if %temprem > 5 then 
+if (%temprem > 5) then 
 	{
 	gosub PUT mark my $MC.order.noun at 5
 	gosub PUT break my $MC.order.noun
