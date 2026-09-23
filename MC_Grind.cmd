@@ -19,6 +19,11 @@ action var action push when ^Straining a bit less you maintain force to the grin
 action var action oil when ^With grinding complete, the metal now needs protection by pouring oil on it.
 action var action Done when Applying the final touches, you complete working
 
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
+
 if !matchre("$lefthand|$righthand", "$MC.order.noun") then
 	{
 	 gosub EMPTY_HANDS
@@ -62,5 +67,6 @@ done:
 	 gosub PUT_IT my oil in my %forging.storage
 	 gosub mark
 	 pause .5
+      # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
 	 send #parse GRINDING DONE
 	exit
