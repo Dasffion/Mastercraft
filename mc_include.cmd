@@ -1,3 +1,4 @@
+#debug 5
 #Setup Your variables in the MC_SETUP file
 #
 # Happy Crafting!
@@ -30,6 +31,12 @@ eval alltools replacere("%alltools", "^\|", "")
 eval alltools replacere("%alltools", "\|$", "")
 var HaloType NULL
 var Removing 0
+var RepairChecked 0
+var need.repair 0
+var LookTime $gametime
+var LookLast 0
+var need.coin 0
+action var need.repair 1 when ^The .+ is far too damaged to be used for that\.
 #var alltools saw|chisel|carving knife|rasp|riffler|clamp|needles|drawknife|slickstone|hammer|tongs|bellows|pliers|shovel|bowl|mixing stick|pestle|mortar|sieve|loop|burin|yardstick|tools|awl|rod
 #put #unvar repair.room
 put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 6}
@@ -62,7 +69,8 @@ action (order) put #tvar catalyst.order $1 when (\d+)\)\..*a massive coal nugget
 action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
 action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
 action var need.coin 1 when you don't have enough coins|you don't have that much
- 
+## action goto RESET when ^You cannot figure out how to do that\.\s+Perhaps finding suitable ingredients and studying some instructions would help\.
+action goto RESET when ^The (.+) is far too damaged to be used for that\.
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
@@ -84,7 +92,7 @@ action (book) var fount.need $1 when .*(\d).* mana fount$
 ### KERTIGEN HALO IDENTIFICATION
 var HaloType NULL
 var HaloRemoved 0
-action var HaloType $1 when (\w+) with a .+ Kertigen halo
+action var HaloType $1 when (\w+) with a .+ halo on it
 
 ### ELEMENTAL WATER CUBE TIMER SETUP
 if !def(MC.WATERCUBE.TIME) then put #var MC.WATERCUBE.TIME $gametime
@@ -122,61 +130,69 @@ if $MC_TOOLBELT_%society.type != NULL then
 #Forging settings
 if "%society.type" = "Forging" then
 	{
-     eval discipline tolower($MC_FORGING.DISCIPLINE)
-     if !matchre("blacksmith|weapon|armor", "%discipline") then goto discfail
-     eval work.difficulty tolower($MC_FORGING.DIFFICULTY)
-     eval work.material tolower($MC_FORGING.MATERIAL)
-     eval order.pref tolower(ingot)
-     eval main.storage tolower(%forging.storage)
-     eval deed.order tolower($MC_FORGING.DEED)
+     var discipline $MC_FORGING.DISCIPLINE
+     if !matchre("%discipline", "(?i)(blacksmith|weapon|armor)") then goto discfail
+     var work.difficulty $MC_FORGING.DIFFICULTY
+     var work.material $MC_FORGING.MATERIAL
+     var order.pref ingot
+     var main.storage %forging.storage
+     var deed.order $MC_FORGING.DEED
 	}
 #Outfitting settings
 if "%society.type" = "Outfitting" then
 	{
-     eval discipline tolower($MC_OUT.DISCIPLINE)
-     if "%discipline" != "tailor" then goto discfail
-     eval work.difficulty tolower($MC_OUT.DIFFICULTY)
-     eval work.material tolower($MC_OUT.MATERIAL)
-     eval order.pref tolower($MC_OUT.PREF)
-     eval main.storage tolower(%outfitting.storage)
-     eval deed.order tolower($MC_OUT.DEED)
+     var discipline $MC_OUT.DISCIPLINE
+	if !matchre("%discipline", "(?i)tailor") then goto discfail
+     var work.difficulty $MC_OUT.DIFFICULTY
+     var work.material $MC_OUT.MATERIAL
+     var order.pref $MC_OUT.PREF
+     var main.storage %outfitting.storage
+     var deed.order $MC_OUT.DEED
 	}
 #Engineering settings
 if "%society.type" = "Engineering" then
 	{
-     eval discipline tolower($MC_ENG.DISCIPLINE)
-     if !matchre("carving|shaping|tinkering", "%discipline") then goto discfail
-     eval work.difficulty tolower($MC_ENG.DIFFICULTY)
-     eval work.material tolower($MC_ENG.MATERIAL)
-     eval deed.size
-     eval order.pref tolower($MC_ENG.PREF)
-     eval main.storage tolower(%engineering.storage)
-     eval deed.order tolower($MC_ENG.DEED)
+     var discipline $MC_ENG.DISCIPLINE
+	if !matchre("%discipline", "(?i)(carving|shaping|tinkering)") then goto discfail
+     var work.difficulty $MC_ENG.DIFFICULTY
+     var work.material $MC_ENG.MATERIAL
+     var deed.size
+     var order.pref $MC_ENG.PREF
+     var main.storage %engineering.storage
+     var deed.order $MC_ENG.DEED
 	}
 #Alchemy Settings
 if "%society.type" = "Alchemy" then
 	{
      eval discipline tolower($MC_ALC.DISCIPLINE)
-     if "%discipline" != "remed" then goto discfail
-     eval work.difficulty tolower($MC_ALC.DIFFICULTY)
+	if !matchre("%discipline", "(?i)remed") then goto discfail
+     var work.difficulty $MC_ALC.DIFFICULTY
      var work.material
      var deed.size
      var order.pref 
-     eval main.storage tolower(%alchemy.storage)
+     var main.storage %alchemy.storage
      var deed.order 
 	}
 #Enchanting Settings
 if "%society.type" = "Enchanting" then
 	{
-     eval discipline tolower($MC_ENCHANTING.DISCIPLINE)
-     if "%discipline" != "artif" then goto discfail
-     eval work.difficulty tolower($MC_ENCHANTING.DIFFICULTY)
+     var discipline $MC_ENCHANTING.DISCIPLINE
+	if !matchre("%discipline", "(?i)artif") then goto discfail
+     var work.difficulty $MC_ENCHANTING.DIFFICULTY
      var work.material
      var deed.size
      var order.pref 
-     eval main.storage tolower(%enchanting.storage)
+     var main.storage %enchanting.storage
      var deed.order 
 	}
+eval discipline tolower("%discipline")
+eval work.difficulty tolower("%work.difficulty")
+eval work.material tolower("%work.material")
+eval deed.size tolower("%deed.size")
+eval order.pref tolower("%order.pref")
+eval main.storage tolower("%main.storage")
+eval deed.order tolower("%deed.order")
+
 goto endinclude
 
 discfail:
@@ -1001,7 +1017,7 @@ return
 
 
 find.room:
-	if "%discipline" = "remed" then return
+	#if "%discipline" = "remed" then return
 	var find.room $1
 	gosub roomplayerstrip
      if ((matchre("%find.room", "$roomid")) && matchre("%tempplayers", "(^$)")) then 
@@ -1254,39 +1270,102 @@ MOVE_RETURN:
      if $roomid = 0 then goto door
      return
      
-automove:
-	 pause 0.2
-     var toroom $0
-     if $roomid = 0 then 
-          {
-          gosub door
-          put #mapper reset
-          }
-automovecont:
-     pause 0.2
-     match automovecont2 Bonk! You smash your nose.
-     match return YOU HAVE ARRIVED
-     match automovecont1 YOU HAVE FAILED
-     put #goto %toroom
-     matchwait 90
-     if $roomid = 0 then 
-          {
-          gosub door
-          }
+# automove:
+	 # pause 0.2
+     # var toroom $0
+     # if $roomid = 0 then 
+          # {
+          # gosub door
+          # put #mapper reset
+          # }
+# automovecont:
+     # pause 0.2
+     # match automovecont2 Bonk! You smash your nose.
+     # match return YOU HAVE ARRIVED
+     # match automovecont1 YOU HAVE FAILED
+     # put #goto %toroom
+     # matchwait 90
+     # if $roomid = 0 then 
+          # {
+          # gosub door
+          # }
      
-     put #mapper reset
-     goto automovecont
+     # put #mapper reset
+     # goto automovecont
+	
+AUTOMOVE:
+	action (moving) var Moving 1 when Obvious (path|exits)|Roundtime
+     delay 0.00001
+     var randomloop 0
+     var Destination $0
+     var automovefailCounter 0
+	if ($standing = 0) then gosub AUTOMOVE_STAND
+     if ("$roomid" = "%Destination") then return
+     if ($roomid = 0) then 
+          {
+			gosub door
+			put #mapper reset
+			pause 0.3
+          }
+AUTOMOVE_GO:
+automovecont:
+     delay 0.00001
+	action (moving) on
+	var Moving 0
+     matchre AUTOMOVE_FAILED ^(?:AUTOMAPPER )?MOVE(?:MENT)? FAILED
+     matchre AUTOMOVE_RETURN ^YOU HAVE ARRIVED(?:\!)?
+     matchre AUTOMOVE_RETURN ^SHOP CLOSED(?:\!)?
+     matchre AUTOMOVE_FAIL_BAIL ^DESTINATION NOT FOUND
+     matchre AUTOMOVE_FAILED ^You don't seem
+     put #goto %Destination
+     matchwait 3
+     if (%Moving = 0) then goto AUTOMOVE_FAILED
+     matchre AUTOMOVE_FAILED ^(?:AUTOMAPPER )?MOVE(?:MENT)? FAILED
+     matchre AUTOMOVE_RETURN ^YOU HAVE ARRIVED(?:\!)?
+     matchre AUTOMOVE_RETURN ^SHOP CLOSED(?:\!)?
+     matchre AUTOMOVE_FAIL_BAIL ^DESTINATION NOT FOUND
+     matchwait 120
+     goto AUTOMOVE_FAILED
+AUTOMOVE_STAND:
+     delay 0.00001
+     if ($standing = 1) then return
+     matchre AUTOMOVE_STAND ^\.\.\.wait|^Sorry,|^You are still stunned\.
+     matchre AUTOMOVE_STAND ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime
+     matchre AUTOMOVE_STAND ^The weight of all your possessions prevents you from standing\.
+     matchre AUTOMOVE_STAND ^You are still stunned\.
+     matchre RETURN ^You stand(?:\s*back)? up\.
+     matchre RETURN ^You are already standing
+     send stand
+     matchwait 20
+     goto AUTOMOVE_STAND
 
 automovecont1:
      pause
      put look
      pause
 	goto automovecont
-
+AUTOMOVE_FAILED:
+     math automovefailCounter add 1
+	echo
+	echo *** Movement failed!
+	echo
+	send look
+	pause 0.2
+     if (%automovefailCounter > 5) then goto AUTOMOVE_FAIL_BAIL
+	send #mapper reset
+	pause 0.1
+     goto AUTOMOVE_GO
+AUTOMOVE_FAIL_BAIL:
+	echo
+	echo *** AUTOMOVEMENT FAILURE!!!!
+	echo
+	action (moving) off
+AUTOMOVE_RETURN:
 automovecont2:
      pause
      if matchre("$scriptlist", "automapper") then send #script abort automapper
      pause
+	action (moving) off
      return
 
 mark:
@@ -1362,6 +1441,7 @@ summonoil2:
 manualwater:
 	gosub automove alchemy suppl
 	action (order) on
+     pause 0.001
 	gosub ORDER
      pause 0.9
      pause 0.5
@@ -1387,6 +1467,7 @@ summonalcohol2:
 manualalcohol:
 	gosub automove alchemy suppl
 	action (order) on
+     pause 0.001
 	gosub ORDER
      pause 0.9
      pause 0.5
@@ -1448,24 +1529,31 @@ got.tool:
 	 
 clerk.tools.done:
      gosub automove %temp.room
-     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
+     # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
 	return
 
 check.tools:
      evalmath lastToolRepairTime $gametime - $last%society.typeRepair
-     if %lastToolRepairTime < 100 then return
+     if (%lastToolRepairTime < 100) then return
      var temp 0
      eval MaxTemp count("$MC_WORK.TOOLS","|")
-     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
+     math MaxTemp add 1
+     #if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
 check.tools2:
      var repairing 1
-     echo * Checking Tools
+     echo
+     echo ~~~~~~~~~~~~~~~~~~~~~
+     echo * Checking Tools for Repair
+     echo * TOOLS: $MC_WORK.TOOLS
+     echo * Number to check: %MaxTemp
+     echo ~~~~~~~~~~~~~~~~~~~~~
+     echo
      gosub ToolCheckRight $MC_WORK.TOOLS(%temp)
      gosub repair.tool $MC_WORK.TOOLS(%temp)
      unvar repair.temp
      if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
           {
-          if !matchre("$righthand", "(halo|Empty)") then
+          if matchre("$righthand", "(halo|Empty)") then
                {
                     send push my halo
                     wait
@@ -1476,11 +1564,11 @@ check.tools2:
      gosub STOW_RIGHT
      math temp add 1
      var repairing 0
-     if %temp > %MaxTemp then
+     if (%temp >= %MaxTemp) then
           {
                unvar temp
                unvar MaxTemp
-               if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 1)) then gosub HALO_REMOVE
+               # if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
                return
           }
      gosub check.tools2
@@ -1491,7 +1579,6 @@ check.tools2:
                gosub PUT_IT my stamp in my %main.storage
           }
      put #var last%society.typeRepair $gametime
-     if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
      return
 
 repair.tool:
@@ -1502,7 +1589,7 @@ repair.tool_1:
      send analyze my $righthandnoun
      # send analyze my %repair.temp
      pause 1
-     if (("%tool.repair" = "in pristine condition") || ("%tool.repair" = "practically in mint condition")) then
+     if matchre("%tool.repair", "(pristine|mint) condition") then
           {
                echo * Pristine condition
                return
@@ -1516,7 +1603,6 @@ repair.tool_1:
                gosub RepairAllItems
                gosub ReturnAllItems
                gosub automove %temp.room
-               if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
                return
           }
 repair.tool_2:
@@ -1529,23 +1615,23 @@ repair.tool_2:
           {
                gosub toolcheck
                pause 0.1
-               echo *** HALO SELF-REPAIR
+               echo *** SELF-REPAIR TOOLS
                if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
                     {
                          if !matchre("$righthand", "(%HaloType|%repair.temp|halo)") then
                               {
                                    gosub GET my kertigen halo
-                                   pause 0.2
+                                   pause 0.4
                               }
                          if !matchre("$righthand|$lefthand", "(%HaloType|%repair.temp|halo)") then
                               {
                                    gosub GET my %repair.temp from my %tool.storage
-                                   pause 0.3
+                                   pause 0.4
                               }
                          if !matchre("$righthand", "(%HaloType|%repair.temp|halo)") then gosub GET my %HaloType
-                         pause 0.1
+                         pause 0.2
                          if !matchre("$righthand|$lefthand", "%repair.temp") then gosub HALO_SHIFT %repair.temp
-                         pause 0.1
+                         pause 0.2
                          if matchre("$righthand|$lefthand", "halo") then gosub PUT_IT halo in my %tool.storage
                     }
                if matchre("$lefthand", "%repair.temp") then
@@ -1560,7 +1646,14 @@ repair.tool_2:
                gosub GET my wire brush
                gosub PUT rub my %repair.temp with my brush
                gosub PUT_IT my wire brush in my %main.storage
-               if (%too.damaged = 1) then goto repair.tool_1
+               if (%too.damaged = 1) then
+                    {
+                         echo
+                         echo *** TOOL IS TOO DAMAGED TO SELF-REPAIR!
+                         echo *** USING NPC CLERK TO REPAIR!
+                         echo
+                         goto repair.tool_1
+                    }
                gosub GET my oil
                gosub PUT pour my oil on my %repair.temp
                gosub PUT_IT my oil in my %main.storage
@@ -1640,12 +1733,14 @@ ReturnAllItems:
      match ticket You get
      match ReturnAllItems2 I could not find
      match ReturnAllItems2 What were you referring to
+     match ReturnAllItems2 You are already holding that
      send get my ticket
      matchwait
 ReturnAllItems2:
      match ticket You get
      match return I could not find
      match return What were you referring to
+     match ReturnAllItems2 You are already holding that
      send get my ticket from my portal
      matchwait
 
@@ -1671,15 +1766,15 @@ ToolCheckRight:
 		{
 		gosub GET MY %tools
           # if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
-          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               {
-                    pause 0.001
-                    if matchre("$righthand", "%tools") then return
-                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    pause 0.1
-                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
-                    if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
-               }
+          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               # {
+                    # pause 0.001
+                    # if matchre("$righthand", "%tools") then return
+                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    # pause 0.1
+                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
+                    # if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
+               # }
           var Removing 0
 		return
 		}
@@ -1688,15 +1783,15 @@ ToolCheckRight:
 		gosub STOW_RIGHT
 		gosub GET my %tools
           if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
-          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               {
-                    pause 0.001
-                    if matchre("$righthand", "%tools") then return
-                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    pause 0.1
-                    if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
-                    if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
-               }
+          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               # {
+                    # pause 0.001
+                    # if matchre("$righthand", "%tools") then return
+                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    # pause 0.1
+                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
+                    # if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
+               # }
 		}
      var Removing 0
 	return
@@ -1708,14 +1803,14 @@ ToolCheckLeft:
 		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
 		else gosub GET MY %tools
           if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
-          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               {
-                    if matchre("$lefthand", "%tools") then return
-                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    pause 0.1
-                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
-                    if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
-               }
+          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               # {
+                    # if matchre("$lefthand", "%tools") then return
+                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    # pause 0.1
+                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
+                    # if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
+               # }
 		return
 		}
 	if !matchre("%tools", "$lefthandnoun") then
@@ -1723,14 +1818,14 @@ ToolCheckLeft:
 		gosub STOW_LEFT
 		gosub GET my %tools
           if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
-          if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               {
-                    if matchre("$lefthand", "%tools") then return
-                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    pause 0.1
-                    if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
-                    if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
-               }
+          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
+               # {
+                    # if matchre("$lefthand", "%tools") then return
+                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
+                    # pause 0.1
+                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
+                    # if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
+               # }
 		}
 	return
      
@@ -1813,10 +1908,10 @@ lack.coin.exit:
      exit
      
 return.tools:
-	 gosub automove $repair.room
+	gosub automove $repair.room
      var toolcount 0
      eval toolstotal count("$MC_WORK.TOOLS","|")
-	 gosub EMPTY_HANDS
+	gosub EMPTY_HANDS
 return.tools1:
      if matchre ("$MC_WORK.TOOLS(%toolcount)", "%clerktools") then 
 	 {
@@ -1840,7 +1935,7 @@ next.tool:
      goto return.tools1
 
 not.a.tool:
-	 put #echo >log green MASTERCRAFT: $MC_WORK.TOOLS(%toolcount) is not a tool that can be stored - adjust your variables
+	put #echo >log green MASTERCRAFT: $MC_WORK.TOOLS(%toolcount) is not a tool that can be stored - adjust your variables
      math toolcount add 1
      if (%toolcount > %toolstotal) then return
      goto return.tools1
@@ -1859,7 +1954,7 @@ EMPTY_HANDS:
      
 
 #### KERTIGEN HALO HANDLING
-#### INITIAL HALO HANDLING TO REMOVE TOOLS
+#### INITIAL HALO HANDLING TO REMOVE ALL TOOLS
 HALO_REMOVE:
      var Removing 1
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
@@ -1879,14 +1974,22 @@ HALO_REMOVE:
                pause 0.5
                pause 0.5
                pause 0.1
-               send pull halo
+               if !matchre("$righthand", "(halo|%HaloType)") then gosub GET my kertigen halo
+               pause 0.7
+               pause 0.1
+               if matchre("$righthand", "(halo|%HaloType)") then send pull my halo
                wait
                pause 0.5
                put stow %HaloType
                pause 0.3
           }
      if !matchre("$righthand", "halo") then gosub GET my kertigen halo
-     pause 0.1
+     pause 0.2
+     if !matchre("$righthand", "halo") then
+          {
+               gosub HALO_FIND
+               if (%HaloFound = 0) then goto endearly
+          }
      if (matchre("%discipline", "weapon|armor|blacksmith") || matchre("$roomname", "Forging Society")) then
           {
                gosub HALO_SHIFT $MC_HAMMER
@@ -1943,7 +2046,7 @@ HALO_REPAIR:
      echo *** REMOVING REPAIR TOOLS FROM HALO
      echo
      pause 0.01
-     put look in my %tool.storage
+     put rummage in my %tool.storage
      pause 0.2
      pause 0.1
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
@@ -1962,10 +2065,16 @@ HALO_REPAIR:
           }
      if !matchre("$righthand", "halo") then gosub GET my kertigen halo
      pause 0.1     
+     if !matchre("$righthand", "halo") then
+          {
+               gosub HALO_FIND
+               if (%HaloFound = 0) then goto endearly
+          }
 HALO_SHIFT:
      var shifting $0
      pause 0.001
      if !matchre("$righthand $lefthand", "(%HaloType|halo)") then goto HALO_ERROR
+     if matchre("$righthand $lefthand", "%shifting") then goto HALO_SUCCESS
      matchre HALO_SUCCESS ^Your Kertigen halo flares brightly
      matchre HALO_ERROR ^What tool did you want\?
      put turn my halo to %shifting
@@ -1983,14 +2092,11 @@ HALO_SUCCESS:
      pause 0.5
      echo ** LastHalo: %HaloType
      pause 0.001
-     if ((%Removing = 1) && (%repairing = 0)) then 
-          {
-               send pull my kertigen halo
-               var HaloType halo
-               pause 0.5
-               if !matchre("$lefthand", "(halo|Empty)") then gosub STOW_LEFT
-               if !matchre("$righthand", "(halo|Empty)") then gosub STOW_RIGHT
-          }
+     send pull my kertigen halo
+     var HaloType halo
+     pause 0.5
+     if !matchre("$lefthand", "(halo|Empty)") then gosub STOW_LEFT
+     if !matchre("$righthand", "(halo|Empty)") then gosub STOW_RIGHT
      if matchre("$lefthand", "halo") then
           {
                send swap
@@ -2002,6 +2108,141 @@ HALO_ERROR:
      echo
      echo *** %shifting not found in Halo
      echo
+     return
+     
+HALO_FIND:
+     var HaloFound 0
+     echo
+     echo *** CANNOT FIND OUR HALO???
+     echo *** CHECKING ALL OUR TOOLS
+     echo
+     pause 0.1
+     send look in my portal
+     pause 0.2
+     send look in my %tool.storage
+     pause 0.4
+     pause 0.2
+     if !matchre("%HaloType", "NULL") then
+          {
+               gosub GET my %HaloType from my %tool.storage
+               pause 0.5
+               pause 0.5
+               pause 0.1
+               if !matchre("$righthand", "(halo|%HaloType)") then gosub GET my kertigen halo
+               pause 0.7
+               pause 0.1
+               if matchre("$righthand", "(halo|%HaloType)") then
+                    {
+                         send pull my halo
+                         wait
+                         pause 0.5
+                         put gosub PUT_IT %HaloType in my %tool.storage
+                         pause 0.3
+                         if matchre("$righthand|$lefthand", "halo") then gosub PUT_IT halo in my %tool.storage
+                         var HaloFound 1
+                         return
+                    }
+          }
+     gosub HALO_CHECK $MC_HAMMER
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_TONGS
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_PLIERS
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_BELLOWS
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_STIRROD
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_HAMMER
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_NEEDLES
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_SCISSORS
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_YARDSTICK
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_AWL
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_SLICKSTONE
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_CHISEL
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_SAW
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_RASP
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_RIFFLER
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_SHAPER
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_DRAWKNIFE
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_BOWL
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_MORTAR
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_STICK
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_PESTLE
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_SIEVE
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_BURIN
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_LOOP
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK $MC_BRAZIER
+     if (%HaloFound = 1) then return
+     gosub HALO_CHECK stick
+     return
+
+HALO_CHECK:
+     var ItemToGet $0
+     pause 0.001
+     if !matchre("$righthand $lefthand", "(%ItemToGet)") then
+          {
+               put get my %ItemToGet
+               wait
+               pause 0.8
+          }
+     if !matchre("$righthand $lefthand", "(%ItemToGet)") then
+          {
+               put get my %ItemToGet from my portal
+               wait
+               pause 0.8
+          }
+     if !matchre("$righthand $lefthand", "(%ItemToGet)") then return
+     matchre HALO_CHECK2 ^You give your .+ halo a slight tug
+     matchre HALO_NON ^I'm afraid that you can't pull that\.
+     put pull my halo
+     matchwait 3
+     goto HALO_NON
+
+### HALO FOUND!
+HALO_CHECK2:
+     pause 0.1
+     pause 0.1
+     if matchre("$righthand $lefthand", "Halo") then
+          {
+               echo *** FOUND HALO!!
+               var HaloFound 1
+          }
+     pause 0.1
+     send put %ItemToGet in my %tool.storage
+     pause 0.7
+     pause 0.5
+     if matchre("$righthand|$lefthand", "halo") then gosub PUT_IT halo in my %tool.storage
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     return
+     
+### NO HALO FOUND - STORE TOOL
+HALO_NON:
+     pause 0.1
+     send put %ItemToGet in my %tool.storage
+     pause 0.7
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
      return
      
 HALO_RESTACK:
@@ -2079,8 +2320,8 @@ HALO_RESTACK:
      pause 0.001
      put study my halo
      pause 0.5
-     #if matchre("$lefthand", "halo") then gosub STOW_LEFT
-     #if matchre("$righthand", "halo") then gosub STOW_RIGHT
+     if matchre("$lefthand", "halo") then gosub STOW_LEFT
+     if matchre("$righthand", "halo") then gosub STOW_RIGHT
      return
      
 HALO_STACK:
@@ -2131,7 +2372,24 @@ WATERCUBE:
      put #var MC.WATERCUBE.TIME $gametime
      return
 
-GetHerbs:
+PHK:
+     if !matchre("$guild", "Trader") then return
+     var PHKPrep 5
+     if ($Primary_Magic.Ranks <= 100) then var PHKPrep 15
+     if (($Primary_Magic.Ranks > 100) && ($Primary_Magic.Ranks <= 200)) then var PHKPrep 20
+     if (($Primary_Magic.Ranks > 200) && ($Primary_Magic.Ranks <= 300)) then var PHKPrep 24
+     if (($Primary_Magic.Ranks > 300) && ($Primary_Magic.Ranks <= 400)) then var PHKPrep 30
+     if (($Primary_Magic.Ranks > 400) && ($Primary_Magic.Ranks <= 500)) then var PHKPrep 38
+     if (($Primary_Magic.Ranks > 500) && ($Primary_Magic.Ranks <= 600)) then var PHKPrep 44
+     if (($Primary_Magic.Ranks > 600) && ($Primary_Magic.Ranks <= 700)) then var PHKPrep 55
+     if ($Primary_Magic.Ranks > 700) then var PHKPrep 69
+     send prep PHK %PHKPrep
+     pause 9
+     send cast
+     pause 0.5
+     return
+
+GETHERBS:
      var startingRoom $roomid
      var herb $0
      echo
@@ -2167,7 +2425,7 @@ ForageHerbs:
      echo
      echo *** Forage Count: %HerbLoop
      echo
-     math add HerbLoop 1
+     math HerbLoop add 1
      pause 0.2
      pause 0.2
      send forage %herb
@@ -2186,6 +2444,7 @@ ForageHerbs:
           }
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     if (%HerbLoop > 10) then goto FORAGE_DONE
      if ((%HerbLoop > 6) && (%HerbsFound = 0)) then
           {
                echo *** DAMNIT NO HERBS FOUND!
@@ -2193,6 +2452,7 @@ ForageHerbs:
                echo *** Or is this a bad spot?
                return
           }
+     goto ForageHerbs
 FORAGE_DONE:
      pause 0.1
      if matchre($zoneid, "(31|32|33)") then gosub automove river
@@ -2200,26 +2460,35 @@ FORAGE_DONE:
      if ($zoneid = 66) then gosub automove east
      if ($zoneid = 66) then gosub automove east
      pause 0.2
-     gosub AUTOMOVE %work.room
+     gosub find.room $work.room
      pause 0.5
 HerbProcess:
      pause 0.001
-     put get my %herb
+     put get my %herb from my %tool.storage
      pause 0.2
      pause 0.5
      pause 0.1
-     if ("$righthand" != "Empty") then
+     if ("$righthand" = "Empty") then
           {
-          put get my %herb from my portal
+          get my %herb from my portal
           pause 0.6
           pause 0.3             
           }
-     if ("$righthand" != "Empty") then return
+     if ("$righthand" = "Empty") then
+          {    
+               var Ordinals first|second|third|fourth|fifth|sixth|seventh|eighth
+               var Num 0
+               gosub HERB_COMBINE
+               goto first.order
+          }
 HerbPress:
-     put put my $righthandnoun in press
+     math %herb1.item.count add 1
+     if (("%discipline" = "remed") && (!matchre("%order.type", "qun pollen|ithor"))) then math %order.type.material.volume add 25
+     else math %order.type.material.volume add 4
+     put put $righthandnoun in press
      pause 0.5
      pause 0.1
-     put put my $righthandnoun in grinder
+     put put $righthandnoun in grinder
      pause 0.5
      pause 0.1
      pause 0.2
@@ -2227,6 +2496,55 @@ HerbPress:
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
      goto HerbProcess
 
+HERB_COMBINE:
+     if (%Num > 8) then goto COMBINE_FAIL
+     pause 0.2
+     put get my %Ordinals(%Num) %herb1 from my %tool.storage
+     pause 0.5
+     pause 0.1
+     if ("$righthand" = "Empty") then
+          {
+          get my %Ordinals(%Num) %herb1 from my portal
+          pause 0.8
+          pause 0.5             
+          }
+     if ("$righthand" = "Empty") then goto COMBINE_FAIL
+     put get my %Ordinals(%Num) %herb1 from my %tool.storage
+     pause 0.5
+     if ("$lefthand" = "Empty") then
+          {
+          get my %Ordinals(%Num) %herb1 from my portal
+          pause 0.5
+          }     
+	pause 0.01
+     if ("$lefthand" = "Empty") then goto COMBINE_FAIL
+COMBINING:
+     pause 0.01
+     COMBINE_STOW ^That stack of herbs is too large to add more to\.
+     COMBINE_GOOD ^You combine
+     send combine
+     matchwait 5
+COMBINE_STOW:
+     pause 0.01
+     send swap
+     wait
+     pause 0.2
+     gosub STOW_RIGHT
+     pause 0.1
+     math Num add 1
+     goto HERB_COMBINE
+COMBINE_GOOD:
+     pause 0.001
+     goto HERB_COMBINE
+COMBINE_FAIL:
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     return
+     
+     
+     
+     
+     
 SWAP:
      pause 0.0001
      send swap
@@ -2274,7 +2592,7 @@ ORDER:
      var Order $0
      var LOCATION ORDER_1
      ORDER_1:
-     pause 0.1
+     pause 0.01
      matchre WAIT ^\.\.\.wait|^Sorry\,
      matchre IMMOBILE ^You don't seem to be able to move to do that
      matchre WEBBED ^You can't do that while entangled in a web
@@ -2290,6 +2608,8 @@ ORDER:
         gosub lack.coin
         goto ORDER_1
         }
+     pause 0.1
+     pause 0.1
      if matchre("%Order", "\d+") then send order %Order
      if !matchre("%Order", "\d+") then 
 		{
@@ -2579,10 +2899,15 @@ GET:
 GET_DOUBLECHECK:
      var LOCATION GET_2
      pause 0.0001
-     put look in my portal
-     pause 0.001
-     pause 0.001
-     pause 0.001
+     gosub LOOK_TIMER
+     if (%LookLast > 90) then
+          {
+               var LookTime $gametime
+               send look in my portal
+               pause 0.4
+               pause 0.1
+               pause 0.001
+          }
      GET_2:
      matchre WAIT ^\.\.\.wait|^Sorry\,
      matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
@@ -2610,6 +2935,14 @@ GET_DOUBLECHECK:
      put #log $datetime MISSING MATCH IN GET2 (mc_include.cmd)
      return
 
+LOOK_TIMER:
+     if matchre("%LookTime", "$^") then 
+          {
+               evalmath LookTime ($gametime - 300)
+          }
+     evalmath LookLast ($gametime - %LookTime)
+     return
+     
 UNTIE:
 	send untie %Get
 	var BELTTOOLS 1
@@ -2857,6 +3190,17 @@ SPELL_CAST_TARGET_1:
      matchre SPELL_CAST_FAIL ^Your concentration slips for a moment\, and your spell is lost\.
      put -cast %Target;-2 gesture
      matchwait
+     
+RESET:
+pause 0.1
+echo
+echo ** ERROR! ATTEMPTING TO RESET!!!
+echo
+put #queue clear
+gosub clear
+pause 0.1
+pause 0.1
+goto identify.order
 
 #### RETURNS
 RETURN_CLEAR:
