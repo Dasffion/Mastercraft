@@ -15,7 +15,10 @@ var swap.tongs 0
 var worn.tongs 0
 var tongs.adj 0
 
-
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
 
 action var worn.tongs 1 when ^You tap some.*(segmented|articulated).*tongs that you are wearing\.$
 action var tongs.adj 0 when ^With a yank you fold the shovel
@@ -148,6 +151,7 @@ Finish:
 	 pause 0.1
      if matchre("$righthand|$lefthand", "ingot") then gosub PUT_IT ing in my $MC_FORGING.STORAGE
      gosub STOW_RIGHT
+     # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
      goto end
 
 End:
