@@ -31,6 +31,10 @@ var Action carve
 var polish.gone 0
 var assemble
 
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_CHISEL|$MC_RIFFLER|$MC_RASP|$MC_SAW
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
 
 if "$MC_ENG.PREF" = "bone" then 
 	{
@@ -88,6 +92,7 @@ unfinished:
 	}
 
 first.carve:
+     if !matchre("$righthand $lefthand", "%rock") then gosub GET %rock
 	if contains("$righthandnoun", "%rock") then gosub PUT swap
 	pause 1
 	#if ((contains("$lefthandnoun", "%rock")) && ("%rock" != "stack")) then gosub PUT drop my $lefthandnoun
@@ -95,6 +100,7 @@ first.carve:
 	gosub ToolCheckRight %chisel
 	 matchre excess and place the excess (.+) off to the side|cut off the excess material
 	 matchre work Roundtime: \d+
+      matchre done ^The .+ is far too damaged to be used for that\.
 	 send carve %hand %rock with my %chisel
 	matchwait
 
@@ -128,6 +134,7 @@ work:
 action (work) on
 save %Action
 gosub %Action
+if (%need.repair = 1) then goto done
 goto work
 
 carve:
@@ -153,7 +160,7 @@ rasp:
 
 polish:
 	if "%assemble" != "" then gosub assemble
-	if %polish.gone = 1 then gosub new.tool
+	if %polish.gone = 1 then gosub tool.swap
 	if !contains("$righthandnoun", "polish") then
 	{
 	 gosub STOW_RIGHT
@@ -174,7 +181,7 @@ assemble:
 	 var assemble
 	return
 
-new.tool:
+tool.swap:
 	if !contains("$scriptlist", "mastercraft.cmd") then return
 	 var temp.room $roomid
 	 gosub location.vars
@@ -204,12 +211,13 @@ return:
 	return
 
 done:
-	if %polish.gone = 1 then gosub new.tool
+	if %polish.gone = 1 then gosub tool.swap
 	gosub STOW_RIGHT
 	pause 0.5
 	if "$lefthandnoun" = "$MC.order.noun" then gosub PUT swap
 	pause 1
      if ("%repair" = "on") then gosub check.tools
-	 gosub mark
-	 put #parse CARVING DONE
+	gosub mark
+	# if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
+     put #parse CARVING DONE
 	exit
