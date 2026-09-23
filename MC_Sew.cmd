@@ -53,6 +53,11 @@ action var assemble $1 padding when another finished (small|large) cloth padding
 action var assemble $1 when another finished \S+ shield (handle)
 action var assemble $1 $2 when another finished (long|short|small|large) leather (cord|backing)
 
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_AWL|$MC_YARDSTICK
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
+if ("%repair" = "on") then gosub check.tools
+
 unfinished:
 	send glance
 	waitforre ^You glance down (.*)\.$
@@ -65,7 +70,14 @@ unfinished:
 		pause 1
 		goto work
 	}
-
+     if !contains("$righthandnoun", "(cloth|leather)") then
+          {
+               if !contains("$lefthandnoun", "(cloth|leather)") then
+                    {
+                         gosub get my %order.pref
+                    }
+          }
+      
 first.cut:
 	if (contains("$righthandnoun", "cloth") || contains("$lefthandnoun", "cloth")) then var material cloth
 	if (contains("$righthandnoun", "leather") || contains("$lefthandnoun", "leather")) then var material leather
@@ -95,7 +107,7 @@ work:
      
 needle:
 	if "%assemble" != "" then gosub assemble
-     if %thread.gone = 1 then gosub new.tool
+     if %thread.gone = 1 then gosub tool.swap
      gosub ToolCheckLeft $MC_NEEDLES
      if matchre("$righthand", "$MC_NEEDLES") then gosub SWAP
      if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
@@ -125,7 +137,7 @@ slickstone:
 
 pins:
 	if "%assemble" != "" then gosub assemble
-	if %pins.gone = 1 then gosub new.tool
+	if %pins.gone = 1 then gosub tool.swap
 	if !contains("$lefthandnoun", "pins") then
 	{
 	if "$lefthand" != "Empty" then gosub STOW_LEFT
@@ -174,7 +186,7 @@ assemble:
 	#send analyze my $MC.order.noun
 	return
 
-new.tool:
+tool.swap:
 if contains("$scriptlist", "mastercraft") then
 	{
 	action (work) off
@@ -205,7 +217,7 @@ if contains("$scriptlist", "mastercraft") then
 		waitforre ^You carefully thread
 		var thread.gone 0
 	}
-	if %pins.gone = 1 || %thread.gone = 1 then goto new.tool
+	if %pins.gone = 1 || %thread.gone = 1 then goto tool.swap
 	gosub automove %temp.room
 	if !matchre("$righthand|$lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun from my $MC_OUTFITTING.STORAGE
 	pause 0.5
@@ -250,6 +262,7 @@ repeat:
 	math sew.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my $MC_OUTFITTING.STORAGE
      if "%repair" = "on" then gosub check.tools
+     gosub EMPTY_HANDS
 	gosub GET my tailor book
 	if !matchre("$lefthand|$righthand", "book") then gosub GET my tailor book from my portal
 	gosub Study my book
@@ -261,8 +274,8 @@ repeat:
 
 
 done:
-	if %pins.gone = 1 then gosub new.tool
-	if %thread.gone = 1 then gosub new.tool
+	if %pins.gone = 1 then gosub tool.swap
+	if %thread.gone = 1 then gosub tool.swap
 	if "$lefthand" != "Empty" then gosub STOW_LEFT
 	gosub mark
 	pause 1
