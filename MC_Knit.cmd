@@ -27,6 +27,7 @@ action var Action cast when be cast off the needles|cast to finish binding the k
 #action (work) goto Retry when \.\.\.wait|type ahead
 action var Action done when ^Applying the final touches
 action (work) off
+if ("%repair" = "on") then gosub check.tools
 
 gosub ToolCheckLeft $MC_NEEDLES
 pause .5
