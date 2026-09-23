@@ -23,7 +23,9 @@ action var tool restudy when You must first study instructions regarding the enc
 action var tool scribe when more permanently with a burin|^You do not see anything that would prevent scribing additional sigils|would impede further sigil scribing|looks ready for additional scribing
 action var tool sigil;var sigil $1 when ^You need another (?!primary)(\S+) .*sigil to continue the enchanting process
 action var tool sigil when ^You need another primary sigil to continue the enchanting process
-action var tool imbue when ^Then continue the process with the casting of an imbue spell|Once finished you sense an imbue spell will be required to continue enchanting.|^The.*?requires an application of an imbue spell to advance the enchanting process.
+action var tool imbue when ^Then continue the process with the casting of an imbue spell
+action var tool imbue when ^Once finished you sense an imbue spell will be required
+action var tool imbue when ^The.*?requires an application of an imbue spell to advance the enchanting process\.
 action var tool done when With the enchantment complete|With the enchanting process completed|With enchanting complete
 action goto clean when It does not seem possible to continue with the enchanting process, and you will need to start over.
 action var unknown 1 when ^You find it impossible to identify who crafted this item\.|^The .+ appears to be in the process of being enhanced\.
@@ -32,6 +34,10 @@ action put #tvar prepared 1 when ^You feel fully prepared
 action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*)\.
 action (work) off
 var main.storage $MC_ENCHANTING.STORAGE
+
+## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
+put #var MC_WORK.TOOLS $MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
+if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
 
 GetBrazier:
     if (!def(MC_BRAZIER) || matchre("$MC_BRAZIER", "(?i)\b(NULL|OFF|0|^%|^\s*$)")) then goto NoBrazier	
@@ -162,6 +168,7 @@ work:
 	pause 0.5
 	if "%tool" = "done" then goto done
 	gosub %tool
+     if (%need.repair = 1) then goto done
 	goto work
 	
 restudy:
@@ -324,6 +331,7 @@ done:
                gosub PUT_IT $MC.order.noun in %main.storage 
                goto repeat
 		}
+     # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
 	put #parse ENCHANTING DONE
 	exit
 RESTARTENCHANT:
