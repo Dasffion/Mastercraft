@@ -58,7 +58,7 @@ put #var MC_OUTFITTING.STORAGE portal
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL cougar-pelt
 put #var MC_OUT.PREF leather
-put #var MC_OUT.DIFFICULTY challenging
+put #var MC_OUT.DIFFICULTY easy
 put #var MC_OUT.DEED off
 put #var MC_Outfitting_NOWO 0
 #######################################################################
@@ -115,7 +115,7 @@ put #var MC_GET.COIN on
 put #var MC_WITHD.AMOUNT 20 gold
 put #var MC_REORDER on
 put #var MC.Mark off
-put #var MC_BLACKLIST limb tonic
+put #var MC_BLACKLIST NULL
 put #var MC_WORK.OUTSIDE 0
 #put #var MC_PREFERRED.ROOM 
 #put #var MC_FRIENDLIST
@@ -130,7 +130,7 @@ put #var MC_MIN.ORDER 2
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
 # Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
-put #var MC_KERTIGEN.HALO ON
+put #var MC_KERTIGEN.HALO OFF
 # Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
 put #var MC_WATERCUBE parry stick
 # An array of your tools that go on tool belts.i.e. silversteel mallet|muracite tongs|stirring rod
