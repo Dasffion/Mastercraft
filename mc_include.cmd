@@ -36,6 +36,7 @@ var need.repair 0
 var LookTime $gametime
 var LookLast 0
 var need.coin 0
+var sigilnum 1
 action var need.repair 1 when ^The .+ is far too damaged to be used for that\.
 #var alltools saw|chisel|carving knife|rasp|riffler|clamp|needles|drawknife|slickstone|hammer|tongs|bellows|pliers|shovel|bowl|mixing stick|pestle|mortar|sieve|loop|burin|yardstick|tools|awl|rod
 #put #unvar repair.room
@@ -88,7 +89,9 @@ action (book) var assemble2 backer; var asmCount2 $1 when .*(\d).* backing mater
 action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* leather (strips)$
 action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* (mechanism)$
 action (book) var fount.need $1 when .*(\d).* mana fount$
-
+action (book) var Sigil1Count $1;var sigil %sigil|$2;math sigilnum add 1 when ^\s+\((\d)\)\s+(?:primary) sigil \((\S+)\)
+action (book) var Sigil%sigilnumCount $1;var sigil %sigil|$2;math sigilnum add 1 when ^\s+\((\d)\)\s+(?:secondary) sigil \((\S+)\)
+### action var sigil %sigil|$1|$2|$3 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
 ### KERTIGEN HALO IDENTIFICATION
 var HaloType NULL
 var HaloRemoved 0
@@ -171,7 +174,7 @@ if "%society.type" = "Alchemy" then
      var deed.size
      var order.pref 
      var main.storage %alchemy.storage
-     var deed.order 
+     var deed.order $MC_ALCH.DEED
 	}
 #Enchanting Settings
 if "%society.type" = "Enchanting" then
@@ -1538,16 +1541,16 @@ check.tools:
      var temp 0
      eval MaxTemp count("$MC_WORK.TOOLS","|")
      math MaxTemp add 1
+     echo
+     echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     echo * CHECKING TOOLS FOR REPAIR
+     echo * TOOLS: $MC_WORK.TOOLS
+     echo * NUMBER TO CHECK: %MaxTemp
+     echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     echo
      #if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
 check.tools2:
      var repairing 1
-     echo
-     echo ~~~~~~~~~~~~~~~~~~~~~
-     echo * Checking Tools for Repair
-     echo * TOOLS: $MC_WORK.TOOLS
-     echo * Number to check: %MaxTemp
-     echo ~~~~~~~~~~~~~~~~~~~~~
-     echo
      gosub ToolCheckRight $MC_WORK.TOOLS(%temp)
      gosub repair.tool $MC_WORK.TOOLS(%temp)
      unvar repair.temp
@@ -1765,33 +1768,14 @@ ToolCheckRight:
 	if ("$righthand" = "Empty") then
 		{
 		gosub GET MY %tools
-          # if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
-          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               # {
-                    # pause 0.001
-                    # if matchre("$righthand", "%tools") then return
-                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    # pause 0.1
-                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
-                    # if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
-               # }
           var Removing 0
 		return
 		}
 	if !matchre("%tools", "$righthandnoun") then
 		{
 		gosub STOW_RIGHT
-		gosub GET my %tools
-          if !matchre("$righthand", "%tools") then gosub GET my %tools from my portal
-          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               # {
-                    # pause 0.001
-                    # if matchre("$righthand", "%tools") then return
-                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    # pause 0.1
-                    # if !matchre("$righthand", "(%tools|halo)") then gosub GET my %HaloType
-                    # if !matchre("$righthand", "%tools") then gosub HALO_SHIFT %tools
-               # }
+		gosub GET my %tools from my %main.storage
+          if !matchre("$righthand", "%tools") then gosub GET my %tools
 		}
      var Removing 0
 	return
@@ -1801,31 +1785,15 @@ ToolCheckLeft:
 	if "$lefthand" = "Empty" then
 		{
 		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
-		else gosub GET MY %tools
-          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
-          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               # {
-                    # if matchre("$lefthand", "%tools") then return
-                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    # pause 0.1
-                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
-                    # if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
-               # }
+		else gosub GET my %tools from my %main.storage
+          if !matchre("$righthand", "%tools") then gosub GET my %tools
 		return
 		}
 	if !matchre("%tools", "$lefthandnoun") then
 		{
 		gosub STOW_LEFT
-		gosub GET my %tools
-          if !matchre("$lefthand", "%tools") then gosub GET my %tools from my portal
-          # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
-               # {
-                    # if matchre("$lefthand", "%tools") then return
-                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my kertigen halo
-                    # pause 0.1
-                    # if !matchre("$lefthand", "(%tools|halo)") then gosub GET my %HaloType
-                    # if !matchre("$lefthand", "%tools") then gosub HALO_SHIFT %tools
-               # }
+		gosub GET my %tools from my %main.storage
+          if !matchre("$lefthand", "%tools") then gosub GET my %tools
 		}
 	return
      
@@ -2444,7 +2412,7 @@ ForageHerbs:
           }
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
-     if (%HerbLoop > 10) then goto FORAGE_DONE
+     if (%HerbLoop > 22) then goto FORAGE_DONE
      if ((%HerbLoop > 6) && (%HerbsFound = 0)) then
           {
                echo *** DAMNIT NO HERBS FOUND!
@@ -2483,14 +2451,13 @@ HerbProcess:
           }
 HerbPress:
      math %herb1.item.count add 1
+	if matchre("%order.type", "(flower|blue flower)") then var order.type blue.flower
      if (("%discipline" = "remed") && (!matchre("%order.type", "qun pollen|ithor"))) then math %order.type.material.volume add 25
      else math %order.type.material.volume add 4
-     put put $righthandnoun in press
+     send put $righthandnoun in press
+     pause 0.2
+     send put $righthandnoun in grinder
      pause 0.5
-     pause 0.1
-     put put $righthandnoun in grinder
-     pause 0.5
-     pause 0.1
      pause 0.2
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
@@ -2795,21 +2762,43 @@ STUDY:
      matchre STUNNED ^You are still stunned
      matchre WEBBED ^You can't do that while entangled in a web
      matchre IMMOBILE ^You don't seem to be able to move to do that
-     match STUDY_1 You begin
-     match STUDY_1 You continue studying the
-     match STUDY_1 You continue to study
-     match RETURN You take on a studious look
-     match STUDY_END Why do you need to study this chart again?
+     matchre STUDY_1 You begin
+     matchre STUDY_1 You continue studying the
+     matchre STUDY_1 You continue to study
+     matchre RETURN You take on a studious look
+     matchre STUDY_END Why do you need to study this chart again?
      matchre STUDY_NEXT (^With|^In) a sudden moment of clarity
      matchre GET_BOOK ^But you are not holding it
      matchre GET_BOOK ^But you're not holding it 
+     matchre GET_BOOK ^Study what? 
      matchre RETURN You study|You scan|You notate|You review
      matchre RETURN ^You now feel ready to begin the crafting process.
      send study %Study
      matchwait
 
+STUDYIT:
+     var Study $0
+     var LOCATION STUDYIT_1
+     pause 0.0001
+     STUDYIT_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre RETURN You (begin|continue)
+     matchre RETURN You take on a studious look
+     matchre RETURN Why do you need to study this chart again?
+     matchre RETURN (^With|^In) a sudden moment of clarity
+     matchre RETURN You study|You scan|You notate|You review
+     matchre RETURN ^You now feel ready to begin the crafting process.
+     matchre RETURN ^Roundtime|Roundtime
+     send study %Study
+     matchwait
+	
 GET_BOOK:
 	gosub GET %discipline book
+	pause 0.1
+	if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
 	goto STUDY_1
 #### DOUBLE PUT SUB
 PUT_IT:
@@ -2887,7 +2876,7 @@ GET:
      matchre RETURN ^Analyze what
      matchre UNTIE ^You pull at it|^You pull at|^You should untie
      matchre GET_DOUBLECHECK ^I could not find what you were referring to\.
-     matchre GET_DOUBLECHECK ^What were you referring to\?
+     matchre GET_DOUBLECHECK What were you referring to\?
      matchre GET_DOUBLECHECK ^Perhaps you should
 	matchre WRONG_ITEM ^That is far too dangerous to remove
      send get %Get
