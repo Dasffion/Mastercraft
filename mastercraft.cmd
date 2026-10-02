@@ -1,4 +1,4 @@
-debug 10
+#debug 10
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
