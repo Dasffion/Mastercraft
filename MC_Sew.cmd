@@ -138,12 +138,16 @@ slickstone:
 pins:
 	if "%assemble" != "" then gosub assemble
 	if %pins.gone = 1 then gosub tool.swap
-	if !contains("$lefthandnoun", "pins") then
-	{
-	if "$lefthand" != "Empty" then gosub STOW_LEFT
-		gosub GET my pins
-		if !matchre("$righthand|$lefthand", "pins") then gosub GET my pins from my portal
-	}
+     if !matchre("$righthand|$lefthand", "pins") then
+          {
+               if ("$lefthand" != "Empty") then gosub STOW_LEFT
+               gosub GET my pins from my $MC_OUTFITTING.STORAGE
+          }
+     if !matchre("$righthand|$lefthand", "pins") then
+          {
+               var pins.gone 1
+               gosub tool.swap
+          }
 	var tool needle
      if matchre("$righthand", "pins") then gosub SWAP
      if !matchre("$righthand", "$MC.order.noun") then gosub STOW_RIGHT
@@ -193,10 +197,15 @@ if contains("$scriptlist", "mastercraft") then
 	var temp.room $roomid
 	gosub check.location
 	if matchre("$righthand|$lefthand", "$MC.order.noun") then send put my $MC.order.noun in my $MC_OUTFITTING.STORAGE
-	if %pins.gone = 1 then
+	gosub EMPTY_HANDS
+	if (%pins.gone = 1) then
 	{
 		gosub automove outfitting tool
 		action (order) on
+		pause 0.1
+		put order
+		pause 2
+		pause 0.5
 		gosub ORDER
 		action (order) off
 		gosub ORDER %pins.order
@@ -204,19 +213,22 @@ if contains("$scriptlist", "mastercraft") then
 		pause .5
 		var pins.gone 0
 	}
-	if %thread.gone = 1 then
-	{
-		gosub automove outfitting suppl
-		action (order) on
-		pause 1
-		gosub ORDER
-		action (order) off
-		gosub ORDER %thread.order
-		pause 1
-		send put my thread on my needles;-0.5 put my thread on my needles in my port
-		waitforre ^You carefully thread
-		var thread.gone 0
-	}
+	if (%thread.gone = 1) then
+		{
+			gosub automove outfitting suppl
+			action (order) on
+			var thread.order
+			put order
+			pause 2
+			pause 0.5
+			action (order) off
+			gosub ORDER %thread.order
+			pause 1
+			if matchre("$righthand|$lefthand", "needle") then gosub GET my needle from my $MC_OUTFITTING.STORAGE
+			send put my thread on my needles
+			waitforre ^You carefully thread
+			var thread.gone 0
+		}
 	if %pins.gone = 1 || %thread.gone = 1 then goto tool.swap
 	gosub automove %temp.room
 	if !matchre("$righthand|$lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun from my $MC_OUTFITTING.STORAGE

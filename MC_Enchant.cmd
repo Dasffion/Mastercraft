@@ -130,9 +130,13 @@ stow.fount:
 	gosub GET fount
 	gosub PUT_IT fount in %main.storage
 	goto unfinished
-	
 
 start.enchant:
+	if matchre("%rawmat", "(?i)^\s*$") then
+		{
+			echo rawmat was blank, using sphere
+			var rawmat sphere
+		}
 	put #tvar prepared 0
 	if "$MC_IMBUE" = "SPELL|spell" then gosub PREPARE imbue $MC_IMBUE.MANA
 	if !matchre("$righthand|$lefthand", "%rawmat") then gosub GET my %rawmat from %main.storage
@@ -140,6 +144,7 @@ start.enchant:
      gosub clean.prep
      if matchre("$MC_BRAZIER", "(?i)\b(NULL|OFF|0|^%|^\s*$)") then gosub PUT_IT my %rawmat on %usebrazier
 	else gosub PUT_IT my %rawmat on my %usebrazier
+     var tool analyze
 	goto work
 	
 clean.prep:
@@ -177,7 +182,8 @@ restudy:
 	else gosub GET %rawmat from my %usebrazier
 	gosub PUT_IT my %rawmat in %main.storage
 	gosub GET my artif book
-	gosub STUDY my artif book
+	if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
+	gosub STUDY my book
 	gosub PUT_IT my book in my %main.storage
 	goto start.enchant
 	
@@ -214,8 +220,8 @@ imbue:
 	goto work
 	
 sigil:
-	gosub GET %sigil sigil from %main.storage
-	gosub STUDY %sigil sigil
+	gosub GET %sigil sigil from my %main.storage
+	gosub STUDYIT %sigil sigil
      if matchre("$MC_BRAZIER", "(?i)\b(NULL|OFF|0|^%|^\s*$)") then
           {
                gosub PUT trace $MC.order.noun on %usebrazier
@@ -304,6 +310,7 @@ repeat:
 	gosub PUT_IT my $MC.order.noun in my %main.storage
      if ("%repair" = "on") then gosub check.tools
 	gosub GET my artif book
+	if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
 	gosub STUDY my book
 	gosub PUT_IT my book in my %main.storage
 	gosub GET my %rawmat from %main.storage

@@ -2,7 +2,7 @@
 ## SET YOUR CHARACTER NAMES BELOW - BETWEEN THE QUOTES!
 ## CASE SENSITIVE! - FIRST LETTER CAPITOL, REST LOWERCASE
 if ("$charactername" = "Shroom") then goto CHARACTER1
-if ("$charactername" = "Illuminati") then goto CHARACTER2
+if ("$charactername" = "Zagoth") then goto CHARACTER2
 if ("$charactername" = "Raidboss") then goto CHARACTER3
 if ("$charactername" = "Healbot") then goto CHARACTER4
 if ("$charactername" = "Aerog") then goto CHARACTER5
@@ -58,7 +58,7 @@ put #var MC_OUTFITTING.STORAGE portal
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL cougar-pelt
 put #var MC_OUT.PREF leather
-put #var MC_OUT.DIFFICULTY easy
+put #var MC_OUT.DIFFICULTY challenging
 put #var MC_OUT.DEED off
 put #var MC_Outfitting_NOWO 0
 #######################################################################
@@ -67,9 +67,12 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
+#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
 put #var MC_ALCHEMY.STORAGE portal
+put #var MC.REDFLOWER.STORAGE backpack
 put #var MC_ALC.DISCIPLINE remed
-put #var MC_ALC.DIFFICULTY easy
+put #var MC_ALC.DIFFICULTY challenging
+put #var MC_ALCH.DEED off
 put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
@@ -130,6 +133,7 @@ put #var MC_MIN.ORDER 2
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
 # Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+# WARNING! RECOMMEND ~OFF~ DO NOT USE HALO! IT IS VERY BUGGY AND DAMAGES YOUR TOOLS VERY QUICKLY
 put #var MC_KERTIGEN.HALO OFF
 # Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
 put #var MC_WATERCUBE parry stick
@@ -240,9 +244,12 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
+#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
 put #var MC_ALCHEMY.STORAGE shadows
+put #var MC.REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_ALCH.DEED on
 put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
@@ -303,6 +310,7 @@ put #var MC_MIN.ORDER 3
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
 # Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+# WARNING! RECOMMEND ~OFF~ DO NOT USE HALO! IT IS VERY BUGGY AND DAMAGES YOUR TOOLS VERY QUICKLY
 put #var MC_KERTIGEN.HALO OFF
 # Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
 put #var MC_WATERCUBE NULL
@@ -413,9 +421,12 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
+#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
 put #var MC_ALCHEMY.STORAGE shoulder pack
+put #var MC.REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_ALCH.DEED on
 put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
@@ -477,6 +488,7 @@ put #var MC_MIN.ORDER 3
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
 # Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+# WARNING! RECOMMEND ~OFF~ DO NOT USE HALO! IT IS VERY BUGGY AND DAMAGES YOUR TOOLS VERY QUICKLY
 put #var MC_KERTIGEN.HALO OFF
 # Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
 put #var MC_WATERCUBE NULL
@@ -587,9 +599,12 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
+#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
 put #var MC_ALCHEMY.STORAGE carry-all
+put #var MC.REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_ALCH.DEED on
 put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
@@ -651,6 +666,7 @@ put #var MC_MIN.ORDER 1
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
 # Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+# WARNING! RECOMMEND ~OFF~ DO NOT USE HALO! IT IS VERY BUGGY AND DAMAGES YOUR TOOLS VERY QUICKLY
 put #var MC_KERTIGEN.HALO OFF
 # Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
 put #var MC_WATERCUBE NULL
@@ -754,16 +770,19 @@ put #var MC_OUT.MATERIAL wool
 put #var MC_OUT.PREF cloth
 put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
-put #var MC_Outfitting_NOWO
+put #var MC_Outfitting_NOWO 0
 #######################################################################
 ########################  ALCHEMY VARIABLES  #######################
 #######################################################################
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
+#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
 put #var MC_ALCHEMY.STORAGE shoulder pack
+put #var MC.REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
+put #var MC_ALCH.DEED on
 put #var MC_Alchemy_NOWO 0
 #######################################################################
 ########################  ENCHANTING VARIABLES  #######################
@@ -824,6 +843,7 @@ put #var MC_MIN.ORDER 3
 #Toolbelts/Straps only necessary if you have one.
 #GENERAL
 # Kertigen Halo Support - SET ON IF YOU HAVE A KERTIGEN HALO (Magic item that holds all crafting tools)
+# WARNING! RECOMMEND ~OFF~ DO NOT USE HALO! IT IS VERY BUGGY AND DAMAGES YOUR TOOLS VERY QUICKLY
 put #var MC_KERTIGEN.HALO OFF
 # Elemental Cube of Water - Set the ITEM NAME of the Armor you have the Elemental Cube attached to ('22 HE gift reduces crafting RT)
 put #var MC_WATERCUBE NULL
