@@ -35,19 +35,18 @@ action var special alcohol when  ^You need another splash of alcohol to continue
 action var special catalyst when ^You need another catalyst material to
 action var special add.herb when You need another prepared herb to
 action var tool done when ^Applying the final touches, you complete working
-#action (work) goto Retry when \.\.\.wait|type ahead
-action (work) off
-var alchemy.storage $MC_ALCHEMY.STORAGE
-
 action (order) var water.order $1 when (\d+)\)\..*10 splashes of water.*(Lirums|Kronars|Dokoras)
 action (order) var alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol.*(Lirums|Kronars|Dokoras)
 action (order) var catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
-
+#action (work) goto Retry when \.\.\.wait|type ahead
+action (work) off
+var main.storage $MC_ALCHEMY.STORAGE
 var liquid tonic|wash|potion|elixir|draught
 var solid cream|salve|balm|poultices|unguent|ungent|ointment
 
 put #var MC_WORK.TOOLS $MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE
-
+if matchre("%herb1", "(blue flower|blue.flower|red flower|red.flower)") then var herb1 flower
+if matchre("%herb2", "(blue flower|blue.flower|red flower|red.flower)") then var herb2 flower
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
 if ("%repair" = "on") then gosub check.tools
 
@@ -72,8 +71,10 @@ if matchre("$MC.order.noun", "%solid") then
 		var water water
 		}	
 unfinished:
+	if !matchre("$righthand|$lefthand", "book") then gosub GET %discipline book
+     if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
      gosub STUDY book
-	gosub ToolCheckRight %bowl
+	gosub ToolCheckRight %bowl in my %main.storage
 	if matchre("%bowl", "$lefthand") then gosub PUT swap
 	send look in my %bowl
 	waitforre (^In the (.*)\.$|^I could not find|^There is nothing in there)
@@ -96,13 +97,13 @@ unfinished:
 first.mix:
 	gosub ToolCheckRight %bowl
 	if matchre("%bowl", "$lefthand") then gosub PUT swap
-	gosub ToolCheckLeft %herb1
+	gosub ToolCheckLeft %herb1 in my %main.storage
 	gosub PUT_IT my %herb1 in my %bowl
 	pause 0.5
 	if ("$lefthand" != "Empty") then gosub STOW_LEFT
 	pause 0.5
-	gosub GET my %mixer
-	if !matchre("$lefthand|$righthand", "%mixer") then gosub GET my %mixer from my portal
+	gosub GET my %mixer from my %main.storage
+	if !matchre("$lefthand|$righthand", "%mixer") then gosub GET my %mixer
 	pause 0.5
 	if "%tool.mix" = "crush" then gosub Action %tool.mix %herb1 in my %bowl with my %mixer
 	else gosub Action %tool.mix my %bowl with my %mixer
@@ -123,7 +124,7 @@ work:
 mix:
 	gosub specialcheck
 	gosub ToolCheckLeft %mixer
-	if "%tool.mix" = "crush" then gosub Action %tool.mix $MC.order.noun in my %bowl with my %mixer
+	if ("%tool.mix" = "crush") then gosub Action %tool.mix $MC.order.noun in my %bowl with my %mixer
 	else gosub Action %tool.mix my %bowl with my %mixer
      if (%need.repair = 1) then goto too.damaged
 	return
@@ -149,8 +150,8 @@ turn:
 	return
 	
 water:
-	if %water.gone = 1 then gosub tool.swap
-	gosub ToolCheckLeft water
+	if (%water.gone = 1) then gosub tool.swap
+	gosub ToolCheckLeft water in my %main.storage
 	var tool mix
 	send pour part water in my %bowl
 	pause 0.5
@@ -159,8 +160,8 @@ water:
 	return
 	
 alcohol:
-	if %alcohol.gone = 1 then gosub tool.swap
-	gosub ToolCheckLeft alcohol
+	if (%alcohol.gone = 1) then gosub tool.swap
+	gosub ToolCheckLeft alcohol in my %main.storage
 	var tool mix
 	send pour part alcohol in my %bowl
 	pause 0.5
@@ -169,11 +170,11 @@ alcohol:
 	return
 	
 catalyst:
-	if %catalyst.gone = 1 then gosub tool.swap
+	if (%catalyst.gone = 1) then gosub tool.swap
 	if !contains("$lefthandnoun", "nugget") then
 	{
 		if "$lefthand" != "Empty" then gosub STOW_LEFT
-		gosub GET my coal nugget from my %alchemy.storage
+		gosub GET my coal nugget in my %main.storage
 	}
 	var tool mix
 	send put nugget in my %bowl
@@ -182,7 +183,7 @@ catalyst:
 	return
 
 add.herb:
-	gosub ToolCheckLeft %herb2
+	gosub ToolCheckLeft %herb2 in my %main.storage
 	var tool mix
 	send put %herb2 in my %bowl
 	pause 0.5
@@ -203,7 +204,7 @@ if contains("$scriptlist", "mastercraft") then
                if matchre("$righthand", "%bowl") then gosub PUT_IT #$righthandid in my %tool.storage
                if matchre("$lefthand", "%bowl") then gosub PUT_IT #$lefthandid in my %tool.storage
           }
-	if %water.gone = 1 then
+	if (%water.gone = 1) then
 	{
 		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then send put my %bowl in my %tool.storage
 		gosub summonwater
@@ -211,14 +212,14 @@ if contains("$scriptlist", "mastercraft") then
 		pause .5
 		var water.gone 0
 	}
-	if %alcohol.gone = 1 then
+	if (%alcohol.gone = 1) then
 	{
 		if (("$righthand" != "Empty") || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
 		gosub summonalcohol
 		if (("$righthandnoun" != "%bowl") && ("$lefthandnoun" != "%bowl")) then send get my %bowl from my %tool.storage
 		var alcohol.gone 0
 	}
-	if %catalyst.gone = 1 then
+	if (%catalyst.gone = 1) then
 	{
 		gosub automove Forging suppl
 		if (("$righthand" != "Empty" || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
@@ -227,7 +228,7 @@ if contains("$scriptlist", "mastercraft") then
 		gosub ORDER
 		action (order) off
 		gosub ORDER %catalyst.order
-		gosub PUT_IT my nugget in my %alchemy.storage
+		gosub PUT_IT my nugget in my %main.storage
 		if (("$righthandnoun" != "%bowl") && ("$lefthandnoun" != "%bowl")) then send get my %bowl from my %tool.storage
 		var catalyst.gone 0
 	}
@@ -247,7 +248,7 @@ exit
 } 
 
 lack.coin:
-	if "%get.coin" = "off" then goto lack.coin.exit
+	if ("%get.coin" = "off") then goto lack.coin.exit
 	action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
 	gosub automove teller
 	send withd 5 gold
@@ -273,15 +274,15 @@ Retry:
 	
 repeat:
 	math mix.repeat subtract 1
-	gosub PUT_IT my $MC.order.noun in my %alchemy.storage
+	gosub PUT_IT my $MC.order.noun in my %main.storage
 	if ("%repair" = "on") then gosub check.tools
-     gosub GET my remedy book
-	if !matchre("$righthand|$lefthand", "book") then gosub GET my remedy book from my portal
+     gosub GET my remedy book from my %main.storage
+	if !matchre("$righthand|$lefthand", "book") then gosub GET my remedy book
      if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
 	gosub STUDY my book
-	gosub PUT_IT my book in my %alchemy.storage
-	gosub GET my %material
-	if !matchre("$righthand|$lefthand", "%material") then gosub GET my %material from my portal
+	gosub PUT_IT my book in my %main.storage
+	gosub GET my %material from my %main.storage
+	if !matchre("$righthand|$lefthand", "%material") then gosub GET my %material
 	var tool mix
 	goto first.mix
 	
@@ -293,22 +294,25 @@ done:
 	if (%alcohol.gone = 1) then gosub tool.swap
 	if ("$lefthand" != "Empty") then gosub STOW_LEFT
 	gosub GET my $MC.order.noun from my %bowl
+	if ("$righthand" != "Empty") then gosub STOW_RIGHT
+	gosub countcheck
 	if ((%mix.repeat > 1) && (%need.repair = 0)) then 
 		{
-		gosub PUT_IT $MC.order.noun in %alchemy.storage 
+		gosub PUT_IT $MC.order.noun in %main.storage 
 		goto repeat
 		}
-	if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("%repair" = "on") then gosub check.tools
+	# if ("$righthand" != "Empty") then gosub STOW_RIGHT
+	# if ("$lefthand" != "Empty") then gosub STOW_LEFT
 	# if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
-     gosub countcheck
 	put #parse ALCHEMY DONE
 	exit
 	
 countcheck:
-if $MC_NOWO then return
+if ($MC_NOWO = 1) then return
 action var temprem $1 when ^You count out (\d+) uses remaining\.
 gosub PUT count my $MC.order.noun
+pause 0.1
 if (%temprem > 5) then 
 	{
 	gosub PUT mark my $MC.order.noun at 5

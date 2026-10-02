@@ -91,6 +91,7 @@ action (book) var assemble2 $2; var asmCount2 $1 when .*(\d).* (mechanism)$
 action (book) var fount.need $1 when .*(\d).* mana fount$
 action (book) var Sigil1Count $1;var sigil %sigil|$2;math sigilnum add 1 when ^\s+\((\d)\)\s+(?:primary) sigil \((\S+)\)
 action (book) var Sigil%sigilnumCount $1;var sigil %sigil|$2;math sigilnum add 1 when ^\s+\((\d)\)\s+(?:secondary) sigil \((\S+)\)
+action (book) var order.pref sphere; var work.material small when ^\s+\(\d+\)\s+A small stone, wood or bone sphere
 ### action var sigil %sigil|$1|$2|$3 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
 ### KERTIGEN HALO IDENTIFICATION
 var HaloType NULL
@@ -1480,6 +1481,26 @@ manualalcohol:
 	var water.gone 0
 	return
 	
+BUY_SPHERE:
+     var buy.ok 0
+     gosub EMPTY_HANDS
+     var LOCATION BUY_SPHERE
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre BUY_SPHERE_OK ^You hand .* He hands you a .*sphere|^The attendant hands you a .*sphere|^The sales clerk hands you
+     matchre BUY_SPHERE_FAIL ^Buy what\?|^You can't|don't have enough coin|I could not find
+     put buy sphere from crate
+     matchwait 15
+	if !matchre("$righthand|$lefthand", "sphere") then goto BUY_SPHERE_FAIL
+     goto BUY_SPHERE_FAIL
+BUY_SPHERE_OK:
+     var buy.ok 1
+     gosub PUT_IT my sphere in my %main.storage
+     return
+BUY_SPHERE_FAIL:
+     echo crate buy failed, not counting a sphere
+     var buy.ok 0
+     return
+	
 ##############################
 ### MIGRATED FROM MASTERCRAFT - TO WORK WITH ALL INDIVIDUAL SCRIPTS
 
@@ -1613,12 +1634,14 @@ repair.tool_2:
      send craft blacksmith
      waitforre ^From the blacksmithing crafting discipline you have been trained in (.*)\.$
      var repair.techs $0
-     pause 0.3
+     pause 0.1
      if (contains("%repair.techs", "Tool Repair") then
           {
                gosub toolcheck
-               pause 0.1
-               echo *** SELF-REPAIR TOOLS
+               pause 0.2
+			echo
+               echo *** SELF-REPAIRING TOOLS
+			echo
                if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then
                     {
                          if !matchre("$righthand", "(%HaloType|%repair.temp|halo)") then
@@ -1640,15 +1663,22 @@ repair.tool_2:
                if matchre("$lefthand", "%repair.temp") then
                     {
                          send swap
-                         pause 0.5
+                         pause 0.8
                     }
                if !matchre("$righthand|$lefthand", "%repair.temp") then gosub GET my %repair.temp from my %tool.storage
                pause 0.2
                if !matchre("$righthand|$lefthand", "%repair.temp") then gosub GET my %repair.temp
-               if ("$lefthand" != "Empty") then gosub PUT_IT $lefthandnoun in my %main.storage
+               if matchre("$lefthand", "%repair.temp") then
+                    {
+                         send swap
+                         pause
+                    }      
+			if ("$lefthand" != "Empty") then gosub PUT_IT $lefthandnoun in my %main.storage
                gosub GET my wire brush
+			pause 0.5
                gosub PUT rub my %repair.temp with my brush
-               gosub PUT_IT my wire brush in my %main.storage
+               pause 0.5
+			gosub PUT_IT my wire brush in my %main.storage
                if (%too.damaged = 1) then
                     {
                          echo
@@ -1658,7 +1688,9 @@ repair.tool_2:
                          goto repair.tool_1
                     }
                gosub GET my oil
+			pause 0.5
                gosub PUT pour my oil on my %repair.temp
+			pause 0.5
                gosub PUT_IT my oil in my %main.storage
                goto repair.tool_1
           }
@@ -2389,7 +2421,7 @@ GETHERBS:
      pause 0.1
      var HerbLoop 0
      var HerbsFound 0
-ForageHerbs:
+FORAGEHERBS:
      echo
      echo *** Forage Count: %HerbLoop
      echo
@@ -2420,7 +2452,7 @@ ForageHerbs:
                echo *** Or is this a bad spot?
                return
           }
-     goto ForageHerbs
+     goto FORAGEHERBS
 FORAGE_DONE:
      pause 0.1
      if matchre($zoneid, "(31|32|33)") then gosub automove river
@@ -2430,7 +2462,7 @@ FORAGE_DONE:
      pause 0.2
      gosub find.room $work.room
      pause 0.5
-HerbProcess:
+HERB_PROCESS:
      pause 0.001
      put get my %herb from my %tool.storage
      pause 0.2
@@ -2449,7 +2481,7 @@ HerbProcess:
                gosub HERB_COMBINE
                goto first.order
           }
-HerbPress:
+HERB_PRESS:
      math %herb1.item.count add 1
 	if matchre("%order.type", "(flower|blue flower)") then var order.type blue.flower
      if (("%discipline" = "remed") && (!matchre("%order.type", "qun pollen|ithor"))) then math %order.type.material.volume add 25
@@ -2458,10 +2490,10 @@ HerbPress:
      pause 0.2
      send put $righthandnoun in grinder
      pause 0.5
-     pause 0.2
+     pause 0.3
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
-     goto HerbProcess
+     goto HERB_PROCESS
 
 HERB_COMBINE:
      if (%Num > 8) then goto COMBINE_FAIL
@@ -2487,8 +2519,8 @@ HERB_COMBINE:
      if ("$lefthand" = "Empty") then goto COMBINE_FAIL
 COMBINING:
      pause 0.01
-     COMBINE_STOW ^That stack of herbs is too large to add more to\.
-     COMBINE_GOOD ^You combine
+     matchre COMBINE_STOW ^That stack of herbs is too large to add more to\.
+     matchre COMBINE_GOOD ^You combine
      send combine
      matchwait 5
 COMBINE_STOW:
@@ -2557,14 +2589,32 @@ return
      ### ORDERING SUB, FOR SHOPS
 ORDER:
      var Order $0
-     var LOCATION ORDER_1
-     ORDER_1:
+     var LOCATION ORDER_MENU
+     if matchre("%Order", "^%|^\s*$") then var Order $1
+     if matchre("%Order", "^%|^\s*$") then
+          {
+               echo ORDER called with empty item
+               return
+          }
+	gosub EMPTY_HANDS
+ORDER_MENU:
+     matchre WAIT ^\.\.\.wait|^Sorry,
+     matchre ORDER_BUY ^\[You may purchase items from the shopkeeper with ORDER|^The attendant|^You can ORDER|order from the shopkeeper
+     matchre ORDER_BUY ^What would you like to order
+     matchre ORDER_BUY ^You can't order anything here
+     put order
+     matchwait 8
+ORDER_BUY:
+	var LOCATION ORDER_BUY
      pause 0.01
+	echo ASCENSION CATALOG #: $ascension.order
+	echo DECAY CATALOG #: $decay.order
+	echo CONGRUENCE CATALOG #: $congruence.order
      matchre WAIT ^\.\.\.wait|^Sorry\,
      matchre IMMOBILE ^You don't seem to be able to move to do that
      matchre WEBBED ^You can't do that while entangled in a web
      matchre STUNNED ^You are still stunned
-     matchre ORDER_1 ^The attendant says\,\s*\"You (can|may) purchase .*\.\s*Just order it again and we'll see it done\!\" 
+     matchre ORDER_BUY ^The attendant says\,\s*\"You (can|may) purchase .*\.\s*Just order it again and we'll see it done\!\" 
      matchre fullhands ^You realize your hands are full, and stop\.
      matchre RETURN ^The attendant takes some coins from you and hands you .*\.
      matchre RETURN pay the sales clerk
@@ -2573,22 +2623,23 @@ ORDER:
         {
         var temp.room $roomid
         gosub lack.coin
-        goto ORDER_1
+        goto ORDER_BUY
         }
      pause 0.1
      pause 0.1
-     if matchre("%Order", "\d+") then send order %Order
+     if matchre("%Order", "^\d+$") then send order %Order
+	else send order %Order
      if !matchre("%Order", "\d+") then 
 		{
-		if matchre("%Order", "\w+") then send buy %Order
-		else send Order
+		if matchre("%Order", "\w+") then send order %Order
+		else send order
 		}
      matchwait 15
      if %need.coin = 1 then
         {
         var temp.room $roomid
         gosub lack.coin
-        goto ORDER_1
+        goto ORDER_BUY
         }
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN ORDER! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Order = %Order
@@ -2597,7 +2648,7 @@ ORDER:
 
 fullhands:
 	gosub EMPTY_HANDS
-	goto ORDER_1
+	goto ORDER_BUY
 	
 WAIT:
      pause 0.0001
