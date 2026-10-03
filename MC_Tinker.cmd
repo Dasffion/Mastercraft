@@ -72,7 +72,6 @@ var count zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|th
 ## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
 put #var MC_WORK.TOOLS $MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_PLIERS|$MC_TINKERTOOL|$MC_CARVINGKNIFE
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
-if ("%repair" = "on") then gosub check.tools
 
 unfinished:
 	send glance
@@ -157,6 +156,7 @@ fouledup:
 	
 restudy:
 	gosub EMPTY_HANDS
+	if ("%repair" = "on") then gosub check.tools
 	gosub GET tinkering book from my $MC_ENGINEERING.STORAGE
 	gosub STUDY my book
 	gosub PUT_IT my book in my $MC_ENGINEERING.STORAGE
@@ -328,14 +328,14 @@ stain:
 	if %stain.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight stain
 	var Action drawknife
-	 gosub Action apply my stain to my $MC.order.noun
+	gosub Action apply my stain to my $MC.order.noun
 	return
 
 glue:
 	if %glue.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight glue
 	var Action drawknife
-	 gosub Action apply my glue to my $MC.order.noun
+	gosub Action apply my glue to my $MC.order.noun
 	return
 	
 shaft:
@@ -419,5 +419,6 @@ done:
 	if "$lefthandnoun" = "$MC.order.noun" then gosub PUT swap
 	pause 1
 	if ("%MarkIt" = "YES") then gosub mark
+	if ("%repair" = "on") then gosub check.tools
 	 put #parse TINKERING DONE
 	exit
