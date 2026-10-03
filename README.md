@@ -7,9 +7,12 @@ Mastercraft takes the tedium out of workorders, and works in practically every s
 It will get and turn in orders, buy extra parts, repair tools, manage materials, check item quality, 
 and will even reduce your order difficulty if you fail the item too often.
 
+Mastercraft Suite supports the following disciplines:
+Remedies / Weapon & Armor Blacksmithing / Tailoring / Carving / Shaping / Tinkering  / Artifacting
+
 There are a few things to note in using this script, however:
 
-1. You must have all required tools and books in your crafting bag for the craft you choose<br><br> 
+1. You must have ALL required tools and books in your crafting bag for the craft you choose<br><br> 
 2. You must have some gold/plat for the script to handle buying supplies / repairing tools<br><br> 
 3. Script DOES handle Self-Repairing tools if you have the tech - requires oil and brush<br>
   If tools are damaged beyond self-repair - It will take them to the NPC repair like normal<br><br>
