@@ -10,7 +10,7 @@ and will even reduce your order difficulty if you fail the item too often.
 There are a few things to note in using this script, however:
 
 1. You must have all required tools and books in your crafting bag for the craft you choose<br>
-  (repairing also requires oil and brush to be available).
+  (Self-repairing tools also requires oil and brush to be available).
 2. Workorders can only be automated within societies. Individual scripts can be run elsewhere if you desire, but part purchasing and order turn-in will not be automatic.
 3. Make sure your stock materials (specifically ingots) are managed in sizes your character can lift.<br> 
    If he can't pick up an ingot, I don't know how you'll be able to cut it down to a more manageable size.
