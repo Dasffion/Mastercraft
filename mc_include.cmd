@@ -118,7 +118,7 @@ action instant var coin.temp $1 when You can purchase.*for (\d+) (Lirums|Kronars
 action instant math coin.intake add $1 when You hand .* your logbook and bundled items, and are given (\d+)
 action instant math coin.intake subtract $1 when pay the sales clerk (\d+)
 action instant math coin.intake subtract %coin.temp when takes some coins from you and hands you.*\.$
-action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\))?\.
+action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\)| \(\d+\/\d+\))?\.
 action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
 action instant var grind 1 when TURN the GRINDSTONE several times
 action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
@@ -1592,7 +1592,6 @@ check.tools2:
           {
                unvar temp
                unvar MaxTemp
-               # if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
                return
           }
      gosub check.tools2
@@ -1613,7 +1612,7 @@ repair.tool_1:
      send analyze my $righthandnoun
      # send analyze my %repair.temp
      pause 1
-     if matchre("%tool.repair", "(pristine|mint) condition") then
+     if matchre("%tool.repair", "pristine condition") then
           {
                echo * Pristine condition
                return
