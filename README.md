@@ -36,7 +36,7 @@ ENCHANTING - Artifacting</h3>
 8. KERTIGEN HALO support was added in a past patch - but may not work well at all (untested recently)<br>
    My recommendation is DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!
    If you ever add/remove a tool in the halo that is not in PERFECT condition - It DAMAGES *ALL* THE TOOLS IN YOUR HALO!
-   Not only that, but they are very clumsy to work with. A highly flawed MT item - DO NOT USE HALOS AT ALL<br><br>
+   Not only that, but they are very clumsy to work with. A highly flawed MT item - DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.<br><br>
 9. Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
    and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**
    This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running
