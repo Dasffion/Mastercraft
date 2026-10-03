@@ -224,7 +224,7 @@ if contains("$scriptlist", "mastercraft") then
 			action (order) off
 			gosub ORDER %thread.order
 			pause 1
-			if matchre("$righthand|$lefthand", "needle") then gosub GET my needle from my $MC_OUTFITTING.STORAGE
+			if !matchre("$righthand|$lefthand", "needle") then gosub GET my needle from my $MC_OUTFITTING.STORAGE
 			send put my thread on my needles
 			waitforre ^You carefully thread
 			var thread.gone 0
