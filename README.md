@@ -3,6 +3,9 @@
 .mastercraft (no. of orders) --to perform more than one<br>
 .mastercraft (no. of orders) (difficulty)  --to ask for a different difficulty than you have set in your character profile.<br><br>
 
+.mastercraft 2 - complete 2 work orders at your set difficulty <br>
+.mastercraft 4 challenging - Complete 4 challenging workorders<br><br>
+
 Mastercraft takes the tedium out of workorders, and works in practically every society for practically every craft. 
 It will get and turn in orders, buy extra parts, repair tools, manage materials, check item quality, 
 and will even reduce your order difficulty if you fail the item too often.
