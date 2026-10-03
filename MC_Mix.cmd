@@ -48,7 +48,6 @@ put #var MC_WORK.TOOLS $MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE
 if matchre("%herb1", "(blue flower|blue.flower|red flower|red.flower)") then var herb1 flower
 if matchre("%herb2", "(blue flower|blue.flower|red flower|red.flower)") then var herb2 flower
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
-if ("%repair" = "on") then gosub check.tools
 
 if matchre("$MC.order.noun", "%liquid") then
 		{

@@ -48,27 +48,27 @@ put #trigger {absorb a handful of the design's finer point\.$} {#var MC_DIFFICUL
 put #trigger {fail to grasp all but the simplest diagrams on the page\.$} {#var MC_DIFFICULTY 1}
 put #trigger {quickly realize the design is far beyond your abilities\.$} {#var MC_DIFFICULTY 0}
 #### Finding Ordering Numbers
-action (order) put #tvar handle.order $1 when (\d+)\)\.\s+a (\S+) shield handle.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar l.cord.order $1 when (\d+)\)\.\s+a long leather cord.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar l.padding.order $1 when (\d+)\)\..*some large cloth padding.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar s.padding.order $1 when (\d+)\)\..*some.*small.*padding.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar pins.order $1 when (\d+)\)\..*some straight iron pins.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar polish.order $1 when (\d+)\)\..*jar of surface polish.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar oil.order $1 when (\d+)\)\.\s+a flask of oil.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar stain.order $1 when (\d+)\)\.\s+some wood stain.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar brush.order $1 when (\d+)\)\.\s+an iron wire brush.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar burlap.order $1 when (\d+)\)\..*yards of burlap cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar wool.order $1 when (\d+)\)\..*yards of wool cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar silk.order $1 when (\d+)\)\..*yards of silk cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar linen.order $1 when (\d+)\)\..*yards of linen cloth.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar rat-pelt.order $1 when (\d+)\)\..*yards of rat-pelt leather.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar cougar-pelt.order $1 when (\d+)\)\..*yards of cougar-pelt leather.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar thread.order $1 when (\d+)\)\..*yards of cotton thread.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar water.order $1 when (\d+)\)\..*10 splashes of water.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
-action (order) put #tvar salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
+action (order) var handle.order $1 when (\d+)\)\.\s+a (\S+) shield handle.*(Lirums|Kronars|Dokoras)
+action (order) var l.cord.order $1 when (\d+)\)\.\s+a long leather cord.*(Lirums|Kronars|Dokoras)
+action (order) var l.padding.order $1 when (\d+)\)\..*some large cloth padding.*(Lirums|Kronars|Dokoras)
+action (order) var s.padding.order $1 when (\d+)\)\..*some.*small.*padding.*(Lirums|Kronars|Dokoras)
+action (order) var pins.order $1 when (\d+)\)\..*some straight iron pins.*(Lirums|Kronars|Dokoras)
+action (order) var polish.order $1 when (\d+)\)\..*jar of surface polish.*(Lirums|Kronars|Dokoras)
+action (order) var oil.order $1 when (\d+)\)\.\s+a flask of oil.*(Lirums|Kronars|Dokoras)
+action (order) var stain.order $1 when (\d+)\)\.\s+some wood stain.*(Lirums|Kronars|Dokoras)
+action (order) var brush.order $1 when (\d+)\)\.\s+an iron wire brush.*(Lirums|Kronars|Dokoras)
+action (order) var burlap.order $1 when (\d+)\)\..*yards of burlap cloth.*(Lirums|Kronars|Dokoras)
+action (order) var wool.order $1 when (\d+)\)\..*yards of wool cloth.*(Lirums|Kronars|Dokoras)
+action (order) var silk.order $1 when (\d+)\)\..*yards of silk cloth.*(Lirums|Kronars|Dokoras)
+action (order) var linen.order $1 when (\d+)\)\..*yards of linen cloth.*(Lirums|Kronars|Dokoras)
+action (order) var rat-pelt.order $1 when (\d+)\)\..*yards of rat-pelt leather.*(Lirums|Kronars|Dokoras)
+action (order) var cougar-pelt.order $1 when (\d+)\)\..*yards of cougar-pelt leather.*(Lirums|Kronars|Dokoras)
+action (order) var thread.order $1 when (\d+)\)\..*yards of cotton thread.*(Lirums|Kronars|Dokoras)
+action (order) var water.order $1 when (\d+)\)\..*10 splashes of water.*(Lirums|Kronars|Dokoras)
+action (order) var alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol.*(Lirums|Kronars|Dokoras)
+action (order) var catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
+action (order) var $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
+action (order) var salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
 action var need.coin 1 when you don't have enough coins|you don't have that much
 ## action goto RESET when ^You cannot figure out how to do that\.\s+Perhaps finding suitable ingredients and studying some instructions would help\.
 action goto RESET when ^The (.+) is far too damaged to be used for that\.
@@ -373,8 +373,8 @@ location.vars:
      var MKF.grind.room %MKF.work.room
      
      #Fang Cove Engineering
-     var FE.room.list 206|207|208|209|210|220|221|182
-     var FE.master.room 206|207|208|209|210|182
+     var FE.room.list 206|207|208|209|210|220|221
+     var FE.master.room 206|207|208|209|210
      var FE.work.room 220|221
      #Fang Cove Forging
      var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248|249
@@ -1099,8 +1099,9 @@ find.master2:
                return
 		}
      gosub automove $master.room(%temp)
-     #send look %master
-     #pause 1
+     pause 0.5
+	send look %master
+	pause 0.5
      #if %Master.Found = 1 then
      if matchre("$roomobjs", "%master") then
 		{
@@ -1111,7 +1112,7 @@ find.master2:
                return
 		}
      math temp add 1
-     if %temp > %temp.max then
+     if (%temp > %temp.max) then
 	{
 	goto find.master
      echo %master not found in any room specified. Check your master room list for this society!
@@ -2589,12 +2590,7 @@ return
 ORDER:
      var Order $0
      var LOCATION ORDER_MENU
-     if matchre("%Order", "^%|^\s*$") then var Order $1
-     if matchre("%Order", "^%|^\s*$") then
-          {
-               echo ORDER called with empty item
-               return
-          }
+     #if matchre("%Order", "^%|^\s*$") then var Order $1
 	gosub EMPTY_HANDS
 ORDER_MENU:
      matchre WAIT ^\.\.\.wait|^Sorry,
@@ -2604,11 +2600,15 @@ ORDER_MENU:
      put order
      matchwait 8
 ORDER_BUY:
+     if matchre("%Order", "^%|^\s*$") then return
 	var LOCATION ORDER_BUY
      pause 0.01
-	echo ASCENSION CATALOG #: $ascension.order
-	echo DECAY CATALOG #: $decay.order
-	echo CONGRUENCE CATALOG #: $congruence.order
+	if ("%discipline" = "artif") then
+		{
+			echo ASCENSION CATALOG #: %ascension.order
+			echo DECAY CATALOG #: %decay.order
+			echo CONGRUENCE CATALOG #: %congruence.order
+		}
      matchre WAIT ^\.\.\.wait|^Sorry\,
      matchre IMMOBILE ^You don't seem to be able to move to do that
      matchre WEBBED ^You can't do that while entangled in a web
@@ -2618,7 +2618,7 @@ ORDER_BUY:
      matchre RETURN ^The attendant takes some coins from you and hands you .*\.
      matchre RETURN pay the sales clerk
      matchre RETURN ^\[You may purchase items from the shopkeeper with ORDER
-     if %need.coin = 1 then
+     if (%need.coin = 1) then
         {
         var temp.room $roomid
         gosub lack.coin
@@ -2634,7 +2634,7 @@ ORDER_BUY:
 		else send order
 		}
      matchwait 15
-     if %need.coin = 1 then
+     if (%need.coin = 1) then
         {
         var temp.room $roomid
         gosub lack.coin
@@ -2967,7 +2967,8 @@ GET_DOUBLECHECK:
      matchre RETURN ^Perhaps you should
      matchre UNTIE ^You pull at it|^You pull at|^You should untie
 	matchre WRONG_ITEM ^That is far too dangerous to remove
-     send get %Get from my portal
+	if matchre("%Get", "from my") then send get %Get
+	else send get %Get from my portal
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET2! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Get = %Get

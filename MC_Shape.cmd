@@ -61,7 +61,6 @@ action var glue.gone 1 when ^The glue is all used up, so you toss it away.
 ## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
 put #var MC_WORK.TOOLS $MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_PLIERS|$MC_TINKERTOOL|$MC_CARVINGKNIFE
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
-if ("%repair" = "on") then gosub check.tools
 
 unfinished:
 	send glance

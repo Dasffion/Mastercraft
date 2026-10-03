@@ -47,7 +47,6 @@ action (work) off
 ## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
 put #var MC_WORK.TOOLS $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
-if ("%repair" = "on") then gosub check.tools
 
 
 action var assemble $1 when another finished \S+ shield (handle)
@@ -70,32 +69,32 @@ action (tongs) off
 pause .5
 
 unfinished:
-	 var tool analyze
-	 gosub poundcheck
+	var tool analyze
+	gosub poundcheck
 	if %swap.tongs = 1 then
           {
           if %tongs.adj = 1 then send adjust my $MC_TONGS
           }
-      pause 0.5
-      pause 0.5
-	 matchre work $MC.order.noun
-	 matchre clean unfinished .+ (\S+)\.
-	 matchre first.pound (a|an) .+ ingot
-	 send look on anvil
-	 matchwait 
+     pause 0.5
+     pause 0.5
+	matchre work $MC.order.noun
+	matchre clean unfinished .+ (\S+)\.
+	matchre first.pound (a|an) .+ ingot
+	send look on anvil
+	matchwait 
 
 first.pound:
-	 var small.ingot 0
-	 var tool hammer
-	 gosub poundcheck
+	var small.ingot 0
+	var tool hammer
+	gosub poundcheck
 	if %swap.tongs = 1 then
           {
           if %tongs.adj = 1 then send adjust my $MC_TONGS
           }
-	 matchre ingot.grab ^You realize the .+ will not require as much metal as you have
-	 matchre small.ingot ^You need a larger volume
-	 matchre work ^Roundtime
-	 send pound ingot on anvil with my $MC_HAMMER
+	matchre ingot.grab ^You realize the .+ will not require as much metal as you have
+	matchre small.ingot ^You need a larger volume
+	matchre work ^Roundtime
+	send pound ingot on anvil with my $MC_HAMMER
 	matchwait
 
 small.ingot:
@@ -269,27 +268,27 @@ assemble:
 	if !contains("$righthandnoun", "%assemble") then
 	{
 		if "$rightthand" != "Empty" then gosub STOW_RIGHT
-	 gosub GET my %assemble from my %forging.storage
+		gosub GET my %assemble from my %forging.storage
 	}
 	send look on anvil
 	pause 1
-	if "$lefthand" != "Empty" && %item.anvil = 1 then
+	if ("$lefthand" != "Empty" && %item.anvil = 1) then
 	{
-	 if (!matchre("$MC_TONGS", "$lefthandnoun") && %worn.tongs = 1) then send wear my $MC_TONGS
-	 else gosub STOW_LEFT
-	 gosub GET $MC.order.noun from anvil
-	 var item.anvil 0
+	if (!matchre("$MC_TONGS", "$lefthandnoun") && %worn.tongs = 1) then send wear my $MC_TONGS
+	else gosub STOW_LEFT
+	gosub GET $MC.order.noun from anvil
+	var item.anvil 0
 	}
 	if !matchre("$lefthandnoun", "$MC.order.noun") then
 	{
-	 if (!matchre("$MC_TONGS", "$lefthandnoun") && %worn.tongs = 1) then send wear my $MC_TONGS
-	 else gosub STOW_LEFT
-	 gosub GET my $MC.order.noun
-	 if !matchre ("$righthand|$lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun from my portal
+	if (!matchre("$MC_TONGS", "$lefthandnoun") && %worn.tongs = 1) then send wear my $MC_TONGS
+	else gosub STOW_LEFT
+	gosub GET my $MC.order.noun
+	if !matchre ("$righthand|$lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun from my portal
 	}
-	 send assemble my $MC.order.noun with my %assemble
-	 pause 1
-	 var tool analyze
+	send assemble my $MC.order.noun with my %assemble
+	pause 1
+	var tool analyze
 	return
 
 Retry:
@@ -298,15 +297,15 @@ Retry:
 	goto work
 	
 repeat:
-	 math pound.repeat subtract 1
-	 gosub PUT_IT my $MC.order.noun in my %forging.storage
-      if "%repair" = "on" then gosub check.tools
-	 gosub GET my book
-	 if !matchre ("$righthand|$lefthand", "book") then gosub GET my book from my portal
-	 gosub STUDY my book
-	 gosub GET my ingot
-	 if !matchre ("$righthand|$lefthand", "ingot") then gosub GET my ingot from my portal
-	 gosub PUT_IT ingot on anvil
+	math pound.repeat subtract 1
+	gosub PUT_IT my $MC.order.noun in my %forging.storage
+     if "%repair" = "on" then gosub check.tools
+	gosub GET my book
+	if !matchre ("$righthand|$lefthand", "book") then gosub GET my book from my portal
+	gosub STUDY my book
+     gosub GET my ingot
+	if !matchre ("$righthand|$lefthand", "ingot") then gosub GET my ingot from my portal
+	gosub PUT_IT ingot on anvil
 	goto first.pound
 
 done:

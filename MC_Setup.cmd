@@ -67,9 +67,9 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
+#    MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
 put #var MC_ALCHEMY.STORAGE portal
-put #var MC.REDFLOWER.STORAGE backpack
+put #var MC_REDFLOWER.STORAGE backpack
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_ALCH.DEED off
@@ -244,9 +244,9 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
+#    MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
 put #var MC_ALCHEMY.STORAGE shadows
-put #var MC.REDFLOWER.STORAGE bag
+put #var MC_REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_ALCH.DEED on
@@ -421,9 +421,9 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
+#    MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
 put #var MC_ALCHEMY.STORAGE shoulder pack
-put #var MC.REDFLOWER.STORAGE bag
+put #var MC_REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_ALCH.DEED on
@@ -599,9 +599,9 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
+#    MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
 put #var MC_ALCHEMY.STORAGE carry-all
-put #var MC.REDFLOWER.STORAGE bag
+put #var MC_REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_ALCH.DEED on
@@ -777,9 +777,9 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-#    MC.REDFLOWER.STORAGE SHOULD BE A DIFFERENT CONTAINER THEN YOUR ALCHEMY STORAGE! FOR PROPER RED/BLUE FLOWER HANDLING!
+#    MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
 put #var MC_ALCHEMY.STORAGE shoulder pack
-put #var MC.REDFLOWER.STORAGE bag
+put #var MC_REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
 put #var MC_ALC.DIFFICULTY challenging
 put #var MC_ALCH.DEED on

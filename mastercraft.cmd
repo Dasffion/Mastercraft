@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/2/2026
-# v 1.6
+# Latest updates 10/3/2026
+# v 1.7
 #
 # Script Usage: .mastercraft                                        --to only do one work order
 #                    .mastercraft <no. of orders>                    --to perform more than one
@@ -61,11 +61,18 @@ include mc_include.cmd
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
 
-# v 1.6
-# - Robustified Tool Repair checks / Fixed trigger
-# - Fixed bugs in Alchemy and Outfitting prep
+# v 1.7
+# Added even more challenging / hard Alchemy recipes 
+# Converted all Order tvar global variables to local variables (when shopping) 
+# Fixes bugs with ordering from menu sometimes not correctly populating the menu number
+# Removed unnecessary tool repair checks from the start of every script run
+# As mastercraft already checks repairs, and loops between orders will check repair 
+# Fixed bugs in alchemy between red and blue flowers - should now properly use both depending on recipe
 
-#
+# v 1.6
+# Robustified Tool Repair checks / Fixed trigger
+# Fixed bugs in Alchemy and Outfitting prep
+
 # v 1.5 - Shroom
 # MAJOR MASTERCRAFT OVERHAULS - After extensive exhaustive testing
 # Robustified SHOP BUYING / ORDER logic - In many cases was missing the order menu and causing order errors
@@ -418,9 +425,9 @@ identify.order:
           {
                action var volume $1 when ^The notes indicate that remedies such as this must be bundled in quantities containing exactly (\d+) uses
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (some blister cream|some moisturizing ointment|some itch salve|some lip balm|some hangover potion)
-               matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb unguent|some neck salve|some abdominal salve|some chest salve|some neck unguent|some abdominal unguent|some chest unguent|some head unguent|some head salve)
-               matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic|a back potion|some limb tonic)
-               matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices)
+               matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb unguent|some neck salve|some abdominal salve|some chest salve|some neck unguent|some abdominal unguent|some chest unguent|some head unguent|some head salve|some eye unguent)
+               matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic|a back potion|some limb tonic|some chest tonic|some head tonic)
+               matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices|some skin ointment|some limb ointment|some limb poultices)
                matchre chapter.6 This logbook is tracking a work order requiring you to craft (a body draught|a body elixir| a general elixir|a limb elixir)
                put read my %society.type logbook
                matchwait 3
@@ -557,9 +564,11 @@ turn.page:
      if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
      action (book) on
      #### ADDED THIS LINE TO HANDLE MT BOOKS THAT HAVE ALL DISCIPLINES 
-     put turn my book to discipline %discipline
-     pause 0.5
-     pause 0.2
+     if matchre("$righthand|$lefthand", "crafting book") then
+		{
+			put turn my book to discipline %discipline
+			pause 0.5
+		}
      #################################################################
      gosub PUT turn my book to chapter %order.chapter
      gosub READ %full.order.noun
@@ -610,7 +619,7 @@ calc.material:
                action (book) off
                pause 0.1
                evalmath mass.volume %volume * %order.quantity
-               if $MC_SMALL.ORDERS = 1 then
+               if ($MC_SMALL.ORDERS = 1) then
                     {
                          if (("%work.material" = "bronze") && (%volume > 5)) then goto new.order
                          if (("%work.material" = "steel") && (%volume > 10)) then goto new.order
@@ -631,10 +640,11 @@ calc.material:
                {
                     gosub automove $oil.room
                     action (order) on
-                    gosub ORDER
-                    pause .5
+				pause 0.1
+                    send order
+				pause 0.8
                     action (order) off
-                    gosub ORDER $oil.order
+                    gosub ORDER %oil.order
                     gosub PUT_IT my oil in my %main.storage
                }
           }
@@ -673,9 +683,11 @@ calc.material:
                {
                     gosub automove $tool.room
                     action (order) on
-                    gosub ORDER
+				pause 0.1
+                    send order
+				pause 0.8
                     action (order) off
-                    gosub ORDER $pins.order
+                    gosub ORDER %pins.order
                     gosub PUT_IT my pin in my %main.storage
                }
           }
@@ -718,13 +730,15 @@ calc.material:
                echo Pieces per Item: %volume
                echo Number of Items Req'd: %order.quantity
                echo Inventory: %material.volume pieces
-               if %polish.count < 1 then
+               if (%polish.count < 1) then
                     {
                          gosub automove $tool.room
                          action (order) on
-                         gosub ORDER
+					pause 0.1
+                         send order
+					pause 0.8
                          action (order) off
-                         gosub ORDER $polish.order
+                         gosub ORDER %polish.order
                          gosub PUT_IT my polish in my %main.storage
                     }
           }
@@ -766,9 +780,11 @@ calc.material:
                     {
                          gosub automove $tool.room
                          action (order) on
-                         gosub ORDER
+					pause 0.1
+                         send order
+					pause 0.8
                          action (order) off
-                         gosub ORDER $stain.order
+                         gosub ORDER %stain.order
                          gosub PUT_IT my stain in my %main.storage
                     }
          }     
@@ -790,12 +806,15 @@ calc.material:
                gosub EMPTY_HANDS
                var herb1 NULL
                var herb2 NULL
+			### SET THE SECONDARY HERB FIRST FOR RECIPES THAT REQUIRE 2 HERBS
                if matchre("%full.order.noun", "hangover potion") then var herb2 ojhenik
-               if matchre("%full.order.noun", "some blister cream|some moisturizing ointment|some itch salve|some lip balm") then var herb1 flowers
-               if ("%full.order.noun" = "some blister cream") then var herb2 nemoih
-               if ("%full.order.noun" = "some moisturizing ointment") then var herb2 plovik
-               if ("%full.order.noun" = "some itch salve") then var herb2 jadice
-               if ("%full.order.noun" = "some lip balm") then var herb2 nilos
+               if matchre("%full.order.noun", "(some blister cream|some moisturizing ointment|some itch salve|some lip balm|vigor poultice)") then var herb1 flowers
+               if matchre("%full.order.noun", "some blister cream") then var herb2 nemoih
+               if matchre("%full.order.noun", "some moisturizing ointment") then var herb2 plovik
+               if matchre("%full.order.noun", "some itch salve") then var herb2 jadice
+               if matchre("%full.order.noun", "some lip balm") then var herb2 nilos
+               if matchre("%full.order.noun", "vigor poultice") then var herb2 dioica
+			### NOW SET THE PRIMARY HERB DEPENDING ON THE RECIPE 
                if matchre("%full.order.noun", "(some neck salve|some neck unguent)") then var herb1 georin
                if matchre("%full.order.noun", "(some abdominal salve|some abdominal unguent)") then var herb1 nilos
                if matchre("%full.order.noun", "(some chest salve|some chest unguent)") then var herb1 plovik
@@ -810,6 +829,7 @@ calc.material:
                if matchre("%full.order.noun", "(some face ointment|some face poultices)") then var herb1 pollen
                if matchre("%full.order.noun", "(some body ointment|some body poultices)") then var herb1 genich
                #### SPECIAL ORDERS - HERBS THAT HAVE TO BE FORAGED / PROCESSED FIRST 
+			if matchre("%full.order.noun", "(limb poultice|limb ointment)") then var herb1 blocil
 			if matchre("%full.order.noun", "general elixir") then var herb1 belradi
 			if matchre("%full.order.noun", "hangover potion") then var herb1 blue.flower
                if matchre("%full.order.noun", "(eye unguent|eye salve)") then var herb1 sufil
@@ -821,6 +841,8 @@ calc.material:
                if matchre("%full.order.noun", "(a body elixir|some body draught)") then var herb1 ojhenik
                if matchre("%full.order.noun", "(general poultices|general purpose ointment)") then var herb1 dioica
                if matchre("%full.order.noun", "(skin poultice|skin ointment)") then var herb1 cebi
+               if matchre("%full.order.noun", "skin draught") then var herb1 hisan
+               if matchre("%full.order.noun", "(face elixir|face draught)") then var herb1 hulij
                var order.pref %herb1
                var herb1.volume 5 * %order.quantity
 			var herb2.volume 1 * %order.quantity
@@ -868,9 +890,11 @@ calc.material:
                     {
                          gosub automove forging suppl
                          action (order) on
-                         gosub ORDER
+					pause 0.1
+                         send order
+					pause 0.8
                          action (order) off
-                         gosub ORDER $catalyst.order
+                         gosub ORDER %catalyst.order
                          gosub PUT_IT my nugget in my %main.storage
                          gosub automove alchemy supplies
                     }
@@ -914,40 +938,6 @@ calc.material:
           math asmCount1 add 2
           if %asmCount2 > 0 then math asmCount2 add 2
           if %asmCount3 > 0 then math asmCount3 add 2
-          # var sigil
-          # action var order.pref $1 when ^\s+\(\d\)\s+[Aa] (?:finished|basic|small).* (runestone|totem|wand|rod|sphere)
-          # if !matchre("$righthand", "book") then gosub GET my %discipline book
-		# pause 0.3
-          # if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
-          # pause 0.2
-          #####
-          # send read my book
-          # pause 2
-		# pause 0.4
-		# pause 0.1
-          # action (book) off
-          # if !matchre("$MC.order.noun", "fount|loop") then put #var MC.order.noun %order.pref
-          # eval sigil replacere("%sigil", "^\|", "")
-          # eval sigil replacere("%sigil", "\|+", "|")
-
-          # eval sigil.total count("%sigil", "|")
-          # echo SIGILS: %sigil
-          # gosub sigil.count
-          # if ((%sigil.total > 0) && ("%sigil(0)" = "%sigil(1)")) then var sigil %sigil(0)
-          # eval sigil.total count("%sigil", "|")
-          # var assemble %sigil(0)
-          # var asmCount1 %Sigil1Count
-          # if (%sigil.total > 0) then 
-               # {
-                    # var assemble2 %sigil(1)
-                    # var asmCount2 %Sigil2Count
-               # }
-          # if (%sigil.total > 1) then 
-               # {
-                    # var assemble3 %sigil(2)
-                    # var asmCount3 %Sigil3Count
-               # }
-          # math asmCount1 add 2
           gosub parts.inv
           if (%order.quantity > %%order.pref.item.count) then gosub lack.material
           pause 0.5
@@ -969,9 +959,11 @@ calc.material:
                {
                     gosub automove forging tool
                     action (order) on
-                    gosub ORDER
+				pause 0.1
+                    send order
+				pause 0.8
                     action (order) off
-                    gosub ORDER $salt.order
+                    gosub ORDER %salt.order
                     gosub PUT_IT my salt in my %main.storage
                     gosub automove enchanting supplies
                }
@@ -996,6 +988,7 @@ sigil.count_1:
 calc.parts:
      var temp.room 0
 	## This multiplies the ingredients by number of orders needed to get correct quantity
+	## This *should* give us the correct number of ingredients we need to complete the full workorder
      math asmCount1 multiply %order.quantity
      math asmCount2 multiply %order.quantity
      math asmCount3 multiply %order.quantity
@@ -1020,26 +1013,15 @@ calc.parts:
                if matchre("%assemble3", "(\S+)") then math asmCount3 subtract %$1.count
                if matchre("%assemble3", "(\S+)\s(\S+)") then math asmCount3 subtract %$1.$2.count
           }
-	
 	# ENABLE THIS SECTION TO INCREASE BUYING MORE SECONDARY INGREDIENTS
 	# SOMETIMES ENCHANTING WOULD NOT BUY ENOUGH SIGILS AND BUG OUT/LOOP IN MIDDLE OF CRAFTING
-	# THIS GIVES A BIGGER CUSHION TO AVOID ISSUES
-	# MAY END WITH LEFTOVER SECONDARIES BUT BETTER THAN INFINITE LOOPS!
-	# if ("%discipline" = "artif") then
-	# {
-	# if (%asmCount1 > 0) then
-		# {
-			# math asmCount1 add 4
-		# }
-	# if (%asmCount2 > 0) then
-		# {
-			# math asmCount2 add 4
-		# }
-	# if (%asmCount3 > 0) then
-		# {
-			# math asmCount3 add 4
-		# }
-	# }
+	# THIS GIVES A BIGGER CUSHION TO AVOID ANY POTENTIAL ISSUES
+	if ("%discipline" = "artif") then
+		{
+			if (%asmCount1 > 0) then math asmCount1 add 2
+			if (%asmCount2 > 0) then math asmCount2 add 2
+			if (%asmCount3 > 0) then math asmCount3 add 2
+		}
 	pause 0.01
 	#####################################################################
 	if ("%assemble2" = "mechanism") then 
@@ -1410,13 +1392,13 @@ purchase.assemble_2:
           {
                if ("%discipline" = "tailor") then 
                     {
-                         if matchre("%assemble", "handle") then gosub ORDER $handle.order
-                         if matchre("%assemble", "large padding") then gosub ORDER $l.padding.order
+                         if matchre("%assemble", "handle") then gosub ORDER %handle.order
+                         if matchre("%assemble", "large padding") then gosub ORDER %l.padding.order
                     }
                if ("%discipline" = "artif") then
                     {
-                         if (($zoneid = 150) && ("%assemble" = "abolition")) then gosub order $abolition.order
-                         else gosub ORDER $%assemble.order
+                         if (($zoneid = 150) && ("%assemble" = "abolition")) then gosub ORDER %abolition.order
+                         else gosub ORDER %%assemble.order
                     }
           }
      math asmCount1 subtract 1
@@ -1439,6 +1421,7 @@ purchase.assemble2:
           }
      purchase.assemble2_1:
      action (order) on
+	pause 0.1
      gosub ORDER
      action (order) off
      purchase.assemble2_2:
@@ -1451,32 +1434,32 @@ purchase.assemble2:
                          action (order) off
                          if ("%assemble2" = "small backing") then
 						{
-							gosub ORDER $s.padding.order
-							if (%order.quantity > 1) then gosub ORDER $s.padding.order
-							if (%order.quantity > 2) then gosub ORDER $s.padding.order
-							if (%order.quantity > 3) then gosub ORDER $s.padding.order
-							if (%order.quantity > 4) then gosub ORDER $s.padding.order
+							gosub ORDER %s.padding.order
+							if (%order.quantity > 1) then gosub ORDER %s.padding.order
+							if (%order.quantity > 2) then gosub ORDER %s.padding.order
+							if (%order.quantity > 3) then gosub ORDER %s.padding.order
+							if (%order.quantity > 4) then gosub ORDER %s.padding.order
 						}
 					if ("%assemble2" = "large padding") then
 						{
-							gosub ORDER $l.padding.order
-							if (%order.quantity > 1) then gosub ORDER $l.padding.order
-							if (%order.quantity > 2) then gosub ORDER $l.padding.order
-							if (%order.quantity > 3) then gosub ORDER $l.padding.order
+							gosub ORDER %l.padding.order
+							if (%order.quantity > 1) then gosub ORDER %l.padding.order
+							if (%order.quantity > 2) then gosub ORDER %l.padding.order
+							if (%order.quantity > 3) then gosub ORDER %l.padding.order
 						}
                          if ("%assemble2" = "long cord") then
 						{
-							gosub ORDER $l.cord.order
-							if (%order.quantity > 1) then gosub ORDER $l.cord.order
-							if (%order.quantity > 2) then gosub ORDER $l.cord.order
-							if (%order.quantity > 3) then gosub ORDER $l.cord.order
+							gosub ORDER %l.cord.order
+							if (%order.quantity > 1) then gosub ORDER %l.cord.order
+							if (%order.quantity > 2) then gosub ORDER %l.cord.order
+							if (%order.quantity > 3) then gosub ORDER %l.cord.order
 						}
                          if ("%assemble2" = "short cord") then
 						{
-							gosub ORDER $s.cord.order
-							if (%order.quantity > 1) then gosub ORDER $s.cord.order
-							if (%order.quantity > 2) then gosub ORDER $s.cord.order
-							if (%order.quantity > 3) then gosub ORDER $s.cord.order
+							gosub ORDER %s.cord.order
+							if (%order.quantity > 1) then gosub ORDER %s.cord.order
+							if (%order.quantity > 2) then gosub ORDER %s.cord.order
+							if (%order.quantity > 3) then gosub ORDER %s.cord.order
 						}
                     }
                if ("%assemble2" = "mechanism") then
@@ -1486,8 +1469,8 @@ purchase.assemble2:
                     }
                if ("%discipline" = "artif") then
                     {
-                         if (($zoneid = 150) && ("%assemble2" = "abolition")) then gosub order $abolition.order
-                         else gosub ORDER $%assemble2.order
+                         if (($zoneid = 150) && ("%assemble2" = "abolition")) then gosub order %abolition.order
+                         else gosub ORDER %%assemble2.order
                     }
           }
      else gosub ORDER %assemble2
@@ -1525,10 +1508,10 @@ purchase.assemble3:
                          action (order) on
                          gosub ORDER
                          action (order) off
-                         if "%assemble3" = "small padding" then gosub ORDER $s.padding.order
-                         if "%assemble3" = "small backing" then gosub ORDER $s.backing.order
-                         if "%assemble3" = "long cord" then gosub ORDER $l.cord.order
-                         if "%assemble3" = "short cord" then gosub ORDER $s.cord.order
+                         if "%assemble3" = "small padding" then gosub ORDER %s.padding.order
+                         if "%assemble3" = "small backing" then gosub ORDER %s.backing.order
+                         if "%assemble3" = "long cord" then gosub ORDER %l.cord.order
+                         if "%assemble3" = "short cord" then gosub ORDER %s.cord.order
                     }
                if ("%assemble3" = "mechanism") then
                     {
@@ -1537,8 +1520,8 @@ purchase.assemble3:
                     }
                if ("%discipline" = "artif") then
                     {
-                         if (($zoneid = 150) && ("%assemble3" = "abolition")) then gosub order $abolition.order
-                         else gosub ORDER $%assemble3.order
+                         if (($zoneid = 150) && ("%assemble3" = "abolition")) then gosub order %abolition.order
+                         else gosub ORDER %%assemble3.order
                     }
           }
      else gosub ORDER %assemble3
@@ -2195,32 +2178,32 @@ gather.material_1:
      gosub lack.material
      goto calc.material
 
+### SPECIAL FLOWER CYCLE LOGIC FOR FULL BLUE / RED FLOWER SUPPORT
+### DISTINCTION BETWEEN CRUSHED FLOWER TYPES CAN ONLY BE DONE WHEN THEY ARE IN THE HAND
+### SCRIPT PULLS OUT FLOWERS FIRST - AND PUTS NON-MATCHING FLOWERS INTO A SEPARATE CONTAINER
+### SO CRAFTING CONTAINER ~ONLY~ CONTAINS FLOWERS FOR OUR RECIPE TO AVOID ERRORS
 flower.cycle:
+	var flower.bin 1
+	var flower.loop 0
+flower.cycle1:
      math flower.loop add 1
      if (%flower.loop > 12) then goto lack.material
-	if matchre("%get.mat", "(blue flower|blue.flower|flower)") then
-	{
-        if (%herb1 = "blue.flower" || %herb1 = "blue flower") then
-        {
-          if !matchre("$righthand", "flower") then gosub STOW_RIGHT
-		if matchre("$righthand", "Empty") then gosub GET flower from my %main.storage
-        }
-        else
-        {
-		if !matchre("$righthand", "flower") then gosub STOW_RIGHT
-          if matchre("$righthand", "Empty") gosub GET flower from my $MC.REDFLOWER.STORAGE
-        }
-	}
-     if !matchre("$righthand", "flower") then gosub GET my flower from my %main.storage
+     if (%flower.bin > 10) then goto lack.material
+     if matchre("%herb1", "(?i)blue") then var flower.noun blue
+     else var flower.noun red
+     if !matchre("$righthand", "flower") then gosub STOW_RIGHT
+     if matchre("$righthand", "Empty") then gosub GET flower from my %main.storage
+     if !matchre("$righthand", "flower") then gosub GET %ordinal(%flower.bin) flower from my $MC_REDFLOWER.STORAGE
      if !matchre("$righthand", "flower") then goto lack.material
-     if (matchre("$righthand", "red flower") && matchre("%herb1", "blue.flower")) then goto flower.wrong
-     if (matchre("$righthand", "blue flower") && matchre("%herb1", "red.flower")) then goto flower.wrong
+     if (matchre("$righthand", "red flower") && matchre("%flower.noun", "blue")) then goto flower.wrong
+     if (matchre("$righthand", "blue flower") && matchre("%flower.noun", "red")) then goto flower.wrong
      return
 
 flower.wrong:
-     gosub PUT_IT #$righthandid in my $MC.REDFLOWER.STORAGE
+     gosub PUT_IT my flower in my $MC_REDFLOWER.STORAGE
+     math flower.bin add 1
      pause 0.3
-     goto flower.cycle
+     goto flower.cycle1
 
 itemchange:
 	var itemchangeloop 0
@@ -2484,6 +2467,7 @@ turn.in:
      matchre turn.in1 ^You hand .* your logbook
      matchre turn.in ^You can't give it to someone who's not here
      matchre check.for.order ^The work order isn't yet complete
+	matchre wrong.master ^You realize .+ doesn't accept work orders from that crafting discipline
      send give %master
      matchwait 30
      goto turn.in
@@ -2514,7 +2498,10 @@ turn.in1:
           # }
      put #parse MASTERCRAFT DONE
      exit
-
+wrong.master:
+     if (("$zoneid" = "67") && ("%discipline" = "artif")) then gosub automove $master.room
+     else gosub automove $master.room(1)
+	goto turn.in
 deed.order:
      gosub GET my packet
      send push $MC.order.noun with packet
@@ -2675,23 +2662,21 @@ lack.material:
                if ("%order.type" = "root") then var order.num 14
                if ("%order.type" = "pollen") then var order.num 15
                ### HERBS THAT HAVE TO BE FORAGED!
+			if matchre("%order.type", "(eghmokm?o?s?s?|eghmok\.moss)") then gosub GETHERBS eghmok moss
+			if matchre("%order.type", "(blue flowers?|blue\.flowers?)") then gosub GETHERBS blue flower
+               if ("%order.type" = "dioica") then gosub GETHERBS dioica sap
+               if ("%order.type" = "blocil") then gosub GETHERBS blocil berries
                if ("%order.type" = "belradi") then gosub GETHERBS belradi moss
-               if ("%order.type" = "eghmok moss") then gosub GETHERBS eghmok moss
-               if ("%order.type" = "eghmok.moss") then gosub GETHERBS eghmok moss
-               if ("%order.type" = "eghmok") then gosub GETHERBS eghmok moss
                if ("%order.type" = "yelith") then gosub GETHERBS yelith root
                if ("%order.type" = "lujeakave") then gosub GETHERBS lujeakave root
                if ("%order.type" = "hulij") then gosub GETHERBS hulij leaf
-               if ("%order.type" = "hisan") then gosub GETHERBS hisan flower
                if ("%order.type" = "nuloe") then gosub GETHERBS nuloe stem
                if ("%order.type" = "sufil") then gosub GETHERBS sufil sap
                if ("%order.type" = "muljin") then gosub GETHERBS muljin sap
+			if ("%order.type" = "hulnik") then gosub GETHERBS hulnik grass
                if ("%order.type" = "cebi") then gosub GETHERBS cebi root
-               if ("%order.type" = "hulnik") then gosub GETHERBS hulnik grass
-               if ("%order.type" = "blue flowers") then gosub GETHERBS blue flower
-               if ("%order.type" = "blue flower") then gosub GETHERBS blue flower
-               if ("%order.type" = "blue.flower") then gosub GETHERBS blue flower
-               if matchre("%order.type", "(belradi|eghmok|yelith|lujeakave|hulij|nuloe|sufil|muljin|cebi|hulnik|blue flower|hisan)") then goto first.order
+			if ("%order.type" = "hisan") then gosub GETHERBS hisan flower
+               if matchre("%order.type", "(belradi|eghmok|yelith|lujeakave|hulij|nuloe|sufil|muljin|cebi|hulnik|blue flower|hisan|hulij|dioica|blocil)") then goto first.order
                if !matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/25)
                if matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/4)
                goto purchase.material
