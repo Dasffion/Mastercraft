@@ -206,7 +206,7 @@ TOP:
      action instant math coin.intake add $1 when You hand .* your logbook and bundled items, and are given (\d+)
      action instant math coin.intake subtract $1 when pay the sales clerk (\d+)
      action instant math coin.intake subtract %coin.temp when takes some coins from you and hands you.*\.$
-     action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\))?\.
+     action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\)| \(\d+\/\d+\))?\.
      action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
      action instant var grind 1 when TURN the GRINDSTONE several times
      action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
