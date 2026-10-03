@@ -40,7 +40,6 @@ action var excessloc $2 when You carefully cut off the excess material and set i
 action var tool needle when ^measure my \S+ with my yardstick|^rub my \S+ with my slickstone|poke my \S+ with my pins|^poke my \S+ with my awl|^cut my \S+ with my scissors|pushing it with a needle and thread
 #action GOTO unfinished when That tool does not seem suitable for that task.
 action send get my $MC.order.noun when ^You must be holding the .* to do that\.
-#action (work) goto Retry when \.\.\.wait|type ahead
 action (work) off
 action goto done when The .+ is far too damaged to be used for that\.
 action (order) var thread.order $1 when (\d+)\)\..*yards of cotton thread.*(Lirums|Kronars|Dokoras)
@@ -56,7 +55,6 @@ action var assemble $1 $2 when another finished (long|short|small|large) leather
 ## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
 put #var MC_WORK.TOOLS $MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_AWL|$MC_YARDSTICK
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
-if ("%repair" = "on") then gosub check.tools
 
 unfinished:
 	send glance
@@ -273,7 +271,7 @@ Retry:
 repeat:
 	math sew.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my $MC_OUTFITTING.STORAGE
-     if "%repair" = "on" then gosub check.tools
+     if ("%repair" = "on") then gosub check.tools
      gosub EMPTY_HANDS
 	gosub GET my tailor book
 	if !matchre("$lefthand|$righthand", "book") then gosub GET my tailor book from my portal
