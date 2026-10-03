@@ -31,25 +31,27 @@ There are a few things to note in using this script, however:
 9. Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself<br>
    and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**<br>
    This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running<br>
-   Be very careful when renaming scriptfiles!<br><br>
+   Be very careful when renaming scriptfiles!<br>
 
-Be sure to setup your character's crafting profile in **MC_SETUP.CMD BEFORE USING THESE SCRIPTS.** 
-There are some things scripting cannot do for you, such as make personal decisions.
+Be sure to setup your character's crafting profile in <b>**MC_SETUP.CMD BEFORE USING THESE SCRIPTS!**</b><br>
+There are some things scripting cannot do for you, such as make personal decisions.<br>
 
-Included in this suite:<br>
+<b>Included in this suite:</b><br>
    mastercraft.cmd<br>
    mc_include.cmd<br>
+   mc_setup.cmd<br>
+   mc_mix.cmd<br>
    mc_pound.cmd<br>
-   mc_sew.cmd<br>
-   mc_knit.cmd<br>
    mc_carve.cmd<br>
+   mc_sew.cmd<br>
    mc_enchant.cmd<br>
+   mc_knit.cmd<br>
    mc_shape.cmd<br>
    mc_smelt.cmd<br>
    mc_grind.cmd<br>
-   mc_weave.cmd<br>
    mc_spin.cmd<br>
    mc_tinker.cmd<br>
+   mc_weave.cmd<br>
    mc_triggers.cmd<br>
     
 Each script can be run completely standalone from Mastercraft if you want to create multiple items or just individual orders. 
