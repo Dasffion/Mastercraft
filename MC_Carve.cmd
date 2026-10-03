@@ -34,7 +34,6 @@ var assemble
 ## NEW LINES ADDED FOR STANDALONE SCRIPT SUPPORT AND HALO SUPPORT
 put #var MC_WORK.TOOLS $MC_CHISEL|$MC_RIFFLER|$MC_RASP|$MC_SAW
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
-if ("%repair" = "on") then gosub check.tools
 
 if "$MC_ENG.PREF" = "bone" then 
 	{
@@ -186,14 +185,14 @@ tool.swap:
 	 var temp.room $roomid
 	 gosub location.vars
 	 gosub check.location
-	if %polish.gone = 1 then
+	if (%polish.gone = 1) then
 		{
 		 gosub automove $tool.room
 		 if !("$righthand" = "Empty" || "$lefthand" = "Empty") then gosub PUT_IT my $MC.order.noun in my %engineering.storage
 		 action (order) on
 		 gosub ORDER
 		 action (order) off
-		 gosub ORDER $polish.order
+		 gosub ORDER %polish.order
 		 gosub PUT_IT my polish in my %engineering.storage
 		 if (("$righthandnoun" != "$MC.order.noun" && "$lefthandnoun" != "$MC.order.noun") && ("%rock" = "stack")) then gosub GET my $MC.order.noun from my %engineering.storage
 		 var polish.gone 0
