@@ -224,7 +224,9 @@ if contains("$scriptlist", "mastercraft") then
 		gosub automove Forging suppl
 		if (("$righthand" != "Empty" || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
 		action (order) on
-		pause 1
+		send order
+		pause 2
+		pause 0.5
 		gosub ORDER
 		action (order) off
 		gosub ORDER %catalyst.order
