@@ -30,7 +30,7 @@ ENCHANTING - Artifacting</h3>
 6. If you have less than 50 Forging skill, your analyzes may not pick up item quality or ingot size.<br> 
    To do orders with low forging skill, be sure to have a yardstick to measure with.<br>
    Your character will otherwise not be able to tell if he has enough material to actually complete the order.<br><br>      
-7. Alchemy recently added support for higher level (challenging/hard) work orders using FORAGED herbs that cannot be bought at the store<br>
+7. Recently added support for many higher level (challenging/hard) workorders w/ FORAGED herbs that can't be bought at the store<br>
    Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ is needed??)<br> 
    It forages the herbs and process them (press/crush) to be used in the recipes<br><br> 
 8. KERTIGEN HALO support was added in a previous patch - but it may not work well at all (untested recently)<br>
