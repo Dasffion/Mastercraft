@@ -31,12 +31,13 @@ ENCHANTING - Artifacting</h3>
    To do orders with low forging skill, be sure to have a yardstick to measure with.<br>
    Your character will otherwise not be able to tell if he has enough material to actually complete the order.<br><br>      
 7. Recently added Alchemy support for many higher level (challenging/hard) workorders w/ FORAGED herbs that can't be bought at the store.
-   Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ is needed??) 
-   It forages the herbs and process them (press/crush) to be used in the recipes<br><br>
-8. KERTIGEN HALO support was added in a previous patch - but it may not work well at all (untested recently)<br>
-   My recommendation is to NOT USE A HALO AT ALL! Halos are EXTREMELY unwieldy and have a TERRIBLE DOWNSIDE!
-   DAMAGING ALL YOUR TOOLS at once if you put ANY tool into it that is not in PERFECT CONDITION
-   They are an extremely flawed MT item and my recommendation is DO NOT USE HALOS<br><br> 
+   Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ needed??) 
+   It forages the herbs and processes them (press/grind) to be used in the recipes<br><br>
+8. KERTIGEN HALO support was added in a past patch - but may not work well at all (untested recently)<br>
+   My recommendation is DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!<br> 
+   If you ever add/remove a tool in the halo that is not in PERFECT condition - It DAMAGES ~ALL~ THE TOOLS IN YOUR HALO!<br>
+   Not only that, but they are very clumsy to work with.<br>
+   They are an extremely flawed MT item and my recommendation is DO NOT USE HALOS AT ALL<br><br>
 9. Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
    and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**
    This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running
