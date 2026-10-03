@@ -27,7 +27,6 @@ action var Action cast when be cast off the needles|cast to finish binding the k
 #action (work) goto Retry when \.\.\.wait|type ahead
 action var Action done when ^Applying the final touches
 action (work) off
-if ("%repair" = "on") then gosub check.tools
 
 gosub ToolCheckLeft $MC_NEEDLES
 pause .5
@@ -49,10 +48,10 @@ unfinished:
 	}
 
 first.cut:
-	 var Action knit
-	 matchre excess You carefully cut off the excess
-	 matchre KnitAction Roundtime: \d+
-	 send knit my yarn with my $MC_NEEDLES
+	var Action knit
+	matchre excess You carefully cut off the excess
+	matchre KnitAction Roundtime: \d+
+	send knit my yarn with my $MC_NEEDLES
 	matchwait
 
 excess:
@@ -72,7 +71,7 @@ Retry:
 repeat:
 	math sew.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my %outfitting.storage
-     if "%repair" = "on" then gosub check.tools
+     if ("%repair" = "on") then gosub check.tools
 	gosub GET my tailor book
 	gosub STUDY my book
 	gosub PUT_IT my book in my %outfitting.storage
@@ -80,8 +79,8 @@ repeat:
 	goto first.cut
 
 done:
-	 gosub mark
-	 if %sew.repeat > 1 then goto repeat
+	gosub mark
+	if %sew.repeat > 1 then goto repeat
 	gosub STOW my needle in my %tool.storage
 	put #parse KNITTING DONE
 	exit
