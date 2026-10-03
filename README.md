@@ -25,12 +25,12 @@ There are a few things to note in using this script, however:
    Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ is needed??)<br> 
    It forages the herbs and process them (press/crush) to be used in the recipes<br><br> 
 8. KERTIGEN HALO support was added in a previous patch - but it may not work well at all (untested recently)<br>
-   My recommendation is to NOT USE A HALO AT ALL! Halos are EXTREMELY unwieldy and have a TERRIBLE DOWNSIDE!<br>
-   DAMAGING ALL YOUR TOOLS at once if you put ANY tool into it that is not in PERFECT CONDITION<br> 
+   My recommendation is to NOT USE A HALO AT ALL! Halos are EXTREMELY unwieldy and have a TERRIBLE DOWNSIDE!
+   DAMAGING ALL YOUR TOOLS at once if you put ANY tool into it that is not in PERFECT CONDITION
    They are an extremely flawed MT item and my recommendation is DO NOT USE HALOS<br><br> 
-9. Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself<br>
-   and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**<br>
-   This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running<br>
+9. Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
+   and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**
+   This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running
    Be very careful when renaming scriptfiles!<br>
 
 Be sure to setup your character's crafting profile in <b>**MC_SETUP.CMD BEFORE USING THESE SCRIPTS!**</b><br>
