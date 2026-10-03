@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/1/2026
-# v 1.5
+# Latest updates 10/2/2026
+# v 1.6
 #
 # Script Usage: .mastercraft                                        --to only do one work order
 #                    .mastercraft <no. of orders>                    --to perform more than one
@@ -61,6 +61,11 @@ include mc_include.cmd
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
 
+# v 1.6
+# - Robustified Tool Repair checks / Fixed trigger
+# - Fixed bugs in Alchemy and Outfitting prep
+
+#
 # v 1.5 - Shroom
 # MAJOR MASTERCRAFT OVERHAULS - After extensive exhaustive testing
 # Robustified SHOP BUYING / ORDER logic - In many cases was missing the order menu and causing order errors
@@ -1808,13 +1813,13 @@ process.order:
 			if matchre("%herb1", "(blue flower|blue.flower)") then
 				{
 					#var herb1 flower
-					send count my flower in my %main.storage;count my flower
+					send count my flower
 					waitforre You count out (\d+) pieces|There are
 					if (%volume > $1) then gosub small.mat %herb1
 				}
 			if !matchre("%herb1", "(blue flower|blue.flower)") then
 				{
-					send count my %herb1 in my %main.storage;count my flower
+					send count my flower
 					waitforre You count out (\d+) pieces|There are
 					if (%volume > $1) then gosub small.mat %herb1
 				}
