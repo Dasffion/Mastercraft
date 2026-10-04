@@ -27,7 +27,7 @@ ENCHANTING - Artificing</h3>
   leather/bone, sigils, ingots, coal nuggets, herbs, oil, brush, etc<br> 
   You just need to make sure you have all the tools!<br><br>
 2) You must have some gold/plat for the script to handle buying supplies / repairing tools<br><br>
-3) Script DOES handle Self-Repairing tools if you have the techique (Advanced Tool Repair)<br>
+3) Script DOES handle Self-Repairing tools if you have the technique (Advanced Tool Repair)<br>
   If tools are damaged beyond self-repair - It will take them to the NPC repair like normal<br><br>
 4) Workorders are only automated using .mastercraft in crafting societies.<br> 
    Individual scripts can be run elsewhere if you desire<br>
