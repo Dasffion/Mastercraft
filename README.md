@@ -48,7 +48,9 @@ ENCHANTING - Artificing</h3>
 
 Be sure to setup your character's crafting profile in <b>**MC_SETUP.cmd**</b> BEFORE USING THESE SCRIPTS!<br>
 There are some things scripting cannot do for you, such as make personal decisions.<br>
-<b>MC_SETUP.cmd contains all the variables to control your characters crafting settings, that is the only script you must edit</b><br>
+
+<b>MC_SETUP.cmd</b> contains all the variables to control your characters crafting settings<br>
+This is the ONLY script you need to edit<br>
 
 <b>Included in this suite:</b><br>
    mastercraft.cmd<br>
