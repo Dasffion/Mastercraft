@@ -1674,7 +1674,7 @@ return.tools1:
           matchwait 10
 		put #echo >log green MASTERCRAFT: Missing match in return.tools
      }
-     #"
+     ##"
      math toolcount add 1
      if (%toolcount > %toolstotal) then return
      goto return.tools1
@@ -1738,12 +1738,12 @@ GETHERBS:
      var startingRoom $roomid
      var herb $0
      echo
-     echo #############
+     echo ######################
      echo # Stocking up on %herb
-     echo # Attempting to Forage
-     echo #############
+     echo # Attempting to go Forage
+     echo ######################
      echo
-     pause 0.6
+     pause
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
      ### TO THE BEST PLACE TO FIND HERBS NEARBY
@@ -1762,18 +1762,33 @@ GETHERBS:
           }
      if ($zoneid = 90) then gosub AUTOMOVE green
      if ($zoneid = 150) then gosub AUTOMOVE 45
-     pause 0.8
      pause 0.1
      var HerbLoop 0
      var HerbsFound 0
+	var Precise 0
+HERBCHECK:
+	pause 0.1
+     send craft remedies
+     waitforre ^From the remedies crafting discipline you have been trained in (.*)\.$
+     var remedy.techs $0
+     pause 0.3
+     if matchre("%remedy.techs", "Remedial Herb Gathering") then var Precise 1
 FORAGEHERBS:
-     echo
-     echo *** Forage Count: %HerbLoop
-     echo
+	echo
+     echo ~~~~~~~~~~~~~~~~~~~~~~~
+     echo * Forage Count: %HerbLoop
+	if (%Precise = 1) then
+		{
+		echo * Remedial Herb Gathering Active
+		echo * Using Precise Forage!
+		}
+	echo ~~~~~~~~~~~~~~~~~~~~~~~
+	echo 
      math HerbLoop add 1
      pause 0.2
      pause 0.2
-     send forage %herb
+	if (%Precise = 1) then send forage %herb precise
+     else send forage %herb
      pause
      pause 0.5
      pause 0.2

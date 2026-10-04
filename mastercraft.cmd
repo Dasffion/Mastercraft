@@ -3,7 +3,7 @@
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
 # Latest updates 10/4/2026
-# v 1.8
+# v 1.9
 #
 #  Script Usage: 
 #
@@ -30,14 +30,18 @@
 #  1) You must have ALL required tools and books in your crafting bag for the craft you choose
 #     ( Discipline book / Logbook for work orders / All the tools for that profession ) 
 #     It does support the special "All Disciplines" Crafting Book by default - no config needed
+#
+#  NOTE: Mastercraft does buy normal shop supplies/materials such as:
+#  leather/bone, sigils, ingots, coal nuggets, herbs, etc
+#  You just need to make sure you have all the tools!
 #  
-#  2) You must have some gold/plat for the script to handle buying supplies / repairing tools
+#  2) You must have some gold/plat for the script to handle buying supplies / repairing tools.
 #  
-#  3) Script DOES handle Self-Repairing tools if you have the tech - requires oil and brush
-#  If tools are damaged beyond self-repair - It will take them to the NPC repair like normal
+#  3) Script DOES handle Self-Repairing tools if you have the tech (Advanced Tool Repair) - requires oil and brush.
+#  If tools are damaged beyond self-repair - It will take them to the NPC repair like normal.
 #  
 #  4) Workorders can only be automated within societies, using the mastercraft script.
-#  Individual scripts can be run elsewhere if you desire
+#  Individual scripts can be run elsewhere if you desire.
 #  Part purchasing and order turn-in will NOT be automatic when the scripts are run solo.
 #  
 #  5) Make sure your stock materials (specifically ingots) are managed in sizes your character can lift.
@@ -49,14 +53,19 @@
 #  
 #  7) Recently added Alchemy support for higher level (challenging/hard) work orders using FORAGED herbs that cannot be bought at the store
 #  Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ needed??)
-#  It auto forages the herbs needed and processes them (press/grind) to be used in the recipes
+#  It auto forages the herbs needed and processes them (press/grind) to be used in the recipes.
 #  
 #  8) KERTIGEN HALO support was added in a past patch - but it may not work well at all (untested recently)
 #  My recommendation is DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides! 
 #  If you ever add/remove a tool in the halo that is not in PERFECT condition - It DAMAGES ALL THE TOOLS IN YOUR HALO! 
 #  Not only that, but they are very clumsy to work with. A highly flawed MT item - DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.
 #  
-#  9) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) 
+#  9) Note as you gain crafting ranks you will be able to learn more techniques for each discipline.
+#  Type CRAFT to see your available 'points' - Recommended to learn new techniques often.
+#  Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.
+#  Don't forget to choose a CAREER and HOBBY as that will get you even more points to work with.
+#
+#  10) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) 
 #  unless you want to parse through them yourself and edit all the script calls. 
 #  Each subscript is called by name here and runs as a second, separate script. This allows for each subscript to be used standalone. 
 #  Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running Be very careful when renaming scriptfiles!
@@ -101,6 +110,14 @@ include mc_include.cmd
 #Add more challenging/hard recipes especially in Alchemy / Outfitting / Artificing
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
+
+# v 1.9
+# Added recognition of 'Remedial Herb Gathering' tech for <precise> herb gathering 
+# When this tech is known it will use "forage <herb> precise" when gathering herbs
+# Added Engineering protection logic to avoid script errors with different types of stacks
+# Having Wolf and Deer bone stacks in the same crafting container would cause script errors
+# Now should put all non used stacks (the one you aren't using) into MC_REDFLOWER.STORAGE
+# Or it will drop the stack if that is not set - This fixes errors counting/combining stacks
 
 # v 1.8
 # Added Muspari Enchanting Society
@@ -201,7 +218,7 @@ TOP:
      var order.type 0
      var diff.change 0
      var repairing 0
-     var ordinal zeroth|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh
+     var ordinal zeroth|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth
      var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four|twenty-five|twenty-six|twenty-seven|twenty-eight|twenty-nine|thirty
      var assemble NULL
      var assemble2 NULL
@@ -1353,10 +1370,16 @@ count.material2:
      math countloop add 1
      pause 0.3
      if matchre("%ordinal(%tempcount)", "zeroth") then math tempcount add 1
-	if ("%ordinal(%tempcount)" = "") then var tempcount 11
+	if ("%ordinal(%tempcount)" = "") then var tempcount 10
 	var itemvolume 0
-     matchre countfail ^I could not find what you were referring to\.
-     send %c.action %ordinal(%tempcount) %work.material %count in my %main.storage
+	var count.noun %work.material
+	matchre countfail ^I could not find what you were referring to\.
+	if matchre("%work.material", "(wolf-bone|deer-bone)") then
+		{
+			var count.noun stack
+			send count %ordinal(%tempcount) %count in my %main.storage
+		}
+     else send %c.action %ordinal(%tempcount) %work.material %count in my %main.storage
      matchwait 3
 count.material3:
      pause 1
@@ -1378,7 +1401,7 @@ count.material3:
                gosub PUT_IT %work.material %order.pref in %main.storage
                if (%material.volume > %mass.volume) then return
           }     
-     if ((%tempcount < 1) || (%countloop > 7)) then
+     if ((%tempcount < 1) || (%countloop > 9)) then
           {
                unvar tempcount
                unvar count
@@ -2414,14 +2437,15 @@ combine1:
 				{
 					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)\b") then gosub PUT_IT my #$lefthandid in my $MC_REDFLOWER.STORAGE
 					else gosub DROPIT #$lefthandid
+					goto combine1
 				}
                if matchre("$lefthand", "%combine.temp") && !matchre("$lefthand", "$righthand") then
 				{
 					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)\b") then gosub PUT_IT my #$righthandid in my $MC_REDFLOWER.STORAGE
 					else gosub DROPIT #$righthandid
+					goto combine1
 				}
 			pause 0.1
-               return
           }
 	if !matchre("$righthand", "%combine.temp") then goto combine.end
 	if !matchre("$lefthand", "%combine.temp") then goto combine.end
