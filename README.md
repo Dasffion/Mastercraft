@@ -25,7 +25,7 @@ ENCHANTING - Artificing</h3>
 2) You must have some gold/plat for the script to handle buying supplies / repairing tools<br><br>
 3) Script DOES handle Self-Repairing tools if you have the tech - requires oil and brush<br>
   If tools are damaged beyond self-repair - It will take them to the NPC repair like normal<br><br>
-4) Workorders can only be automated within societies, using the mastercraft script.<br> 
+4) Workorders are only automated using .mastercraft in crafting societies.<br> 
    Individual scripts can be run elsewhere if you desire<br>
    Part purchasing and order turn-in will NOT be automatic when the scripts are run solo.<br><br>
 5) Make sure your stock materials (specifically ingots) are managed in sizes your character can lift.<br> 
