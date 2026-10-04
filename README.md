@@ -45,8 +45,9 @@ ENCHANTING - Artificing</h3>
    This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running
    Be very careful when renaming scriptfiles!<br>
 
-Be sure to setup your character's crafting profile in <b>**MC_SETUP.CMD BEFORE USING THESE SCRIPTS!**</b><br>
+Be sure to setup your character's crafting profile in <b>**MC_SETUP.cmd**</b> BEFORE USING THESE SCRIPTS!<br>
 There are some things scripting cannot do for you, such as make personal decisions.<br>
+<b>MC_SETUP.cmd contains all the variables to control your characters crafting settings, that is the only script you must edit</b><br>
 
 <b>Included in this suite:</b><br>
    mastercraft.cmd<br>
