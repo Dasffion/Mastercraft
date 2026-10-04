@@ -2,64 +2,110 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/3/2026
-# v 1.7
+# Latest updates 10/4/2026
+# v 1.8
 #
-# Script Usage: .mastercraft                                        --to only do one work order
-#                    .mastercraft <no. of orders>                    --to perform more than one
-#                    .mastercraft <no. of orders> <difficulty>     --to ask for a different difficulty than you have set in your character profile.
+#  Script Usage: 
 #
-#   Mastercraft takes the tedium out of workorders, and works in practically every society for practically every craft. It will get and
-#     turn in orders, buy extra parts, repair tools, manage materials, check item quality, and will even reduce your order difficulty if
-#     you fail the item too often.
+#  EDIT: MC.Setup.cmd - This contains variables to control crafting settings for all your characters
 #
-#     There are a few things to note in using this script, however:
-#     1. You must have all required tools and books in your crafting bag for the craft you choose (repairing also requires oil and brush to be
-#        available).
-#     2. Workorders can only be automated within societies. Individual scripts can be run elsewhere if you desire, but part purchasing and order
-#        turn-in will not be automatic.
-#     3. Make sure your stock materials (specifically ingots) are managed in sizes your character can lift. If he can't pick up an ingot, I don't
-#      know how you'll be able to cut it down to a more manageable size.
-#     4. If you have less than 50 Forging skill, your analyzes may not pick up item quality or ingot size. To do orders with low forging skill,
-#        be sure to have a yardstick to measure with. Your character will otherwise not be able to tell if he has enough material to actually complete the order.        
-#     5. Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself and edit
-#        the script calls. Each subscript is called by name here and runs as a **second, separate script.** This allows for each subscript to be
-#        used standalone. Also, some subscripts (pound, carve, knit, sew, etc.) check to see if Mastercraft.cmd is running before continuing certain
-#        tasks. Be careful when renaming scriptfiles.
-#      
-#     Be sure to setup your character's crafting profile in **MC_SETUP.CMD BEFORE USING THESE SCRIPTS.** There are some things scripting
-#     cannot do for you, such as make personal decisions.
+#  .mastercraft -- to only do one work order
+#  .mastercraft (no. of orders) --to perform more than one
+#  .mastercraft (no. of orders) (difficulty) --to ask for a different difficulty than you have set in your character profile.
+#  
+#  ex: .mastercraft 4 challenging - Does 4 challenging workorders
+#  
+#  Mastercraft takes the tedium out of workorders, and works in practically every society for practically every craft. 
+#  It will get and turn in orders, buy extra parts, repair tools, manage materials, check item quality, and will even reduce your order difficulty if you fail the item too often.
+#  
+#  Mastercraft Suite supports the following disciplines:
+#  FORGING - Weapon / Armor / Blacksmithing
+#  ENGINEERING - Carving / Shaping / Tinkering
+#  OUTFITTING - Tailoring
+#  ALCHEMY - Remedies
+#  ENCHANTING - Artificing
+#  
+#  There are a few things to note in using this script, however:
+#  
+#  1) You must have ALL required tools and books in your crafting bag for the craft you choose
+#     ( Discipline book / Logbook for work orders / All the tools for that profession ) 
+#     It does support the special "All Disciplines" Crafting Book by default - no config needed
+#  
+#  2) You must have some gold/plat for the script to handle buying supplies / repairing tools
+#  
+#  3) Script DOES handle Self-Repairing tools if you have the tech - requires oil and brush
+#  If tools are damaged beyond self-repair - It will take them to the NPC repair like normal
+#  
+#  4) Workorders can only be automated within societies, using the mastercraft script.
+#  Individual scripts can be run elsewhere if you desire
+#  Part purchasing and order turn-in will NOT be automatic when the scripts are run solo.
+#  
+#  5) Make sure your stock materials (specifically ingots) are managed in sizes your character can lift.
+#  If he can't pick up an ingot, I don't know how you'll be able to cut it down to a more manageable size.
+#  
+#  6) If you have less than 50 Forging skill, your analyzes may not pick up item quality or ingot size.
+#  To do orders with low forging skill, be sure to have a YARDSTICK to measure with.
+#  Your character will otherwise not be able to tell if he has enough material to actually complete the order.
+#  
+#  7) Recently added Alchemy support for higher level (challenging/hard) work orders using FORAGED herbs that cannot be bought at the store
+#  Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ needed??)
+#  It auto forages the herbs needed and processes them (press/grind) to be used in the recipes
+#  
+#  8) KERTIGEN HALO support was added in a past patch - but it may not work well at all (untested recently)
+#  My recommendation is DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides! 
+#  If you ever add/remove a tool in the halo that is not in PERFECT condition - It DAMAGES ALL THE TOOLS IN YOUR HALO! 
+#  Not only that, but they are very clumsy to work with. A highly flawed MT item - DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.
+#  
+#  9) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) 
+#  unless you want to parse through them yourself and edit all the script calls. 
+#  Each subscript is called by name here and runs as a second, separate script. This allows for each subscript to be used standalone. 
+#  Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running Be very careful when renaming scriptfiles!
+#  
+#  Be sure to setup your character's crafting profile in *MC_SETUP.CMD* BEFORE USING THESE SCRIPTS!
+#  There are some things scripting cannot do for you, such as make personal decisions.
 #
-#     Included in this suite:
-#          mastercraft.cmd
-#          mc_include.cmd
-#          mc_pound.cmd
-#          mc_sew.cmd
-#          mc_knit.cmd
-#          mc_carve.cmd
-#          mc_enchant.cmd
-#          mc_shape.cmd
-#          mc_smelt.cmd
-#          mc_grind.cmd
-#          mc_weave.cmd
-#          mc_spin.cmd
-#          mc_tinker.cmd
-#     
-#     Each script can be run completely standalone from Mastercraft if you want to create multiple items or just individual orders. Using them
-#     as such will require you to be responsible for your own material management and quality control. Be sure to read the beginning section for
-#     each script if you intend to use it standalone.
+#  MC_SETUP.cmd contains all the variables to control your character's crafting settings
+#  MC_SETUP is the only script you need to edit
+#  
+#   Included in this suite:
+#   mastercraft.cmd
+#   mc_include.cmd
+#   mc_setup.cmd
+#   mc_mix.cmd
+#   mc_pound.cmd
+#   mc_carve.cmd
+#   mc_sew.cmd
+#   mc_enchant.cmd
+#   mc_knit.cmd
+#   mc_shape.cmd
+#   mc_smelt.cmd
+#   mc_grind.cmd
+#   mc_spin.cmd
+#   mc_tinker.cmd
+#   mc_weave.cmd
+#   mc_triggers.cmd
 #
-# Happy Crafting!
-
+#  Each script can be run completely standalone from Mastercraft
+#  If you want to create multiple items or just individual orders. 
+#  Using them as such will require you to be responsible for your own material management and quality control. 
+#  Be sure to read the beginning section for each script if you intend to use it standalone.
+#  
+#  Happy Crafting!!
+#
 #debug 10
 include MC_SETUP.cmd
 include mc_include.cmd
 
 
 #TO-DO LIST
-#Add more challenging/hard recipes especially in Alchemy / Outfitting / Artifacting
+#Add more challenging/hard recipes especially in Alchemy / Outfitting / Artificing
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
+
+# v 1.8
+# Added Muspari Enchanting Society
+# Added "a flask of golden oil" as recognizable oil to use in Forging / Repair Tools
+# Fixed bugs in Ordering logic for oil/brush, sometimes using undefined global variable
 
 # v 1.7
 # Added even more challenging / hard Alchemy recipes 
@@ -166,39 +212,39 @@ TOP:
 	var all.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS|$MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_YARDSTICK|$MC_AWL|$MC_CHISEL|$MC_RIFFLER|$MC_RASP|$MC_SAW|$MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_TINKERTOOL|$MC_CARVINGKNIFE|$MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE|$MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
 
      if matchre("%discipline", "weapon|blacksmith") then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD
-     if "%discipline" = "armor" then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
-     if "%discipline" = "tailor" then
+     if ("%discipline" = "armor") then var work.tools $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
+     if ("%discipline" = "tailor") then
           {
-               if "%order.pref" = "cloth" then var work.tools $MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_YARDSTICK
-               if "%order.pref" = "leather" then var work.tools $MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_AWL|$MC_YARDSTICK
-               if "%order.pref" = "yarn" then var work.tools $MC_NEEDLES|$MC_YARDSTICK
+               if ("%order.pref" = "cloth") then var work.tools $MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_YARDSTICK
+               if ("%order.pref" = "leather") then var work.tools $MC_NEEDLES|$MC_SCISSORS|$MC_SLICKSTONE|$MC_AWL|$MC_YARDSTICK
+               if ("%order.pref" = "yarn") then var work.tools $MC_NEEDLES|$MC_YARDSTICK
           }
-     if "%discipline" = "carving" then
+     if ("%discipline" = "carving") then
           {
-               if "%order.pref" = "stone" then var work.tools $MC_CHISEL|$MC_RIFFLER|$MC_RASP
-               if "%order.pref" = "bone" then 
+               if ("%order.pref" = "stone") then var work.tools $MC_CHISEL|$MC_RIFFLER|$MC_RASP
+               if ("%order.pref" = "bone") then 
                     {
                          var order.pref stack
                          var work.tools $MC_SAW|$MC_RIFFLER|$MC_RASP
                     }
           }
-     if "%discipline" = "shaping" then
+     if ("%discipline" = "shaping") then
           {
                var work.tools $MC_DRAWKNIFE|$MC_SHAPER|$MC_RASP|$MC_CLAMP|$MC_CARVINGKNIFE
           }
-     if "%discipline" = "tinkering" then 
+     if ("%discipline" = "tinkering") then 
           {
                var work.tools $MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_PLIERS|$MC_TINKERTOOL|$MC_CARVINGKNIFE
           }
-     if "%discipline" = "remed" then
+     if ("%discipline" = "remed") then
           {
                var work.tools $MC_BOWL|$MC_MORTAR|$MC_PESTLE|$MC_STICK|$MC_SIEVE
           }
-     if "%discipline" = "artif" then
+     if ("%discipline" = "artif") then
           {
                var work.tools $MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
           }
-     if $MC_END.EARLY = 1 then 
+     if ($MC_END.EARLY = 1) then 
           {
               action instant var order.quantity 1 when You must bundle and deliver (\d+) more within
               action instant var order.quantity 1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
@@ -327,7 +373,7 @@ identify.order:
           }
      
 
-     if "%discipline" = "weapon" then
+     if ("%discipline" = "weapon") then
           {     
                matchre chapter.1 This logbook is tracking a work order requiring you to craft (a metal dagger|a metal kythe|a metal carving knife|a metal oben|a metal briquet|a metal koummya|a metal stiletto|a metal rapier|a metal poignard|a metal pasabas|a metal pugio|a metal thrusting blade|a metal short sword|a metal scimitar|a metal katar|a metal sabre|a metal misericorde|a metal hanger|a metal kris|a metal parang|a metal takouba|a metal curlade|a metal jambiya|a metal adze|a metal leaf blade sword|a metal sashqa|a metal telek|a metal mambeli|a metal nehlata|a metal gladius|a metal falcata|a metal baselard|a metal throwing dagger|a light throwing axe|a metal dart|a metal hand axe|a metal foil|a metal hatchet|a metal sunblade|a metal cutlass|a metal kasai|a metal shotel|a metal dao) from any material\.
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a metal broadsword|a metal namkomba|a metal arzfilt|a metal hunting sword|a metal kudalata|a metal nimsha|a metal spatha|a metal back-sword|a metal longsword|a metal recade|a metal round axe|a metal battle axe|a metal nehdalata|a metal robe sword|a metal condottiere|a metal falchion|a metal cinquedea|a metal schiavona|a metal abassi|a metal hurling axe|a metal dagasse) from any material\.
@@ -342,7 +388,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-     if "%discipline" = "armor" then
+     if ("%discipline" = "armor") then
           {
                matchre chapter.1 This logbook is tracking a work order requiring you to craft (a metal ring mask|a metal ring vest|a metal ring aventail|a metal ring mantle|some metal ring gloves|a metal ring lorica|a metal chain mask|some metal mail vambraces|a metal ring cap|some metal chain sleeves|a metal chain aventail|a metal mail tasset|some metal chain gloves|a metal chain vest|a metal mail mask|a metal chain mantle|a metal chain cap|a metal chain lorica|a metal mail aventail|a metal ring robe|a metal ring helm|a metal ring shirt|some metal ring greaves|a mail balaclava|a metal mail cap|some metal mail sleeves|a metal chain helm|a metal mail vest|a metal ring balaclava|a metal mail mantle|some metal chain greaves|a metal mail lorica|some metal ring vambraces|a metal chain robe|a metal ring tasset|a metal chain shirt|some metal mail gloves|a metal ring hauberk|a metal mail helm|a metal mail robe|a metal chain balaclava|a metal mail shirt|some metal mail greaves|a metal chain hauberk|some metal chain vambraces|a metal mail hauberk|some metal ring sleeves|a metal chain tasset) from any material\.
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a metal scale mask|some brigandine sleeves|a metal scale aventail|a metal lamellar balaclava|some metal scale gloves|some lamellar vambraces|a metal brigandine mask|a metal lamellar tasset|a metal brigandine aventail|a metal scale vest|a metal scale cap|a metal scale lorica|some metal scale greaves|a brigandine shirt|a metal lamellar aventail|some lamellar sleeves|a metal brigandine cap|a metal brigandine vest|a metal scale helm|a metal brigandine mantle|some metal lamellar gloves|a metal brigandine lorica|some brigandine greaves|a metal scale robe|a metal lamellar cap|a metal scale shirt|a metal brigandine helm|a metal lamellar shirt|a metal scale balaclava|a brigandine hauberk|some metal scale vambraces|a metal lamellar robe|a metal scale tasset|a metal lamellar vest|some metal scale sleeves|a metal lamellar mantle|some lamellar greaves|a metal lamellar lorica|a metal lamellar helm|a metal scale hauberk|a brigandine balaclava|a lamellar hauberk|some brigandine vambraces|a metal brigandine tasset) from any material\.
@@ -352,7 +398,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-     if "%discipline" = "blacksmith" then
+     if ("%discipline" = "blacksmith") then
           {
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a diagonal-peen hammer|some metal bolt tongs|a curved metal shovel|a slender metal pickaxe|a metal cross-peen hammer|a ball-peen hammer|some straight metal tongs|a sturdy metal shovel|a stout metal pickaxe|a flat-headed metal pickaxe|some flat-bladed tongs|some segmented tongs|some curved metal tongs|a wide metal shovel|a square metal shovel|some box-jaw tongs|a narrow metal pickaxe|a weighted metal pickaxe|a straight-peen hammer|some articulated tongs|some angular metal tongs|a tapered metal shovel) from any material\.
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (some short metal chisels|a textured metal rasp|some long metal chisels|some rough metal pliers|some square metal rifflers|a metal slender bow saw|a thin metal rasp|some sharpened chisels|a metal straight bone saw|some elongated rifflers|some squat metal rifflers|a flat metal rasp|some plain metal pliers|some thick metal pliers|some sturdy metal chisels|a tapered metal rasp|a coarse metal rasp|some hooked metal pliers|some curved metal pliers|a metal tapered bone saw|a metal curved bone saw|a metal serrated bone saw|some reinforced chisels|some curved metal rifflers) from any material\.
@@ -363,7 +409,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-     if "%discipline" = "tailor" then
+     if ("%discipline" = "tailor") then
           {
                matchre chapter.1 This logbook is tracking a work order requiring you to craft (some small cloth padding|some large cloth padding) from any (material|fabric)\.
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a cloth ankleband|a floppy cloth hat|some cloth fingerless gloves|a cloth veil|a cloth armband|a cloth head scarf|some cloth ankle socks|some cloth robes|some cloth socks|a cloth tunic|a cloth belt|a baggy cloth shirt|a cloth headband|a billowing cloth shirt|some elbow-length gloves|a front-laced cloth dress|some pleated cloth gloves|a knee-length cloth dress|some cloth knee socks|a cloth dress|a cloth eyepatch|some baggy cloth pants|a cloth commoner's cloak|a cloth top hat|a cloth dress belt|a cloth dress hat|a segmented cloth belt|some hooded cloth robes|a cloth dunce hat|a cloth cape|a cloth hat|a hooded cloth cloak|some cloth field shoes|a cloth tabard|some cloth slippers|a formal cloth tunic|some elegant cloth gloves|a short-sleeved tunic|a cloth scarf|a cloth dress shirt|a cloth cloak|a cloth gown|a cloth shirt|a floor-length cloth dress|a sleeveless cloth shirt|some cloth dress pants|a cloth sash|a deeply-hooded cloak|a cloth kilt|a cloth shaman's robe|a cloth skirt|some flowing cloth robes|some cloth pants|a cloth mage's robe|a double-wrapped belt) from any (material|fabric)\.
@@ -378,7 +424,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-     if "%discipline" = "carving" then
+     if ("%discipline" = "carving") then
           {
                matchre chapter.1 This logbook is tracking a work order requiring you to craft (a small stone block|a deep stone basin|a large stone block|a small stone sphere|a thin stone slab|a flat slickstone|a short stone pole|a large stone sphere|a thick stone slab|a grooved stone stirring rod|a smooth slickstone|a polished slickstone|a stout stone stirring rod|a notched stone stirring rod|a shallow stone basin|a forked stone stirring rod|a long stone pole|a slender stone stirring rod) from any material\.
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a rough stone table|a stone buffet table|a high stone table|a stone dining table|a square stone table|a stone refectory table|a round stone table|a stone meditation table|an oval stone table|a stone parquet table|a long stone table) from any material\.
@@ -394,7 +440,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-     if "%discipline" = "shaping" then
+     if ("%discipline" = "shaping") then
           {
                matchre chapter.1 This logbook is tracking a work order requiring you to craft (a short wood pole) from any material\.
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a toy bow|a simple shortbow|a practice shortbow|a farmer's bow|a light shortbow|a sturdy shortbow|a shortbow|an apline shortbow|a saddle bow|a flight bow|a steppe bow|a battle shortbow| a forester's shortbow|a Nisha shortbow|a competition shortbow) from any material\.
@@ -408,7 +454,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-     if "%discipline" = "tinkering" then
+     if ("%discipline" = "tinkering") then
           {
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a toy crossbow|a simple crossbow|a practice crossbow|a farmer's crossbow|a slim crossbow|a sturdy light crossbow|a light crossbow|a flight crossbow|a saddle crossbow|an alpine crossbow|a lockbow|a light forester's crossbow|a light battle crossbow|a steppe crossbow|a latchbow) from any material\.
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (a simple heavy crossbow|a practice heavy crossbow|a heavy crossbow|a sturdy heavy crossbow|a flat crossbow|a skirmisher's crossbow|a slurbow|an arena crossbow|a recurve crossbow|a forester's crossbow|a battle crossbow|a competition crossbow) from any material\.
@@ -421,7 +467,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-     if "%discipline" = "remed" then
+     if ("%discipline" = "remed") then
           {
                action var volume $1 when ^The notes indicate that remedies such as this must be bundled in quantities containing exactly (\d+) uses
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (some blister cream|some moisturizing ointment|some itch salve|some lip balm|some hangover potion)
@@ -434,7 +480,7 @@ identify.order:
                goto new.order.wait
           }
                
-     if "%discipline" = "artif" then
+     if ("%discipline" = "artif") then
                {
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a cambrinth retuner|a flash trinket|a wind trinket|an earth trinket)
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (training ritual focus|basic lunar ritual focus|basic elemental ritual focus|basic life ritual focus|basic holy ritual focus)
@@ -449,7 +495,7 @@ identify.order:
      exit          
 
 chapter.name:
-     if "%discipline" = "tinkering" then var order.type lumber
+     if ("%discipline" = "tinkering") then var order.type lumber
      if matchre("%full.order.noun", "(?:.*\s)(\S+$)") then put #var MC.order.noun $1
      if matchre("%full.order.noun", ".* ball and chain") then put #var MC.order.noun ball
      put #var MC.full.order.noun %full.order.noun
@@ -461,89 +507,89 @@ chapter.name:
       
 chapter.1:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type cloth
-     if "%discipline" = "carving" then var order.type stone
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type cloth
+     if ("%discipline" = "carving") then var order.type stone
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 1
      pause .5
      goto chapter.name
      
 chapter.2:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type cloth
-     if "%discipline" = "carving" then var order.type stone
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type cloth
+     if ("%discipline" = "carving") then var order.type stone
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 2
      pause .5
      goto chapter.name
      
 chapter.3:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type cloth
-     if "%discipline" = "carving" then var order.type stone
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type cloth
+     if ("%discipline" = "carving") then var order.type stone
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 3
      pause .5
      goto chapter.name
      
 chapter.4:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type cloth
-     if "%discipline" = "carving" then var order.type stone
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type cloth
+     if ("%discipline" = "carving") then var order.type stone
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 4
      pause .5
      goto chapter.name
      
 chapter.5:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type yarn
-     if "%discipline" = "carving" then var order.type stone
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type yarn
+     if ("%discipline" = "carving") then var order.type stone
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 5
      pause .5
      goto chapter.name
      
 chapter.6:
      var full.order.noun $1
-     if "%discipline" = "carving" then var order.type stack
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "carving") then var order.type stack
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 6
      pause .5
      goto chapter.name
      
 chapter.7:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type leather
-     if "%discipline" = "carving" then var order.type stone
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type leather
+     if ("%discipline" = "carving") then var order.type stone
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 7
      pause .5
      goto chapter.name
      
 chapter.8:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type leather
-     if "%discipline" = "carving" then var order.type stack
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type leather
+     if ("%discipline" = "carving") then var order.type stack
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 8
      pause .5
      goto chapter.name
      
 chapter.9:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type leather
-     if "%discipline" = "carving" then var order.type stack
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type leather
+     if ("%discipline" = "carving") then var order.type stack
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 9
      pause .5
      goto chapter.name
      
 chapter.10:
      var full.order.noun $1
-     if "%discipline" = "tailor" then var order.type leather
-     if "%discipline" = "carving" then var order.type stack
-     if "%discipline" = "shaping" then var order.type lumber
+     if ("%discipline" = "tailor") then var order.type leather
+     if ("%discipline" = "carving") then var order.type stack
+     if ("%discipline" = "shaping") then var order.type lumber
      var order.chapter 10
      pause .5
      goto chapter.name
@@ -552,10 +598,10 @@ keep.order:
      if matchre("%full.order.noun", "$MC_BLACKLIST") then goto new.order.wait
      if (("%discipline" = "tailor") && ("%order.pref" != "%order.type")) then goto new.order.wait
      if (("%discipline" = "carving") && ("%order.pref" != "%order.type")) then goto new.order.wait
-     if "$MC.order.quality" = "finely-crafted" then put #var MC.order.quality.fail riddled with mistakes and practically useless|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted
-     if "$MC.order.quality" = "of superior quality" then put #var MC.order.quality.fail riddled with mistakes and practically useless|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted
-     if "$MC.order.quality" = "of exceptional quality" then put #var MC.order.quality.fail riddled with mistakes and practically useless|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality
-     if "$MC.order.quality" = "" then goto new.order
+     if ("$MC.order.quality" = "finely-crafted") then put #var MC.order.quality.fail riddled with mistakes and practically useless|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted
+     if ("$MC.order.quality" = "of superior quality") then put #var MC.order.quality.fail riddled with mistakes and practically useless|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted
+     if ("$MC.order.quality" = "of exceptional quality") then put #var MC.order.quality.fail riddled with mistakes and practically useless|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality
+     if ("$MC.order.quality" = "") then goto new.order
      goto turn.page
 
 turn.page:
@@ -648,7 +694,7 @@ calc.material:
                     gosub PUT_IT my oil in my %main.storage
                }
           }
-     if "%discipline" = "tailor" then
+     if ("%discipline" = "tailor") then
           {
                pause 0.1
                action (book) on     
@@ -742,7 +788,7 @@ calc.material:
                          gosub PUT_IT my polish in my %main.storage
                     }
           }
-     if ((matchre("%discipline", "tinkering|shaping")) && ("%order.pref" = "lumber")) then
+     if (matchre("%discipline", "tinkering|shaping") && ("%order.pref" = "lumber")) then
           {
                pause 0.1
                action (book) on
@@ -932,12 +978,12 @@ calc.material:
                     var assemble3 %sigil(2)
                     var asmCount3 %Sigil3Count
                }
-          if "%asmCount1" = "" then var asmCount1 1
-          if "%asmCount2" = "" then var asmCount2 0
-          if "%asmCount3" = "" then var asmCount3 0
+          if ("%asmCount1" = "") then var asmCount1 1
+          if ("%asmCount2" = "") then var asmCount2 0
+          if ("%asmCount3" = "") then var asmCount3 0
           math asmCount1 add 2
-          if %asmCount2 > 0 then math asmCount2 add 2
-          if %asmCount3 > 0 then math asmCount3 add 2
+          if (%asmCount2 > 0) then math asmCount2 add 2
+          if (%asmCount3 > 0) then math asmCount3 add 2
           gosub parts.inv
           if (%order.quantity > %%order.pref.item.count) then gosub lack.material
           pause 0.5
@@ -995,7 +1041,7 @@ calc.parts:
 	#################################################################
      if matchre("$righthand|$lefthand", "book") then gosub PUT_IT my book in my %main.storage
 	## THIS SUBTRACTS HOW MANY OF THOSE ITEMS WE ALREADY HAVE IN OUR INVENTORY
-     if "%discipline" = "artif" then
+     if ("%discipline" = "artif") then
           {
                if matchre("%assemble", "(\S+)") then math asmCount1 subtract %%assemble.count
                if matchre("%assemble2", "(\S+)") then math asmCount2 subtract %%assemble2.count
@@ -1110,7 +1156,6 @@ parts.inv:
      action (assemble) math handle.count add 1 when ^\s+(a|an) \S+ shield handle
      action (assemble) math hilt.count add 1 when ^\s+a \S+ \S+ hilt
      action (assemble) math haft.count add 1 when ^\s+a \S+ \S+ haft
-     action (assemble) math oil.count add 1 when ^\s+a(?: big)? flask of(?: azure| violet)? oil
      action (assemble) math large.backing.count add 1 when ^\s+a large \S+ backing
      action (assemble) math small.backing.count add 1 when ^\s+a small \S+ backing
      action (assemble) math large.padding.count add 1 when ^\s+(a|some) large \S+ padding
@@ -1122,6 +1167,7 @@ parts.inv:
      action (assemble) math pins.count add 1 when ^\s+some .*?pins
 	action (assemble) math backer.count add 1 when backing material
 	action (assemble) math strips.count add 1 when leather strips
+	action (assemble) math oil.count add 1 when ^\s+a(?: big)? flask of(?: azure| violet| golden)? oil
      action (forging) off
      action (outfitting) off
      action (engineering) off
@@ -1130,8 +1176,8 @@ parts.inv:
      if ("%discipline" = "tailor") then action (outfitting) on
      if matchre("%discipline", "weapon|armor|blacksmith") then action (forging) on
      if matchre("%discipline", "carving|shaping|tinkering") then action (engineering) on
-     if "%discipline" = "remed" then action (alchemy) on
-     if "%discipline" = "artif" then action (enchanting) on
+     if ("%discipline" = "remed") then action (alchemy) on
+     if ("%discipline" = "artif") then action (enchanting) on
      send inv my %main.storage
      if matchre("%main.storage", "(?i)portal") then send inv my eddy
      waitforre INVENTORY HELP
@@ -1161,6 +1207,7 @@ parts.inv:
 			if (%long.cord.count > 0) then echo * LONG CORD: %long.cord.count
 			if (%short.cord.count > 0) then echo * SHORT CORD: %short.cord.count
 			if (%pins.count > 0) then echo * PINS: %pins.count
+			if (%oil.count > 0) then echo * OIL: %oil.count
 		}
 	if ("%discipline" = "artif") then
 		{
@@ -1179,6 +1226,7 @@ parts.inv:
 			if (%rarefaction.count > 0) then echo * RAREFACTION SIGILS: %rarefaction.count
 			if (%fount.count > 0) then echo * FOUNTS: %fount.count
 			if (%salt.count > 0) then echo * SALT: %salt.count
+			if (%oil.count > 0) then echo * OIL: %oil.count
 		}
      if ("%discipline" = "remed") then
 		{
@@ -1187,10 +1235,21 @@ parts.inv:
 			if (%water.count > 0) then echo * WATER: %water.count
 			if (%alcohol.count > 0) then echo * ALCOHOL: %alcohol.count
 			if (%coal.count > 0) then echo * COAL: %coal.count
+			if (%oil.count > 0) then echo * OIL: %oil.count
 		}
      if ("%discipline" = "(weapon|armor|blacksmith)") then
 		{
 			if (%ingot.item.count > 0) then echo * INGOTS: %ingot.item.count
+			if (%handle.count > 0) then echo * HANDLES: %handle.count
+			if (%haft.count > 0) then echo * HAFTS: %haft.count
+			if (%hilt.count > 0) then echo * HILTS: %hilt.count
+			if (%long.pole.count > 0) then echo * LONG POLE: %long.pole.count
+			if (%short.pole.count > 0) then echo * SHORT POLE: %short.pole.count
+			if (%large.backing.count > 0) then echo * LARGE BACKING: %large.backing.count
+			if (%small.backing.count > 0) then echo * SMALL BACKING: %small.backing.count
+			if (%large.backing.count > 0) then echo * LARGE PADDING: %large.backing.count\
+			if (%long.cord.count > 0) then echo * LONG CORD: %long.cord.count
+			if (%short.cord.count > 0) then echo * SHORT CORD: %short.cord.count
 			if (%oil.count > 0) then echo * OIL: %oil.count
 		}
      if ("%discipline" = "(carving|shaping|tinkering)") then
@@ -1203,6 +1262,7 @@ parts.inv:
 			if (%strips.count > 0) then echo * STRIPS: %strips.count
 			if (%string.count > 0) then echo * STRING: %string.count
 			if (%lenses.count > 0) then echo * LENSES: %lenses.count
+			if (%oil.count > 0) then echo * OIL: %oil.count
 		}
 	echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	echo
@@ -1427,7 +1487,7 @@ purchase.assemble2:
      purchase.assemble2_2:
      if matchre("%discipline", "tailor|tinkering|artif") then
           {
-               if "%discipline" = "tailor" then
+               if ("%discipline" = "tailor") then
                     {
                          action (order) on
                          gosub ORDER
@@ -1591,7 +1651,7 @@ process.order:
                unvar tempmessage
                if (%grind = 1) then gosub grind
           }
-     if "%discipline" = "tailor" then
+     if ("%discipline" = "tailor") then
           {
                put store custom %work.material %order.pref in %main.storage
                if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
@@ -1662,7 +1722,7 @@ process.order:
                          waitforre ^KNITTING DONE
                     }
           }
-     if "%discipline" = "carving" then
+     if ("%discipline" = "carving") then
           {
                put store custom %work.material %order.pref in %main.storage
                if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
@@ -1708,7 +1768,7 @@ process.order:
                          exit
                     }
           }
-     if "%discipline" = "shaping" then
+     if ("%discipline" = "shaping") then
           {
                put store custom %work.material %order.pref in %main.storage
                if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
@@ -1752,7 +1812,7 @@ process.order:
                waitforre ^SHAPING DONE
                var HaloRemoved 0
           }
-     if "%discipline" = "tinkering" then
+     if ("%discipline" = "tinkering") then
           {
                put store custom %work.material %order.pref in %main.storage
                if (($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) then gosub find.room $work.room
@@ -1788,7 +1848,7 @@ process.order:
                send .MC_tinker
                waitforre ^TINKERING DONE
           }
-     if "%discipline" = "remed" then
+     if ("%discipline" = "remed") then
           {
                if (($MC_WORK.OUTSIDE = 0) && !matchre($work.room, $roomid)) then gosub find.room $work.room
                gosub EMPTY_HANDS
@@ -1829,7 +1889,7 @@ process.order:
                send .MC_mix $MC.order.noun 1 %herb1 %herb2
                waitforre ^ALCHEMY DONE
           }
-     if "%discipline" = "artif" then
+     if ("%discipline" = "artif") then
           {
                if $MC_WORK.OUTSIDE = 0 && !matchre($work.room, $roomid) then gosub find.room $work.room
                gosub EMPTY_HANDS
@@ -2346,6 +2406,23 @@ combine1:
      if !matchre("$righthand", "%combine.temp") then gosub GET my %combine.temp from my %combine.storage
 	#if %%order.pref.item.count <= 1 then goto combine.end
      if !matchre("$lefthand", "%combine.temp") then gosub GET my %combine.temp from my %combine.storage
+     ### THIS FUNCTION MAKES SURE THE ITEMS WE ARE COMBINING ARE THE SAME THING ie: Deer-Bone Stack vs Wolf-Bone
+	### MAY NEED TO OPEN THIS UP TO ALL DISCIPLINES? AS-IS ONLY SEEN THIS OCCUR WITH OUTFITTING TASKS SO FAR
+	if matchre("%discipline", "(shaping|carving|tinkering)") then
+          {			
+               if matchre("$righthand", "%combine.temp") && !matchre("$righthand", "$lefthand") then
+				{
+					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)\b") then gosub PUT_IT my #$lefthandid in my $MC_REDFLOWER.STORAGE
+					else gosub DROPIT #$lefthandid
+				}
+               if matchre("$lefthand", "%combine.temp") && !matchre("$lefthand", "$righthand") then
+				{
+					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)\b") then gosub PUT_IT my #$righthandid in my $MC_REDFLOWER.STORAGE
+					else gosub DROPIT #$righthandid
+				}
+			pause 0.1
+               return
+          }
 	if !matchre("$righthand", "%combine.temp") then goto combine.end
 	if !matchre("$lefthand", "%combine.temp") then goto combine.end
 	combine2:
@@ -2432,18 +2509,18 @@ diff.change:
                var work.difficulty easy
                if matchre("%discipline", "blacksmith|armor|weapon") then put #var MC_FORGING.DIFFICULTY easy
                if matchre("%discipline", "carving|shaping|tinkering") then put #var MC_ENG.DIFFICULTY easy
-               if "%discipline" = "tailor" then put #var MC_OUT.DIFFICULTY easy
-               if "%discipline" = "remed" then put #var MC_ALC.DIFFICULTY easy
-               if "%discipline" = "artif" then put #var MC_ENCHANTING.DIFFICULTY easy
+               if ("%discipline" = "tailor") then put #var MC_OUT.DIFFICULTY easy
+               if ("%discipline" = "remed") then put #var MC_ALC.DIFFICULTY easy
+               if ("%discipline" = "artif") then put #var MC_ENCHANTING.DIFFICULTY easy
           }
      if "%work.difficulty" = "hard" then 
           {
                var work.difficulty challenging
                if matchre("%discipline", "blacksmith|armor|weapon") then put #var MC_FORGING.DIFFICULTY challenging
                if matchre("%discipline", "carving|shaping|tinkering") then put #var MC_ENG.DIFFICULTY challenging
-               if "%discipline" = "tailor" then put #var MC_OUT.DIFFICULTY challenging
-               if "%discipline" = "remed" then put #var MC_ALC.DIFFICULTY challenging
-               if "%discipline" = "artif" then put #var MC_ENCHANTING.DIFFICULTY challenging
+               if ("%discipline" = "tailor") then put #var MC_OUT.DIFFICULTY challenging
+               if ("%discipline" = "remed") then put #var MC_ALC.DIFFICULTY challenging
+               if ("%discipline" = "artif") then put #var MC_ENCHANTING.DIFFICULTY challenging
           }
      return
 

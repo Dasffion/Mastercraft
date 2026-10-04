@@ -37,7 +37,8 @@ var LookTime $gametime
 var LookLast 0
 var need.coin 0
 var sigilnum 1
-action var need.repair 1 when ^The .+ is far too damaged to be used for that\.
+action var need.repair 1;goto RESET when ^The .+ is far too damaged to be used for that\.
+action var need.coin 1 when you don't have enough coins|you don't have that much
 #var alltools saw|chisel|carving knife|rasp|riffler|clamp|needles|drawknife|slickstone|hammer|tongs|bellows|pliers|shovel|bowl|mixing stick|pestle|mortar|sieve|loop|burin|yardstick|tools|awl|rod
 #put #unvar repair.room
 put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 6}
@@ -69,9 +70,6 @@ action (order) var alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol
 action (order) var catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 action (order) var $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
 action (order) var salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
-action var need.coin 1 when you don't have enough coins|you don't have that much
-## action goto RESET when ^You cannot figure out how to do that\.\s+Perhaps finding suitable ingredients and studying some instructions would help\.
-action goto RESET when ^The (.+) is far too damaged to be used for that\.
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
@@ -103,12 +101,12 @@ if !def(MC.WATERCUBE.TIME) then put #var MC.WATERCUBE.TIME $gametime
 if !def(MC.WATERCUBE.LAST) then put #var MC.WATERCUBE.LAST {#evalmath ($gametime - 900)}
 
 #### MIGRATED FROM MASTERCRAFT MAIN SCRIPT SO THAT TOOL REPAIR WORKS IN ALL SCRIPTS
-if $MC_END.EARLY = 1 then 
+if $MC_END.EARLY = 1 then
      {
          action instant var order.quantity 1 when You must bundle and deliver (\d+) more within
          action instant var order.quantity 1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
      }
-else 
+else
      {
          action instant var order.quantity $1 when You must bundle and deliver (\d+) more within
          action instant var order.quantity $1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
@@ -125,14 +123,14 @@ action instant var chapter $1 when You seem to recall this item being somewhere 
 #action goto lack.coin when ^LACK COIN
 action (analyze) off
 ###########################################################################
-### Character Profiles. Please edit these for your character(s). 
+### Character Profiles. Please edit these for your character(s).
 ###########################################################################
-if $MC_TOOLBELT_%society.type != NULL then
+if ($MC_TOOLBELT_%society.type != NULL) then
 	{
 		echo Toolbelt for %society.type configured
 	}
 #Forging settings
-if "%society.type" = "Forging" then
+if ("%society.type" = "Forging") then
 	{
      var discipline $MC_FORGING.DISCIPLINE
      if !matchre("%discipline", "(?i)(blacksmith|weapon|armor)") then goto discfail
@@ -143,7 +141,7 @@ if "%society.type" = "Forging" then
      var deed.order $MC_FORGING.DEED
 	}
 #Outfitting settings
-if "%society.type" = "Outfitting" then
+if ("%society.type" = "Outfitting") then
 	{
      var discipline $MC_OUT.DISCIPLINE
 	if !matchre("%discipline", "(?i)tailor") then goto discfail
@@ -154,7 +152,7 @@ if "%society.type" = "Outfitting" then
      var deed.order $MC_OUT.DEED
 	}
 #Engineering settings
-if "%society.type" = "Engineering" then
+if ("%society.type" = "Engineering") then
 	{
      var discipline $MC_ENG.DISCIPLINE
 	if !matchre("%discipline", "(?i)(carving|shaping|tinkering)") then goto discfail
@@ -166,28 +164,28 @@ if "%society.type" = "Engineering" then
      var deed.order $MC_ENG.DEED
 	}
 #Alchemy Settings
-if "%society.type" = "Alchemy" then
+if ("%society.type" = "Alchemy") then
 	{
      eval discipline tolower($MC_ALC.DISCIPLINE)
 	if !matchre("%discipline", "(?i)remed") then goto discfail
      var work.difficulty $MC_ALC.DIFFICULTY
      var work.material
      var deed.size
-     var order.pref 
+     var order.pref
      var main.storage %alchemy.storage
      var deed.order $MC_ALCH.DEED
 	}
 #Enchanting Settings
-if "%society.type" = "Enchanting" then
+if ("%society.type" = "Enchanting") then
 	{
      var discipline $MC_ENCHANTING.DISCIPLINE
 	if !matchre("%discipline", "(?i)artif") then goto discfail
      var work.difficulty $MC_ENCHANTING.DIFFICULTY
      var work.material
      var deed.size
-     var order.pref 
+     var order.pref
      var main.storage %enchanting.storage
-     var deed.order 
+     var deed.order
 	}
 eval discipline tolower("%discipline")
 eval work.difficulty tolower("%work.difficulty")
@@ -205,17 +203,17 @@ discfail:
 
 
 ####################################################################################################
-### End of Character Profiles. The following is necessary for location settings and script operation. 
+### End of Character Profiles. The following is necessary for location settings and script operation.
 ####################################################################################################
 
-     
+
 location.vars:
 	#Haven Forging
      var HF.room.list 442|441|443|405|404|398|402|403|409|408|399|406|407|400|410|411|401
      var HF.master.room 398|399|400|401
      var HF.work.room 405|409|403|407|411
      var HF.smelt.room 402|404|406|408|410
-     var HF.grind.room %HF.work.room 
+     var HF.grind.room %HF.work.room
 	#Haven Outfitting
      var HO.room.list 448|450|449|451|458|459|455|452|453|454|456|457|460
      var HO.master.room 448|449|450|451|452|453|454
@@ -240,7 +238,7 @@ location.vars:
      var HENT.work.room 535|536|537|538|539|540|541
      var HENT.room.list 526|527|528|529|530|531|532|533|534|535|536|537|538|539|540
      var HENT.master.room 526|529|530|531|527|528
-     
+
 	#Crossing Forging
      var CF.room.list 903|865|962|961|960|902|905|904|906|963|907|908|909
      var CF.master.room 903|865|962|961|960|902|905|904|906|963|907|908|909
@@ -268,20 +266,20 @@ location.vars:
      var CENT.work.room 1000|1001|1002|1003
      var CENT.room.list 994|995|996|997|998|999|1000|1001|1002|1003
      var CENT.master.room 994|995|996|997|998|999
-     
+
 	#Lava Forge
      var LvF.room.list 774|777|776|775|778|782|779|784|780|786|781|783|785
      var LvF.master.room 775|778|782|779|784|780|786
      var LvF.smelt.room 778|779|780
      var LvF.work.room 781|783|785
      var LvF.grind.room 782|786|784
-     
+
 	#Leth Premie Forge
      var LPF.room.list 248|238|239|240|241|242|243|244|245|246|247|253|252|251|250|249|237
      var LPF.master.room 248|238|239|240|241|242|243|244|245|246|247|253|252
      var LPF.work.room 251|250|249
      var LPF.grind.room 252|253|247
-     
+
      #Ratha Forging
      var RF.room.list 818|819|820|821|822|823|824|825|826|827|828|829|830|831|832
      var RF.master.room 819|820|821|822|823|824|825|826|827|828|829|830|831|832
@@ -301,8 +299,8 @@ location.vars:
      var RA.room.list 863|864|865|866|867|868|869|870|871|872|873
      var RA.master.room 863|864|865|866|867|868|869|870
      var RA.work.room 871|872|873
-     
-     
+
+
 	#Shard Forging
      var SF.room.list 644|661|645|648|647|649|650|651|652|653|654|655|656|657|658|659|660|646
      var SF.master.room 644|645|649|650|653|654|655|658|646|661
@@ -328,7 +326,7 @@ location.vars:
      var SENT.work.room 762|763|764|765|766|767
      var SENT.room.list 755|756|757|758|759|760|761|762|763|764|765|766|767
      var SENT.master.room 756
-     
+
 	#Hibarnhivdar Forging
      var HibF.room.list 401|402|403|404|405|406|407|408|409|410|411|412|413
      var HibF.master.room 401|402|403|404|405|406|407|408|409|410|411|412|413
@@ -347,7 +345,7 @@ location.vars:
      var HIBA.books.room 459
      var HIBA.work.room 461|462|463
      var HIBA.room.list 457|458|459|460|461|462|463|464|465
-     var HIBA.master.room 464|465|457|458|459|460|461|462|463    
+     var HIBA.master.room 464|465|457|458|459|460|461|462|463
      #Hibarnhivdar Enchanting
      var HIBENT.tools.room 432
      var HIBENT.supplies.room 433
@@ -360,8 +358,8 @@ location.vars:
      var HIBO.master.room 466|467|468|469|470|471|472|473|474
      var HIBO.work.room 469|467|470|468
      var HIBO.wheel.room 469|467|470|468
-     var HIBO.loom.room 469|467|470|468    
-     
+     var HIBO.loom.room 469|467|470|468
+
 	#Mer'Kresh Forging
      var MKF.room.list 332|333|334|335|336|337|338|339|340|341|342|343|344|345|346|347|348
      var MKF.tools.room 335
@@ -371,7 +369,7 @@ location.vars:
 	var MKF.smelt.room 337|338|339|340|341
      var MKF.work.room 344|345|346|347|348
      var MKF.grind.room %MKF.work.room
-     
+
      #Fang Cove Engineering
      var FE.room.list 206|207|208|209|210|220|221
      var FE.master.room 206|207|208|209|210
@@ -385,7 +383,7 @@ location.vars:
      #Fang Cove Outfitting
      var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
      var FO.master.room 183|184|185|186|187|188|189
-     var FO.work.room 211|212|213|214     
+     var FO.work.room 211|212|213|214
      #Fang Cove Alchemy
      var FA.room.list 190|191|192|193|194|195
      var FA.master.room 190|191|192|193|194|195
@@ -395,9 +393,9 @@ location.vars:
      var FENT.supplies.room 236
      var FENT.books.room 234
      var FENT.work.room 241|240|238|239
-     var FENT.room.list 232|233|234|235|236|237|238|239|240|241|182
-     var FENT.master.room 232|233|234|235|236|237|182
-     
+     var FENT.room.list 232|233|234|235|236|237|238|239|240|241
+     var FENT.master.room 232|233|234|235|236|237
+
      #Muspari Forging
      var MUF.room.list 504|505|506|507|508|509|510|511|512|513|514|515|516|517|518|519|520
      var MUF.master.room 504|505|506|507|508|509|510|511|512|513|514
@@ -416,7 +414,14 @@ location.vars:
      var MUA.room.list 531|532|533|534|535|536|537|538|539
      var MUA.master.room 531|532|533|534|535|536
      var MUA.work.room 537|538|539
-	
+     #Muspari Enchanting
+     var MUENT.tools.room 547
+     var MUENT.supplies.room 545
+     var MUENT.books.room 544
+     var MUENT.work.room 551|550|549|548
+     var MUENT.room.list 541|542|543|544|545|546|547|548|549|550|551
+     var MUENT.master.room 541|542|543|544|545|546|547
+
 	#Repair Locations
      var crossing.repair.room Rangu
      var crossing.repair Rangu
@@ -433,10 +438,10 @@ location.vars:
 
      var FC 0
      var Master.Found 0
-     action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than 
+     action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than
      return
 
-check.location: 
+check.location:
 	#gosub Crossing.%current.lore
 	#return
 	var society none
@@ -476,36 +481,9 @@ check.location:
      if $zoneid = 47 && matchre("%MUE.room.list", "\b$roomid\b") then var society Muspari.Engineering
      if $zoneid = 47 && matchre("%MUO.room.list", "\b$roomid\b") then var society Muspari.Outfitting
      if $zoneid = 47 && matchre("%MUA.room.list", "\b$roomid\b") then var society Muspari.Alchemy
+     if $zoneid = 47 && matchre("%MUENT.room.list", "\b$roomid\b") then var society Muspari.Enchanting
 	pause 1
 	assembleloc:
-	# if $zoneid = 116 then
-		# {
-		# var handle.loc 413
-		# var cord.loc 413
-		# var pole.loc 413
-		# var padding.loc 413
-		# var hilt.loc 413
-		# var haft.loc 413
-		# }
-	# if $zoneid = 107 then
-		# {
-		# var handle.loc 337
-		# var cord.loc 337
-		# var pole.loc 337
-		# var padding.loc 337
-		# var hilt.loc 337
-		# var haft.loc 337
-		# }
-	# if $zoneid =67 then
-		# {
-		# var padding.loc 724
-		# var handle.loc 724
-		# var cord.loc 724
-		# var flights.loc 711
-		# var strips.loc 711
-		# var pole.loc 711
-		# var lenses.loc 711
-		
 	gosub %society
 	return
 
@@ -592,7 +570,7 @@ put #tvar oil.room 905
 put #tvar repair.room %crossing.repair.room
 put #tvar repair.clerk %crossing.repair
 var society.type Forging
-return 
+return
 
 Crossing.Outfitting:
 var master Milline
@@ -802,7 +780,7 @@ var master Thynik
 put #tvar master.room %HIBA.master.room
 put #tvar work.room %HIBA.work.room
 put #tvar supply.room %HIBA.supplies.room
-put #tvar tool.room %HIBA.tools.room 
+put #tvar tool.room %HIBA.tools.room
 put #tvar oil.room 407
 put #tvar repair.room 314
 put #tvar repair.clerk Ladar
@@ -990,6 +968,19 @@ put #tvar repair.clerk %muspari.repair
 var society.type Outfitting
 return
 
+Muspari.Enchanting:
+var master Master
+put #tvar master.room %MUENT.master.room
+put #tvar work.room %MUENT.work.room
+put #tvar supply.room 545
+put #tvar part.room 545
+put #tvar tool.room 547
+put #tvar oil.room 510
+put #tvar repair.room %muspari.repair.room
+put #tvar repair.clerk %muspari.repair
+var society.type Enchanting
+return
+
 Muspari.Alchemy:
 var master Master
 put #tvar master.room %MUA.master.room
@@ -1003,7 +994,7 @@ var society.type Alchemy
 return
 
 none:
-if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "(?i)(MC_.*?)"))) then 
+if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "(?i)(MC_.*?)"))) then
      {
      if matchre("$scriptlist", "(?i)(Smelt|Pound|Grind)") then var society.type Forging
      if matchre("$scriptlist", "(?i)(Sew|Spin|Knit|Weave)") then var society.type Outfitting
@@ -1012,7 +1003,7 @@ if (($MC_WORK.OUTSIDE) && (matchre("$scriptlist", "(?i)(MC_.*?)"))) then
      if matchre("$scriptlist", "(?i)Enchant") then var society.type Enchanting
      return
      }
-if matchre("$scriptlist", "mastercraft") then 
+if matchre("$scriptlist", "mastercraft") then
 	{
 	put #echo You are not in a valid society
 	exit
@@ -1024,7 +1015,7 @@ find.room:
 	#if "%discipline" = "remed" then return
 	var find.room $1
 	gosub roomplayerstrip
-     if ((matchre("%find.room", "$roomid")) && matchre("%tempplayers", "(^$)")) then 
+     if ((matchre("%find.room", "$roomid")) && matchre("%tempplayers", "(^$)")) then
           {
           unvar tempplayers
           return
@@ -1050,12 +1041,12 @@ find.room2:
 	 pause 0.2
      goto find.room2
 	return
-	
+
 roomplayerstrip:
      eval tempplayers replacere("$roomplayers", "(?:Also here: | and |, |\.|who is (?:\w+))", "|")
      eval tempplayers replacere("%tempplayers", "(\w+ )|$MCFRIENDLIST|\|+", "")
      return
-	
+
 find.room.wait:
      var temp 0
      gosub automove $tool.room
@@ -1075,6 +1066,7 @@ find.master:
      gosub check.location
      var Master.Found 0
      var temp 0
+	var MasterLoop 0
      eval temp.max count("$master.room","|")
      #pause 1
      #send look %master
@@ -1100,8 +1092,6 @@ find.master2:
 		}
      gosub automove $master.room(%temp)
      pause 0.5
-	send look %master
-	pause 0.5
      #if %Master.Found = 1 then
      if matchre("$roomobjs", "%master") then
 		{
@@ -1126,252 +1116,12 @@ door:
      matchre return Obvious
      put go door
      matchwait
-     
+
 arch:
      matchre MOVE_RANDOM What were you
      matchre return Obvious
      put go arch
      matchwait
-     
-MOVE_RANDOM:
-     delay 0.0001
-     random 1 8
-     if (%r = 1) && (!$north) then goto MOVE_RANDOM
-     if (%r = 2) && (!$northeast) then goto MOVE_RANDOM
-     if (%r = 3) && (!$east) then goto MOVE_RANDOM
-     if (%r = 4) && (!$southeast) then goto MOVE_RANDOM
-     if (%r = 5) && (!$south) then goto MOVE_RANDOM
-     if (%r = 6) && (!$southwest) then goto MOVE_RANDOM
-     if (%r = 7) && (!$west) then goto MOVE_RANDOM
-     if (%r = 8) && (!$northwest) then goto MOVE_RANDOM
-     #
-     if (%r = 1) then var Direction north
-     if (%r = 2) then var Direction northeast
-     if (%r = 3) then var Direction east
-     if (%r = 4) then var Direction southeast
-     if (%r = 5) then var Direction south
-     if (%r = 6) then var Direction southwest
-     if (%r = 7) then var Direction west
-     if (%r = 8) then var Direction northwest
-     #
-     if (%r = 1) then var Reverse.Direction south
-     if (%r = 2) then var Reverse.Direction southwest
-     if (%r = 3) then var Reverse.Direction west
-     if (%r = 4) then var Reverse.Direction northwest
-     if (%r = 5) then var Reverse.Direction north
-     if (%r = 6) then var Reverse.Direction northeast
-     if (%r = 7) then var Reverse.Direction east
-     if (%r = 8) then var Reverse.Direction southeast
-     #
-     var Exits 0
-     if ($north) then math Exits add 1
-     if ($northeast) then math Exits add 1
-     if ($east) then math Exits add 1
-     if ($southeast) then math Exits add 1
-     if ($south) then math Exits add 1
-     if ($southwest) then math Exits add 1
-     if ($west) then math Exits add 1
-     if ($northwest) then math Exits add 1
-     #
-     # don't move "back" on a path unless we hit a dead end
-     if (%Exits > 1) && ("%Last.Direction" = "%Reverse.Direction") then goto MOVE_RANDOM
-     #
-     var Last.Direction %Direction
-     # Trigger to set variable for occupied room, when roaming.
-     action instant var Occupied 1 when ^Also here\:|^Also in the room\:
-     var Occupied 0
-     gosub MOVE_RESUME
-     if (%Occupied) then goto MOVE_RANDOM
-     return
-####################################################################################
-MOVE:
-     delay 0.0001
-     var Direction $0
-     var movefailCounter 0
-MOVE_RESUME:
-     matchre MOVE_RESUME ^\.\.\.wait|^Sorry\,
-     matchre MOVE_RESUME ^You make your way up the .*\.\s*Partway up\, you make the mistake of looking down\.\s*Struck by vertigo\, you cling to the .* for a few moments\, then slowly climb back down\.
-     matchre MOVE_RESUME ^You pick your way up the .*\, but reach a point where your footing is questionable\.\s*Reluctantly\, you climb back down\.
-     matchre MOVE_RESUME ^You approach the .*\, but the steepness is intimidating\.
-     matchre MOVE_RESUME ^You struggle
-     matchre MOVE_RESUME ^You blunder
-     matchre MOVE_RESUME ^You slap
-     matchre MOVE_RESUME ^You work
-     matchre MOVE_RESUME make much headway
-     matchre MOVE_RESUME ^You flounder around in the water\.
-     matchre MOVE_RETREAT ^You are engaged to .*\!
-     matchre MOVE_STAND ^You start up the .*\, but slip after a few feet and fall to the ground\!\s*You are unharmed but feel foolish\.
-     matchre MOVE_STAND ^Running heedlessly over the rough terrain\, you trip over an exposed root and land face first in the dirt\.
-     matchre MOVE_STAND ^You can't do that while lying down\.
-     matchre MOVE_STAND ^You can't do that while sitting\!
-     matchre MOVE_STAND ^You must be standing to do that\.
-     matchre MOVE_STAND ^You must stand first\.
-     matchre MOVE_STAND ^Stand up first.
-     matchre MOVE_DIG ^You make no progress in the mud \-\- mostly just shifting of your weight from one side to the other\.
-     matchre MOVE_DIG ^You find yourself stuck in the mud\, unable to move much at all after your pathetic attempts\.
-     matchre MOVE_DIG ^You struggle forward\, managing a few steps before ultimately falling short of your goal\.
-     matchre MOVE_DIG ^Like a blind\, lame duck\, you wallow in the mud in a feeble attempt at forward motion\.
-     matchre MOVE_DIG ^The mud holds you tightly\, preventing you from making much headway\.
-     matchre MOVE_DIG ^You fall into the mud with a loud \*SPLUT\*\.
-     matchre MOVE_FAILED ^You can't go there
-     matchre MOVE_FAILED ^I could not find what you were referring to\.
-     matchre MOVE_FAILED ^What were you referring to\?
-     matchre MOVE_RETURN ^It's pitch dark
-     matchre MOVE_RETURN ^Obvious
-     send %Direction
-     matchwait
-MOVE_STAND:
-     pause 0.1
-     matchre MOVE_STAND ^\.\.\.wait|^Sorry\,
-     matchre MOVE_STAND ^You are overburdened and cannot manage to stand\.
-     matchre MOVE_STAND ^The weight
-     matchre MOVE_STAND ^You try
-     matchre MOVE_RETREAT ^You are already standing\.
-     matchre MOVE_RETREAT ^You stand(?:\s*back)? up\.
-     matchre MOVE_RETREAT ^You stand up\.
-     send stand
-     matchwait
-MOVE_RETREAT:
-     pause 0.1
-     matchre MOVE_RETREAT ^\.\.\.wait|^Sorry\,
-     matchre MOVE_RETREAT ^You retreat back to pole range\.
-     matchre MOVE_RETREAT ^You try to back away
-     matchre MOVE_STAND ^You must stand first\.
-     matchre MOVE_RESUME ^You retreat from combat\.
-     matchre MOVE_RESUME ^You are already as far away as you can get\!
-     send retreat
-     matchwait
-MOVE_DIG:
-     pause 0.1
-     matchre MOVE_DIG ^\.\.\.wait|^Sorry\,
-     matchre MOVE_DIG ^You struggle to dig off the thick mud caked around your legs\.
-     matchre MOVE_STAND ^You manage to dig enough mud away from your legs to assist your movements\.
-     matchre MOVE_DIG_STAND ^Maybe you can reach better that way\, but you'll need to stand up for that to really do you any good\.
-     matchre MOVE_RESUME ^You will have to kneel
-     send dig
-     matchwait
-MOVE_DIG_STAND:
-     pause 0.1
-     matchre MOVE_DIG_STAND ^\.\.\.wait|^Sorry\,
-     matchre MOVE_DIG_STAND ^The weight
-     matchre MOVE_DIG_STAND ^You try
-     matchre MOVE_DIG_STAND ^You are overburdened and cannot manage to stand\.
-     matchre MOVE_DIG ^You stand(?:\s*back)? up\.
-     matchre MOVE_DIG ^You are already standing\.
-     send stand
-     matchwait
-MOVE_FAILED:
-     evalmath movefailCounter (movefailCounter + 1)
-     if (%movefailCounter > 3) then goto MOVE_FAIL_BAIL
-     pause 0.5
-     goto MOVE_RESUME
-MOVE_FAIL_BAIL:
-     put #echo
-     put #echo >$Log Crimson *** MOVE FAILED. ***
-     put #echo Crimson *** MOVE FAILED.  ***
-     put #echo
-     exit
-MOVE_RETURN:
-     if $roomid = 0 then goto door
-     return
-     
-# automove:
-	 # pause 0.2
-     # var toroom $0
-     # if $roomid = 0 then 
-          # {
-          # gosub door
-          # put #mapper reset
-          # }
-# automovecont:
-     # pause 0.2
-     # match automovecont2 Bonk! You smash your nose.
-     # match return YOU HAVE ARRIVED
-     # match automovecont1 YOU HAVE FAILED
-     # put #goto %toroom
-     # matchwait 90
-     # if $roomid = 0 then 
-          # {
-          # gosub door
-          # }
-     
-     # put #mapper reset
-     # goto automovecont
-	
-AUTOMOVE:
-	action (moving) var Moving 1 when Obvious (path|exits)|Roundtime
-     delay 0.00001
-     var randomloop 0
-     var Destination $0
-     var automovefailCounter 0
-	if ($standing = 0) then gosub AUTOMOVE_STAND
-     if ("$roomid" = "%Destination") then return
-     if ($roomid = 0) then 
-          {
-			gosub door
-			put #mapper reset
-			pause 0.3
-          }
-AUTOMOVE_GO:
-automovecont:
-     delay 0.00001
-	action (moving) on
-	var Moving 0
-     matchre AUTOMOVE_FAILED ^(?:AUTOMAPPER )?MOVE(?:MENT)? FAILED
-     matchre AUTOMOVE_RETURN ^YOU HAVE ARRIVED(?:\!)?
-     matchre AUTOMOVE_RETURN ^SHOP CLOSED(?:\!)?
-     matchre AUTOMOVE_FAIL_BAIL ^DESTINATION NOT FOUND
-     matchre AUTOMOVE_FAILED ^You don't seem
-     put #goto %Destination
-     matchwait 3
-     if (%Moving = 0) then goto AUTOMOVE_FAILED
-     matchre AUTOMOVE_FAILED ^(?:AUTOMAPPER )?MOVE(?:MENT)? FAILED
-     matchre AUTOMOVE_RETURN ^YOU HAVE ARRIVED(?:\!)?
-     matchre AUTOMOVE_RETURN ^SHOP CLOSED(?:\!)?
-     matchre AUTOMOVE_FAIL_BAIL ^DESTINATION NOT FOUND
-     matchwait 120
-     goto AUTOMOVE_FAILED
-AUTOMOVE_STAND:
-     delay 0.00001
-     if ($standing = 1) then return
-     matchre AUTOMOVE_STAND ^\.\.\.wait|^Sorry,|^You are still stunned\.
-     matchre AUTOMOVE_STAND ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime
-     matchre AUTOMOVE_STAND ^The weight of all your possessions prevents you from standing\.
-     matchre AUTOMOVE_STAND ^You are still stunned\.
-     matchre RETURN ^You stand(?:\s*back)? up\.
-     matchre RETURN ^You are already standing
-     send stand
-     matchwait 20
-     goto AUTOMOVE_STAND
-
-automovecont1:
-     pause
-     put look
-     pause
-	goto automovecont
-AUTOMOVE_FAILED:
-     math automovefailCounter add 1
-	echo
-	echo *** Movement failed!
-	echo
-	send look
-	pause 0.2
-     if (%automovefailCounter > 5) then goto AUTOMOVE_FAIL_BAIL
-	send #mapper reset
-	pause 0.1
-     goto AUTOMOVE_GO
-AUTOMOVE_FAIL_BAIL:
-	echo
-	echo *** AUTOMOVEMENT FAILURE!!!!
-	echo
-	action (moving) off
-AUTOMOVE_RETURN:
-automovecont2:
-     pause
-     if matchre("$scriptlist", "automapper") then send #script abort automapper
-     pause
-	action (moving) off
-     return
 
 mark:
 	if matchre("$MC.Mark", "(?i)off") then return
@@ -1388,11 +1138,11 @@ anvilcheck:
 	matchre clean ^The anvil already has|unfinished .+ (\S+)\.
 	matchre return The anvil's surface looks clean
 	matchre ingot On the.* anvil you see a %work.material ingot
-	matchre manualclean On the.* anvil you see a 
+	matchre manualclean On the.* anvil you see a
 	put look on anvil
 	matchwait 2
 
-	
+
 clean:
 	send clean anvil
 	send clean anvil
@@ -1404,7 +1154,7 @@ manualclean:
 	send get ingot from anvil
 	send drop ingot
 	return
-	
+
 ingot:
      var tempvolume null
      send analyze ingot on anvil
@@ -1416,7 +1166,7 @@ ingot:
 		}
 	var anvilingot 1
 	return
-	
+
 summonwater:
 	match summonwater2 Brushing your fingers
 	match manualwater What were you referring
@@ -1429,7 +1179,7 @@ summonwater2:
 	gosub PUT_IT my water in my %main.storage
 	var water.gone 0
 	return
-	
+
 summonoil:
 	match summonoil2 Brushing your fingers
 	match RETURN What were you referring
@@ -1476,12 +1226,12 @@ manualalcohol:
 	gosub ORDER
      pause 0.9
      pause 0.5
-	action (order) off	
+	action (order) off
 	gosub ORDER $alcohol.order
 	gosub PUT_IT my alcohol in my %main.storage
 	var water.gone 0
 	return
-	
+
 BUY_SPHERE:
      var buy.ok 0
      gosub EMPTY_HANDS
@@ -1501,7 +1251,7 @@ BUY_SPHERE_FAIL:
      echo crate buy failed, not counting a sphere
      var buy.ok 0
      return
-	
+
 ##############################
 ### MIGRATED FROM MASTERCRAFT - TO WORK WITH ALL INDIVIDUAL SCRIPTS
 
@@ -1524,9 +1274,9 @@ get.tools:
      eval toolstotal count("$MC_WORK.TOOLS","|")
 	gosub EMPTY_HANDS
 get.tools1:
-     if matchre ("(?i)$MC_WORK.TOOLS(%toolcount)", "(?i)%clerktools") then 
+     if matchre ("(?i)$MC_WORK.TOOLS(%toolcount)", "(?i)%clerktools") then
 	 {
-          matchre got.tool \"Ah, yes, we have one of your tools like that.\" 
+          matchre got.tool \"Ah, yes, we have one of your tools like that.\"
           matchre missing.tool \"It doesn't look like we have anything like that of yours here.\"
           matchre tool.error \"Well, you need a free hand if I'm going to help you.\"
           put ask $repair.clerk for $MC_WORK.TOOLS(%toolcount)
@@ -1551,7 +1301,7 @@ got.tool:
      math toolcount add 1
      if %toolcount > %toolstotal then goto clerk.tools.done
      goto get.tools1
-	 
+
 clerk.tools.done:
      gosub automove %temp.room
      # if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_REMOVE
@@ -1672,7 +1422,7 @@ repair.tool_2:
                     {
                          send swap
                          pause
-                    }      
+                    }
 			if ("$lefthand" != "Empty") then gosub PUT_IT $lefthandnoun in my %main.storage
                gosub GET my wire brush
 			pause 0.5
@@ -1704,7 +1454,7 @@ repair.tool_2:
                return
           }
      return
-     
+
 toolcheck:
      var brush.gone 1
      var oil.gone 1
@@ -1793,7 +1543,7 @@ tool.store:
      if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%Removing = 0)) then gosub PUT push my halo
      gosub STOW_RIGHT
      goto ReturnAllItems
-     
+
 ToolCheckRight:
 	var tools $0
      var Removing 1
@@ -1811,7 +1561,7 @@ ToolCheckRight:
 		}
      var Removing 0
 	return
-	
+
 ToolCheckLeft:
 	var tools $0
 	if "$lefthand" = "Empty" then
@@ -1828,7 +1578,7 @@ ToolCheckLeft:
           if !matchre("$lefthand", "%tools") then gosub GET my %tools
 		}
 	return
-     
+
 new.tool:
      var temp.room $roomid
      gosub STOW_RIGHT
@@ -1850,7 +1600,7 @@ new.tool:
                pause 0.9
                pause 0.5
                action (order) off
-               gosub ORDER $stain.order
+               gosub ORDER %stain.order
                gosub PUT_IT my stain in my %main.storage
                var stain.gone 0
           }
@@ -1862,7 +1612,7 @@ new.tool:
                pause 0.9
                pause 0.5
                action (order) off
-               gosub ORDER $oil.order
+               gosub ORDER %oil.order
                gosub PUT_IT my oil in my %main.storage
                var oil.gone 0
           }
@@ -1874,7 +1624,7 @@ new.tool:
                pause 0.9
                pause 0.5
                action (order) off
-               gosub ORDER $brush.order
+               gosub ORDER %brush.order
                gosub PUT_IT my brush in my %main.storage
                var brush.gone 0
           }
@@ -1882,7 +1632,7 @@ new.tool:
      unvar temp.room
      var tool.gone 0
      return
-     
+
 
 lack.coin:
      if "%get.coin" = "off" then goto lack.coin.exit
@@ -1906,14 +1656,14 @@ lack.coin.exit:
      echo You need some startup coin to purchase stuff! Go to the bank and try again!
      put #parse Need coin
      exit
-     
+
 return.tools:
 	gosub automove $repair.room
      var toolcount 0
      eval toolstotal count("$MC_WORK.TOOLS","|")
 	gosub EMPTY_HANDS
 return.tools1:
-     if matchre ("$MC_WORK.TOOLS(%toolcount)", "%clerktools") then 
+     if matchre ("$MC_WORK.TOOLS(%toolcount)", "%clerktools") then
 	 {
 		gosub GET $MC_WORK.TOOLS(%toolcount)
           matchre next.tool ^What were you referring to?
@@ -1944,14 +1694,1152 @@ no.clerk.room:
      put #echo >log green MASTERCRAFT: Ran out of room with clerk - adjust your variables
      return
 
-##############################
-#### EMPTY HANDS SUB
+WATERCUBE_TIMER:
+     if !def(MC.WATERCUBE.TIME) then put #var MC.WATERCUBE.TIME $gametime
+     put #var MC.WATERCUBE.LAST {#evalmath ($gametime - $MC.WATERCUBE.TIME)}
+     if ($MC.WATERCUBE.LAST >= 900) then gosub WATERCUBE
+     if ($MC.WATERCUBE.LAST < 900) then
+          {
+               echo
+               echo * Cube of Water still on cooldown!
+               echo * Last use: $MC.WATERCUBE.LAST seconds
+               echo
+          }
+     return
+
+WATERCUBE:
+     pause 0.01
+     echo
+     echo *** USING ELEMENTAL CUBE OF WATER!
+     echo
+     put touch my $MC_WATERCUBE
+     pause 0.2
+     put #var MC.WATERCUBE.TIME $gametime
+     return
+
+PHK:
+     if !matchre("$guild", "Trader") then return
+     var PHKPrep 5
+     if ($Primary_Magic.Ranks <= 100) then var PHKPrep 15
+     if (($Primary_Magic.Ranks > 100) && ($Primary_Magic.Ranks <= 200)) then var PHKPrep 20
+     if (($Primary_Magic.Ranks > 200) && ($Primary_Magic.Ranks <= 300)) then var PHKPrep 24
+     if (($Primary_Magic.Ranks > 300) && ($Primary_Magic.Ranks <= 400)) then var PHKPrep 30
+     if (($Primary_Magic.Ranks > 400) && ($Primary_Magic.Ranks <= 500)) then var PHKPrep 38
+     if (($Primary_Magic.Ranks > 500) && ($Primary_Magic.Ranks <= 600)) then var PHKPrep 44
+     if (($Primary_Magic.Ranks > 600) && ($Primary_Magic.Ranks <= 700)) then var PHKPrep 55
+     if ($Primary_Magic.Ranks > 700) then var PHKPrep 69
+     send prep PHK %PHKPrep
+     pause 9
+     send cast
+     pause 0.5
+     return
+
+GETHERBS:
+     var startingRoom $roomid
+     var herb $0
+     echo
+     echo #############
+     echo # Stocking up on %herb
+     echo # Attempting to Forage
+     echo #############
+     echo
+     pause 0.6
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     ### TO THE BEST PLACE TO FIND HERBS NEARBY
+     ## ALCHEMY ONLY IN CROSS/HAVEN/SHARD/RATHA/MUSPARI/FC
+     if ($zoneid = 1) then gosub AUTOMOVE willow
+     if ($zoneid = 30) then
+          {
+               gosub AUTOMOVE egate
+               gosub AUTOMOVE 4
+          }
+     if ($zoneid = 47) then gosub AUTOMOVE 68
+     if ($zoneid = 67) then
+          {
+               gosub AUTOMOVE east
+               gosub AUTOMOVE campfire
+          }
+     if ($zoneid = 90) then gosub AUTOMOVE green
+     if ($zoneid = 150) then gosub AUTOMOVE 45
+     pause 0.8
+     pause 0.1
+     var HerbLoop 0
+     var HerbsFound 0
+FORAGEHERBS:
+     echo
+     echo *** Forage Count: %HerbLoop
+     echo
+     math HerbLoop add 1
+     pause 0.2
+     pause 0.2
+     send forage %herb
+     pause
+     pause 0.5
+     pause 0.2
+     if matchre("$righthand", "%herb") then
+          {
+               math HerbsFound add 1
+               gosub STOW_RIGHT
+          }
+     if matchre("$lefthand", "%herb") then
+          {
+               math HerbsFound add 1
+               gosub STOW_LEFT
+          }
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     if (%HerbLoop > 22) then goto FORAGE_DONE
+     if ((%HerbLoop > 6) && (%HerbsFound = 0)) then
+          {
+               echo *** DAMNIT NO HERBS FOUND!
+               echo *** Maybe you just suck at Outdoorsmanship?
+               echo *** Or is this a bad spot?
+               return
+          }
+     goto FORAGEHERBS
+FORAGE_DONE:
+     pause 0.1
+     if matchre($zoneid, "(31|32|33)") then gosub automove river
+     if matchre($zoneid, "(31|32|33)") then gosub automove river
+     if ($zoneid = 66) then gosub automove east
+     if ($zoneid = 66) then gosub automove east
+     pause 0.2
+     gosub find.room $work.room
+     pause 0.5
+HERB_PROCESS:
+     pause 0.001
+     put get my %herb from my %tool.storage
+     pause 0.2
+     pause 0.5
+     pause 0.1
+     if ("$righthand" = "Empty") then
+          {
+          get my %herb from my portal
+          pause 0.6
+          pause 0.3
+          }
+     if ("$righthand" = "Empty") then
+          {
+               var Ordinals first|second|third|fourth|fifth|sixth|seventh|eighth
+               var Num 0
+               gosub HERB_COMBINE
+               goto first.order
+          }
+HERB_PRESS:
+     math %herb1.item.count add 1
+	if matchre("%order.type", "(flower|blue flower)") then var order.type blue.flower
+     if (("%discipline" = "remed") && (!matchre("%order.type", "qun pollen|ithor"))) then math %order.type.material.volume add 25
+     else math %order.type.material.volume add 4
+     send put $righthandnoun in press
+     pause 0.2
+     send put $righthandnoun in grinder
+     pause 0.5
+     pause 0.3
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     goto HERB_PROCESS
+
+HERB_COMBINE:
+     if (%Num > 8) then goto COMBINE_FAIL
+     pause 0.2
+     put get my %Ordinals(%Num) %herb1 from my %tool.storage
+     pause 0.5
+     pause 0.1
+     if ("$righthand" = "Empty") then
+          {
+          get my %Ordinals(%Num) %herb1 from my portal
+          pause 0.8
+          pause 0.5
+          }
+     if ("$righthand" = "Empty") then goto COMBINE_FAIL
+     put get my %Ordinals(%Num) %herb1 from my %tool.storage
+     pause 0.5
+     if ("$lefthand" = "Empty") then
+          {
+          get my %Ordinals(%Num) %herb1 from my portal
+          pause 0.5
+          }
+	pause 0.01
+     if ("$lefthand" = "Empty") then goto COMBINE_FAIL
+COMBINING:
+     pause 0.01
+     matchre COMBINE_STOW ^That stack of herbs is too large to add more to\.
+     matchre COMBINE_GOOD ^You combine
+     send combine
+     matchwait 5
+COMBINE_STOW:
+     pause 0.01
+     send swap
+     wait
+     pause 0.2
+     gosub STOW_RIGHT
+     pause 0.1
+     math Num add 1
+     goto HERB_COMBINE
+COMBINE_GOOD:
+     pause 0.001
+     goto HERB_COMBINE
+COMBINE_FAIL:
+     if ("$righthand" != "Empty") then gosub STOW_RIGHT
+     if ("$lefthand" != "Empty") then gosub STOW_LEFT
+     return
+
+SWAP:
+     pause 0.0001
+     send swap
+     pause 0.1
+     pause 0.3
+     return
+
+Action_My:
+	var command analyze $MC.order.noun on my brazier
+	goto Action_1
+Action:
+	var command $0
+	Action_1:
+	matchre Action_1 ^\.\.\.wait|type ahead
+	matchre Analyze ^That tool does not seem suitable for that task\.
+	matchre Analyze appear suitable for working
+	matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
+	matchre Action_My ^Analyze what\?
+	send %command
+	matchwait 10
+	var got.analyze NO
+	return
+
+Analyze:
+     var got.analyze YES
+	if (%society.type = Enchanting) then
+          {
+               if matchre("$MC_BRAZIER", "(?i)NULL") then
+                    {
+                         gosub Action analyze $MC.order.noun on brazier
+                    }
+               else gosub Action analyze $MC.order.noun on my brazier
+          }
+     if (%society.type = Forging) then
+          {
+               if matchre("$righthand $lefthand", "$MC.order.noun") then gosub Action analyze my $MC.order.noun
+          }
+     else gosub Action analyze $MC.order.noun
+	return
+
+return
+
+     ### ORDERING SUB, FOR SHOPS
+ORDER:
+     var Order $0
+     var LOCATION ORDER_MENU
+     #if matchre("%Order", "^%|^\s*$") then var Order $1
+	gosub EMPTY_HANDS
+ORDER_MENU:
+     matchre WAIT ^\.\.\.wait|^Sorry,
+     matchre ORDER_BUY ^\[You may purchase items from the shopkeeper with ORDER|^The attendant|^You can ORDER|order from the shopkeeper
+     matchre ORDER_BUY ^What would you like to order
+     matchre ORDER_BUY ^You can't order anything here
+     put order
+     matchwait 8
+ORDER_BUY:
+     if matchre("%Order", "^%|^\s*$") then return
+	var LOCATION ORDER_BUY
+     pause 0.01
+	if ("%discipline" = "artif") then
+		{
+			echo ASCENSION CATALOG #: %ascension.order
+			echo DECAY CATALOG #: %decay.order
+			echo CONGRUENCE CATALOG #: %congruence.order
+		}
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre ORDER_BUY ^The attendant says\,\s*\"You (can|may) purchase .*\.\s*Just order it again and we'll see it done\!\"
+     matchre fullhands ^You realize your hands are full, and stop\.
+     matchre RETURN ^The attendant takes some coins from you and hands you .*\.
+     matchre RETURN pay the sales clerk
+     matchre RETURN ^\[You may purchase items from the shopkeeper with ORDER
+     if (%need.coin = 1) then
+        {
+        var temp.room $roomid
+        gosub lack.coin
+        goto ORDER_BUY
+        }
+     pause 0.1
+     pause 0.1
+     if matchre("%Order", "^\d+$") then send order %Order
+	else send order %Order
+     if !matchre("%Order", "\d+") then
+		{
+		if matchre("%Order", "\w+") then send order %Order
+		else send order
+		}
+     matchwait 15
+     if (%need.coin = 1) then
+        {
+        var temp.room $roomid
+        gosub lack.coin
+        goto ORDER_BUY
+        }
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN ORDER! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Order = %Order
+     put #log $datetime MISSING MATCH IN ORDER! (mc_include.cmd)
+     return
+
+####################################################################################
+AUTOMOVE:
+	action (moving) var Moving 1 when Obvious (path|exits)|Roundtime
+     delay 0.00001
+     var randomloop 0
+     var Destination $0
+     var automovefailCounter 0
+	if ($standing = 0) then gosub AUTOMOVE_STAND
+     if ("$roomid" = "%Destination") then return
+     if ($roomid = 0) then
+          {
+			gosub door
+			put #mapper reset
+			pause 0.3
+          }
+AUTOMOVE_GO:
+automovecont:
+     delay 0.00001
+	action (moving) on
+	var Moving 0
+     matchre AUTOMOVE_FAILED ^(?:AUTOMAPPER )?MOVE(?:MENT)? FAILED
+     matchre AUTOMOVE_RETURN ^YOU HAVE ARRIVED(?:\!)?
+     matchre AUTOMOVE_RETURN ^SHOP CLOSED(?:\!)?
+     matchre AUTOMOVE_FAIL_BAIL ^DESTINATION NOT FOUND
+     matchre AUTOMOVE_FAILED ^You don't seem
+     put #goto %Destination
+     matchwait 3
+     if (%Moving = 0) then goto AUTOMOVE_FAILED
+     matchre AUTOMOVE_FAILED ^(?:AUTOMAPPER )?MOVE(?:MENT)? FAILED
+     matchre AUTOMOVE_RETURN ^YOU HAVE ARRIVED(?:\!)?
+     matchre AUTOMOVE_RETURN ^SHOP CLOSED(?:\!)?
+     matchre AUTOMOVE_FAIL_BAIL ^DESTINATION NOT FOUND
+     matchwait 120
+     goto AUTOMOVE_FAILED
+AUTOMOVE_STAND:
+     delay 0.00001
+     if ($standing = 1) then return
+     matchre AUTOMOVE_STAND ^\.\.\.wait|^Sorry,|^You are still stunned\.
+     matchre AUTOMOVE_STAND ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime
+     matchre AUTOMOVE_STAND ^The weight of all your possessions prevents you from standing\.
+     matchre AUTOMOVE_STAND ^You are still stunned\.
+     matchre RETURN ^You stand(?:\s*back)? up\.
+     matchre RETURN ^You are already standing
+     send stand
+     matchwait 20
+     goto AUTOMOVE_STAND
+
+automovecont1:
+     pause
+     put look
+     pause
+	goto automovecont
+AUTOMOVE_FAILED:
+     math automovefailCounter add 1
+	echo
+	echo *** Movement failed!
+	echo
+	send look
+	pause 0.2
+     if (%automovefailCounter > 5) then goto AUTOMOVE_FAIL_BAIL
+	send #mapper reset
+	pause 0.1
+     goto AUTOMOVE_GO
+AUTOMOVE_FAIL_BAIL:
+	echo
+	echo *** AUTOMOVEMENT FAILURE!!!!
+	echo
+	action (moving) off
+AUTOMOVE_RETURN:
+automovecont2:
+     pause
+     if matchre("$scriptlist", "automapper") then send #script abort automapper
+     pause
+	action (moving) off
+     return
+###########################################################################################
+MOVE:
+     delay 0.0001
+     var Direction $0
+     var movefailCounter 0
+MOVE_RESUME:
+     matchre MOVE_RESUME ^\.\.\.wait|^Sorry\,
+     matchre MOVE_RESUME ^You make your way up the .*\.\s*Partway up\, you make the mistake of looking down\.\s*Struck by vertigo\, you cling to the .* for a few moments\, then slowly climb back down\.
+     matchre MOVE_RESUME ^You pick your way up the .*\, but reach a point where your footing is questionable\.\s*Reluctantly\, you climb back down\.
+     matchre MOVE_RESUME ^You approach the .*\, but the steepness is intimidating\.
+     matchre MOVE_RESUME ^You struggle
+     matchre MOVE_RESUME ^You blunder
+     matchre MOVE_RESUME ^You slap
+     matchre MOVE_RESUME ^You work
+     matchre MOVE_RESUME make much headway
+     matchre MOVE_RESUME ^You flounder around in the water\.
+     matchre MOVE_RETREAT ^You are engaged to .*\!
+     matchre MOVE_STAND ^You start up the .*\, but slip after a few feet and fall to the ground\!\s*You are unharmed but feel foolish\.
+     matchre MOVE_STAND ^Running heedlessly over the rough terrain\, you trip over an exposed root and land face first in the dirt\.
+     matchre MOVE_STAND ^You can't do that while lying down\.
+     matchre MOVE_STAND ^You can't do that while sitting\!
+     matchre MOVE_STAND ^You must be standing to do that\.
+     matchre MOVE_STAND ^You must stand first\.
+     matchre MOVE_STAND ^Stand up first.
+     matchre MOVE_DIG ^You make no progress in the mud \-\- mostly just shifting of your weight from one side to the other\.
+     matchre MOVE_DIG ^You find yourself stuck in the mud\, unable to move much at all after your pathetic attempts\.
+     matchre MOVE_DIG ^You struggle forward\, managing a few steps before ultimately falling short of your goal\.
+     matchre MOVE_DIG ^Like a blind\, lame duck\, you wallow in the mud in a feeble attempt at forward motion\.
+     matchre MOVE_DIG ^The mud holds you tightly\, preventing you from making much headway\.
+     matchre MOVE_DIG ^You fall into the mud with a loud \*SPLUT\*\.
+     matchre MOVE_FAILED ^You can't go there
+     matchre MOVE_FAILED ^I could not find what you were referring to\.
+     matchre MOVE_FAILED ^What were you referring to\?
+     matchre MOVE_RETURN ^It's pitch dark
+     matchre MOVE_RETURN ^Obvious
+     send %Direction
+     matchwait
+MOVE_STAND:
+     pause 0.1
+     matchre MOVE_STAND ^\.\.\.wait|^Sorry\,
+     matchre MOVE_STAND ^You are overburdened and cannot manage to stand\.
+     matchre MOVE_STAND ^The weight
+     matchre MOVE_STAND ^You try
+     matchre MOVE_RETREAT ^You are already standing\.
+     matchre MOVE_RETREAT ^You stand(?:\s*back)? up\.
+     matchre MOVE_RETREAT ^You stand up\.
+     send stand
+     matchwait
+MOVE_RETREAT:
+     pause 0.1
+     matchre MOVE_RETREAT ^\.\.\.wait|^Sorry\,
+     matchre MOVE_RETREAT ^You retreat back to pole range\.
+     matchre MOVE_RETREAT ^You try to back away
+     matchre MOVE_STAND ^You must stand first\.
+     matchre MOVE_RESUME ^You retreat from combat\.
+     matchre MOVE_RESUME ^You are already as far away as you can get\!
+     send retreat
+     matchwait
+MOVE_DIG:
+     pause 0.1
+     matchre MOVE_DIG ^\.\.\.wait|^Sorry\,
+     matchre MOVE_DIG ^You struggle to dig off the thick mud caked around your legs\.
+     matchre MOVE_STAND ^You manage to dig enough mud away from your legs to assist your movements\.
+     matchre MOVE_DIG_STAND ^Maybe you can reach better that way\, but you'll need to stand up for that to really do you any good\.
+     matchre MOVE_RESUME ^You will have to kneel
+     send dig
+     matchwait
+MOVE_DIG_STAND:
+     pause 0.1
+     matchre MOVE_DIG_STAND ^\.\.\.wait|^Sorry\,
+     matchre MOVE_DIG_STAND ^The weight
+     matchre MOVE_DIG_STAND ^You try
+     matchre MOVE_DIG_STAND ^You are overburdened and cannot manage to stand\.
+     matchre MOVE_DIG ^You stand(?:\s*back)? up\.
+     matchre MOVE_DIG ^You are already standing\.
+     send stand
+     matchwait
+MOVE_FAILED:
+     evalmath movefailCounter (movefailCounter + 1)
+     if (%movefailCounter > 3) then goto MOVE_FAIL_BAIL
+     pause 0.5
+     goto MOVE_RESUME
+MOVE_FAIL_BAIL:
+     put #echo
+     put #echo >$Log Crimson *** MOVE FAILED. ***
+     put #echo Crimson *** MOVE FAILED.  ***
+     put #echo
+     exit
+MOVE_RETURN:
+     if $roomid = 0 then goto door
+     return
+
+MOVE_RANDOM:
+     delay 0.0001
+     random 1 8
+     if (%r = 1) && (!$north) then goto MOVE_RANDOM
+     if (%r = 2) && (!$northeast) then goto MOVE_RANDOM
+     if (%r = 3) && (!$east) then goto MOVE_RANDOM
+     if (%r = 4) && (!$southeast) then goto MOVE_RANDOM
+     if (%r = 5) && (!$south) then goto MOVE_RANDOM
+     if (%r = 6) && (!$southwest) then goto MOVE_RANDOM
+     if (%r = 7) && (!$west) then goto MOVE_RANDOM
+     if (%r = 8) && (!$northwest) then goto MOVE_RANDOM
+     #
+     if (%r = 1) then var Direction north
+     if (%r = 2) then var Direction northeast
+     if (%r = 3) then var Direction east
+     if (%r = 4) then var Direction southeast
+     if (%r = 5) then var Direction south
+     if (%r = 6) then var Direction southwest
+     if (%r = 7) then var Direction west
+     if (%r = 8) then var Direction northwest
+     #
+     if (%r = 1) then var Reverse.Direction south
+     if (%r = 2) then var Reverse.Direction southwest
+     if (%r = 3) then var Reverse.Direction west
+     if (%r = 4) then var Reverse.Direction northwest
+     if (%r = 5) then var Reverse.Direction north
+     if (%r = 6) then var Reverse.Direction northeast
+     if (%r = 7) then var Reverse.Direction east
+     if (%r = 8) then var Reverse.Direction southeast
+     #
+     var Exits 0
+     if ($north) then math Exits add 1
+     if ($northeast) then math Exits add 1
+     if ($east) then math Exits add 1
+     if ($southeast) then math Exits add 1
+     if ($south) then math Exits add 1
+     if ($southwest) then math Exits add 1
+     if ($west) then math Exits add 1
+     if ($northwest) then math Exits add 1
+     #
+     # don't move "back" on a path unless we hit a dead end
+     if (%Exits > 1) && ("%Last.Direction" = "%Reverse.Direction") then goto MOVE_RANDOM
+     #
+     var Last.Direction %Direction
+     # Trigger to set variable for occupied room, when roaming.
+     action instant var Occupied 1 when ^Also here\:|^Also in the room\:
+     var Occupied 0
+     gosub MOVE_RESUME
+     if (%Occupied) then goto MOVE_RANDOM
+     return
+
+#### MASTER PUT SUB
+PUT:
+     var Command $0
+     var LOCATION PUT_1
+     pause 0.0001
+     PUT_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre PUT_STOW ^You need a free hand
+     matchre WAIT ^\[Enter your command again if you want to\.\]
+     matchre RETURN (^You'?r?e?|^As|^With|^Using).*(?:\.|\!|\?)?
+     matchre RETURN ^You can't pick that up with your hands that damaged\.|^Both your hands are missing\!
+     matchre RETURN (You'?r?e?|As|With|Using) (?:accept|adeptly|add|adjust|allow|already|are|aren't|ask|cut|attach|attempt|.+ to|.+ fan|bash|begin|bend|blow|breathe|briefly|bring|bundle|cannot|can't|carefully|cautiously|chop|circle|clasp|close|collect|collector's|concentrate|corruption|count|combine|come|dance|decide|deduce|dodge|don't|drum|draw|effortlessly|eyes|gracefully|deftly|desire|detach|drop|drape|exhale|fade|fail|fake|feel(?! fully rested)|feint|fill|find|filter|focus|form|fumble|gaze|gesture|giggle|gingerly|get|glance|grab|hand|hang|have|icesteel|inhale|insert|kiss|kneel|knock|leap|lean|let|lose|lift|loosen|lob|load|measure|move|must|mutter|mind|not|now|need|offer|open|parry|place|pick|push|pout|pour|put|pull|prepare|press|quietly|quickly|raise|read|reach|ready|realize|recall|remain|release|remove|retreat|reverently|rock|roll|rub|scan|search|secure|sense|set|sheathe|shield|should|shouldn't|shove|silently|sit|skin|slide|sling|slip|slow|slowly|spin|spread|sprinkle|start|stick|stop|strap|struggle|swap|swiftly|swing|switch|tap|take|the|though|touch|tie|tilt|toss|trace|try|tug|turn|twist|unload|untie|vigorously|wave|wear|weave|whisper|whistle|will|wink|wring|work|yank|yell|you|zills) .*(?:\.|\!|\?)?
+     matchre RETURN ^Brother Durantine|^Durantine|^Mags|^Ylono|^Malik|^Kilam|^Ragge|^Randal|^Catrox|^Kamze|^Unspiek|^Wyla|^Ladar|^Dagul|^Granzer|^Gemsmith|^Fekoeti|^Diwitt|(?:An|The|A) attendant|clerk|Dwarven|spider|^.*He says,
+     matchre RETURN ^The(.*)?(clerk|teller|attendant|mortar|pestle|tongs|bowl|riffler|hammer|gem|book|page|lockpick|sconce|voice|waters|contours|person|is|has|are|slides|fades|hinges|spell|not)
+     matchre RETURN ^It('s)?(?:'s|a|and|the)?\s+?(?:would|will|is|a|already|dead|keen|practiced|graceful|stealthy|resounding|full|has)
+     matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime|\[Roundtime
+     matchre RETURN ^That('s)?\s+?(?:is|has|was|a|cannot|area|can't|won't|would|already|tool|will|cost|too|section)
+     matchre RETURN ^With(?: (a|and|the))?\s+?(?:keen|practiced|graceful|stealthy|resounding)
+     matchre RETURN ^This (is a .+ spell|is an exclusive|spell|ritual)
+     matchre RETURN ^The .*(is|has|are|slides|fades|hinges|spell|not|vines|antique|(.+) spider|pattern)
+     matchre RETURN ^There('s|is)?\s+(?:is(n't)?)?|does(n't)?|already|nothing|not?
+     matchre RETURN ^But (?:that|you|you're|you've|the)
+     matchre RETURN ^Obvious (?:exits|paths)
+     matchre RETURN ^There's no room|any more room|no matter how you arrange|have all been used\.
+     matchre RETURN ^That's too heavy|too thick|too long|too wide|not designed to carry|cannot hold any more
+     matchre RETURN ^(You|I) can't|^Tie what\?|^You just can't|As you attempt to place your
+     matchre RETURN suddenly leaps toward you|and flies towards you|with a flick
+     matchre RETURN ^Brushing your fingers|^Sensing your intent|^Quietly touching your lips
+     matchre RETURN Lucky for you\!\s*That isn't damaged\!|I will not repair something that isn't broken\.
+     matchre RETURN I'm sorry, but I don't work on those|There isn't a scratch on that, and I'm not one to rob you\.
+     matchre RETURN I don't work on those here\.|I don't repair those here|Please don't lose this ticket\!
+     matchre RETURN ^Please rephrase that command\.|^I could not find|^Perhaps you should|^I don't|^Weirdly,|That can't
+     matchre RETURN \[You're|^Your .*\.|\[This is|too injured
+     matchre RETURN ^Moving|Brushing|Recalling|Unaware
+     matchre RETURN ^.*\[Praying for \d+ sec\.\]
+     matchre RETURN ^.+ is not in need|^That is closed\.
+     matchre RETURN ^What (?:were you|is it)
+     matchre RETURN ^In the name of love\?|^Play on|^(.+) what\?
+     matchre RETURN ^It's kind of wet out here\.
+     matchre RETURN ^Some (?:polished|people|tarnished|.* zills)
+     matchre RETURN ^(\S+) has accepted
+     matchre RETURN ^Subservient type|^The shadows|^Close examination|^Try though
+     matchre RETURN ^USAGE\:|^Using your|^You.*analyze
+     matchre RETURN ^Allows a Moon Mage|^Smoking commands are
+     matchre RETURN ^A (?:slit|pair|shadow) .*(?:\.|\!|\?)?
+     matchre RETURN ^Your (?:actions|dance|nerves) .*(?:\.|\!|\?)?
+     matchre RETURN ^Having no further use for .*, you discard it\.
+     matchre RETURN ^After a moment, .*\.
+     matchre RETURN ^.* (?:is|are) not in need of cleaning\.
+     matchre RETURN \[Type INVENTORY HELP for more options\]|\[Use INVENTORY HELP for more options\.\]
+     matchre RETURN ^A vortex|^A chance for|^In a flash|^It is locked|^An aftershock
+     matchre RETURN ^In the .* you see .*\.
+     matchre RETURN .* (?:Dokoras|Kronars|Lirums)
+     matchre RETURN ^You will now store .* in your .*\.
+     matchre RETURN ^\[Ingredients can be added by using ASSEMBLE Ingredient1 WITH Ingredient2\]
+     matchre RETURN ^\s\*LINK ALL CANCEL\s\*- Breaks all links
+     matchre RETURN ^Stalking is an inherently stealthy endeavor, try being out of sight\.
+     matchre RETURN ^You're already stalking|^There aren't any
+     matchre RETURN ^An offer|shakes (his|her) head
+     matchre RETURN ^Tie it off when it's empty\?
+     matchre RETURN ^But the merchant can't see you|are invisible
+     matchre RETURN Page|^As the world|^Obvious|^A ravenous energy
+     matchre RETURN ^In the|^The attendant|^That is already open\.|^Your inner
+     matchre RETURN ^(.+) hands you|^Searching methodically|^But you haven't prepared a symbiosis\!
+     matchre RETURN ^Illustrations of complex,|^It is labeled|^Your nerves
+     matchre RETURN ^The lockpick|^Doing that|is not required to continue crafting
+     matchre RETURN ^Without (any|a|the)|^Wouldn't (it|that|you)
+     matchre RETURN ^Weirdly, you can't manage
+     matchre RETURN ^Hold hands with whom\?
+     matchre RETURN ^Something in the area interferes
+     matchre RETURN ^With a .+ to your voice,
+     matchre RETURN ^You don't have a .* coin on you\!\s*The .* spider looks at you in forlorn disappointment\.
+     matchre RETURN ^Quietly touching your lips with the tips of your fingers as you kneel\, you make the Cleric's sign with your hand\.
+     matchre RETURN ^Maybe you should stand up\.
+     matchre RETURN ^You sense a successful empathic link has been forged|^Touch what|^I could not find
+     matchre RETURN ^The .+ has suffered too much damage and needs to be repaired at a crafting repair shop
+     matchre RETURN ^The .* is not damaged enough to warrant repair\.
+     matchre RETURN ^This spell cannot be targeted\.
+     matchre RETURN ^You are already focusing your appraisal on a subject\.
+     matchre RETURN ^You are already under the effects of an appraisal focus\.
+     matchre RETURN ^\[Ingredients can be added by using ASSEMBLE Ingredient1 WITH Ingredient2\]
+     matchre RETURN ^You can't seem to focus on that\.\s*Perhaps you're too mentally tired from researching similar principles recently\.
+     matchre RETURN ^\s*LINK ALL CANCEL\s*\- Breaks all links
+     matchre RETURN (bundle them with your logbook and then give|you trace|you just received a work order|You hand|You slide|You place)
+     matchre RETURN ^(You have no idea how to craft|The book is already turned|You turn your book|You realize you have items bundled with the logbook)
+     matchre RETURN (You measure out|You carefully break off|^You hand|\"There isn't a scratch on that|\"I don't repair those here\.)
+     matchre RETURN (Just give it to me again if you want|completely undamaged and does not need repair|not damaged enough to warrant repair)
+     matchre RETURN ^(You find your jar|The (\S+) can only hold)
+     matchre RETURN ^(You .*open|You .*close|That is already open|That is already closed)
+     matchre RETURN ^Turning your focus solemnly inward
+     matchre RETURN ^Slow, rich tones form a somber introduction
+     matchre RETURN ^Images of streaking stars falling from the heavens
+     matchre RETURN ^Strangely, you don't feel like fighting right now\.
+     matchre RETURN ^With .* movements you prepare your body for the .* spell\.
+     matchre RETURN ^A strong wind swirls around you as you prepare the .* spell\.
+     matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime
+     matchre RETURN ^Shadow and light collide wildly around you as you prepare the .* spell\.
+     matchre RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
+     matchre RETURN ^A soft breeze surrounds your body as you confidently prepare the .* spell\.
+     matchre RETURN ^Light withdraws from around you as you speak arcane words for the .* spell\.
+     matchre RETURN ^Tiny tendrils of lightning jolt between your hands as you prepare the .* spell\.
+     matchre RETURN ^Low, hummed tones form a soft backdrop for the opening notes of the .* enchante\.
+     matchre RETURN ^Heatless orange flames blaze between your fingertips as you prepare the .* spell\.
+     matchre RETURN ^Throwing your head back, you release a savage roar and growl words for the .* spell\.
+     matchre RETURN ^Entering a trance-like state, your hands begin to tremble as you prepare the .* spell\.
+     matchre RETURN ^Glowing geometric patterns arc between your upturned palms as you prepare the .* spell\.
+     matchre RETURN ^Focusing intently, you slice seven straight lines through the air as you invoke the .* spell.\.
+     matchre RETURN ^Accompanied with a flash of light, you clap your hands sharply together in preparation of the .* spell\.
+     matchre RETURN ^Icy blue frost crackles up your arms with the ferocity of a blizzard as you begin to prepare the .* spell\!
+     matchre RETURN ^A radiant glow wreathes your hands as you weave lines of light into the complicated pattern of the .* spell\.
+     matchre RETURN ^Kaleidoscopic ribbons of light swirl between your outstretched hands, coalescing into a spectral wildling spider\.
+     matchre RETURN ^Darkly gleaming motes of sanguine light swirl briefly about your fingertips as you gesture while uttering the .* spell\.
+     matchre RETURN ^As you begin to solemnly intone the .* spell a blue glow swirls about forming a nimbus that surrounds your entire being\.
+     matchre RETURN ^As you slam your fists together and inhale sharply, a glowing outline begins to form and a matrix of blue and white motes surround you\.
+     matchre RETURN ^In one fluid motion, you bring your palms close together and a fiery crimson mist begins to burn within them as you prepare the .* spell\.
+     matchre RETURN ^The first gentle notes of .* waft from you with delicate ease, riddled with low tones that gradually give way to a higher\-pitched theme\.
+     matchre RETURN ^Droplets of water coalesce around your fingertips as your arms undulate like gracefully flowing river currents to form the pattern of the .* spell\.
+     matchre RETURN ^Inhaling deeply, you adopt a cyclical rhythm in your breaths to reflect the ebb and flow of the natural world and steel yourself to prepare the .* spell\.
+     matchre RETURN ^Calmly reaching out with one hand, a silvery-blue beam of light descends from the sky to fill your upturned palm with radiance as you prepare the .* spell\.
+     matchre RETURN ^Turning your head slightly and gazing directly ahead with a calculating stare, tiny sparks of crystalline light flash around your eyes as you prepare the .* spell\.
+     matchre RETURN ^You take up a handful of dirt in your palm to prepare the .* spell\.  As you whisper arcane words, you gently blow the dust away and watch as it becomes swirling motes of
+     # matchre RETURN ^
+     matchre RETURN ^\s*Encumbrance\s*\:
+     send %Command
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Command = %Command
+     put #log $datetime MISSING MATCH IN PUT (mc_include.cmd)
+     return
+
+#### DOUBLE PUT SUB
+PUT_IT:
+     var PutIt $0
+     var LOCATION PUT_IT_1
+     pause 0.0001
+     PUT_IT_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+	matchre RETURN ^That's too heavy to go in there\!
+     matchre RETURN ^With a flick
+     matchre RETURN ^You (?:put|drop) .*\.
+     matchre RETURN ^Please rephrase that command\.
+     matchre RETURN ^.* what\?
+     matchre RETURN ^I could not find what you were referring to\.
+     matchre RETURN ^What were you referring to\?
+     matchre RETURN ^The (\S+) can only hold
+     matchre RETURN ^Perhaps you should
+     matchre TRASH ^This appears too far altered to enchant|^The %rawmat is already enchanted|^You have no idea how to craft
+     matchre BAG_FULL no matter how you arrange it
+     matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
+     send put %PutIt
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT_IT! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime PutIt = %PutIt
+     put #log $datetime MISSING MATCH IN PUT_IT (mc_include.cmd)
+     return
+
+READ:
+     var LOCATION READ
+     var Read $0
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre READ_RETURN (?<!Page).*Page (\d+): %Read
+     send read my book
+     matchwait
+READ_RETURN:
+	 var page $1
+	 return
+
+STUDY:
+     var Study $0
+     var LOCATION STUDY_1
+     pause 0.0001
+     STUDY_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre STUDY_1 You begin
+     matchre STUDY_1 You continue studying the
+     matchre STUDY_1 You continue to study
+     matchre RETURN You take on a studious look
+     matchre STUDY_END Why do you need to study this chart again?
+     matchre STUDY_NEXT (^With|^In) a sudden moment of clarity
+     matchre GET_BOOK ^But you are not holding it
+     matchre GET_BOOK ^But you're not holding it
+     matchre GET_BOOK ^Study what?
+     matchre RETURN You study|You scan|You notate|You review
+     matchre RETURN ^You now feel ready to begin the crafting process.
+     send study %Study
+     matchwait
+
+STUDYIT:
+     var Study $0
+     var LOCATION STUDYIT_1
+     pause 0.0001
+     STUDYIT_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre RETURN You (begin|continue)
+     matchre RETURN You take on a studious look
+     matchre RETURN Why do you need to study this chart again?
+     matchre RETURN (^With|^In) a sudden moment of clarity
+     matchre RETURN You study|You scan|You notate|You review
+     matchre RETURN ^You now feel ready to begin the crafting process.
+     matchre RETURN ^Roundtime|Roundtime
+     send study %Study
+     matchwait
+
+GET_BOOK:
+	gosub GET %discipline book
+	pause 0.1
+	if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
+	goto STUDY_1
+
+TRASH:
+     if matchre("$roomobjs", "(bucket|bin)") then
+		{
+		if !matchre("%rawmat", "%all.tools") then gosub PUT_IT %rawmat in bin
+		else goto endearly
+		}
+     else
+	    {
+		if !matchre("%rawmat", "%all.tools") then gosub PUT drop %rawmat
+		else goto endearly
+		}
+     gosub clear
+     goto start.enchant
+
+# EMPTY HANDS SUB
 EMPTY_HANDS:
      pause 0.0001
      gosub STOW_RIGHT
      gosub STOW_LEFT
 	return
-     
+
+# DROP ITEM
+DROPIT:
+	var Item $0
+	var LOCATION DROPIT_1
+	pause 0.001
+DROPIT_1:
+     pause 0.1
+     matchre DROPIT_1 ^\.\.\.wait|^Sorry,|^You are still stunned\.
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre RETURN ^Please rephrase that command\.
+     matchre RETURN ^You drop
+     matchre RETURN ^Your left hand is already empty\.
+     matchre RETURN ^Your right hand is already empty\.
+     matchre RETURN ^What were you referring to\?
+     matchre RETURN ^I could not find what you were referring to\.
+     matchre DROPIT_1 ^Whoah\!
+     send drop %Item
+     matchwait 5
+     return
+
+BAG_FULL:
+    gosub combine.check "%main.storage" %order.pref
+    #send open $MC_REMNANT.STORAGE
+    #gosub combine.check "$MC_REMNANT.STORAGE" %order.pref
+    #send close $MC_REMNANT.STORAGE
+    pause 1
+    RETURN
+
+#### GET SUB
+GET:
+     var Get $0
+     var LOCATION GET_1
+     pause 0.0001
+     GET_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre HOLD_1 ^But that is already in your inventory\.
+     matchre RETURN ^You get .*\.
+     matchre RETURN ^You pick up .*\.
+     matchre RETURN ^You carefully remove .* from the bundle\.
+     matchre RETURN ^You are already holding that\.
+     matchre RETURN ^Get what\?
+     matchre RETURN ^You grab .*(?:\.|\!|\?)
+     matchre RETURN ^As best it can\, .* moves in your direction\.
+     matchre RETURN ^You need a free hand to pick that up\.
+     matchre RETURN ^That can't be picked up\.
+     matchre RETURN ^Please rephrase
+     matchre RETURN ^Analyze what
+     matchre UNTIE ^You pull at it|^You pull at|^You should untie
+     matchre GET_DOUBLECHECK ^I could not find what you were referring to\.
+     matchre GET_DOUBLECHECK What were you referring to\?
+     matchre GET_DOUBLECHECK ^Perhaps you should
+	matchre WRONG_ITEM ^That is far too dangerous to remove
+     send get %Get
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Get = %Get
+     put #log $datetime MISSING MATCH IN GET (mc_include.cmd)
+     return
+GET_DOUBLECHECK:
+     var LOCATION GET_2
+     pause 0.0001
+     gosub LOOK_TIMER
+     if (%LookLast > 90) then
+          {
+               var LookTime $gametime
+               send look in my portal
+               pause 0.4
+               pause 0.1
+               pause 0.001
+          }
+     GET_2:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre HOLD_1 ^But that is already in your inventory\.
+     matchre RETURN ^You get .*\.
+     matchre RETURN ^You pick up .*\.
+     matchre RETURN ^You carefully remove .* from the bundle\.
+     matchre RETURN ^You are already holding that\.
+     matchre RETURN ^Get what\?
+     matchre RETURN ^I could not find what you were referring to\.
+     matchre RETURN ^What were you referring to\?
+     matchre RETURN ^You grab .*(?:\.|\!|\?)
+     matchre RETURN ^As best it can\, .* moves in your direction\.
+     matchre RETURN ^You need a free hand to pick that up\.
+     matchre RETURN ^Perhaps you should
+     matchre UNTIE ^You pull at it|^You pull at|^You should untie
+	matchre WRONG_ITEM ^That is far too dangerous to remove
+	if matchre("%Get", "from my") then send get %Get
+	else send get %Get from my portal
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET2! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Get = %Get
+     put #log $datetime MISSING MATCH IN GET2 (mc_include.cmd)
+     return
+
+LOOK_TIMER:
+     if matchre("%LookTime", "$^") then
+          {
+               evalmath LookTime ($gametime - 300)
+          }
+     evalmath LookLast ($gametime - %LookTime)
+     return
+
+UNTIE:
+	send untie %Get
+	var BELTTOOLS 1
+	return
+
+WRONG_ITEM:
+	matchre WRONG_ITEM ^\.\.\.wait|^Sorry\,
+	send get my %Get
+	matchwait 5
+	return
+
+
+#### HOLD SUB
+HOLD:
+     var Get $0
+     var LOCATION HOLD_1
+     pause 0.0001
+     HOLD_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre RETURN ^You sling .*\.
+     matchre RETURN ^You get .*\.
+     matchre RETURN ^You take .*\.
+     matchre RETURN ^You pull .*\.
+     matchre RETURN ^You remove .*\.
+     matchre RETURN ^You loosen .*\.
+     matchre RETURN ^You remove .* from your belt\.
+     matchre RETURN ^You are already holding that\.
+     matchre RETURN ^Get what\?
+     matchre RETURN ^Hold hands with whom
+     matchre RETURN ^You work your way out of
+     matchre RETURN ^You aren't
+     matchre RETURN ^I could not find what you were referring to\.
+     matchre RETURN ^What were you referring to\?
+     matchre GET_1 ^Perhaps you should be holding that
+     send hold %Get
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN HOLD! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Get = %Get
+     put #log $datetime MISSING MATCH IN HOLD (mc_include.cmd)
+     return
+
+#### STOW SUB
+STOW:
+     var Stow $0
+     var LOCATION STOW_1
+     pause 0.0001
+     STOW_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre WEAR_CHECK ^.* is too long to fit in .*\.
+     matchre RETURN ^You put .*\.
+     matchre RETURN already in your inventory
+     matchre RETURN ^You open your pouch and put .* inside\, closing it once more\.
+     matchre RETURN ^What were you referring to\?
+     matchre RETURN ^Stow what\?  Type 'STOW HELP' for details\.
+     matchre STOW_LEFT You need a free hand
+     matchre STOW.UNLOAD ^You should unload
+     send stow %Stow
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN STOW! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Stow = %Stow
+     put #log $datetime MISSING MATCH IN STOW (mc_include.cmd)
+     return
+
+STOW_LEFT:
+     if "$lefthandnoun" != "" then
+          {
+               if matchre("%tiedtools", "$lefthand") then
+                    {
+					pause .05
+					pause .5
+                    send tie #$lefthandid to my $MC_TOOLBELT_%society.type
+                    }
+               else
+                         {
+						if matchre("%alltools", "$lefthandnoun") then
+							{
+								gosub PUT_IT #$lefthandid in my %tool.storage
+							}
+						else
+							{
+								gosub PUT_IT #$lefthandid in my %main.storage
+							}
+					}
+          }
+	return
+
+STOW_RIGHT:
+     if "$righthandnoun" != "" then
+          {
+               if matchre("%tiedtools", "$righthand") then
+                    {
+					pause .05
+					pause .5
+                    send tie my $righthandnoun to my $MC_TOOLBELT_%society.type
+                    }
+               else
+                         {
+                              if matchre("$righthand", "crafting book") then
+                                   {
+                                        put wear book
+                                        pause 0.5
+                                   }
+						if matchre("%alltools", "$righthandnoun") then
+							{
+								gosub PUT_IT #$righthandid in my %tool.storage
+							}
+						else
+							{
+								gosub PUT_IT #$righthandid in my %main.storage
+							}
+					}
+          }
+	return
+
+
+#### WEAR SUB
+WEAR_CHECK:
+          if matchre("$righthand", "stone quarterstaff|stone lance") then
+		{
+		put drop $righthand
+		return
+		}
+		goto WEAR_1
+WEAR:
+     var Stow $0
+     var LOCATION WEAR_1
+     pause 0.0001
+     WEAR_1:
+
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre STUNNED ^You are still stunned
+     matchre STOW_1 ^You can't wear that\!
+     matchre STOW_1 ^You can't wear any more items like that\.
+     matchre STOW_1 ^This .* can't fit over the .* you are already wearing which also covers and protects your .*\.
+     matchre RETURN ^You (?:sling|put|slide|slip|attach|work|strap) .*\.
+     matchre RETURN ^You are already wearing that\.
+     matchre RETURN ^What were you referring to\?
+     matchre RETURN ^Wear what\?
+     send wear %Stow
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN WEAR! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Stow = %Stow
+     put #log $datetime MISSING MATCH IN WEAR (mc_include.cmd)
+     return
+
+#### SPELL CASTING
+PREPARE:
+     var Prepare $0
+     var LOCATION PREPARE_1
+     pause 0.0001
+PREPARE_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+	matchre SPELL_CAST_RETURN ^But you've already prepared the
+     matchre SPELL_CAST_RETURN ^You have already fully prepared
+     matchre SPELL_CAST_RETURN ^You are already preparing the .* spell\!
+     matchre SPELL_CAST_RETURN ^You begin chanting .* to invoke the .* spell\.
+     matchre SPELL_CAST_RETURN ^You mutter .* to yourself while preparing the .* spell\.
+     matchre SPELL_CAST_RETURN ^With .* movements you prepare your body for the .* spell\.
+     matchre SPELL_CAST_RETURN ^You raise your .* skyward\, chanting the .* of the .* spell\.
+     matchre SPELL_CAST_RETURN ^You rock back and forth\, humming tunelessly as you invoke the .* spell\.
+     matchre SPELL_CAST_RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Your eyes darken to black as a starless night as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^You close your eyes and breathe deeply, gathering energy for the .* spell\.
+     matchre SPELL_CAST_RETURN ^You trace an arcane sigil in the air\, shaping the pattern of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Your eyes darken to black as a starless night as you prepare the .* spell\.
+	matchre SPELL_CAST_RETURN ^You trace a geometric sigil in the air, shaping the pattern of the .* spell\.
+     matchre SPELL_CAST_RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
+     matchre SPELL_CAST_RETURN ^A soft breeze surrounds your body as you confidently prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^Tiny tendrils of lightning jolt between your hands as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^Heatless orange flames blaze between your fingertips as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^Entering a trance-like state\, your hands begin to tremble as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^You adeptly sing the incantations for the .* spell\, setting the words to a favorite tune\.
+     matchre SPELL_CAST_RETURN ^You bring your hand slowly to your forehead as you begin chanting the words of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Icy blue frost crackles up your arms with the ferocity of a blizzard as you begin to prepare the .* spell\!
+     matchre SPELL_CAST_RETURN ^You have to strain to harness the energy for this spell, and you aren't sure you can get enough to cast it\.
+     matchre SPELL_CAST_RETURN ^You giggle to yourself as you move through the syncopated gestures that accompany the preparations of the .* spell\.
+     matchre SPELL_CAST_RETURN ^Darkly gleaming motes of sanguine light swirl briefly about your fingertips as you gesture while uttering the .* spell\.
+     matchre SPELL_CAST_RETURN ^As you begin to solemnly intone the .* spell a blue glow swirls about forming a nimbus that surrounds your entire being\.
+     matchre SPELL_CAST_RETURN ^Your skin briefly withers and tightens\, becoming gaunt as the energies of the .* spell begin to build up through your body\.
+     matchre SPELL_CAST_RETURN ^You trace an intricate rune in the air with your finger\, illusory lines lingering several seconds as you prepare the .* spell\.
+     matchre SPELL_CAST_RETURN ^You begin reciting a solemn incantation\, causing familiar patterns of geometric shapes to circle your hand as the .* spell forms\.
+     matchre SPELL_CAST_RETURN ^You take up a handful of dirt in your palm to prepare the .* spell\.  As you whisper arcane words\, you gently blow the dust away and watch as it becomes swirling motes of glittering light that veil your hands in a pale aura\.
+     matchre SPELL_CAST_RETURN ^You recall the exact details
+     matchre SPELL_CAST_RETURN ^But you've already prepared the Chaos symbiosis
+     matchre SPELL_CAST_DONE ^What do you want to prepare\?
+     matchre SPELL_CAST_DONE ^That is not a spell you can cast\.
+     matchre SPELL_CAST_DONE ^You wouldn't have the first clue how to do that\.
+     matchre SPELL_CAST_DONE ^You stop\, convinced that there's no way to control that much mana\.
+     matchre SPELL_CAST_FAIL ^You have to strain to harness the energy for this spell, and you aren't sure you can get enough to cast it\.
+     send prepare %Prepare
+     matchwait 15
+     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PREPARE! (mc_include.cmd) ***
+     put #echo >$Log Crimson $datetime Prepare = %Prepare
+     put #log $datetime MISSING MATCH IN PREPARE! (mc_include.cmd)
+     goto SPELL_CAST_RETURN
+
+SPELL_CAST_DONE:
+     put #queue clear
+     put #var symb 0
+     pause 0.0001
+     return
+SPELL_CAST_FAIL:
+     gosub RELEASE MANA
+SPELL_CAST_RETURN:
+     pause 0.0001
+     return
+RELEASE:
+     var Release $0
+     var LOCATION RELEASE_1
+     pause 0.0001
+     RELEASE_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre RETURN ^\s*Encumbrance\s*\:
+     put -release %Release;-encumbrance
+     matchwait
+
+SPELL_CAST_TARGET:
+     var Target $0
+     var LOCATION SPELL_CAST_TARGET_1
+     pause 0.0001
+SPELL_CAST_TARGET_1:
+     matchre WAIT ^\.\.\.wait|^Sorry\,
+     matchre STUNNED ^You are still stunned
+     matchre WEBBED ^You can't do that while entangled in a web
+     matchre IMMOBILE ^You don't seem to be able to move to do that
+     matchre SPELL_CAST_DONE ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
+     matchre SPELL_CAST_DONE ^You gesture
+     matchre SPELL_CAST_DONE ^Focus the power of justice on whom\?
+     matchre SPELL_CAST_FAIL ^You don't have a spell prepared\!
+     matchre SPELL_CAST_FAIL ^Your concentration slips for a moment\, and your spell is lost\.
+     put -cast %Target;-2 gesture
+     matchwait
+
+FULLHANDS:
+	gosub EMPTY_HANDS
+	goto ORDER_BUY
+
+WAIT:
+     pause 0.0001
+     pause 0.1
+     if (!$standing) then put STAND
+     goto %LOCATION
+
+RESET:
+	pause 0.1
+	echo
+	echo ** ERROR! ATTEMPTING TO RESET!!!
+	echo
+	put #queue clear
+	gosub clear
+	pause 0.1
+	pause 0.1
+	goto identify.order
+
+#### RETURNS
+RETURN_CLEAR:
+     pause 0.0001
+     put #queue clear
+     pause 0.0001
+     return
+RETURN:
+     pause 0.0001
+     return
+
 
 #### KERTIGEN HALO HANDLING
 #### INITIAL HALO HANDLING TO REMOVE ALL TOOLS
@@ -2064,7 +2952,7 @@ HALO_REPAIR:
                pause 0.3
           }
      if !matchre("$righthand", "halo") then gosub GET my kertigen halo
-     pause 0.1     
+     pause 0.1
      if !matchre("$righthand", "halo") then
           {
                gosub HALO_FIND
@@ -2109,7 +2997,7 @@ HALO_ERROR:
      echo *** %shifting not found in Halo
      echo
      return
-     
+
 HALO_FIND:
      var HaloFound 0
      echo
@@ -2235,7 +3123,7 @@ HALO_CHECK2:
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
      return
-     
+
 ### NO HALO FOUND - STORE TOOL
 HALO_NON:
      pause 0.1
@@ -2244,7 +3132,7 @@ HALO_NON:
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
      return
-     
+
 HALO_RESTACK:
      echo
      echo *** RE-ADDING TOOLS TO HALO
@@ -2323,7 +3211,7 @@ HALO_RESTACK:
      if matchre("$lefthand", "halo") then gosub STOW_LEFT
      if matchre("$righthand", "halo") then gosub STOW_RIGHT
      return
-     
+
 HALO_STACK:
      var item $0
      pause 0.001
@@ -2348,908 +3236,5 @@ HALO_STACK:
      pause 0.3
      if matchre("$lefthand", "(?i)%item") then gosub STOW_LEFT
      return
-     
-WATERCUBE_TIMER:
-     if !def(MC.WATERCUBE.TIME) then put #var MC.WATERCUBE.TIME $gametime
-     put #var MC.WATERCUBE.LAST {#evalmath ($gametime - $MC.WATERCUBE.TIME)}
-     if ($MC.WATERCUBE.LAST >= 900) then gosub WATERCUBE
-     if ($MC.WATERCUBE.LAST < 900) then
-          {
-               echo
-               echo * Cube of Water still on cooldown!
-               echo * Last use: $MC.WATERCUBE.LAST seconds
-               echo
-          }
-     return
 
-WATERCUBE:
-     pause 0.01
-     echo
-     echo *** USING ELEMENTAL CUBE OF WATER!
-     echo
-     put touch my $MC_WATERCUBE
-     pause 0.2
-     put #var MC.WATERCUBE.TIME $gametime
-     return
-
-PHK:
-     if !matchre("$guild", "Trader") then return
-     var PHKPrep 5
-     if ($Primary_Magic.Ranks <= 100) then var PHKPrep 15
-     if (($Primary_Magic.Ranks > 100) && ($Primary_Magic.Ranks <= 200)) then var PHKPrep 20
-     if (($Primary_Magic.Ranks > 200) && ($Primary_Magic.Ranks <= 300)) then var PHKPrep 24
-     if (($Primary_Magic.Ranks > 300) && ($Primary_Magic.Ranks <= 400)) then var PHKPrep 30
-     if (($Primary_Magic.Ranks > 400) && ($Primary_Magic.Ranks <= 500)) then var PHKPrep 38
-     if (($Primary_Magic.Ranks > 500) && ($Primary_Magic.Ranks <= 600)) then var PHKPrep 44
-     if (($Primary_Magic.Ranks > 600) && ($Primary_Magic.Ranks <= 700)) then var PHKPrep 55
-     if ($Primary_Magic.Ranks > 700) then var PHKPrep 69
-     send prep PHK %PHKPrep
-     pause 9
-     send cast
-     pause 0.5
-     return
-
-GETHERBS:
-     var startingRoom $roomid
-     var herb $0
-     echo
-     echo #############
-     echo # Stocking up on %herb
-     echo # Attempting to Forage
-     echo #############
-     echo
-     pause 0.6
-     if ("$righthand" != "Empty") then gosub STOW_RIGHT
-     if ("$lefthand" != "Empty") then gosub STOW_LEFT
-     ### TO THE BEST PLACE TO FIND HERBS NEARBY
-     ## ALCHEMY ONLY IN CROSS/HAVEN/SHARD/RATHA/MUSPARI/FC
-     if ($zoneid = 1) then gosub AUTOMOVE willow
-     if ($zoneid = 30) then
-          {    
-               gosub AUTOMOVE egate
-               gosub AUTOMOVE 4
-          }
-     if ($zoneid = 47) then gosub AUTOMOVE 68
-     if ($zoneid = 67) then
-          {    
-               gosub AUTOMOVE east
-               gosub AUTOMOVE campfire
-          }
-     if ($zoneid = 90) then gosub AUTOMOVE green
-     if ($zoneid = 150) then gosub AUTOMOVE 45
-     pause 0.8
-     pause 0.1
-     var HerbLoop 0
-     var HerbsFound 0
-FORAGEHERBS:
-     echo
-     echo *** Forage Count: %HerbLoop
-     echo
-     math HerbLoop add 1
-     pause 0.2
-     pause 0.2
-     send forage %herb
-     pause
-     pause 0.5
-     pause 0.2
-     if matchre("$righthand", "%herb") then
-          {
-               math HerbsFound add 1
-               gosub STOW_RIGHT
-          }
-     if matchre("$lefthand", "%herb") then
-          {
-               math HerbsFound add 1
-               gosub STOW_LEFT
-          }
-     if ("$righthand" != "Empty") then gosub STOW_RIGHT
-     if ("$lefthand" != "Empty") then gosub STOW_LEFT
-     if (%HerbLoop > 22) then goto FORAGE_DONE
-     if ((%HerbLoop > 6) && (%HerbsFound = 0)) then
-          {
-               echo *** DAMNIT NO HERBS FOUND!
-               echo *** Maybe you just suck at Outdoorsmanship?
-               echo *** Or is this a bad spot?
-               return
-          }
-     goto FORAGEHERBS
-FORAGE_DONE:
-     pause 0.1
-     if matchre($zoneid, "(31|32|33)") then gosub automove river
-     if matchre($zoneid, "(31|32|33)") then gosub automove river
-     if ($zoneid = 66) then gosub automove east
-     if ($zoneid = 66) then gosub automove east
-     pause 0.2
-     gosub find.room $work.room
-     pause 0.5
-HERB_PROCESS:
-     pause 0.001
-     put get my %herb from my %tool.storage
-     pause 0.2
-     pause 0.5
-     pause 0.1
-     if ("$righthand" = "Empty") then
-          {
-          get my %herb from my portal
-          pause 0.6
-          pause 0.3             
-          }
-     if ("$righthand" = "Empty") then
-          {    
-               var Ordinals first|second|third|fourth|fifth|sixth|seventh|eighth
-               var Num 0
-               gosub HERB_COMBINE
-               goto first.order
-          }
-HERB_PRESS:
-     math %herb1.item.count add 1
-	if matchre("%order.type", "(flower|blue flower)") then var order.type blue.flower
-     if (("%discipline" = "remed") && (!matchre("%order.type", "qun pollen|ithor"))) then math %order.type.material.volume add 25
-     else math %order.type.material.volume add 4
-     send put $righthandnoun in press
-     pause 0.2
-     send put $righthandnoun in grinder
-     pause 0.5
-     pause 0.3
-     if ("$righthand" != "Empty") then gosub STOW_RIGHT
-     if ("$lefthand" != "Empty") then gosub STOW_LEFT
-     goto HERB_PROCESS
-
-HERB_COMBINE:
-     if (%Num > 8) then goto COMBINE_FAIL
-     pause 0.2
-     put get my %Ordinals(%Num) %herb1 from my %tool.storage
-     pause 0.5
-     pause 0.1
-     if ("$righthand" = "Empty") then
-          {
-          get my %Ordinals(%Num) %herb1 from my portal
-          pause 0.8
-          pause 0.5             
-          }
-     if ("$righthand" = "Empty") then goto COMBINE_FAIL
-     put get my %Ordinals(%Num) %herb1 from my %tool.storage
-     pause 0.5
-     if ("$lefthand" = "Empty") then
-          {
-          get my %Ordinals(%Num) %herb1 from my portal
-          pause 0.5
-          }     
-	pause 0.01
-     if ("$lefthand" = "Empty") then goto COMBINE_FAIL
-COMBINING:
-     pause 0.01
-     matchre COMBINE_STOW ^That stack of herbs is too large to add more to\.
-     matchre COMBINE_GOOD ^You combine
-     send combine
-     matchwait 5
-COMBINE_STOW:
-     pause 0.01
-     send swap
-     wait
-     pause 0.2
-     gosub STOW_RIGHT
-     pause 0.1
-     math Num add 1
-     goto HERB_COMBINE
-COMBINE_GOOD:
-     pause 0.001
-     goto HERB_COMBINE
-COMBINE_FAIL:
-     if ("$righthand" != "Empty") then gosub STOW_RIGHT
-     if ("$lefthand" != "Empty") then gosub STOW_LEFT
-     return
-     
-     
-     
-     
-     
-SWAP:
-     pause 0.0001
-     send swap
-     pause 0.1
-     pause 0.3
-     return
-     
-Action_My:
-var command analyze $MC.order.noun on my brazier
-goto Action_1
-Action:
-var command $0
-Action_1:
-matchre Action_1 ^\.\.\.wait|type ahead
-matchre Analyze ^That tool does not seem suitable for that task\.
-matchre Analyze appear suitable for working
-matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
-matchre Action_My ^Analyze what\?
-send %command
-matchwait 10
-var got.analyze NO
-return
-
-Analyze:
-     var got.analyze YES
-	if (%society.type = Enchanting) then
-          {
-               if matchre("$MC_BRAZIER", "(?i)NULL") then
-                    {
-                         gosub Action analyze $MC.order.noun on brazier
-                    }
-               else gosub Action analyze $MC.order.noun on my brazier
-          }
-     if (%society.type = Forging) then
-          {
-               if matchre("$righthand $lefthand", "$MC.order.noun") then gosub Action analyze my $MC.order.noun
-          }
-     else gosub Action analyze $MC.order.noun
-	return
-
-return
-
-     ### ORDERING SUB, FOR SHOPS
-ORDER:
-     var Order $0
-     var LOCATION ORDER_MENU
-     #if matchre("%Order", "^%|^\s*$") then var Order $1
-	gosub EMPTY_HANDS
-ORDER_MENU:
-     matchre WAIT ^\.\.\.wait|^Sorry,
-     matchre ORDER_BUY ^\[You may purchase items from the shopkeeper with ORDER|^The attendant|^You can ORDER|order from the shopkeeper
-     matchre ORDER_BUY ^What would you like to order
-     matchre ORDER_BUY ^You can't order anything here
-     put order
-     matchwait 8
-ORDER_BUY:
-     if matchre("%Order", "^%|^\s*$") then return
-	var LOCATION ORDER_BUY
-     pause 0.01
-	if ("%discipline" = "artif") then
-		{
-			echo ASCENSION CATALOG #: %ascension.order
-			echo DECAY CATALOG #: %decay.order
-			echo CONGRUENCE CATALOG #: %congruence.order
-		}
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-     matchre ORDER_BUY ^The attendant says\,\s*\"You (can|may) purchase .*\.\s*Just order it again and we'll see it done\!\" 
-     matchre fullhands ^You realize your hands are full, and stop\.
-     matchre RETURN ^The attendant takes some coins from you and hands you .*\.
-     matchre RETURN pay the sales clerk
-     matchre RETURN ^\[You may purchase items from the shopkeeper with ORDER
-     if (%need.coin = 1) then
-        {
-        var temp.room $roomid
-        gosub lack.coin
-        goto ORDER_BUY
-        }
-     pause 0.1
-     pause 0.1
-     if matchre("%Order", "^\d+$") then send order %Order
-	else send order %Order
-     if !matchre("%Order", "\d+") then 
-		{
-		if matchre("%Order", "\w+") then send order %Order
-		else send order
-		}
-     matchwait 15
-     if (%need.coin = 1) then
-        {
-        var temp.room $roomid
-        gosub lack.coin
-        goto ORDER_BUY
-        }
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN ORDER! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Order = %Order
-     put #log $datetime MISSING MATCH IN ORDER! (mc_include.cmd)
-     return
-
-fullhands:
-	gosub EMPTY_HANDS
-	goto ORDER_BUY
-	
-WAIT:
-     pause 0.0001
-     pause 0.1
-     if (!$standing) then put STAND
-     goto %LOCATION
- 
-#### PUT SUB
-PUT:
-     var Command $0
-     var LOCATION PUT_1
-     pause 0.0001
-     PUT_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-     matchre PUT_STOW ^You need a free hand
-     matchre WAIT ^\[Enter your command again if you want to\.\]
-     matchre RETURN (^You'?r?e?|^As|^With|^Using).*(?:\.|\!|\?)?
-     matchre RETURN ^You can't pick that up with your hands that damaged\.|^Both your hands are missing\!
-     matchre RETURN (You'?r?e?|As|With|Using) (?:accept|adeptly|add|adjust|allow|already|are|aren't|ask|cut|attach|attempt|.+ to|.+ fan|bash|begin|bend|blow|breathe|briefly|bring|bundle|cannot|can't|carefully|cautiously|chop|circle|clasp|close|collect|collector's|concentrate|corruption|count|combine|come|dance|decide|deduce|dodge|don't|drum|draw|effortlessly|eyes|gracefully|deftly|desire|detach|drop|drape|exhale|fade|fail|fake|feel(?! fully rested)|feint|fill|find|filter|focus|form|fumble|gaze|gesture|giggle|gingerly|get|glance|grab|hand|hang|have|icesteel|inhale|insert|kiss|kneel|knock|leap|lean|let|lose|lift|loosen|lob|load|measure|move|must|mutter|mind|not|now|need|offer|open|parry|place|pick|push|pout|pour|put|pull|prepare|press|quietly|quickly|raise|read|reach|ready|realize|recall|remain|release|remove|retreat|reverently|rock|roll|rub|scan|search|secure|sense|set|sheathe|shield|should|shouldn't|shove|silently|sit|skin|slide|sling|slip|slow|slowly|spin|spread|sprinkle|start|stick|stop|strap|struggle|swap|swiftly|swing|switch|tap|take|the|though|touch|tie|tilt|toss|trace|try|tug|turn|twist|unload|untie|vigorously|wave|wear|weave|whisper|whistle|will|wink|wring|work|yank|yell|you|zills) .*(?:\.|\!|\?)?
-     matchre RETURN ^Brother Durantine|^Durantine|^Mags|^Ylono|^Malik|^Kilam|^Ragge|^Randal|^Catrox|^Kamze|^Unspiek|^Wyla|^Ladar|^Dagul|^Granzer|^Gemsmith|^Fekoeti|^Diwitt|(?:An|The|A) attendant|clerk|Dwarven|spider|^.*He says,
-     matchre RETURN ^The(.*)?(clerk|teller|attendant|mortar|pestle|tongs|bowl|riffler|hammer|gem|book|page|lockpick|sconce|voice|waters|contours|person|is|has|are|slides|fades|hinges|spell|not)
-     matchre RETURN ^It('s)?(?:'s|a|and|the)?\s+?(?:would|will|is|a|already|dead|keen|practiced|graceful|stealthy|resounding|full|has)
-     matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime|\[Roundtime
-     matchre RETURN ^That('s)?\s+?(?:is|has|was|a|cannot|area|can't|won't|would|already|tool|will|cost|too|section)
-     matchre RETURN ^With(?: (a|and|the))?\s+?(?:keen|practiced|graceful|stealthy|resounding)
-     matchre RETURN ^This (is a .+ spell|is an exclusive|spell|ritual)
-     matchre RETURN ^The .*(is|has|are|slides|fades|hinges|spell|not|vines|antique|(.+) spider|pattern)
-     matchre RETURN ^There('s|is)?\s+(?:is(n't)?)?|does(n't)?|already|nothing|not?
-     matchre RETURN ^But (?:that|you|you're|you've|the)
-     matchre RETURN ^Obvious (?:exits|paths)
-     matchre RETURN ^There's no room|any more room|no matter how you arrange|have all been used\.
-     matchre RETURN ^That's too heavy|too thick|too long|too wide|not designed to carry|cannot hold any more
-     matchre RETURN ^(You|I) can't|^Tie what\?|^You just can't|As you attempt to place your
-     matchre RETURN suddenly leaps toward you|and flies towards you|with a flick
-     matchre RETURN ^Brushing your fingers|^Sensing your intent|^Quietly touching your lips
-     matchre RETURN Lucky for you\!\s*That isn't damaged\!|I will not repair something that isn't broken\.
-     matchre RETURN I'm sorry, but I don't work on those|There isn't a scratch on that, and I'm not one to rob you\.
-     matchre RETURN I don't work on those here\.|I don't repair those here|Please don't lose this ticket\!
-     matchre RETURN ^Please rephrase that command\.|^I could not find|^Perhaps you should|^I don't|^Weirdly,|That can't
-     matchre RETURN \[You're|^Your .*\.|\[This is|too injured
-     matchre RETURN ^Moving|Brushing|Recalling|Unaware
-     matchre RETURN ^.*\[Praying for \d+ sec\.\]
-     matchre RETURN ^.+ is not in need|^That is closed\.
-     matchre RETURN ^What (?:were you|is it)
-     matchre RETURN ^In the name of love\?|^Play on|^(.+) what\?
-     matchre RETURN ^It's kind of wet out here\.
-     matchre RETURN ^Some (?:polished|people|tarnished|.* zills)
-     matchre RETURN ^(\S+) has accepted
-     matchre RETURN ^Subservient type|^The shadows|^Close examination|^Try though
-     matchre RETURN ^USAGE\:|^Using your|^You.*analyze
-     matchre RETURN ^Allows a Moon Mage|^Smoking commands are
-     matchre RETURN ^A (?:slit|pair|shadow) .*(?:\.|\!|\?)?
-     matchre RETURN ^Your (?:actions|dance|nerves) .*(?:\.|\!|\?)?
-     matchre RETURN ^Having no further use for .*, you discard it\.
-     matchre RETURN ^After a moment, .*\.
-     matchre RETURN ^.* (?:is|are) not in need of cleaning\.
-     matchre RETURN \[Type INVENTORY HELP for more options\]|\[Use INVENTORY HELP for more options\.\]
-     matchre RETURN ^A vortex|^A chance for|^In a flash|^It is locked|^An aftershock
-     matchre RETURN ^In the .* you see .*\.
-     matchre RETURN .* (?:Dokoras|Kronars|Lirums)
-     matchre RETURN ^You will now store .* in your .*\.
-     matchre RETURN ^\[Ingredients can be added by using ASSEMBLE Ingredient1 WITH Ingredient2\]
-     matchre RETURN ^\s\*LINK ALL CANCEL\s\*- Breaks all links
-     matchre RETURN ^Stalking is an inherently stealthy endeavor, try being out of sight\.
-     matchre RETURN ^You're already stalking|^There aren't any
-     matchre RETURN ^An offer|shakes (his|her) head
-     matchre RETURN ^Tie it off when it's empty\?
-     matchre RETURN ^But the merchant can't see you|are invisible
-     matchre RETURN Page|^As the world|^Obvious|^A ravenous energy
-     matchre RETURN ^In the|^The attendant|^That is already open\.|^Your inner
-     matchre RETURN ^(.+) hands you|^Searching methodically|^But you haven't prepared a symbiosis\!
-     matchre RETURN ^Illustrations of complex,|^It is labeled|^Your nerves
-     matchre RETURN ^The lockpick|^Doing that|is not required to continue crafting
-     matchre RETURN ^Without (any|a|the)|^Wouldn't (it|that|you)
-     matchre RETURN ^Weirdly, you can't manage
-     matchre RETURN ^Hold hands with whom\?
-     matchre RETURN ^Something in the area interferes
-     matchre RETURN ^With a .+ to your voice,
-     matchre RETURN ^You don't have a .* coin on you\!\s*The .* spider looks at you in forlorn disappointment\.
-     matchre RETURN ^Quietly touching your lips with the tips of your fingers as you kneel\, you make the Cleric's sign with your hand\.
-     matchre RETURN ^Maybe you should stand up\.
-     matchre RETURN ^You sense a successful empathic link has been forged|^Touch what|^I could not find
-     matchre RETURN ^The .+ has suffered too much damage and needs to be repaired at a crafting repair shop
-     matchre RETURN ^The .* is not damaged enough to warrant repair\.
-     matchre RETURN ^This spell cannot be targeted\.
-     matchre RETURN ^You are already focusing your appraisal on a subject\.
-     matchre RETURN ^You are already under the effects of an appraisal focus\.
-     matchre RETURN ^\[Ingredients can be added by using ASSEMBLE Ingredient1 WITH Ingredient2\]
-     matchre RETURN ^You can't seem to focus on that\.\s*Perhaps you're too mentally tired from researching similar principles recently\.
-     matchre RETURN ^\s*LINK ALL CANCEL\s*\- Breaks all links
-     matchre RETURN (bundle them with your logbook and then give|you trace|you just received a work order|You hand|You slide|You place)
-     matchre RETURN ^(You have no idea how to craft|The book is already turned|You turn your book|You realize you have items bundled with the logbook)
-     matchre RETURN (You measure out|You carefully break off|^You hand|\"There isn't a scratch on that|\"I don't repair those here\.)
-     matchre RETURN (Just give it to me again if you want|completely undamaged and does not need repair|not damaged enough to warrant repair)
-     matchre RETURN ^(You find your jar|The (\S+) can only hold)
-     matchre RETURN ^(You .*open|You .*close|That is already open|That is already closed)
-     matchre RETURN ^Turning your focus solemnly inward
-     matchre RETURN ^Slow, rich tones form a somber introduction
-     matchre RETURN ^Images of streaking stars falling from the heavens
-     matchre RETURN ^Strangely, you don't feel like fighting right now\.
-     matchre RETURN ^With .* movements you prepare your body for the .* spell\.
-     matchre RETURN ^A strong wind swirls around you as you prepare the .* spell\.
-     matchre RETURN ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?|^\[Roundtime|^Roundtime
-     matchre RETURN ^Shadow and light collide wildly around you as you prepare the .* spell\.
-     matchre RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
-     matchre RETURN ^A soft breeze surrounds your body as you confidently prepare the .* spell\.
-     matchre RETURN ^Light withdraws from around you as you speak arcane words for the .* spell\.
-     matchre RETURN ^Tiny tendrils of lightning jolt between your hands as you prepare the .* spell\.
-     matchre RETURN ^Low, hummed tones form a soft backdrop for the opening notes of the .* enchante\.
-     matchre RETURN ^Heatless orange flames blaze between your fingertips as you prepare the .* spell\.
-     matchre RETURN ^Throwing your head back, you release a savage roar and growl words for the .* spell\.
-     matchre RETURN ^Entering a trance-like state, your hands begin to tremble as you prepare the .* spell\.
-     matchre RETURN ^Glowing geometric patterns arc between your upturned palms as you prepare the .* spell\.
-     matchre RETURN ^Focusing intently, you slice seven straight lines through the air as you invoke the .* spell.\.
-     matchre RETURN ^Accompanied with a flash of light, you clap your hands sharply together in preparation of the .* spell\.
-     matchre RETURN ^Icy blue frost crackles up your arms with the ferocity of a blizzard as you begin to prepare the .* spell\!
-     matchre RETURN ^A radiant glow wreathes your hands as you weave lines of light into the complicated pattern of the .* spell\.
-     matchre RETURN ^Kaleidoscopic ribbons of light swirl between your outstretched hands, coalescing into a spectral wildling spider\.
-     matchre RETURN ^Darkly gleaming motes of sanguine light swirl briefly about your fingertips as you gesture while uttering the .* spell\.
-     matchre RETURN ^As you begin to solemnly intone the .* spell a blue glow swirls about forming a nimbus that surrounds your entire being\.
-     matchre RETURN ^As you slam your fists together and inhale sharply, a glowing outline begins to form and a matrix of blue and white motes surround you\.
-     matchre RETURN ^In one fluid motion, you bring your palms close together and a fiery crimson mist begins to burn within them as you prepare the .* spell\.
-     matchre RETURN ^The first gentle notes of .* waft from you with delicate ease, riddled with low tones that gradually give way to a higher\-pitched theme\.
-     matchre RETURN ^Droplets of water coalesce around your fingertips as your arms undulate like gracefully flowing river currents to form the pattern of the .* spell\.
-     matchre RETURN ^Inhaling deeply, you adopt a cyclical rhythm in your breaths to reflect the ebb and flow of the natural world and steel yourself to prepare the .* spell\.
-     matchre RETURN ^Calmly reaching out with one hand, a silvery-blue beam of light descends from the sky to fill your upturned palm with radiance as you prepare the .* spell\.
-     matchre RETURN ^Turning your head slightly and gazing directly ahead with a calculating stare, tiny sparks of crystalline light flash around your eyes as you prepare the .* spell\.
-     matchre RETURN ^You take up a handful of dirt in your palm to prepare the .* spell\.  As you whisper arcane words, you gently blow the dust away and watch as it becomes swirling motes of 
-     # matchre RETURN ^
-     matchre RETURN ^\s*Encumbrance\s*\:
-     send %Command
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Command = %Command
-     put #log $datetime MISSING MATCH IN PUT (mc_include.cmd)
-     return
-     
-READ:
-     var LOCATION READ
-     var Read $0
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre STUNNED ^You are still stunned
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre READ_RETURN (?<!Page).*Page (\d+): %Read
-     send read my book
-     matchwait
-READ_RETURN:
-	 var page $1
-	 return
-     
-     
-STUDY:
-     var Study $0
-     var LOCATION STUDY_1
-     pause 0.0001
-     STUDY_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre STUNNED ^You are still stunned
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre STUDY_1 You begin
-     matchre STUDY_1 You continue studying the
-     matchre STUDY_1 You continue to study
-     matchre RETURN You take on a studious look
-     matchre STUDY_END Why do you need to study this chart again?
-     matchre STUDY_NEXT (^With|^In) a sudden moment of clarity
-     matchre GET_BOOK ^But you are not holding it
-     matchre GET_BOOK ^But you're not holding it 
-     matchre GET_BOOK ^Study what? 
-     matchre RETURN You study|You scan|You notate|You review
-     matchre RETURN ^You now feel ready to begin the crafting process.
-     send study %Study
-     matchwait
-
-STUDYIT:
-     var Study $0
-     var LOCATION STUDYIT_1
-     pause 0.0001
-     STUDYIT_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre STUNNED ^You are still stunned
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre RETURN You (begin|continue)
-     matchre RETURN You take on a studious look
-     matchre RETURN Why do you need to study this chart again?
-     matchre RETURN (^With|^In) a sudden moment of clarity
-     matchre RETURN You study|You scan|You notate|You review
-     matchre RETURN ^You now feel ready to begin the crafting process.
-     matchre RETURN ^Roundtime|Roundtime
-     send study %Study
-     matchwait
-	
-GET_BOOK:
-	gosub GET %discipline book
-	pause 0.1
-	if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
-	goto STUDY_1
-#### DOUBLE PUT SUB
-PUT_IT:
-     var PutIt $0
-     var LOCATION PUT_IT_1
-     pause 0.0001
-     PUT_IT_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-	 matchre RETURN ^That's too heavy to go in there\!
-     matchre RETURN ^With a flick
-     matchre RETURN ^You (?:put|drop) .*\.
-     matchre RETURN ^Please rephrase that command\.
-     matchre RETURN ^.* what\?
-     matchre RETURN ^I could not find what you were referring to\.
-     matchre RETURN ^What were you referring to\?     
-     matchre RETURN ^The (\S+) can only hold
-     matchre RETURN ^Perhaps you should
-     matchre TRASH ^This appears too far altered to enchant|^The %rawmat is already enchanted|^You have no idea how to craft
-     matchre BAG_FULL no matter how you arrange it
-     matchre PUT_IT_1 ^\[Putting an item on the brazier begins the enchanting process
-     send put %PutIt
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PUT_IT! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime PutIt = %PutIt
-     put #log $datetime MISSING MATCH IN PUT_IT (mc_include.cmd)
-     return
-     
-TRASH:
-     if matchre("$roomobjs", "(bucket|bin)") then
-		{
-		if !matchre("%rawmat", "%all.tools") then gosub PUT_IT %rawmat in bin
-		else goto endearly
-		}
-     else 
-	    {
-		if !matchre("%rawmat", "%all.tools") then gosub PUT drop %rawmat
-		else goto endearly
-		}
-     gosub clear
-     goto start.enchant
-     
-BAG_FULL:
-    gosub combine.check "%main.storage" %order.pref
-    #send open $MC_REMNANT.STORAGE
-    #gosub combine.check "$MC_REMNANT.STORAGE" %order.pref
-    #send close $MC_REMNANT.STORAGE
-    pause 1    
-    RETURN
-	
-#### GET SUB
-GET:
-     var Get $0
-     var LOCATION GET_1
-     pause 0.0001
-     GET_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-     matchre HOLD_1 ^But that is already in your inventory\.
-     matchre RETURN ^You get .*\.
-     matchre RETURN ^You pick up .*\.
-     matchre RETURN ^You carefully remove .* from the bundle\.
-     matchre RETURN ^You are already holding that\.
-     matchre RETURN ^Get what\?
-     matchre RETURN ^You grab .*(?:\.|\!|\?)
-     matchre RETURN ^As best it can\, .* moves in your direction\.
-     matchre RETURN ^You need a free hand to pick that up\.
-     matchre RETURN ^That can't be picked up\.
-     matchre RETURN ^Please rephrase
-     matchre RETURN ^Analyze what
-     matchre UNTIE ^You pull at it|^You pull at|^You should untie
-     matchre GET_DOUBLECHECK ^I could not find what you were referring to\.
-     matchre GET_DOUBLECHECK What were you referring to\?
-     matchre GET_DOUBLECHECK ^Perhaps you should
-	matchre WRONG_ITEM ^That is far too dangerous to remove
-     send get %Get
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Get = %Get
-     put #log $datetime MISSING MATCH IN GET (mc_include.cmd)
-     return
-GET_DOUBLECHECK:
-     var LOCATION GET_2
-     pause 0.0001
-     gosub LOOK_TIMER
-     if (%LookLast > 90) then
-          {
-               var LookTime $gametime
-               send look in my portal
-               pause 0.4
-               pause 0.1
-               pause 0.001
-          }
-     GET_2:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-     matchre HOLD_1 ^But that is already in your inventory\.
-     matchre RETURN ^You get .*\.
-     matchre RETURN ^You pick up .*\.
-     matchre RETURN ^You carefully remove .* from the bundle\.
-     matchre RETURN ^You are already holding that\.
-     matchre RETURN ^Get what\?
-     matchre RETURN ^I could not find what you were referring to\.
-     matchre RETURN ^What were you referring to\?
-     matchre RETURN ^You grab .*(?:\.|\!|\?)
-     matchre RETURN ^As best it can\, .* moves in your direction\.
-     matchre RETURN ^You need a free hand to pick that up\.
-     matchre RETURN ^Perhaps you should
-     matchre UNTIE ^You pull at it|^You pull at|^You should untie
-	matchre WRONG_ITEM ^That is far too dangerous to remove
-	if matchre("%Get", "from my") then send get %Get
-	else send get %Get from my portal
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET2! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Get = %Get
-     put #log $datetime MISSING MATCH IN GET2 (mc_include.cmd)
-     return
-
-LOOK_TIMER:
-     if matchre("%LookTime", "$^") then 
-          {
-               evalmath LookTime ($gametime - 300)
-          }
-     evalmath LookLast ($gametime - %LookTime)
-     return
-     
-UNTIE:
-	send untie %Get
-	var BELTTOOLS 1
-	return
-	
-WRONG_ITEM:
-	matchre WRONG_ITEM ^\.\.\.wait|^Sorry\,
-	send get my %Get
-	matchwait 5
-	return
-	
- 
-#### HOLD SUB
-HOLD:
-     var Get $0
-     var LOCATION HOLD_1
-     pause 0.0001
-     HOLD_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre WAIT ^You struggle with .* great weight but can't quite lift it\!
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-     matchre RETURN ^You sling .*\.
-     matchre RETURN ^You get .*\.
-     matchre RETURN ^You take .*\.
-     matchre RETURN ^You pull .*\.
-     matchre RETURN ^You remove .*\.
-     matchre RETURN ^You loosen .*\.
-     matchre RETURN ^You remove .* from your belt\.
-     matchre RETURN ^You are already holding that\.
-     matchre RETURN ^Get what\?
-     matchre RETURN ^Hold hands with whom
-     matchre RETURN ^You work your way out of
-     matchre RETURN ^You aren't
-     matchre RETURN ^I could not find what you were referring to\.
-     matchre RETURN ^What were you referring to\?
-     matchre GET_1 ^Perhaps you should be holding that
-     send hold %Get
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN HOLD! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Get = %Get
-     put #log $datetime MISSING MATCH IN HOLD (mc_include.cmd)
-     return
- 
-#### STOW SUB
-STOW:
-     var Stow $0
-     var LOCATION STOW_1
-     pause 0.0001
-     STOW_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-     matchre WEAR_CHECK ^.* is too long to fit in .*\.
-     matchre RETURN ^You put .*\.
-     matchre RETURN already in your inventory
-     matchre RETURN ^You open your pouch and put .* inside\, closing it once more\.
-     matchre RETURN ^What were you referring to\?
-     matchre RETURN ^Stow what\?  Type 'STOW HELP' for details\.
-     matchre STOW_LEFT You need a free hand
-     matchre STOW.UNLOAD ^You should unload
-     send stow %Stow
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN STOW! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Stow = %Stow
-     put #log $datetime MISSING MATCH IN STOW (mc_include.cmd)
-     return
-     
-STOW_LEFT:
-     if "$lefthandnoun" != "" then
-          {
-               if matchre("%tiedtools", "$lefthand") then 
-                    {
-					pause .05
-					pause .5
-                    send tie #$lefthandid to my $MC_TOOLBELT_%society.type
-                    }
-               else 
-                         {
-						if matchre("%alltools", "$lefthandnoun") then 
-							{
-								gosub PUT_IT #$lefthandid in my %tool.storage
-							}
-						else
-							{
-								gosub PUT_IT #$lefthandid in my %main.storage
-							}
-					}
-          }
-	return
-     
-STOW_RIGHT:
-     if "$righthandnoun" != "" then
-          {
-               if matchre("%tiedtools", "$righthand") then 
-                    {
-					pause .05
-					pause .5
-                    send tie my $righthandnoun to my $MC_TOOLBELT_%society.type
-                    }
-               else 
-                         {
-                              if matchre("$righthand", "crafting book") then
-                                   {
-                                        put wear book
-                                        pause 0.5
-                                   }
-						if matchre("%alltools", "$righthandnoun") then 
-							{
-								gosub PUT_IT #$righthandid in my %tool.storage
-							}
-						else
-							{
-								gosub PUT_IT #$righthandid in my %main.storage
-							}
-					}
-          }
-	return
-     
-		
-#### WEAR SUB
-WEAR_CHECK:
-          if matchre("$righthand", "stone quarterstaff|stone lance") then 
-		{
-		put drop $righthand
-		return
-		}
-		goto WEAR_1
-WEAR:
-     var Stow $0
-     var LOCATION WEAR_1
-     pause 0.0001
-     WEAR_1:
-
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre STUNNED ^You are still stunned
-     matchre STOW_1 ^You can't wear that\!
-     matchre STOW_1 ^You can't wear any more items like that\.
-     matchre STOW_1 ^This .* can't fit over the .* you are already wearing which also covers and protects your .*\.
-     matchre RETURN ^You (?:sling|put|slide|slip|attach|work|strap) .*\.
-     matchre RETURN ^You are already wearing that\.
-     matchre RETURN ^What were you referring to\?
-     matchre RETURN ^Wear what\?
-     send wear %Stow
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN WEAR! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Stow = %Stow
-     put #log $datetime MISSING MATCH IN WEAR (mc_include.cmd)
-     return
-     
-#### SPELL CASTING
-PREPARE:
-     var Prepare $0
-     var LOCATION PREPARE_1
-     pause 0.0001
-PREPARE_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre STUNNED ^You are still stunned
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-	matchre SPELL_CAST_RETURN ^But you've already prepared the
-     matchre SPELL_CAST_RETURN ^You have already fully prepared
-     matchre SPELL_CAST_RETURN ^You are already preparing the .* spell\!
-     matchre SPELL_CAST_RETURN ^You begin chanting .* to invoke the .* spell\.
-     matchre SPELL_CAST_RETURN ^You mutter .* to yourself while preparing the .* spell\.
-     matchre SPELL_CAST_RETURN ^With .* movements you prepare your body for the .* spell\.
-     matchre SPELL_CAST_RETURN ^You raise your .* skyward\, chanting the .* of the .* spell\.
-     matchre SPELL_CAST_RETURN ^You rock back and forth\, humming tunelessly as you invoke the .* spell\.
-     matchre SPELL_CAST_RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
-     matchre SPELL_CAST_RETURN ^Your eyes darken to black as a starless night as you prepare the .* spell\.
-     matchre SPELL_CAST_RETURN ^You close your eyes and breathe deeply, gathering energy for the .* spell\.
-     matchre SPELL_CAST_RETURN ^You trace an arcane sigil in the air\, shaping the pattern of the .* spell\.
-     matchre SPELL_CAST_RETURN ^Your eyes darken to black as a starless night as you prepare the .* spell\.
-	matchre SPELL_CAST_RETURN ^You trace a geometric sigil in the air, shaping the pattern of the .* spell\.
-     matchre SPELL_CAST_RETURN ^The wailing of lost souls accompanies your preparations of the .* spell\.
-     matchre SPELL_CAST_RETURN ^A soft breeze surrounds your body as you confidently prepare the .* spell\.
-     matchre SPELL_CAST_RETURN ^Tiny tendrils of lightning jolt between your hands as you prepare the .* spell\.
-     matchre SPELL_CAST_RETURN ^Heatless orange flames blaze between your fingertips as you prepare the .* spell\.
-     matchre SPELL_CAST_RETURN ^Entering a trance-like state\, your hands begin to tremble as you prepare the .* spell\.
-     matchre SPELL_CAST_RETURN ^You adeptly sing the incantations for the .* spell\, setting the words to a favorite tune\.
-     matchre SPELL_CAST_RETURN ^You bring your hand slowly to your forehead as you begin chanting the words of the .* spell\.
-     matchre SPELL_CAST_RETURN ^Icy blue frost crackles up your arms with the ferocity of a blizzard as you begin to prepare the .* spell\!
-     matchre SPELL_CAST_RETURN ^You have to strain to harness the energy for this spell, and you aren't sure you can get enough to cast it\.
-     matchre SPELL_CAST_RETURN ^You giggle to yourself as you move through the syncopated gestures that accompany the preparations of the .* spell\.
-     matchre SPELL_CAST_RETURN ^Darkly gleaming motes of sanguine light swirl briefly about your fingertips as you gesture while uttering the .* spell\.
-     matchre SPELL_CAST_RETURN ^As you begin to solemnly intone the .* spell a blue glow swirls about forming a nimbus that surrounds your entire being\.
-     matchre SPELL_CAST_RETURN ^Your skin briefly withers and tightens\, becoming gaunt as the energies of the .* spell begin to build up through your body\.
-     matchre SPELL_CAST_RETURN ^You trace an intricate rune in the air with your finger\, illusory lines lingering several seconds as you prepare the .* spell\.
-     matchre SPELL_CAST_RETURN ^You begin reciting a solemn incantation\, causing familiar patterns of geometric shapes to circle your hand as the .* spell forms\.
-     matchre SPELL_CAST_RETURN ^You take up a handful of dirt in your palm to prepare the .* spell\.  As you whisper arcane words\, you gently blow the dust away and watch as it becomes swirling motes of glittering light that veil your hands in a pale aura\.
-     matchre SPELL_CAST_RETURN ^You recall the exact details
-     matchre SPELL_CAST_RETURN ^But you've already prepared the Chaos symbiosis
-     matchre SPELL_CAST_DONE ^What do you want to prepare\?
-     matchre SPELL_CAST_DONE ^That is not a spell you can cast\.
-     matchre SPELL_CAST_DONE ^You wouldn't have the first clue how to do that\.
-     matchre SPELL_CAST_DONE ^You stop\, convinced that there's no way to control that much mana\.
-     matchre SPELL_CAST_FAIL ^You have to strain to harness the energy for this spell, and you aren't sure you can get enough to cast it\.
-     send prepare %Prepare
-     matchwait 15
-     put #echo >$Log Crimson $datetime *** MISSING MATCH IN PREPARE! (mc_include.cmd) ***
-     put #echo >$Log Crimson $datetime Prepare = %Prepare
-     put #log $datetime MISSING MATCH IN PREPARE! (mc_include.cmd)
-     goto SPELL_CAST_RETURN
-
-SPELL_CAST_DONE:
-     put #queue clear
-     put #var symb 0
-     pause 0.0001
-     return
-SPELL_CAST_FAIL:
-     gosub RELEASE MANA
-SPELL_CAST_RETURN:
-     pause 0.0001
-     return
-RELEASE:
-     var Release $0
-     var LOCATION RELEASE_1
-     pause 0.0001
-     RELEASE_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre STUNNED ^You are still stunned
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre RETURN ^\s*Encumbrance\s*\:
-     put -release %Release;-encumbrance
-     matchwait
-     
-SPELL_CAST_TARGET:
-     var Target $0
-     var LOCATION SPELL_CAST_TARGET_1
-     pause 0.0001
-SPELL_CAST_TARGET_1:
-     matchre WAIT ^\.\.\.wait|^Sorry\,
-     matchre STUNNED ^You are still stunned
-     matchre WEBBED ^You can't do that while entangled in a web
-     matchre IMMOBILE ^You don't seem to be able to move to do that
-     matchre SPELL_CAST_DONE ^Roundtime\:?|^\[Roundtime\:?|^\(Roundtime\:?
-     matchre SPELL_CAST_DONE ^You gesture
-     matchre SPELL_CAST_DONE ^Focus the power of justice on whom\?
-     matchre SPELL_CAST_FAIL ^You don't have a spell prepared\!
-     matchre SPELL_CAST_FAIL ^Your concentration slips for a moment\, and your spell is lost\.
-     put -cast %Target;-2 gesture
-     matchwait
-     
-RESET:
-pause 0.1
-echo
-echo ** ERROR! ATTEMPTING TO RESET!!!
-echo
-put #queue clear
-gosub clear
-pause 0.1
-pause 0.1
-goto identify.order
-
-#### RETURNS
-RETURN_CLEAR:
-     pause 0.0001
-     put #queue clear
-     pause 0.0001
-     return
-RETURN:
-     pause 0.0001
-     return     
-	
 endinclude:

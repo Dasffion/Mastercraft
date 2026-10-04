@@ -25,7 +25,7 @@ CHARACTER1:
 put #var MC_FORGING.STORAGE portal
 put #var MC_FORGING.DISCIPLINE blacksmith
 put #var MC_FORGING.MATERIAL steel
-put #var MC_FORGING.DIFFICULTY challenging
+put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
 put #var MC_Forging_NOWO 0
@@ -67,7 +67,7 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-#    MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
+#	MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
 put #var MC_ALCHEMY.STORAGE portal
 put #var MC_REDFLOWER.STORAGE backpack
 put #var MC_ALC.DISCIPLINE remed
@@ -81,10 +81,9 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
-# 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
-# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
+#	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+#	MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
-
 put #var MC_ENCHANTING.STORAGE portal
 put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
@@ -98,10 +97,10 @@ put #var MC_IMBUE.ROD imbuement rod
 #######################################################################
 #	Variables are case sensitive
 #	MC_TOOL.STORAGE: Where you want to store your tools
-# 	MC_REPAIR: For repairing your tools, if MC_AUTO.REPAIR is off you will go to the repair shop, on or off
+#	MC_REPAIR: For repairing your tools, if MC_AUTO.REPAIR is off you will go to the repair shop, on or off
 #	MC_AUTO.REPAIR: For repairing your own tools, on or off
 #	MC_GET.COIN: For getting more coin if you run out while purchasing, on or off
-#    MC_WITHD.AMOUNT: Amount of money to withdraw for WOs, enter amount and type, i.e. 5 gold
+#	MC_WITHD.AMOUNT: Amount of money to withdraw for WOs, enter amount and type, i.e. 5 gold
 #	MC_REORDER: For repurchasing mats, on or off
 #	MC_MARK: For Marking your working on or off
 #	MC_BLACKLIST: Orders that you don't want to take, must be the noun of the items
@@ -244,7 +243,7 @@ put #var MC_Outfitting_NOWO 0
 #	Variables are case sensitive
 #	MC_ALC.DISCIPLINE: OPTIONS remed NOTE: Do not do remedy or remedies. This is the only way to get the book to work for all types
 #	MC_ALC.DIFFICULTY: Order difficulty easy, challenging, hard
-#    MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
+#	MC_REDFLOWER.STORAGE ~MUST~ BE A DIFFERENT CONTAINER THEN MC_ALCHEMY.STORAGE! MANDATORY FOR RED/BLUE FLOWER RECIPES TO WORK PROPERLY
 put #var MC_ALCHEMY.STORAGE shadows
 put #var MC_REDFLOWER.STORAGE bag
 put #var MC_ALC.DISCIPLINE remed
@@ -258,10 +257,9 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
-# 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
-# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
+#	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+#	MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
-
 put #var MC_ENCHANTING.STORAGE shadows
 put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
@@ -435,10 +433,9 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
-# 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
-# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
+#	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+#	MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
-
 put #var MC_ENCHANTING.STORAGE shoulder pack
 put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
@@ -613,10 +610,9 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
-# 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
-# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
+#	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+#	MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
-
 put #var MC_ENCHANTING.STORAGE shoulder pack
 put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
@@ -791,10 +787,9 @@ put #var MC_Alchemy_NOWO 0
 #	MC_ENCHANTING.DISCIPLINE: OPTIONS artif NOTE: Do not do artifcer or artificing. This is the only way to get the book to work for all types
 #	MC_ENCHANTING.DIFFICULTY: Order difficulty easy, challenging, hard
 #	MC_IMBUE: ROD or SPELL determines if you're going to cast or use a rod. You will need to have a rod on you if you're going to use it. Needs to be all caps
-# 	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
-# MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
+#	MC_IMBUE.MANA: Amount of mana you want to cast at if you're using MC_IMBUE SPELL
+#	MC_IMBUE.ROD: Description of your  imbue Rod. Not necessary if using a spell
 #	MC_FOCUS.WAND: The name of the wand you are using for focusing. If you are a magic user it's not needed, leave it commented. If you are using it I suggest being as descriptive as possible
-
 put #var MC_ENCHANTING.STORAGE shoulder pack
 put #var MC_ENCHANTING.DISCIPLINE artif
 put #var MC_ENCHANTING.DIFFICULTY challenging
