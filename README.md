@@ -41,7 +41,11 @@ ENCHANTING - Artificing</h3>
    My recommendation is DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!
    If you ever add/remove a tool in the halo that is not in PERFECT condition - It DAMAGES *ALL* THE TOOLS IN YOUR HALO!
    Not only that, but they are very clumsy to work with. A highly flawed MT item - DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.<br><br>
-9) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
+9) Note as you gain crafting ranks you will be able to learn more techniques for each discipline<br>
+   Type CRAFT to see your available 'points' - Recommended to learn new techniques often.<br>
+   Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.<br>
+   Also don't forget to choose CAREER and HOBBY in your favorites as that will get you even more points to work with<br><br>
+10) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
    and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**
    This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running
    Be very careful when renaming scriptfiles!<br>
