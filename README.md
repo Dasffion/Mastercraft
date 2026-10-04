@@ -68,7 +68,8 @@ There are some things scripting cannot do for you, such as make personal decisio
    mc_weave.cmd<br>
    mc_triggers.cmd<br>
     
-Each script can be run completely standalone from Mastercraft if you want to create multiple items or just individual orders. <br>
+Each script can be run completely standalone from Mastercraft<br>
+If you want to create multiple items or just individual orders.<br> 
 Using them as such will require you to be responsible for your own material management and quality control.<br>
 Be sure to read the beginning section for each script if you intend to use it standalone.<br>
 
