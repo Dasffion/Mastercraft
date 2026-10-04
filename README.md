@@ -15,7 +15,7 @@ FORGING - Weapon / Armor / Blacksmithing<br>
 ENGINEERING - Carving / Shaping / Tinkering<br>
 OUTFITTING - Tailoring<br>
 ALCHEMY - Remedies<br>
-ENCHANTING - Artifacting</h3>
+ENCHANTING - Artificing</h3>
 
 <b>There are a few things to note in using this script, however:</b><br>
 
