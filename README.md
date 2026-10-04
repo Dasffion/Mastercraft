@@ -22,7 +22,10 @@ ENCHANTING - Artificing</h3>
 
 1) You must have ALL required tools and books in your crafting bag for the craft you choose<br>
   ( Discipline book / Logbook for work orders / All the tools for that profession )<br> 
-  It does support the special "All Disciplines" Crafting Book by default - no config needed<br><br>
+  *It does support the special "All Disciplines" Crafting Book by default - no config needed*<br><br> 
+  NOTE: Mastercraft does buy normal shop supplies/materials such as:<br>
+  leather/bone, sigils, ingots, coal nuggets, herbs, etc<br> 
+  You just need to make sure you have the all tools!<br><br>
 2) You must have some gold/plat for the script to handle buying supplies / repairing tools<br><br>
 3) Script DOES handle Self-Repairing tools if you have the tech - requires oil and brush<br>
   If tools are damaged beyond self-repair - It will take them to the NPC repair like normal<br><br>
