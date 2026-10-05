@@ -87,3 +87,17 @@ Using them as such will require you to be responsible for your own material mana
 Be sure to read the beginning section for each script if you intend to use it standalone.<br>
 
  Happy Crafting!
+
+
+
+<h2>FEATURES:<br><br>
+  
+- Trains FORGING / ALCHEMY / ENGINEERING / OUTFITTING / ENCHANTING<br>
+- Automates getting and completing Work Orders from Society Masters<br>
+- Automatically stocks necessary crafting materials <br>
+- Automatically repairs tools when damaged<br>
+  Self-repair tools if Tool Repair tech is known<br>
+  NPC/clerk repair if cannot self-repair<br>
+- Automatically tunes down difficulty if you fail to craft an item too many times<br>
+
+</h2>
