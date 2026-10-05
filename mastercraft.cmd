@@ -642,7 +642,7 @@ turn.page:
      if %NOWO then goto calc.material
 	if !matchre("$righthand|$lefthand", "book") then gosub GET %discipline book
      if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
-     gosub STUDY my book
+     #gosub STUDY my book
      if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
           {
                math difficultytry add 1
@@ -1368,7 +1368,7 @@ count.material:
 count.material2:
      action (count) on
      math countloop add 1
-     pause 0.3
+     pause 0.01
      if matchre("%ordinal(%tempcount)", "zeroth") then math tempcount add 1
 	if ("%ordinal(%tempcount)" = "") then var tempcount 10
 	var itemvolume 0
@@ -1382,8 +1382,7 @@ count.material2:
      else send %c.action %ordinal(%tempcount) %work.material %count in my %main.storage
      matchwait 3
 count.material3:
-     pause 1
-	pause 0.2
+	pause 0.1
      if (%manual =  1) then 
           {
                var bagcount %tempcount
@@ -1392,7 +1391,7 @@ count.material3:
      var vol.%ordinal(%tempcount) %itemvolume
      math tempcount subtract 1
      action (count) off
-     pause 1
+     pause 0.1
      evalmath bigenough (floor(%itemvolume/%volume))+%bigenough
      if (("%count" = "deed") && ("%discipline" != "carving")) then
           {
@@ -1889,6 +1888,16 @@ process.order:
 					waitforre You count out (\d+) pieces|There are
 					if (%volume > $1) then gosub small.mat %herb1
 				}
+			if !matchre("%herb2", "(?i)^\s*$|NULL") then
+				{
+					gosub EMPTY_HANDS
+					var order.type %herb2
+					gosub gather.material %herb2
+					send count my %herb2
+					waitforre ^You count out (\d+) pieces
+					if ($1 < %order.quantity) then gosub lack.material
+					gosub EMPTY_HANDS
+				}
                gosub GET my %discipline book
                if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
                ## ADDED THIS LINE TO HANDLE MT BOOKS THAT HAVE ALL DISCIPLINES 
@@ -2203,14 +2212,17 @@ gather.material2:
                          var herb1 junliar
                          var get.mat junliar
                          gosub GET %get.mat from my %main.storage
+					evalmath %get.mat.item.count %%get.mat.item.count - 1
+					return
                     }
                if (!matchre("$righthand", "%get.mat") && ("%herb1", "junliar")) then
                     {
                          var herb1 junilar
                          var get.mat junilar
                          gosub GET %get.mat from my %main.storage
+					evalmath %get.mat.item.count %%get.mat.item.count - 1
+					return
                     }
-               return
           }
 #     if "%get.mat" = "stone" then {}
      var itemno 1
