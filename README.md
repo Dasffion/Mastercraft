@@ -48,7 +48,7 @@ ENCHANTING - Artificing</h3>
    If ever add/remove a tool that isn't in PERFECT condition - It DAMAGES *ALL* THE TOOLS IN YOUR HALO!<br>
    Not only that, but they are very clumsy to work with. A highly flawed MT item<br>
    DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.<br><br>
-9) Note as you gain crafting ranks you will be able to learn more techniques for each discipline<br>
+9) TECHNIQUES - as you gain crafting ranks you can learn more techniques for each discipline.<br>
    Type CRAFT to see your available 'points' - Recommended to learn new techniques often.<br>
    Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.<br>
    Don't forget to choose a CAREER and HOBBY as that will get you even more points to work with<br><br>
