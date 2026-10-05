@@ -182,11 +182,12 @@ catalyst:
 	return
 
 add.herb:
-	gosub ToolCheckLeft %herb2 in my %main.storage
-	var tool mix
-	send put %herb2 in my %bowl
-	pause 0.5
-	return
+     gosub GET my %herb2 from my %main.storage
+     if !matchre("$righthand|$lefthand", "%herb2") then goto lack.material
+     put put my %herb2 in my $MC_BOWL
+     pause 0.5
+     var special NULL
+     return
 	
 specialcheck:
 	if "%special" != "NULL" then gosub %special
