@@ -44,9 +44,10 @@ ENCHANTING - Artificing</h3>
    Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ needed??) 
    It forages the herbs and processes them (press/grind) to be used in the recipes<br><br>
 8) KERTIGEN HALO support was added in a past patch - but may not work well at all (untested recently)<br>
-   My recommendation is DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!
-   If you ever add/remove a tool in the halo that is not in PERFECT condition - It DAMAGES *ALL* THE TOOLS IN YOUR HALO!
-   Not only that, but they are very clumsy to work with. A highly flawed MT item - DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.<br><br>
+   Recommend DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!<br>
+   If ever add/remove a tool that isn't in PERFECT condition - It DAMAGES *ALL* THE TOOLS IN YOUR HALO!<br>
+   Not only that, but they are very clumsy to work with. A highly flawed MT item<br>
+   DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.<br><br>
 9) Note as you gain crafting ranks you will be able to learn more techniques for each discipline<br>
    Type CRAFT to see your available 'points' - Recommended to learn new techniques often.<br>
    Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.<br>
