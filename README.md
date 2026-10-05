@@ -91,13 +91,14 @@ Be sure to read the beginning section for each script if you intend to use it st
 
 
 <h2>FEATURES:<br><br>
-  
-- Trains FORGING / ALCHEMY / ENGINEERING / OUTFITTING / ENCHANTING<br>
-- Automates getting and completing Work Orders from Society Masters<br>
-- Automatically stocks necessary crafting materials <br>
+  FORGING / ALCHEMY / ENGINEERING<br>
+  OUTFITTING / ENCHANTING<br><br>
+- Automates getting and completing Work Orders from Society Masters<br><br>
+- Automatically stocks necessary crafting materials<br><br>
 - Automatically repairs tools when damaged<br>
   Self-repair tools if Tool Repair tech is known<br>
-  NPC/clerk repair if cannot self-repair<br>
-- Automatically tunes down difficulty if you fail to craft an item too many times<br>
+  NPC/clerk repair if cannot self-repair<br><br>
+- Automatically tunes down difficulty<br>
+  if you fail to craft an item too many times<br>
 
 </h2>
