@@ -15,7 +15,8 @@ It will get and turn in orders, buy extra parts, repair tools, manage materials,
 and will even reduce your order difficulty if you fail the item too often.
 
 <h1>MAIN FEATURES:</h1>
-<h3>- Automates getting and completing Work Orders from Society Masters<br><br>
+<h3>- Trains all 5 Crafting skills<br><br>
+- Automates getting and completing Work Orders from Society Masters<br><br>
 - Automatically stocks necessary crafting materials<br><br>
 - Automatically repairs tools when damaged<br>
     Self-repair tools if Tool Repair tech is known<br>
