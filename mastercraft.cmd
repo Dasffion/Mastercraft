@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/4/2026
-# v 1.9
+# Latest updates 10/8/2026
+# v 1.9.1
 #
 #  Script Usage: 
 #
@@ -13,8 +13,12 @@
 #  .mastercraft (no. of orders) --to perform more than one
 #  .mastercraft (no. of orders) (difficulty) --to ask for a different difficulty than you have set in your character profile.
 #  
-#  ex: .mastercraft 4 challenging - Does 4 challenging workorders
+#  ex: .mastercraft 2 - complete 2 work orders at your set difficulty 
+#      .mastercraft 4 challenging - complete 4 challenging workorders
 #  
+#  Simply setup your variables in MC_Setup, go to the crafting society you want to train in and start mastercraft.
+#  Mastercraft automatically detects which discipline to train based on which Society you start in.
+#
 #  Mastercraft takes the tedium out of workorders, and works in practically every society for practically every craft. 
 #  It will get and turn in orders, buy extra parts, repair tools, manage materials, check item quality, and will even reduce your order difficulty if you fail the item too often.
 #  
@@ -31,13 +35,13 @@
 #     ( Discipline book / Logbook for work orders / All the tools for that profession ) 
 #     It does support the special "All Disciplines" Crafting Book by default - no config needed
 #
-#  NOTE: Mastercraft does buy normal shop supplies/materials such as:
-#  leather/bone, sigils, ingots, coal nuggets, herbs, etc
-#  You just need to make sure you have all the tools!
+#     NOTE: Mastercraft does buy normal shop supplies/materials such as:
+#     leather/bone, sigils, ingots, rocks, coal, herbs, etc
+#     You just need to make sure you have all the tools!
 #  
 #  2) You must have some gold/plat for the script to handle buying supplies / repairing tools.
 #  
-#  3) Script DOES handle Self-Repairing tools if you have the tech (Advanced Tool Repair) - requires oil and brush.
+#  3) Script DOES handle Self-Repairing tools if you have the blacksmith technique (Advanced Tool Repair).
 #  If tools are damaged beyond self-repair - It will take them to the NPC repair like normal.
 #  
 #  4) Workorders can only be automated within societies, using the mastercraft script.
@@ -56,11 +60,12 @@
 #  It auto forages the herbs needed and processes them (press/grind) to be used in the recipes.
 #  
 #  8) KERTIGEN HALO support was added in a past patch - but it may not work well at all (untested recently)
-#  My recommendation is DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides! 
-#  If you ever add/remove a tool in the halo that is not in PERFECT condition - It DAMAGES ALL THE TOOLS IN YOUR HALO! 
-#  Not only that, but they are very clumsy to work with. A highly flawed MT item - DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.
+#  Recommend DO *NOT* USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!
+#  If you ever add/remove a tool that isn't in PERFECT condition - It DAMAGES ALL THE TOOLS IN YOUR HALO!
+#  Not only that, but they are very clumsy to work with. A highly flawed MT item!
+#  DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.
 #  
-#  9) Note as you gain crafting ranks you will be able to learn more techniques for each discipline.
+#  9) TECHNIQUES - as you gain crafting ranks you can learn more techniques for each discipline.
 #  Type CRAFT to see your available 'points' - Recommended to learn new techniques often.
 #  Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.
 #  Don't forget to choose a CAREER and HOBBY as that will get you even more points to work with.
@@ -111,6 +116,15 @@ include mc_include.cmd
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
 
+
+# v 1.9.1
+# Fixed several bugs in Outfitting and Alchemy counting of materials
+# Will now count materials UP (starting at first) instead of counting down, until it finds one it can't count
+# This fixed an issue in script sometimes not calculating the proper amount of a materials it had 
+# Also added proper counting for herb2 in Remedies when a second herb is required
+# Fixed another bug causing a loop sometimes in Outfitting  
+#
+#
 # v 1.9
 # Added recognition of 'Remedial Herb Gathering' tech for <precise> herb gathering 
 # When this tech is known it will use "forage <herb> precise" when gathering herbs
@@ -688,10 +702,10 @@ calc.material:
                          if (("%work.material" = "steel") && (%volume > 10)) then goto new.order
                     }
                gosub parts.inv
-               if %%order.pref.item.count > 11 then var %%order.pref.item.count 11
-               if %%order.pref.item.count > 0 then gosub count.material ingot
-               if %%order.pref.deed.count > 11 then var %%order.pref.deed.count 11
-               if %%order.pref.deed.count > 0 then gosub count.material deed
+               if (%%order.pref.item.count > 11) then var %order.pref.item.count 11
+               if (%%order.pref.item.count > 0) then gosub count.material ingot
+               if (%%order.pref.deed.count > 11) then var %order.pref.deed.count 11
+               if (%%order.pref.deed.count > 0) then gosub count.material deed
                if %bigenough < %order.quantity then gosub lack.material
                if %mass.volume > %material.volume then gosub lack.material
                pause 0.5
@@ -731,9 +745,9 @@ calc.material:
                pause 0.1
 			# math mass.volume add 20
                gosub parts.inv
-               if %%order.pref.item.count > 11 then var %%order.pref.item.count 11
+               if %%order.pref.item.count > 11 then var %order.pref.item.count 11
                if %%order.pref.item.count > 0 then gosub count.material %order.pref
-               if %%order.pref.deed.count > 11 then var %%order.pref.deed.count 11
+               if %%order.pref.deed.count > 11 then var %order.pref.deed.count 11
                if %%order.pref.deed.count > 0 then gosub count.material deed
                if %mass.volume > %material.volume then gosub lack.material
                gosub combine.check "%main.storage" "%work.material %order.pref"
@@ -782,9 +796,9 @@ calc.material:
                evalmath mass.volume %volume * %order.quantity
    			if (("%order.pref" = "stack") && (%mass.volume > 99)) then goto new.order
                gosub parts.inv          
-               if %%order.pref.item.count > 11 then var %%order.pref.item.count 11
+               if %%order.pref.item.count > 11 then var %order.pref.item.count 11
                if %%order.pref.item.count > 0 then gosub count.material stack
-               if %%order.pref.deed.count > 11 then var %%order.pref.deed.count 11
+               if %%order.pref.deed.count > 11 then var %order.pref.deed.count 11
                if %%order.pref.deed.count > 0 then gosub count.material deed
                if %mass.volume > %material.volume then gosub lack.material
                gosub combine.check "%main.storage" %order.pref
@@ -826,11 +840,11 @@ calc.material:
                evalmath mass.volume %volume * %order.quantity
                if (%mass.volume > 70) then goto new.order
                gosub parts.inv          
-               if (%%order.pref.item.count > 11) then var %%order.pref.item.count 11
+               if (%%order.pref.item.count > 11) then var %order.pref.item.count 11
                if (%%order.pref.item.count > 0) then gosub count.material lumber
                if ("%assemble2" = "mechanism") then gosub count.material mechanism
                if ("%assemble3" = "mechanism") then gosub count.material mechanism
-               if (%%order.pref.deed.count > 11) then var %%order.pref.deed.count 11
+               if (%%order.pref.deed.count > 11) then var %order.pref.deed.count 11
                if (%%order.pref.deed.count > 0) then gosub count.material deed
                if (%mass.volume > %material.volume) then gosub lack.material     
                gosub combine.check "%main.storage" %order.pref
@@ -1146,6 +1160,7 @@ parts.inv:
      var mechanism.count 0
      var lenses.count 0
      var salt.count 0
+	action remove ^\s+(?:an?|some) (%order.pref).*(leather|cloth|yarn)
      action (forging) math ingot.item.count add 1 when ^\s*(?:an?|some)(?! deed).*(%work.material) ingot
      action (forging) math %order.pref.deed.count add 1 when ^\s+a deed for (?:an?|some).*(%work.material).*(ingot)
      action (outfitting) math %order.pref.item.count add 1 when ^\s+(?:an?|some) (%work.material).*(%order.pref)
@@ -1301,35 +1316,35 @@ count.material:
      if ("%count" = "ingot") then
           {
                var c.action analyze
-               var tempcount %ingot.item.count
+               var tempcount 1
           }
      if contains("(leather|cloth|yarn)","%count") then
           {
                var c.action count
-               var tempcount %%order.pref.item.count
+               var tempcount 1
                gosub combine.check "%main.storage" %order.pref
           }
      if ("%count" = "stack") then
           {
                var c.action count
-               var tempcount %%order.pref.item.count
+               var tempcount 1
                gosub combine.check "%main.storage" %order.pref
           }
      if ("%count" = "lumber") then
           {
                var c.action count
-               var tempcount %%order.pref.item.count
+               var tempcount 1
                gosub combine.check "%main.storage" %order.pref
           }
      if ("%count" = "deed") then
           {
                var c.action read
-               var tempcount %%order.pref.deed.count
+               var tempcount 1
           }
      if ("%discipline" = "remed") then
           {
                var c.action count
-               var tempcount %%count.item.count
+               var tempcount 1
 			if ("%count" = "blue flower") then var count flower
 			if ("%count" = "blue.flower") then var count flower
                gosub combine.check "%main.storage" %count
@@ -1366,11 +1381,15 @@ count.material:
 			   return
 		  }
 count.material2:
+	action remove About (\d+) volumes? of metal was used in this
+	action remove possess a volume of (\d+)\.$
+	action remove ^You count out (\d+) (piece|pieces|yards)
+	action remove \s+(?:Volume|Yards|Piece|Pieces):\s+(\d+)$
      action (count) on
      math countloop add 1
      pause 0.01
+	if (%tempcount > 10) then var tempcount 10
      if matchre("%ordinal(%tempcount)", "zeroth") then math tempcount add 1
-	if ("%ordinal(%tempcount)" = "") then var tempcount 10
 	var itemvolume 0
 	var count.noun %work.material
 	matchre countfail ^I could not find what you were referring to\.
@@ -1389,7 +1408,7 @@ count.material3:
                goto manual.count
           }
      var vol.%ordinal(%tempcount) %itemvolume
-     math tempcount subtract 1
+     math tempcount add 1
      action (count) off
      pause 0.1
      evalmath bigenough (floor(%itemvolume/%volume))+%bigenough
@@ -1411,6 +1430,7 @@ count.material3:
 
 countfail:
      # item doesn't exist -- stop counting, don't wipe the vol table
+	action (count) off
      unvar tempcount
      unvar count
      return
@@ -1418,6 +1438,7 @@ countfail:
      mechcount:
      if ("%countarray(%i)" = "%mechs") then 
           {
+			action (count) off
                var mechnumber %i
                goto foundit
           }
@@ -1890,12 +1911,13 @@ process.order:
 				}
 			if !matchre("%herb2", "(?i)^\s*$|NULL") then
 				{
-					gosub EMPTY_HANDS
-					var order.type %herb2
-					gosub gather.material %herb2
-					send count my %herb2
-					waitforre ^You count out (\d+) pieces
-					if ($1 < %order.quantity) then gosub lack.material
+					var get.mat %herb2
+					gosub count.up
+					if (%material.volume < %order.quantity) then
+						{
+							var order.type %herb2
+							gosub lack.material
+						}
 					gosub EMPTY_HANDS
 				}
                gosub GET my %discipline book
@@ -2156,7 +2178,7 @@ setold.mat1:
      if (%oldvolume > %%get.mat.item.count) then return
      var oldvol.%ordinal(%oldvolume) %vol.%ordinal(%oldvolume)
      math oldvolume add 1
-     goto setold_1
+     goto setold.mat1
      
 ingotchange:
      var tempchange %ingot.item.count
@@ -2206,7 +2228,6 @@ gather.material2:
                     gosub lack.material
                     }
                evalmath %get.mat.material.volume %%get.mat.material.volume - 25
-               if matchre("%get.mat", "flower") then goto flower.cycle
                if (!matchre("$righthand", "%get.mat") && ("%herb1", "junilar")) then
                     {
                          var herb1 junliar
@@ -2223,6 +2244,14 @@ gather.material2:
 					evalmath %get.mat.item.count %%get.mat.item.count - 1
 					return
                     }
+               if matchre("%get.mat", "flower") then goto flower.cycle
+			gosub count.up
+			if (%material.volume < %mass.volume) then
+				{
+					var order.type %get.mat
+					gosub lack.material
+				}
+			return
           }
 #     if "%get.mat" = "stone" then {}
      var itemno 1
@@ -2243,7 +2272,7 @@ gather.material_1:
                goto itemchange
           }
      math itemno add 1
-     if (%itemno > %%get.mat.item.count) then 
+     if (%itemno > 10) then
           {
                gosub lack.material
                goto calc.material
@@ -2299,6 +2328,21 @@ flower.wrong:
      math flower.bin add 1
      pause 0.3
      goto flower.cycle1
+	
+count.up:
+	var itemno 1
+	var material.volume 0
+count.up1:
+     if (%itemno > 10) then return
+     gosub GET %ordinal(%itemno) %get.mat from my %main.storage
+     if !matchre("$righthand|$lefthand", "%get.mat") then return
+     send count my %get.mat
+     waitforre ^You count out (\d+) pieces|^I could not find
+     math material.volume add $1
+     gosub PUT_IT my %get.mat in my %main.storage
+	pause 0.1
+     math itemno add 1
+     goto count.up1
 
 itemchange:
 	var itemchangeloop 0
@@ -2704,24 +2748,26 @@ lack.material:
           {
                if ("%order.pref" = "leather") then
                     {
-                         if "%work.material" = "rat-pelt" then var order.num 14
-                         if "%work.material" = "cougar-pelt" then var order.num 15
+                         if ("%work.material" = "rat-pelt") then var order.num 14
+                         if ("%work.material" = "cougar-pelt") then var order.num 15
                          var order.type leather
                     }
                if ("%order.pref" = "cloth") then
                     {
-                         if "%work.material" = "linen" then var order.num 7
-                         if "%work.material" = "burlap" then var order.num 8
-                         if "%work.material" = "wool" then var order.num 9
-                         if "%work.material" = "silk" then var order.num 10
+                         if ("%work.material" = "linen") then var order.num 7
+                         if ("%work.material" = "burlap") then var order.num 8
+                         if ("%work.material" = "wool") then var order.num 9
+                         if ("%work.material" = "silk") then var order.num 10
                          var order.type cloth
                     }
                if ("%order.pref" = "yarn") then
                     {
                          var order.num 13
                          var order.type yarn
+					if (%material.volume >= %mass.volume) then return
                          evalmath reqd.order (%mass.volume-%material.volume)/100
                          evalmath reqd.order ceiling(%reqd.order)
+					if (%reqd.order < 1) then return
                          var main.storage $MC_OUTFITTING.STORAGE
                          goto purchase.material
                     }
@@ -2729,6 +2775,7 @@ lack.material:
                     {
                          evalmath reqd.order (%mass.volume-%material.volume)/10
                          evalmath reqd.order ceiling(%reqd.order)
+					if (%reqd.order < 1) then var reqd.order 1
                     }
                if !contains("rat-pelt|cougar-pelt|linen|burlap|wool|silk", "%work.material") then goto lack.material.exit
                var main.storage $MC_OUTFITTING.STORAGE
