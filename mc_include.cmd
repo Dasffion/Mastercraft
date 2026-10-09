@@ -393,8 +393,8 @@ location.vars:
      var FENT.supplies.room 236
      var FENT.books.room 234
      var FENT.work.room 241|240|238|239
-     var FENT.room.list 232|233|234|235|236|237|238|239|240|241
-     var FENT.master.room 232|233|234|235|236|237
+     var FENT.room.list 232|233|234|235|236|237|238|239|240|241|182
+     var FENT.master.room 232|233|234|235|236|237|182
 
      #Muspari Forging
      var MUF.room.list 504|505|506|507|508|509|510|511|512|513|514|515|516|517|518|519|520
@@ -1567,7 +1567,7 @@ ToolCheckLeft:
 	if "$lefthand" = "Empty" then
 		{
 		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
-		else gosub GET my %tools from my %main.storage
+		else gosub GET my %tools
           if !matchre("$righthand", "%tools") then gosub GET my %tools
 		return
 		}
