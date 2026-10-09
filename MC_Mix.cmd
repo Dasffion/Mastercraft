@@ -182,6 +182,8 @@ catalyst:
 	return
 
 add.herb:
+	if !matchre("$lefthand", "$MC_BOWL") then gosub STOW_LEFT
+     if !matchre("$righthand", "$MC_BOWL") then gosub STOW_RIGHT
      gosub GET my %herb2 from my %main.storage
      if !matchre("$righthand|$lefthand", "%herb2") then goto lack.material
      put put my %herb2 in my $MC_BOWL
@@ -241,19 +243,21 @@ if contains("$scriptlist", "mastercraft") then
 	return
 	}
 else
-{
-echo *** Out of Water or Alcohol! Go get more!
-if ("%repair" = "on") then gosub check.tools
-put #parse MIX DONE
-put #parse ALCHEMY DONE
-exit
-} 
+	{
+	echo
+	echo *** Out of Water or Alcohol! Go get more!
+	echo
+	if ("%repair" = "on") then gosub check.tools
+	put #parse MIX DONE
+	put #parse ALCHEMY DONE
+	exit
+	} 
 
 lack.coin:
 	if ("%get.coin" = "off") then goto lack.coin.exit
 	action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
 	gosub automove teller
-	send withd 5 gold
+	send withd 9 gold
 	waitfor The clerk counts|You count out
 	gosub automove %temp.room
 	var need.coin 0
@@ -319,7 +323,7 @@ if (%temprem > 5) then
 	{
 	gosub PUT mark my $MC.order.noun at 5
 	gosub PUT break my $MC.order.noun
-	gosub PUT empty left
+	gosub STOW_LEFT
 	gosub PUT swap
 	}
 return
