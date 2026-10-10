@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/8/2026
-# v 1.9.1
+# Latest updates 10/10/2026
+# v 1.9.2
 #
 #  Script Usage: 
 #
@@ -116,7 +116,11 @@ include mc_include.cmd
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
 
-
+# v 1.9.2
+# Fixed bug in counting materials resetting volume variable and not properly counting total in bags
+# Will now attempt to COMBINE any leftover alchemy recipes in bags after workorder - to prevent items buildup over time
+# (Most promimently happens in REMEDY workorders after breaking up potions for workorders) 
+#
 # v 1.9.1
 # Fixed several bugs in Outfitting and Alchemy counting of materials
 # Will now count materials UP (starting at first) instead of counting down, until it finds one it can't count
@@ -1310,7 +1314,7 @@ count.material:
      action (count) math material.volume add $1;var itemvolume $1 when About (\d+) volumes? of metal was used in this
      action (count) math material.volume add $1;var itemvolume $1 when \s+(?:Volume|Yards|Piece|Pieces):\s+(\d+)$
      action (count) math material.volume add $1;var itemvolume $1 when possess a volume of (\d+)\.$
-     action (count) math material.volume add $1;var itemvolume $1 when ^You count out (\d+) (piece|pieces|yards)
+     action (count) math material.volume add $1;var itemvolume $1 when ^You count out (\d+) (piece|pieces|yards|uses)
      action (count) var manual 1 when unable to discern hardly anything about it\.$|make a few observations\.$|learn more about its construction\.$
      var manual 0
      if ("%count" = "ingot") then
@@ -1381,10 +1385,6 @@ count.material:
 			   return
 		  }
 count.material2:
-	action remove About (\d+) volumes? of metal was used in this
-	action remove possess a volume of (\d+)\.$
-	action remove ^You count out (\d+) (piece|pieces|yards)
-	action remove \s+(?:Volume|Yards|Piece|Pieces):\s+(\d+)$
      action (count) on
      math countloop add 1
      pause 0.01
@@ -2112,6 +2112,12 @@ bundle.order3:
           }
      gosub EMPTY_HANDS
      if ("%repair" = "on") then gosub check.tools
+	### THIS LINE ADDED TO COMBINE LEFTOVER ORDERS FROM THE BAG TO PREVENT MASSIVE BUILDUPS
+	if matchre("%discipline", "remed") then
+	{
+		gosub combine.check "%main.storage" $MC.order.noun
+	}
+	###################################################################################
      return
 
 grind:
@@ -2408,7 +2414,7 @@ combine.cut:
      if !matchre("$righthand|$lefthand", "%combine.temp") then gosub GET my %combine.temp
 combine.cut_go:
      var temp.volume 0
-     action var temp.volume $1 when ^You count out (\d+) (piece|pieces|yards)
+     action var temp.volume $1 when ^You count out (\d+) (piece|pieces|yards|uses)
      pause 0.2
      pause 0.2
      matchre combine.cut_2 ^You count
@@ -2520,9 +2526,9 @@ combine1:
 combineNext:
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
-     if !matchre("$righthand", "%combine.temp") then gosub GET my third %combine.temp from my %combine.storage
+     if !matchre("$righthand", "%combine.temp") then gosub GET my second %combine.temp from my %combine.storage
 	#if %%order.pref.item.count <= 1 then goto combine.end
-     if !matchre("$lefthand", "%combine.temp") then gosub GET my third %combine.temp from my %combine.storage
+     if !matchre("$lefthand", "%combine.temp") then gosub GET my second %combine.temp from my %combine.storage
 	#if matchre("$lefthand|$righthand", "Empty") then goto combine.end
 	if !matchre("$righthand", "%combine.temp") then goto combine.end
 	if !matchre("$lefthand", "%combine.temp") then goto combine.end
@@ -2554,7 +2560,7 @@ combine.end:
      if matchre("$righthand|$lefthand", "%combine.temp") then
           {
                send count my %combine.temp
-               waitforre ^You count out (\d+) (piece|pieces|yards)
+               waitforre ^You count out (\d+) (piece|pieces|yards|uses)
                var vol.first $1
           }
 combine.end2:
