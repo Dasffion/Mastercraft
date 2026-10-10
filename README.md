@@ -70,11 +70,15 @@ ENCHANTING - Artificing</h3><br>
    Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.<br>
    Don't forget to choose a CAREER and HOBBY as that will get you even more points to work with<br><br>
 
-10) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
+10) NOTE - Mastercraft is primarily written/intended as an XP/TRAINING script.<br>
+    It is not designed to train every single possible item and does NOT support every single craft recipe.<br> 
+    Although a very large number of recipes are supported<br><br>
+
+11) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
    and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**
    This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running
-   Be very careful when renaming scriptfiles!<br>
-
+   Be very careful when renaming scriptfiles!<br><br>
+   
 Be sure to setup your character's crafting profile in <b>**MC_SETUP.cmd**</b> BEFORE USING THESE SCRIPTS!<br>
 There are some things scripting cannot do for you, such as make personal decisions.<br><br>
 
