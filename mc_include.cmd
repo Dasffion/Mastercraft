@@ -30,6 +30,7 @@ eval alltools replacere("%alltools", "\|+", "|")
 eval alltools replacere("%alltools", "^\|", "")
 eval alltools replacere("%alltools", "\|$", "")
 var HaloType NULL
+var HaloRemoved 0
 var Removing 0
 var RepairChecked 0
 var need.repair 0
@@ -37,8 +38,6 @@ var LookTime $gametime
 var LookLast 0
 var need.coin 0
 var sigilnum 1
-action var need.repair 1;goto RESET when ^The .+ is far too damaged to be used for that\.
-action var need.coin 1 when you don't have enough coins|you don't have that much
 #var alltools saw|chisel|carving knife|rasp|riffler|clamp|needles|drawknife|slickstone|hammer|tongs|bellows|pliers|shovel|bowl|mixing stick|pestle|mortar|sieve|loop|burin|yardstick|tools|awl|rod
 #put #unvar repair.room
 put #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 6}
@@ -70,6 +69,12 @@ action (order) var alcohol.order $1 when (\d+)\)\..*10 splashes of grain alcohol
 action (order) var catalyst.order $1 when (\d+)\)\..*a massive coal nugget.*(Lirums|Kronars|Dokoras)
 action (order) var $2.order $1 when (\d+)\)\..*an intricate (\S+) sigil-scroll.*(Lirums|Kronars|Dokoras)
 action (order) var salt.order $1 when (\d+)\)\..*a pouch of aerated salts.*(Lirums|Kronars|Dokoras)
+#### Counting of item volumes
+action (count) math material.volume add $1;var itemvolume $1 when About (\d+) volumes? of metal was used in this
+action (count) math material.volume add $1;var itemvolume $1 when \s+(?:Volume|Yards|Piece|Pieces):\s+(\d+)$
+action (count) math material.volume add $1;var itemvolume $1 when possess a volume of (\d+)\.$
+action (count) math material.volume add $1;var itemvolume $1 when ^You count out (\d+) (piece|pieces|yards|uses)
+action (count) var manual 1 when unable to discern hardly anything about it\.$|make a few observations\.$|learn more about its construction\.$
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
@@ -91,16 +96,17 @@ action (book) var Sigil1Count $1;var sigil %sigil|$2;math sigilnum add 1 when ^\
 action (book) var Sigil%sigilnumCount $1;var sigil %sigil|$2;math sigilnum add 1 when ^\s+\((\d)\)\s+(?:secondary) sigil \((\S+)\)
 action (book) var order.pref sphere; var work.material small when ^\s+\(\d+\)\s+A small stone, wood or bone sphere
 ### action var sigil %sigil|$1|$2|$3 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
-### KERTIGEN HALO IDENTIFICATION
-var HaloType NULL
-var HaloRemoved 0
+### Analyzing the order
+action (analyze) instant var item.quality $2 when (is|are|have|has) (riddled with mistakes and practically|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality|of exceptional quality|of outstanding quality|masterfully-crafted)
+
+### Kertigen Halo Identification
 action var HaloType $1 when (\w+) with a .+ halo on it
 
-### ELEMENTAL WATER CUBE TIMER SETUP
+### Elemental WaterCube Setup Timer
 if !def(MC.WATERCUBE.TIME) then put #var MC.WATERCUBE.TIME $gametime
 if !def(MC.WATERCUBE.LAST) then put #var MC.WATERCUBE.LAST {#evalmath ($gametime - 900)}
 
-#### MIGRATED FROM MASTERCRAFT MAIN SCRIPT SO THAT TOOL REPAIR WORKS IN ALL SCRIPTS
+#### MIGRATED TRIGGERS FROM MASTERCRAFT MAIN SCRIPT SO THAT FUNCTIONS WORKS IN ALL SCRIPTS
 if $MC_END.EARLY = 1 then
      {
          action instant var order.quantity 1 when You must bundle and deliver (\d+) more within
@@ -111,16 +117,18 @@ else
          action instant var order.quantity $1 when You must bundle and deliver (\d+) more within
          action instant var order.quantity $1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
      }
-action instant var (analyze) item.quality $2 when (is|are|have|has) (riddled with mistakes and practically|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality|of exceptional quality|of outstanding quality|masterfully-crafted)
-action instant var coin.temp $1 when You can purchase.*for (\d+) (Lirums|Kronars|Dokoras)\.
-action instant math coin.intake add $1 when You hand .* your logbook and bundled items, and are given (\d+)
-action instant math coin.intake subtract $1 when pay the sales clerk (\d+)
-action instant math coin.intake subtract %coin.temp when takes some coins from you and hands you.*\.$
+action instant var combine.maxed 1 when ^That (.*) is too large to add more to\.|^The resulting
+action instant var need.repair 1;goto RESET when ^The .+ is far too damaged to be used for that\.
 action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\)| \(\d+\/\d+\))?\.
 action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
 action instant var grind 1 when TURN the GRINDSTONE several times
 action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
-#action goto lack.coin when ^LACK COIN
+### Coin Tracking 
+action instant var need.coin 1 when you don't have enough coins|you don't have that much
+action instant var coin.temp $1 when You can purchase.*for (\d+) (Lirums|Kronars|Dokoras)\.
+action instant math coin.intake add $1 when You hand .* your logbook and bundled items, and are given (\d+)
+action instant math coin.intake subtract $1 when pay the sales clerk (\d+)
+action instant math coin.intake subtract %coin.temp when takes some coins from you and hands you.*\.$
 action (analyze) off
 ###########################################################################
 ### Character Profiles. Please edit these for your character(s).
@@ -375,8 +383,8 @@ location.vars:
      var FE.master.room 206|207|208|209|210
      var FE.work.room 220|221
      #Fang Cove Forging
-     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248|249
-     var FF.master.room 196|197|198|199|200|201|202|203|204
+     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248|249|252
+     var FF.master.room 196|197|198|199|200|201|202|203|204|252
      var FF.work.room 217|219|249
      var FF.grind.room 217|219|249
      var FF.smelt.room 216|218|248
@@ -1804,7 +1812,7 @@ FORAGEHERBS:
           }
      if ("$righthand" != "Empty") then gosub STOW_RIGHT
      if ("$lefthand" != "Empty") then gosub STOW_LEFT
-     if (%HerbLoop > 22) then goto FORAGE_DONE
+     if (%HerbLoop > 19) then goto FORAGE_DONE
      if ((%HerbLoop > 6) && (%HerbsFound = 0)) then
           {
                echo *** DAMNIT NO HERBS FOUND!
@@ -1830,13 +1838,13 @@ HERB_PROCESS:
      pause 0.1
      if ("$righthand" = "Empty") then
           {
-          get my %herb from my portal
+          put get my %herb from my portal
           pause 0.6
           pause 0.3
           }
      if ("$righthand" = "Empty") then
           {
-               var Ordinals first|second|third|fourth|fifth|sixth|seventh|eighth
+               var Ordinals first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth
                var Num 0
                gosub HERB_COMBINE
                goto first.order
@@ -1856,14 +1864,14 @@ HERB_PRESS:
      goto HERB_PROCESS
 
 HERB_COMBINE:
-     if (%Num > 8) then goto COMBINE_FAIL
+     if (%Num > 14) then goto COMBINE_FAIL
      pause 0.2
      put get my %Ordinals(%Num) %herb1 from my %tool.storage
      pause 0.5
      pause 0.1
      if ("$righthand" = "Empty") then
           {
-          get my %Ordinals(%Num) %herb1 from my portal
+          put get my %Ordinals(%Num) %herb1 from my portal
           pause 0.8
           pause 0.5
           }
@@ -1872,7 +1880,7 @@ HERB_COMBINE:
      pause 0.5
      if ("$lefthand" = "Empty") then
           {
-          get my %Ordinals(%Num) %herb1 from my portal
+          put get my %Ordinals(%Num) %herb1 from my portal
           pause 0.5
           }
 	pause 0.01

@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/10/2026
-# v 1.9.2
+# Latest updates 10/11/2026
+# v 1.9.3
 #
 #  Script Usage: 
 #
@@ -115,6 +115,12 @@ include mc_include.cmd
 #Add more challenging/hard recipes especially in Alchemy / Outfitting / Artificing
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
+
+# v 1.9.3
+# Counting of materials/stacks should now be much faster
+# Ordinal counting will count up to nineteenth (19) now 
+# Fixed bug in analyzing of the final product not working 
+# Migrated all major triggers to mc_include for consistency 
 
 # v 1.9.2
 # Fixed bug in counting materials resetting volume variable and not properly counting total in bags
@@ -236,7 +242,7 @@ TOP:
      var order.type 0
      var diff.change 0
      var repairing 0
-     var ordinal zeroth|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth
+     var ordinal zeroth|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eightteenth|nineteenth|twentieth
      var countarray zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twenty-one|twenty-two|twenty-three|twenty-four|twenty-five|twenty-six|twenty-seven|twenty-eight|twenty-nine|thirty
      var assemble NULL
      var assemble2 NULL
@@ -279,33 +285,7 @@ TOP:
           {
                var work.tools $MC_LOOP|$MC_BURIN|$MC_IMBUE.ROD|$MC_BRAZIER
           }
-     if ($MC_END.EARLY = 1) then 
-          {
-              action instant var order.quantity 1 when You must bundle and deliver (\d+) more within
-              action instant var order.quantity 1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
-          }
-     else 
-          {
-              action instant var order.quantity $1 when You must bundle and deliver (\d+) more within
-              action instant var order.quantity $1;put #var MC.order.quality $2 when I need (\d+).*(finely-crafted|of superior quality|of exceptional quality),
-          }
-     action instant var (analyze) item.quality $2 when (is|are|have|has) (riddled with mistakes and practically|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality|of exceptional quality|of outstanding quality|masterfully-crafted)
-     action instant var coin.temp $1 when You can purchase.*for (\d+) (Lirums|Kronars|Dokoras)\.
-     action instant math coin.intake add $1 when You hand .* your logbook and bundled items, and are given (\d+)
-     action instant math coin.intake subtract $1 when pay the sales clerk (\d+)
-     action instant math coin.intake subtract %coin.temp when takes some coins from you and hands you.*\.$
-     action instant var tool.repair $2 when This appears to be a crafting tool and .* (is|are|have|has) (.*?)(?: \(\d+-\d+\%\)| \(\d+\/\d+\))?\.
-     action instant var tool.gone 1; var $1.gone 1 when The (.+) is all used up, so you toss
-     action instant var grind 1 when TURN the GRINDSTONE several times
-     action instant var chapter $1 when You seem to recall this item being somewhere in chapter (\d+) of the instruction book.
-#    action goto lack.coin when ^LACK COIN
      action (analyze) off
-     #trigger {completely understand all facets of the design\.$} {#var MC_DIFFICULTY 5}
-     #trigger {comprehend all but several minor details in the text\.$} {#var MC_DIFFICULTY 4}
-     #trigger {confidently discern most of the design's minutiae\.$} {#var MC_DIFFICULTY 3}
-     #trigger {interpret many of the design's finer points\.$} {#var MC_DIFFICULTY 2}
-     #trigger {fail to grasp all but the simplest diagrams on the page\.$} {#var MC_DIFFICULTY 1}
-     #trigger {quickly realize the design is far beyond your abilities\.$} {#var MC_DIFFICULTY 0}
 ##############################
 #
 # Check for Clerk Tickets 
@@ -508,7 +488,7 @@ identify.order:
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (some blister cream|some moisturizing ointment|some itch salve|some lip balm|some hangover potion)
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (some limb salve|some limb unguent|some neck salve|some abdominal salve|some chest salve|some neck unguent|some abdominal unguent|some chest unguent|some head unguent|some head salve|some eye unguent)
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (a neck potion|an eye potion|some neck tonic|some back tonic|some eye tonic|a back potion|some limb tonic|some chest tonic|some head tonic)
-               matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices|some skin ointment|some limb ointment|some limb poultices)
+               matchre chapter.5 This logbook is tracking a work order requiring you to craft (some body ointment|some body poultices|some skin ointment|some limb ointment|limb poultices|general poultices)
                matchre chapter.6 This logbook is tracking a work order requiring you to craft (a body draught|a body elixir| a general elixir|a limb elixir)
                put read my %society.type logbook
                matchwait 3
@@ -887,43 +867,43 @@ calc.material:
                gosub EMPTY_HANDS
                var herb1 NULL
                var herb2 NULL
-			### SET THE SECONDARY HERB FIRST FOR RECIPES THAT REQUIRE 2 HERBS
-               if matchre("%full.order.noun", "hangover potion") then var herb2 ojhenik
-               if matchre("%full.order.noun", "(some blister cream|some moisturizing ointment|some itch salve|some lip balm|vigor poultice)") then var herb1 flowers
-               if matchre("%full.order.noun", "some blister cream") then var herb2 nemoih
-               if matchre("%full.order.noun", "some moisturizing ointment") then var herb2 plovik
-               if matchre("%full.order.noun", "some itch salve") then var herb2 jadice
-               if matchre("%full.order.noun", "some lip balm") then var herb2 nilos
-               if matchre("%full.order.noun", "vigor poultice") then var herb2 dioica
-			### NOW SET THE PRIMARY HERB DEPENDING ON THE RECIPE 
-               if matchre("%full.order.noun", "(some neck salve|some neck unguent)") then var herb1 georin
-               if matchre("%full.order.noun", "(some abdominal salve|some abdominal unguent)") then var herb1 nilos
-               if matchre("%full.order.noun", "(some chest salve|some chest unguent)") then var herb1 plovik
-               if matchre("%full.order.noun", "(some head salve|some head unguent)") then var herb1 nemoih
-               if matchre("%full.order.noun", "(some limb salve|some limb unguent)") then var herb1 jadice 
-               if matchre("%full.order.noun", "(a neck potion|some neck tonic)") then var herb1 riolur
-               if matchre("%full.order.noun", "(a chest potion|some chest tonic)") then var herb1 root
-               if matchre("%full.order.noun", "(a back potion|some back tonic)") then var herb1 junliar
-               if (("$zoneid" = "150") && (matchre("%full.order.noun", "(back potion|some back tonic)"))) then var herb1 junliar
-               if (("$zoneid" = "67") && (matchre("%full.order.noun", "(back potion|some back tonic)"))) then var herb1 junliar
-               if matchre("%full.order.noun", "(an eye potion|some eye tonic)") then var herb1 aevaes
-               if matchre("%full.order.noun", "(some face ointment|some face poultices)") then var herb1 pollen
-               if matchre("%full.order.noun", "(some body ointment|some body poultices)") then var herb1 genich
-               #### SPECIAL ORDERS - HERBS THAT HAVE TO BE FORAGED / PROCESSED FIRST 
+			### SET THE PRIMARY HERB DEPENDING ON THE RECIPE 
+               if matchre("%full.order.noun", "(neck salve|neck unguent)") then var herb1 georin
+               if matchre("%full.order.noun", "(abdominal salve|abdominal unguent)") then var herb1 nilos
+               if matchre("%full.order.noun", "(chest salve|chest unguent)") then var herb1 plovik
+               if matchre("%full.order.noun", "(head salve|head unguent)") then var herb1 nemoih
+               if matchre("%full.order.noun", "(limb salve|limb unguent)") then var herb1 jadice 
+               if matchre("%full.order.noun", "(neck potion|neck tonic)") then var herb1 riolur
+               if matchre("%full.order.noun", "(chest potion|chest tonic)") then var herb1 root
+               if matchre("%full.order.noun", "(back potion|back tonic)") then var herb1 junliar
+               if (("$zoneid" = "150") && (matchre("%full.order.noun", "(back potion|back tonic)"))) then var herb1 junliar
+               if (("$zoneid" = "67") && (matchre("%full.order.noun", "(back potion|back tonic)"))) then var herb1 junliar
+               if matchre("%full.order.noun", "(eye potion|eye tonic)") then var herb1 aevaes
+               if matchre("%full.order.noun", "(face ointment|face poultice)") then var herb1 pollen
+               if matchre("%full.order.noun", "(body ointment|body poultice)") then var herb1 genich
+               ### SPECIAL ORDERS - HERBS THAT MUST BE FORAGED / PROCESSED FIRST 
 			if matchre("%full.order.noun", "(limb poultice|limb ointment)") then var herb1 blocil
 			if matchre("%full.order.noun", "general elixir") then var herb1 belradi
 			if matchre("%full.order.noun", "hangover potion") then var herb1 blue.flower
                if matchre("%full.order.noun", "(eye unguent|eye salve)") then var herb1 sufil
                if matchre("%full.order.noun", "(back unguent|back salve)") then var herb1 hulnik
-               if matchre("%full.order.noun", "(a skin potion|some skin tonic)") then var herb1 lujeakave
-               if matchre("%full.order.noun", "(a limb potion|some limb tonic)") then var herb1 yelith
-               if matchre("%full.order.noun", "(a head potion|some head tonic)") then var herb1 eghmok
+               if matchre("%full.order.noun", "(skin potion|skin tonic)") then var herb1 lujeakave
+               if matchre("%full.order.noun", "(limb potion|limb tonic)") then var herb1 yelith
+               if matchre("%full.order.noun", "(head potion|head tonic)") then var herb1 eghmok
                if matchre("%full.order.noun", "(limb elixir|limb draught)") then var herb1 nuloe
-               if matchre("%full.order.noun", "(a body elixir|some body draught)") then var herb1 ojhenik
-               if matchre("%full.order.noun", "(general poultices|general purpose ointment)") then var herb1 dioica
+               if matchre("%full.order.noun", "(body elixir|body draught)") then var herb1 ojhenik
+               if matchre("%full.order.noun", "(general poultice|general purpose ointment)") then var herb1 dioica
                if matchre("%full.order.noun", "(skin poultice|skin ointment)") then var herb1 cebi
                if matchre("%full.order.noun", "skin draught") then var herb1 hisan
                if matchre("%full.order.noun", "(face elixir|face draught)") then var herb1 hulij
+			### SET SECONDARY HERB FIRST FOR RECIPES THAT REQUIRE 2 HERBS
+               if matchre("%full.order.noun", "hangover potion") then var herb2 ojhenik
+               if matchre("%full.order.noun", "(blister cream|moisturizing ointment|itch salve|lip balm|vigor poultice)") then var herb1 flowers
+               if matchre("%full.order.noun", "blister cream") then var herb2 nemoih
+               if matchre("%full.order.noun", "moisturizing ointment") then var herb2 plovik
+               if matchre("%full.order.noun", "itch salve") then var herb2 jadice
+               if matchre("%full.order.noun", "lip balm") then var herb2 nilos
+               if matchre("%full.order.noun", "vigor poultice") then var herb2 dioica
                var order.pref %herb1
                var herb1.volume 5 * %order.quantity
 			var herb2.volume 1 * %order.quantity
@@ -1311,11 +1291,6 @@ count.material:
      var countloop 0
      var bigenough 0
      var itemvolume 0
-     action (count) math material.volume add $1;var itemvolume $1 when About (\d+) volumes? of metal was used in this
-     action (count) math material.volume add $1;var itemvolume $1 when \s+(?:Volume|Yards|Piece|Pieces):\s+(\d+)$
-     action (count) math material.volume add $1;var itemvolume $1 when possess a volume of (\d+)\.$
-     action (count) math material.volume add $1;var itemvolume $1 when ^You count out (\d+) (piece|pieces|yards|uses)
-     action (count) var manual 1 when unable to discern hardly anything about it\.$|make a few observations\.$|learn more about its construction\.$
      var manual 0
      if ("%count" = "ingot") then
           {
@@ -1388,11 +1363,14 @@ count.material2:
      action (count) on
      math countloop add 1
      pause 0.01
-	if (%tempcount > 10) then var tempcount 10
+	if (%tempcount > 19) then var tempcount 19
      if matchre("%ordinal(%tempcount)", "zeroth") then math tempcount add 1
 	var itemvolume 0
 	var count.noun %work.material
+	matchre count.material3 ^You count
 	matchre countfail ^I could not find what you were referring to\.
+	matchre countfail ^Analyze what\?
+	matchre countfail ^What were you referring to\?
 	if matchre("%work.material", "(wolf-bone|deer-bone)") then
 		{
 			var count.noun stack
@@ -1419,7 +1397,7 @@ count.material3:
                gosub PUT_IT %work.material %order.pref in %main.storage
                if (%material.volume > %mass.volume) then return
           }     
-     if ((%tempcount < 1) || (%countloop > 9)) then
+     if ((%tempcount < 1) || (%countloop > 18)) then
           {
                unvar tempcount
                unvar count
@@ -1456,7 +1434,7 @@ manual.count:
                     var rightsave $righthand
                     gosub PUT_IT $righthand in my %main.storage
                }
-		if matchre("%ordinal(%bagcount)", "zeroth") then math tempcount add 1
+		if matchre("%ordinal(%bagcount)", "zeroth") then math bagcount add 1
 		if ("%ordinal(%bagcount)" = "") then var bagcount 1
           gosub GET %ordinal(%bagcount) %work.material %count in my %main.storage
           if !contains("$lefthand", "yardstick") then gosub GET yard from my %tool.storage
@@ -2389,7 +2367,6 @@ combine.check:
      var combine.temp $2
      var combine.maxed 0
 	if matchre("%combine.temp", "(blue flower|blue.flower)") then var combine.temp flower
-     action var combine.maxed 1 when ^That (.*) is too large to add more to\.|^The resulting
      #if "%order.pref" = "bone" then var combine.temp stack
      if contains("$righthand|$lefthand", "book") then gosub PUT_IT book in %main.storage
      if matchre("%discipline", "weapon|armor|blacksmith") then
@@ -2489,26 +2466,27 @@ combine:
      var combine.loop 0
 combine1:
      if !matchre("$righthand", "%combine.temp") then gosub GET my %combine.temp from my %combine.storage
-	#if %%order.pref.item.count <= 1 then goto combine.end
+     if !matchre("$righthand", "%combine.temp") then goto combine.end
      if !matchre("$lefthand", "%combine.temp") then gosub GET my %combine.temp from my %combine.storage
+     if !matchre("$lefthand", "%combine.temp") then goto combine.end
      ### THIS FUNCTION MAKES SURE THE ITEMS WE ARE COMBINING ARE THE SAME THING ie: Deer-Bone Stack vs Wolf-Bone
 	### MAY NEED TO OPEN THIS UP TO ALL DISCIPLINES? AS-IS ONLY SEEN THIS OCCUR WITH OUTFITTING TASKS SO FAR
 	if matchre("%discipline", "(shaping|carving|tinkering)") then
-          {			
-               if matchre("$righthand", "%combine.temp") && !matchre("$righthand", "$lefthand") then
+		{
+			# Only try to move an item if the hand actually contains one
+			if matchre("$righthand", "%combine.temp") && !matchre("$lefthand", "%combine.temp") && !matchre("$lefthand", "Empty") then
 				{
-					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)\b") then gosub PUT_IT my #$lefthandid in my $MC_REDFLOWER.STORAGE
+					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)") then gosub PUT_IT my #$lefthandid in my $MC_REDFLOWER.STORAGE
 					else gosub DROPIT #$lefthandid
 					goto combine1
 				}
-               if matchre("$lefthand", "%combine.temp") && !matchre("$lefthand", "$righthand") then
+			if matchre("$lefthand", "%combine.temp") && !matchre("$righthand", "%combine.temp") && !matchre("$righthand", "Empty") then
 				{
-					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)\b") then gosub PUT_IT my #$righthandid in my $MC_REDFLOWER.STORAGE
+					if !matchre("$MC_REDFLOWER.STORAGE", "(?i)\b(NULL|OFF|0|^%|^\s*$)") then gosub PUT_IT my #$righthandid in my $MC_REDFLOWER.STORAGE
 					else gosub DROPIT #$righthandid
 					goto combine1
 				}
-			pause 0.1
-          }
+		}
 	if !matchre("$righthand", "%combine.temp") then goto combine.end
 	if !matchre("$lefthand", "%combine.temp") then goto combine.end
 	combine2:
