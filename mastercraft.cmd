@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/11/2026
-# v 1.9.3
+# Latest updates 10/15/2026
+# v 1.9.4
 #
 #  Script Usage: 
 #
@@ -115,6 +115,10 @@ include mc_include.cmd
 #Add more challenging/hard recipes especially in Alchemy / Outfitting / Artificing
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
+
+# v 1.9.4
+# Should fix bug in not restocking secondary ingredients for Outfitting/Forging 
+# Fixed several other bugs in counting igrendients 
 
 # v 1.9.3
 # Counting of materials/stacks should now be much faster
@@ -1067,12 +1071,38 @@ calc.parts:
           }
      else
           {
-               if matchre("%assemble", "(\S+)") then math asmCount1 subtract %$1.count
-               if matchre("%assemble", "(\S+)\s(\S+)") then math asmCount1 subtract %$1.$2.count
-               if (matchre("%assemble2", "(\S+)") && ("%assemble2" != "mechanism")) then math asmCount2 subtract %$1.count
-               if matchre("%assemble2", "(\S+)\s(\S+)") then math asmCount2 subtract %$1.$2.count
-               if matchre("%assemble3", "(\S+)") then math asmCount3 subtract %$1.count
-               if matchre("%assemble3", "(\S+)\s(\S+)") then math asmCount3 subtract %$1.$2.count
+		if matchre("%assemble", "long pole") then math asmCount1 subtract %long.pole.count
+		if matchre("%assemble", "short pole") then math asmCount1 subtract %short.pole.count
+		if matchre("%assemble", "handle") then math asmCount1 subtract %handle.count
+		if matchre("%assemble", "hilt") then math asmCount1 subtract %hilt.count
+		if matchre("%assemble", "haft") then math asmCount1 subtract %haft.count
+		if matchre("%assemble", "string") then math asmCount1 subtract %string.count
+		if matchre("%assemble", "lenses") then math asmCount1 subtract %lenses.count
+		if matchre("%assemble", "backer") then math asmCount1 subtract %backer.count
+		if matchre("%assemble", "padding") then math asmCount1 subtract %large.padding.count
+		if matchre("%assemble", "backing") then math asmCount1 subtract %large.backing.count
+
+		if matchre("%assemble2", "long cord") then math asmCount2 subtract %long.cord.count
+		if matchre("%assemble2", "short cord") then math asmCount2 subtract %short.cord.count
+		if matchre("%assemble2", "padding") then math asmCount2 subtract %small.padding.count
+		if matchre("%assemble2", "backing") then math asmCount2 subtract %small.backing.count
+		if matchre("%assemble2", "strips") then math asmCount2 subtract %strips.count
+		if matchre("%assemble2", "backer") then math asmCount2 subtract %backer.count
+		if matchre("%assemble2", "mechanism") then math asmCount2 subtract %mechanism.count
+		
+		if matchre("%assemble3", "long cord") then math asmCount3 subtract %long.cord.count
+		if matchre("%assemble3", "short cord") then math asmCount3 subtract %short.cord.count
+		if matchre("%assemble3", "padding") then math asmCount3 subtract %small.padding.count
+		if matchre("%assemble3", "backing") then math asmCount3 subtract %small.backing.count
+		if matchre("%assemble3", "strips") then math asmCount3 subtract %strips.count
+		if matchre("%assemble3", "backer") then math asmCount3 subtract %backer.count
+		if matchre("%assemble3", "mechanism") then math asmCount3 subtract %mechanism.count
+               # if matchre("%assemble", "(\S+)") then math asmCount1 subtract %$1.count
+               # if matchre("%assemble", "(\S+)\s(\S+)") then math asmCount1 subtract %$1.$2.count
+               # if (matchre("%assemble2", "(\S+)") && ("%assemble2" != "mechanism")) then math asmCount2 subtract %$1.count
+               # if matchre("%assemble2", "(\S+)\s(\S+)") then math asmCount2 subtract %$1.$2.count
+               # if matchre("%assemble3", "(\S+)") then math asmCount3 subtract %$1.count
+               # if matchre("%assemble3", "(\S+)\s(\S+)") then math asmCount3 subtract %$1.$2.count
           }
 	# ENABLE THIS SECTION TO INCREASE BUYING MORE SECONDARY INGREDIENTS
 	# SOMETIMES ENCHANTING WOULD NOT BUY ENOUGH SIGILS AND BUG OUT/LOOP IN MIDDLE OF CRAFTING
@@ -1491,13 +1521,13 @@ purchase.assemble_2:
 
 purchase.assemble2:
      if ("%assemble2" = "NULL") then return
-     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble2", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer") then 
+     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble2", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then 
 		{
-			if ($roomid != $part.room)) then gosub automove $part.room
+			if ($roomid != $part.room) then gosub automove $part.room
 		}
      elseif $roomid != $supply.room then 
           {
-               if ("%assemble2" = "mechanism") && $roomid != $ingot.buy then gosub automove $ingot.buy
+               if (("%assemble2" = "mechanism") && ($roomid != $ingot.buy)) then gosub automove $ingot.buy
                if ("%assemble2" != "mechanism") then gosub automove $supply.room
           }
      purchase.assemble2_1:
@@ -1568,13 +1598,13 @@ purchase.assemble2:
      
 purchase.assemble3:
      if ("%assemble3" = "NULL") then return
-     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble3", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer") then 
+     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble3", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then 
 		{
-			if ($roomid != $part.room)) then gosub automove $part.room
+			if ($roomid != $part.room) then gosub automove $part.room
 		}
      elseif $roomid != $supply.room then 
           {
-               if ("%assemble3" = "mechanism") && $roomid != $ingot.buy then gosub automove $ingot.buy
+               if (("%assemble3" = "mechanism") && ($roomid != $ingot.buy)) then gosub automove $ingot.buy
                if ("%assemble3" != "mechanism") then gosub automove $supply.room
           }
      purchase.assemble3_1:
@@ -1589,10 +1619,10 @@ purchase.assemble3:
                          action (order) on
                          gosub ORDER
                          action (order) off
-                         if "%assemble3" = "small padding" then gosub ORDER %s.padding.order
-                         if "%assemble3" = "small backing" then gosub ORDER %s.backing.order
-                         if "%assemble3" = "long cord" then gosub ORDER %l.cord.order
-                         if "%assemble3" = "short cord" then gosub ORDER %s.cord.order
+                         if ("%assemble3" = "small padding") then gosub ORDER %s.padding.order
+                         if ("%assemble3" = "small backing") then gosub ORDER %s.backing.order
+                         if ("%assemble3" = "long cord") then gosub ORDER %l.cord.order
+                         if ("%assemble3" = "short cord") then gosub ORDER %s.cord.order
                     }
                if ("%assemble3" = "mechanism") then
                     {
@@ -2052,7 +2082,7 @@ bundle.order2:
      if !matchre("$righthand $lefthand", "$MC.order.noun") then gosub GET my $MC.order.noun
      if matchre("$lefthand", "$MC.order.noun") then send analyze #$lefthandid
      if matchre("$righthand", "$MC.order.noun") then send analyze #$righthandid
-     matchwait 5
+     matchwait 6
 bundle.order3:
      action (analyze) off
      if contains("$MC.order.quality.fail", "%item.quality") then
@@ -2256,7 +2286,7 @@ gather.material_1:
                goto itemchange
           }
      math itemno add 1
-     if (%itemno > 10) then
+     if (%itemno > 19) then
           {
                gosub lack.material
                goto calc.material
@@ -2510,13 +2540,13 @@ combineNext:
 	#if matchre("$lefthand|$righthand", "Empty") then goto combine.end
 	if !matchre("$righthand", "%combine.temp") then goto combine.end
 	if !matchre("$lefthand", "%combine.temp") then goto combine.end
-	combine2:
+	combine3:
 	matchre combine.end You must be holding both substances to combine them.  For more information, see HELP VERB COMBINE.
 	matchre combine.end ^That (.*) is too large to add more to\.|^The resulting
-	matchre combine.continue You combine
+	matchre combine.continue2 You combine
      send combine
 	matchwait 5
-	combine.continue:
+	combine.continue2:
      math %order.pref.item.count subtract 1
      if !matchre("$lefthand|$righthand", "Empty") then goto combine.end
      pause 0.5
@@ -2954,9 +2984,6 @@ lack.material.exit:
          put #parse Need material
 	     if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
          exit
-
-return:
-     return
 
 clearvolume:
      var vol.first

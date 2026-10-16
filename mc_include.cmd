@@ -97,7 +97,7 @@ action (book) var Sigil%sigilnumCount $1;var sigil %sigil|$2;math sigilnum add 1
 action (book) var order.pref sphere; var work.material small when ^\s+\(\d+\)\s+A small stone, wood or bone sphere
 ### action var sigil %sigil|$1|$2|$3 when ^\s+\(\d\)\s+(?:primary|secondary) sigil \((\S+)\)
 ### Analyzing the order
-action (analyze) instant var item.quality $2 when (is|are|have|has) (riddled with mistakes and practically|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality|of exceptional quality|of outstanding quality|masterfully-crafted)
+action (analyze) var item.quality $2 when (is|are|have|has) (riddled with mistakes and practically|of dismal quality|very poorly-crafted|of below-average quality|of mediocre quality|of average quality|of above-average quality|well-crafted|finely-crafted|of superior quality|of exceptional quality|of outstanding quality|masterfully-crafted)
 
 ### Kertigen Halo Identification
 action var HaloType $1 when (\w+) with a .+ halo on it
