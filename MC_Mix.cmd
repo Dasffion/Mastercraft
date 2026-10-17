@@ -97,6 +97,26 @@ first.mix:
 	gosub ToolCheckRight %bowl
 	if matchre("%bowl", "$lefthand") then gosub PUT swap
 	gosub ToolCheckLeft %herb1 in my %main.storage
+     if !matchre("$righthand|$lefthand", "%herb1") then
+		{
+			if matchre("%scriptlist", "(?i)mastercraft") then
+				{
+					gosub lack.material
+					if !matchre("$righthand|$lefthand", "%herb1") then gosub GET my %herb1 from my %main.storage
+					if !matchre("$righthand|$lefthand", "%herb1") then
+						{
+							echo *** Still missing %herb1 after restock!!
+							exit
+						}
+					goto unfinished
+				}
+			if !matchre("%scriptlist", "(?i)mastercraft") then
+			{
+				echo *** Missing %herb1 — cannot continue!
+				echo *** RESTOCK MANUALLY!
+				exit
+			}
+		}
 	gosub PUT_IT my %herb1 in my %bowl
 	pause 0.5
 	if ("$lefthand" != "Empty") then gosub STOW_LEFT
@@ -185,7 +205,25 @@ add.herb:
 	if !matchre("$lefthand", "$MC_BOWL") then gosub STOW_LEFT
      if !matchre("$righthand", "$MC_BOWL") then gosub STOW_RIGHT
      gosub GET my %herb2 from my %main.storage
-     if !matchre("$righthand|$lefthand", "%herb2") then goto lack.material
+     if !matchre("$righthand|$lefthand", "%herb2") then
+		{
+			if matchre("%scriptlist", "(?i)mastercraft") then
+				{
+					gosub lack.material
+					if !matchre("$righthand|$lefthand", "%herb2") then gosub GET my %herb2 from my %main.storage
+					if !matchre("$righthand|$lefthand", "%herb2") then
+						{
+							echo *** Still missing %herb2 after restock!!
+							exit
+						}
+					goto unfinished
+				}
+			if !matchre("%scriptlist", "(?i)mastercraft") then
+			{
+				echo *** Missing %herb2 — cannot continue!
+				exit
+			}
+		}
      put put my %herb2 in my $MC_BOWL
      pause 0.5
      var special NULL

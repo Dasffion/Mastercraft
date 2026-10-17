@@ -1260,6 +1260,165 @@ BUY_SPHERE_FAIL:
      var buy.ok 0
      return
 
+lack.material:
+	pause 0.1
+     if ("%reorder" = "off") then goto lack.material.exit
+	if ("%order.type" = "flower") then var order.type blue flower
+	if ("%order.type" = "") then var order.type blue flower
+     if matchre("%discipline", "weapon|armor|blacksmith") then
+          {
+               if "%work.material" = "bronze" then var order.num 11
+               if "%work.material" = "steel" then var order.num 9
+               if !contains("bronze|steel", "%work.material") then goto lack.material.exit
+               if "%work.material" = "bronze" then evalmath reqd.order ceiling((((%order.quantity-%bigenough)*%volume) - (%material.volume-(%volume*%bigenough)))/5)
+               if "%work.material" = "steel" then evalmath reqd.order ceiling((((%order.quantity-%bigenough)*%volume) - (%material.volume-(%volume*%bigenough)))/10)
+               gosub buyingvolumechange
+               var main.storage $MC_FORGING.STORAGE
+               var order.type ingot
+               goto purchase.material
+          }
+     if ("%discipline" = "carving") then
+          {
+               if ("%order.pref" = "stack") then
+                    {
+                         if "%work.material" = "deer-bone" then var order.num 7
+                         if "%work.material" = "wolf-bone" then var order.num 8
+                         var order.type stack
+                    }
+               if ("%work.material" = "alabaster") then
+                    {
+                         if "%deed.size" = "rock" then var order.num 1
+                         if "%deed.size" = "boulder" then var order.num 2
+                         var order.type deed
+                    }
+               if ("%work.material" = "granite") then
+                    {
+                         if "%deed.size" = "rock" then var order.num 3
+                         if "%deed.size" = "boulder" then var order.num 4
+                         var order.type deed
+                    }
+               if ("%work.material" = "marble") then
+                    {
+                         if "%deed.size" = "rock" then var order.num 5
+                         if "%deed.size" = "boulder" then var order.num 6
+                         var order.type deed
+                    }
+               if !contains("deer-bone|wolf-bone|alabaster|granite|marble", "%work.material") then goto lack.material.exit
+               evalmath reqd.order (%mass.volume-%material.volume)/10
+               evalmath reqd.order ceiling(%reqd.order)
+               var main.storage $MC_ENGINEERING.STORAGE
+               goto purchase.material
+          }
+     if ("%discipline" = "tailor") then
+          {
+               if ("%order.pref" = "leather") then
+                    {
+                         if ("%work.material" = "rat-pelt") then var order.num 14
+                         if ("%work.material" = "cougar-pelt") then var order.num 15
+                         var order.type leather
+                    }
+               if ("%order.pref" = "cloth") then
+                    {
+                         if ("%work.material" = "linen") then var order.num 7
+                         if ("%work.material" = "burlap") then var order.num 8
+                         if ("%work.material" = "wool") then var order.num 9
+                         if ("%work.material" = "silk") then var order.num 10
+                         var order.type cloth
+                    }
+               if ("%order.pref" = "yarn") then
+                    {
+                         var order.num 13
+                         var order.type yarn
+					if (%material.volume >= %mass.volume) then return
+                         evalmath reqd.order (%mass.volume-%material.volume)/100
+                         evalmath reqd.order ceiling(%reqd.order)
+					if (%reqd.order < 1) then return
+                         var main.storage $MC_OUTFITTING.STORAGE
+                         goto purchase.material
+                    }
+               else 
+                    {
+                         evalmath reqd.order (%mass.volume-%material.volume)/10
+                         evalmath reqd.order ceiling(%reqd.order)
+					if (%reqd.order < 1) then var reqd.order 1
+                    }
+               if !contains("rat-pelt|cougar-pelt|linen|burlap|wool|silk", "%work.material") then goto lack.material.exit
+               var main.storage $MC_OUTFITTING.STORAGE
+               goto purchase.material
+          }
+     if matchre("%discipline", "tinkering|shaping") then
+          {
+               if "%work.material" = "pine" then 
+                    {
+                         var order.num 9
+                         evalmath reqd.order (%mass.volume-%material.volume)/5
+                         evalmath reqd.order ceiling(%reqd.order)
+                    }
+               if "%work.material" = "maple" then 
+                    {
+                         var order.num 10
+                         evalmath reqd.order (%mass.volume-%material.volume)/5
+                         evalmath reqd.order ceiling(%reqd.order)
+                    }
+               if "%work.material" = "balsa" then  
+                    {
+                         var order.num 11
+                         evalmath reqd.order (%mass.volume-%material.volume)/10
+                         evalmath reqd.order ceiling(%reqd.order)
+                    }
+               var main.storage $MC_ENGINEERING.STORAGE
+               goto purchase.material
+          }
+     if ("%discipline" = "remed") then
+          {
+               ### ORDERS FROM THE ALCHEMY STORE
+               if ("%order.type" = "nemoih") then var order.num 3
+               if ("%order.type" = "plovik") then var order.num 4
+               if ("%order.type" = "jadice") then var order.num 5
+               if ("%order.type" = "nilos") then var order.num 6
+               if ("%order.type" = "georin") then var order.num 7
+               if ("%order.type" = "riolur") then var order.num 8
+               if ("%order.type" = "junliar") then var order.num 9
+               if ("%order.type" = "junilar") then var order.num 9
+               if ("%order.type" = "aevaes") then var order.num 10
+               if ("%order.type" = "genich") then var order.num 11
+               if ("%order.type" = "ojhenik") then var order.num 12
+               if ("%order.type" = "flowers") then var order.num 13
+               if ("%order.type" = "root") then var order.num 14
+               if ("%order.type" = "pollen") then var order.num 15
+               ### HERBS THAT HAVE TO BE FORAGED!
+			if matchre("%order.type", "(eghmokm?o?s?s?|eghmok\.moss)") then gosub GETHERBS eghmok moss
+			if matchre("%order.type", "(blue flowers?|blue\.flowers?)") then gosub GETHERBS blue flower
+               if ("%order.type" = "dioica") then gosub GETHERBS dioica sap
+               if ("%order.type" = "blocil") then gosub GETHERBS blocil berries
+               if ("%order.type" = "belradi") then gosub GETHERBS belradi moss
+               if ("%order.type" = "yelith") then gosub GETHERBS yelith root
+               if ("%order.type" = "lujeakave") then gosub GETHERBS lujeakave root
+               if ("%order.type" = "hulij") then gosub GETHERBS hulij leaf
+               if ("%order.type" = "nuloe") then gosub GETHERBS nuloe stem
+               if ("%order.type" = "sufil") then gosub GETHERBS sufil sap
+               if ("%order.type" = "muljin") then gosub GETHERBS muljin sap
+			if ("%order.type" = "hulnik") then gosub GETHERBS hulnik grass
+               if ("%order.type" = "cebi") then gosub GETHERBS cebi root
+			if ("%order.type" = "hisan") then gosub GETHERBS hisan flower
+               if matchre("%order.type", "(belradi|eghmok|yelith|lujeakave|hulij|nuloe|sufil|muljin|cebi|hulnik|blue flower|hisan|hulij|dioica|blocil)") then goto first.order
+               if !matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/25)
+               if matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/4)
+               goto purchase.material
+          }
+     if ("%discipline" = "artif") then
+          {
+               evalmath reqd.order %order.quantity - %%order.pref.item.count
+               if %reqd.order < 1 then return
+               if "%order.pref" = "totem" then var order.num 16
+               if "%order.pref" = "runestone" then var order.num runestone
+               if "%order.pref" = "wand" then var order.num wand
+               if "%order.pref" = "sphere" then var order.num sphere
+               if "%order.pref" = "rod" then var order.num rod
+               if "%order.pref" = "bead" then var order.num bead
+               goto purchase.material
+          }
+     goto lack.material.exit
 ##############################
 ### MIGRATED FROM MASTERCRAFT - TO WORK WITH ALL INDIVIDUAL SCRIPTS
 
