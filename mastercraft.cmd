@@ -117,7 +117,7 @@ include mc_include.cmd
 #Tempering, balancing, honing, sealing, reinforcing scripts.
 
 # v 1.9.6
-# Fixed bug not restocking enough secondary ingredients for Remedy products that requires 2 herbs
+# Fixed bugs not restocking enough secondary ingredients for Remedy products that requires 2 herbs
 # Was only restocking enough secondary herbs for one or two workorders in some cases
 # Should now get enough secondary herbs for all workorders
 
