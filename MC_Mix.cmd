@@ -97,6 +97,7 @@ first.mix:
 	gosub ToolCheckRight %bowl
 	if matchre("%bowl", "$lefthand") then gosub PUT swap
 	gosub ToolCheckLeft %herb1 in my %main.storage
+	### IF MISSING HERB1 AND MC IS RUNNING - RUN LACK.MATERIAL SUB TO RESTOCK
      if !matchre("$righthand|$lefthand", "%herb1") then
 		{
 			if matchre("%scriptlist", "(?i)mastercraft") then
@@ -110,6 +111,7 @@ first.mix:
 						}
 					goto unfinished
 				}
+			### IF MC IS NOT RUNNING (RUNNING SCRIPT SOLO) SCRIPT WILL ABORT DUE TO LACK OF HERB1
 			if !matchre("%scriptlist", "(?i)mastercraft") then
 			{
 				echo *** Missing %herb1 — cannot continue!
@@ -205,6 +207,7 @@ add.herb:
 	if !matchre("$lefthand", "$MC_BOWL") then gosub STOW_LEFT
      if !matchre("$righthand", "$MC_BOWL") then gosub STOW_RIGHT
      gosub GET my %herb2 from my %main.storage
+	### IF MISSING HERB2 AND MC IS RUNNING - RUN LACK.MATERIAL SUB TO RESTOCK
      if !matchre("$righthand|$lefthand", "%herb2") then
 		{
 			if matchre("%scriptlist", "(?i)mastercraft") then
@@ -218,6 +221,7 @@ add.herb:
 						}
 					goto unfinished
 				}
+			### IF MC IS NOT RUNNING (RUNNING SCRIPT SOLO) SCRIPT WILL ABORT DUE TO LACK OF HERB2
 			if !matchre("%scriptlist", "(?i)mastercraft") then
 			{
 				echo *** Missing %herb2 — cannot continue!

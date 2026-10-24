@@ -1369,43 +1369,58 @@ lack.material:
                var main.storage $MC_ENGINEERING.STORAGE
                goto purchase.material
           }
-     if ("%discipline" = "remed") then
-          {
-               ### ORDERS FROM THE ALCHEMY STORE
-               if ("%order.type" = "nemoih") then var order.num 3
-               if ("%order.type" = "plovik") then var order.num 4
-               if ("%order.type" = "jadice") then var order.num 5
-               if ("%order.type" = "nilos") then var order.num 6
-               if ("%order.type" = "georin") then var order.num 7
-               if ("%order.type" = "riolur") then var order.num 8
-               if ("%order.type" = "junliar") then var order.num 9
-               if ("%order.type" = "junilar") then var order.num 9
-               if ("%order.type" = "aevaes") then var order.num 10
-               if ("%order.type" = "genich") then var order.num 11
-               if ("%order.type" = "ojhenik") then var order.num 12
-               if ("%order.type" = "flowers") then var order.num 13
-               if ("%order.type" = "root") then var order.num 14
-               if ("%order.type" = "pollen") then var order.num 15
-               ### HERBS THAT HAVE TO BE FORAGED!
+	if ("%discipline" = "remed") then
+		{
+			### ORDERS FROM THE ALCHEMY STORE
+			if ("%order.type" = "nemoih") then var order.num 3
+			if ("%order.type" = "plovik") then var order.num 4
+			if ("%order.type" = "jadice") then var order.num 5
+			if ("%order.type" = "nilos") then var order.num 6
+			if ("%order.type" = "georin") then var order.num 7
+			if ("%order.type" = "riolur") then var order.num 8
+			if ("%order.type" = "junliar") then var order.num 9
+			if ("%order.type" = "junilar") then var order.num 9
+			if ("%order.type" = "aevaes") then var order.num 10
+			if ("%order.type" = "genich") then var order.num 11
+			if ("%order.type" = "ojhenik") then var order.num 12
+			if ("%order.type" = "flowers") then var order.num 13
+			if ("%order.type" = "root") then var order.num 14
+			if ("%order.type" = "pollen") then var order.num 15
+
+			### HERBS THAT HAVE TO BE FORAGED!
 			if matchre("%order.type", "(eghmokm?o?s?s?|eghmok\.moss)") then gosub GETHERBS eghmok moss
 			if matchre("%order.type", "(blue flowers?|blue\.flowers?)") then gosub GETHERBS blue flower
-               if ("%order.type" = "dioica") then gosub GETHERBS dioica sap
-               if ("%order.type" = "blocil") then gosub GETHERBS blocil berries
-               if ("%order.type" = "belradi") then gosub GETHERBS belradi moss
-               if ("%order.type" = "yelith") then gosub GETHERBS yelith root
-               if ("%order.type" = "lujeakave") then gosub GETHERBS lujeakave root
-               if ("%order.type" = "hulij") then gosub GETHERBS hulij leaf
-               if ("%order.type" = "nuloe") then gosub GETHERBS nuloe stem
-               if ("%order.type" = "sufil") then gosub GETHERBS sufil sap
-               if ("%order.type" = "muljin") then gosub GETHERBS muljin sap
+			if ("%order.type" = "dioica") then gosub GETHERBS dioica sap
+			if ("%order.type" = "blocil") then gosub GETHERBS blocil berries
+			if ("%order.type" = "belradi") then gosub GETHERBS belradi moss
+			if ("%order.type" = "yelith") then gosub GETHERBS yelith root
+			if ("%order.type" = "lujeakave") then gosub GETHERBS lujeakave root
+			if ("%order.type" = "hulij") then gosub GETHERBS hulij leaf
+			if ("%order.type" = "nuloe") then gosub GETHERBS nuloe stem
+			if ("%order.type" = "sufil") then gosub GETHERBS sufil sap
+			if ("%order.type" = "muljin") then gosub GETHERBS muljin sap
 			if ("%order.type" = "hulnik") then gosub GETHERBS hulnik grass
-               if ("%order.type" = "cebi") then gosub GETHERBS cebi root
+			if ("%order.type" = "cebi") then gosub GETHERBS cebi root
 			if ("%order.type" = "hisan") then gosub GETHERBS hisan flower
-               if matchre("%order.type", "(belradi|eghmok|yelith|lujeakave|hulij|nuloe|sufil|muljin|cebi|hulnik|blue flower|hisan|hulij|dioica|blocil)") then goto first.order
-               if !matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/25)
-               if matchre("%order.type", "pollen|root") then evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/4)
-               goto purchase.material
-          }
+			if matchre("%order.type", "(belradi|eghmok|yelith|lujeakave|hulij|nuloe|sufil|muljin|cebi|hulnik|blue flower|hisan|hulij|dioica|blocil)") then goto first.order
+
+			# --- secondary herb (ojhenik etc.) needs its own required amount ---
+			if matchre("%order.type", "(ojhenik|aevaes|riolur|nilos|muljin|sufil|nemoih|plovik|jadice|dioica|belradi)") then
+				{
+					evalmath herb2.needed %order.quantity
+					evalmath reqd.order ceiling((%herb2.needed - %%order.type.material.volume)/25)
+					if (%reqd.order < 1) then var reqd.order 1
+				}
+			if matchre("%order.type", "pollen|root") then
+				{
+					evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/4)
+				}
+			if !matchre("%order.type", "(pollen|root|ojhenik|aevaes|riolur|nilos|muljin|sufil|nemoih|plovik|jadice|dioica|belradi)") then
+				{
+					evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/25)
+				}
+			goto purchase.material
+		}
      if ("%discipline" = "artif") then
           {
                evalmath reqd.order %order.quantity - %%order.pref.item.count

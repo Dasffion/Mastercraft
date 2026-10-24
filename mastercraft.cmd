@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/16/2026
-# v 1.9.5
+# Latest updates 10/24/2026
+# v 1.9.6
 #
 #  Script Usage: 
 #
@@ -116,12 +116,17 @@ include mc_include.cmd
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
 
+# v 1.9.6
+# Fixed bug not restocking enough secondary ingredients for Remedy products that requires 2 herbs
+# Was only restocking enough secondary herbs for one or two workorders in some cases
+# Should now get enough secondary herbs for all workorders
+
 # v 1.9.5
 # Moved lack.material gosub to mc_include so it can work with MC_Mix and other scripts 
 
 # v 1.9.4
 # Should fix bug in not restocking secondary ingredients for Outfitting/Forging 
-# Fixed several other bugs in counting igrendients 
+# Fixed several other bugs in counting igredients 
 
 # v 1.9.3
 # Counting of materials/stacks should now be much faster
@@ -935,11 +940,18 @@ calc.material:
                          var order.type %herb1
                          gosub lack.material %herb1
                     }
-               if ((%order.chapter = 2) && (%order.quantity > %%herb2.material.volume)) then 
-                    {
-                         var order.type %herb2
-                         gosub lack.material %herb2
-                    }
+			if ((%order.chapter = 2) && (%order.quantity > %%herb2.material.volume)) then 
+				{
+					var order.type %herb2
+					# use a dedicated required amount for herb2 (1 piece per potion is typical)
+					evalmath herb2.needed %order.quantity
+					if (%herb2.needed > %%herb2.material.volume) then
+						{
+							evalmath reqd.order ceiling((%herb2.needed - %%herb2.material.volume)/25)
+							if (%reqd.order < 1) then var reqd.order 1
+							gosub lack.material
+						}
+				}
                gosub combine.check "%main.storage" %herb1
                pause 0.5
                echo Total Herbs Required: %mass.volume
