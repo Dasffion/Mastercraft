@@ -2,85 +2,85 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/24/2026
-# v 1.9.6
+# Latest updates 10/30/2026
+# v 1.9.7
 #
-#  Script Usage: 
+#  Script Usage:
 #
 #  EDIT: MC.Setup.cmd - This contains variables to control crafting settings for all your characters
 #
 #  .mastercraft -- to only do one work order
 #  .mastercraft (no. of orders) --to perform more than one
 #  .mastercraft (no. of orders) (difficulty) --to ask for a different difficulty than you have set in your character profile.
-#  
-#  ex: .mastercraft 2 - complete 2 work orders at your set difficulty 
+#
+#  ex: .mastercraft 2 - complete 2 work orders at your set difficulty
 #      .mastercraft 4 challenging - complete 4 challenging workorders
-#  
+#
 #  Simply setup your variables in MC_Setup, go to the crafting society you want to train in and start mastercraft.
 #  Mastercraft automatically detects which discipline to train based on which Society you start in.
 #
-#  Mastercraft takes the tedium out of workorders, and works in practically every society for practically every craft. 
+#  Mastercraft takes the tedium out of workorders, and works in practically every society for practically every craft.
 #  It will get and turn in orders, buy extra parts, repair tools, manage materials, check item quality, and will even reduce your order difficulty if you fail the item too often.
-#  
+#
 #  Mastercraft Suite supports the following disciplines:
 #  FORGING - Weapon / Armor / Blacksmithing
 #  ENGINEERING - Carving / Shaping / Tinkering
 #  OUTFITTING - Tailoring
 #  ALCHEMY - Remedies
 #  ENCHANTING - Artificing
-#  
+#
 #  There are a few things to note in using this script, however:
-#  
+#
 #  1) You must have ALL required tools and books in your crafting bag for the craft you choose
-#     ( Discipline book / Logbook for work orders / All the tools for that profession ) 
+#     ( Discipline book / Logbook for work orders / All the tools for that profession )
 #     It does support the special "All Disciplines" Crafting Book by default - no config needed
 #
 #     NOTE: Mastercraft does buy normal shop supplies/materials such as:
 #     leather/bone, sigils, ingots, rocks, coal, herbs, etc
 #     You just need to make sure you have all the tools!
-#  
+#
 #  2) You must have some gold/plat for the script to handle buying supplies / repairing tools.
-#  
+#
 #  3) Script DOES handle Self-Repairing tools if you have the blacksmith technique (Advanced Tool Repair).
 #  If tools are damaged beyond self-repair - It will take them to the NPC repair like normal.
-#  
+#
 #  4) Workorders can only be automated within societies, using the mastercraft script.
 #  Individual scripts can be run elsewhere if you desire.
 #  Part purchasing and order turn-in will NOT be automatic when the scripts are run solo.
-#  
+#
 #  5) Make sure your stock materials (specifically ingots) are managed in sizes your character can lift.
 #  If he can't pick up an ingot, I don't know how you'll be able to cut it down to a more manageable size.
-#  
+#
 #  6) If you have less than 50 Forging skill, your analyzes may not pick up item quality or ingot size.
 #  To do orders with low forging skill, be sure to have a YARDSTICK to measure with.
 #  Your character will otherwise not be able to tell if he has enough material to actually complete the order.
-#  
+#
 #  7) Recently added Alchemy support for higher level (challenging/hard) work orders using FORAGED herbs that cannot be bought at the store
 #  Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ needed??)
 #  It auto forages the herbs needed and processes them (press/grind) to be used in the recipes.
-#  
+#
 #  8) KERTIGEN HALO support was added in a past patch - but it may not work well at all (untested recently)
 #  Recommend DO *NOT* USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!
 #  If you ever add/remove a tool that isn't in PERFECT condition - It DAMAGES ALL THE TOOLS IN YOUR HALO!
 #  Not only that, but they are very clumsy to work with. A highly flawed MT item!
 #  DO NOT USE HALOS AT ALL. It is not worth the slightly reduced itemcount.
-#  
+#
 #  9) TECHNIQUES - as you gain crafting ranks you can learn more techniques for each discipline.
 #  Type CRAFT to see your available 'points' - Recommended to learn new techniques often.
 #  Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.
 #  Don't forget to choose a CAREER and HOBBY as that will get you even more points to work with.
 #
-#  10) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) 
-#  unless you want to parse through them yourself and edit all the script calls. 
-#  Each subscript is called by name here and runs as a second, separate script. This allows for each subscript to be used standalone. 
+#  10) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd)
+#  unless you want to parse through them yourself and edit all the script calls.
+#  Each subscript is called by name here and runs as a second, separate script. This allows for each subscript to be used standalone.
 #  Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running Be very careful when renaming scriptfiles!
-#  
+#
 #  Be sure to setup your character's crafting profile in *MC_SETUP.CMD* BEFORE USING THESE SCRIPTS!
 #  There are some things scripting cannot do for you, such as make personal decisions.
 #
 #  MC_SETUP.cmd contains all the variables to control your character's crafting settings
 #  MC_SETUP is the only script you need to edit
-#  
+#
 #   Included in this suite:
 #   mastercraft.cmd
 #   mc_include.cmd
@@ -100,10 +100,10 @@
 #   mc_triggers.cmd
 #
 #  Each script can be run completely standalone from Mastercraft
-#  If you want to create multiple items or just individual orders. 
-#  Using them as such will require you to be responsible for your own material management and quality control. 
+#  If you want to create multiple items or just individual orders.
+#  Using them as such will require you to be responsible for your own material management and quality control.
 #  Be sure to read the beginning section for each script if you intend to use it standalone.
-#  
+#
 #  Happy Crafting!!
 #
 #debug 10
@@ -116,91 +116,98 @@ include mc_include.cmd
 #Write up stone material management. Sift through deeds to find appropriate size and workability.
 #Tempering, balancing, honing, sealing, reinforcing scripts.
 
-# v 1.9.6
+# v 1.9.7 - Shroom
+# NEW OUTFITTING VARIABLE - MC_KNITNEEDLES
+# Can now set different variables for Knitting Needles and Sewing Needles
+# MC_Knit will use MC_KNITNEEDLES
+# MC_Sew will use MC_NEEDLES
+# Added multiple new Outfitting Challenging/Hard recipes
+# Added - ALL AESRY CRAFTING SOCIETIES
+#
+# v 1.9.6 - Shroom
 # Fixed bugs not restocking enough secondary ingredients for Remedy products that requires 2 herbs
 # Was only restocking enough secondary herbs for one or two workorders in some cases
 # Should now get enough secondary herbs for all workorders
 
-# v 1.9.5
-# Moved lack.material gosub to mc_include so it can work with MC_Mix and other scripts 
+# v 1.9.5 - Shroom
+# Moved lack.material gosub to mc_include so it can work with MC_Mix and other scripts
 
-# v 1.9.4
-# Should fix bug in not restocking secondary ingredients for Outfitting/Forging 
-# Fixed several other bugs in counting igredients 
+# v 1.9.4 - Shroom
+# Should fix bug in not restocking secondary ingredients for Outfitting/Forging
+# Fixed several other bugs in counting igredients
 
-# v 1.9.3
+# v 1.9.3 - Shroom
 # Counting of materials/stacks should now be much faster
-# Ordinal counting will count up to nineteenth (19) now 
-# Fixed bug in analyzing of the final product not working 
-# Migrated all major triggers to mc_include for consistency 
+# Ordinal counting will count up to nineteenth (19) now
+# Fixed bug in analyzing of the final product not working
+# Migrated all major triggers to mc_include for consistency
 
-# v 1.9.2
+# v 1.9.2 - Shroom
 # Fixed bug in counting materials resetting volume variable and not properly counting total in bags
 # Will now attempt to COMBINE any leftover alchemy recipes in bags after workorder - to prevent items buildup over time
-# (Most promimently happens in REMEDY workorders after breaking up potions for workorders) 
+# (Most promimently happens in REMEDY workorders after breaking up potions for workorders)
 #
-# v 1.9.1
+# v 1.9.1 - Shroom
 # Fixed several bugs in Outfitting and Alchemy counting of materials
 # Will now count materials UP (starting at first) instead of counting down, until it finds one it can't count
-# This fixed an issue in script sometimes not calculating the proper amount of a materials it had 
+# This fixed an issue in script sometimes not calculating the proper amount of a materials it had
 # Also added proper counting for herb2 in Remedies when a second herb is required
-# Fixed another bug causing a loop sometimes in Outfitting  
+# Fixed another bug causing a loop sometimes in Outfitting
 #
-#
-# v 1.9
-# Added recognition of 'Remedial Herb Gathering' tech for <precise> herb gathering 
+# v 1.9 - Shroom
+# Added recognition of 'Remedial Herb Gathering' tech for <precise> herb gathering
 # When this tech is known it will use "forage <herb> precise" when gathering herbs
 # Added Engineering protection logic to avoid script errors with different types of stacks
 # Having Wolf and Deer bone stacks in the same crafting container would cause script errors
 # Now should put all non used stacks (the one you aren't using) into MC_REDFLOWER.STORAGE
 # Or it will drop the stack if that is not set - This fixes errors counting/combining stacks
 
-# v 1.8
+# v 1.8 - Shroom
 # Added Muspari Enchanting Society
 # Added "a flask of golden oil" as recognizable oil to use in Forging / Repair Tools
 # Fixed bugs in Ordering logic for oil/brush, sometimes using undefined global variable
 
-# v 1.7
-# Added even more challenging / hard Alchemy recipes 
-# Converted all Order tvar global variables to local variables (when shopping) 
+# v 1.7 - Shroom
+# Added even more challenging / hard Alchemy recipes
+# Converted all Order tvar global variables to local variables (when shopping)
 # Fixes bugs with ordering from menu sometimes not correctly populating the menu number
 # Removed unnecessary tool repair checks from the start of every script run
-# As mastercraft already checks repairs, and loops between orders will check repair 
+# As mastercraft already checks repairs, and loops between orders will check repair
 # Fixed bugs in alchemy between red and blue flowers - should now properly use both depending on recipe
 
-# v 1.6
+# v 1.6 - Shroom
 # Robustified Tool Repair checks / Fixed trigger
 # Fixed bugs in Alchemy and Outfitting prep
 
 # v 1.5 - Shroom
 # MAJOR MASTERCRAFT OVERHAULS - After extensive exhaustive testing
 # Robustified SHOP BUYING / ORDER logic - In many cases was missing the order menu and causing order errors
-# Added MULTIPLE new challenging level recipes in ALCHEMY / OUTFITTING 
+# Added MULTIPLE new challenging level recipes in ALCHEMY / OUTFITTING
 # (Would often skip endlessly trying to find a challenging workorder it supported)
-# ALCHEMY - NOW SUPPORTS FORAGED HERB RECIPES / HIGHER LEVEL RECIPES 
+# ALCHEMY - NOW SUPPORTS FORAGED HERB RECIPES / HIGHER LEVEL RECIPES
 # Added support for BLUE FLOWER RECIPES like the hangover potion
 # AUTO HERB FORAGE LOGIC - It forages a bunch of the herb - processes it / crushes it for materials
-# Alchemy plans in the future to support even more higher-end recipes by foraging herbs first 
+# Alchemy plans in the future to support even more higher-end recipes by foraging herbs first
 # (As many herbs needed for recipes cannot be bought at the shop but can be foraged/processed)
-# Fixed many bugs in Enchanting logic - with buying spheres and underbuying sigils 
-# Fixed bugs in Outfitting calling the wrong order noun and problems with pins logic 
-# Robustified restocking on thread when Outfitting 
-# Fixed several bugs in Self Repair logic 
+# Fixed many bugs in Enchanting logic - with buying spheres and underbuying sigils
+# Fixed bugs in Outfitting calling the wrong order noun and problems with pins logic
+# Robustified restocking on thread when Outfitting
+# Fixed several bugs in Self Repair logic
 # Fixed numerous other bugs I can't even remember everything
-# ABANDONED ANY MORE DEVELOPMENT ON HALOS - MOST TRASH MT ITEM EVER - I DUMPED MINE 
-# Still has Halo support but I added huge Warnings in the Variables that it's NOT recommended 
+# ABANDONED ANY MORE DEVELOPMENT ON HALOS - MOST TRASH MT ITEM EVER - I DUMPED MINE
+# Still has Halo support but I added huge Warnings in the Variables that it's NOT recommended
 # And there may be Halo bugs as it has not been tested in recent updates, but again.. it's TRASH.
 
 # v 1.4 - Shroom
 # Fixed multiple bugs in order processing logic for: Enchanting / Outfitting / Alchemy skills
 # Fix bug in Enchanting logic for some recipes not buying the secondary sigils needed
 # Fixed bug in not always buying secondary ingredients for Outfitting (padding)
-# Fixed bug in Outfitting counting / calculating leather amount 
+# Fixed bug in Outfitting counting / calculating leather amount
 # Added cushions for buying additional secondary ingredients for Outfitting / Enchanting (large padding / sigils etc )
 # Sometimes would not buy enough secondaries to complete orders and bug out / endless loop in the middle of crafting
-# Also fixed MULTIPLE various syntax issues 
+# Also fixed MULTIPLE various syntax issues
 
-#1.3
+#1.3 - Dasffion
 # Added tinkering. If you do not want to press mechanisms bring your own.
 # Added logic for not taking work orders with more than 70 lumber due to weight and stack issues
 # Added study earlier in the process to determine difficulty. This will prevent buying mats for a work order that you will abandon
@@ -218,7 +225,7 @@ include mc_include.cmd
 # When finished with crafting, should put all the tools back on the Halo
 # Added support to work with the Master Kertigan Crafting Books
 
-#Bug Fixes v 0.1.6
+#Bug Fixes v 0.1.6 - Dasffion
 #Added bone armor to carving.
 #Removed oil purchasing from grind.cmd, is now handled in mastercraft.cmd.
 #Smoothed out some responses in carve.cmd, including some analyzes.
@@ -233,7 +240,7 @@ include mc_include.cmd
 
 
 
-TOP:     
+TOP:
 ####################################################################################################
 #### Various variables and actions needed for script functionality. Most are just initializing for later manipulation.
 ####################################################################################################
@@ -275,7 +282,7 @@ TOP:
      if ("%discipline" = "carving") then
           {
                if ("%order.pref" = "stone") then var work.tools $MC_CHISEL|$MC_RIFFLER|$MC_RASP
-               if ("%order.pref" = "bone") then 
+               if ("%order.pref" = "bone") then
                     {
                          var order.pref stack
                          var work.tools $MC_SAW|$MC_RIFFLER|$MC_RASP
@@ -285,7 +292,7 @@ TOP:
           {
                var work.tools $MC_DRAWKNIFE|$MC_SHAPER|$MC_RASP|$MC_CLAMP|$MC_CARVINGKNIFE
           }
-     if ("%discipline" = "tinkering") then 
+     if ("%discipline" = "tinkering") then
           {
                var work.tools $MC_DRAWKNIFE|$MC_SHAPER|$MC_CLAMP|$MC_PLIERS|$MC_TINKERTOOL|$MC_CARVINGKNIFE
           }
@@ -300,7 +307,7 @@ TOP:
      action (analyze) off
 ##############################
 #
-# Check for Clerk Tickets 
+# Check for Clerk Tickets
 #
 ##############################
      put #var MC_WORK.TOOLS %work.tools
@@ -385,7 +392,7 @@ new.order.wait:
      echo Pausing 2 seconds to get another order.
      pause 2
      goto new.order
-     
+
 ##############################
 #
 #  Setting the Crafting Item
@@ -398,10 +405,10 @@ identify.order:
                if %order.quantity > $MC_MAX.ORDER then goto new.order
                if %order.quantity < $MC_MIN.ORDER then goto new.order
           }
-     
+
 
      if ("%discipline" = "weapon") then
-          {     
+          {
                matchre chapter.1 This logbook is tracking a work order requiring you to craft (a metal dagger|a metal kythe|a metal carving knife|a metal oben|a metal briquet|a metal koummya|a metal stiletto|a metal rapier|a metal poignard|a metal pasabas|a metal pugio|a metal thrusting blade|a metal short sword|a metal scimitar|a metal katar|a metal sabre|a metal misericorde|a metal hanger|a metal kris|a metal parang|a metal takouba|a metal curlade|a metal jambiya|a metal adze|a metal leaf blade sword|a metal sashqa|a metal telek|a metal mambeli|a metal nehlata|a metal gladius|a metal falcata|a metal baselard|a metal throwing dagger|a light throwing axe|a metal dart|a metal hand axe|a metal foil|a metal hatchet|a metal sunblade|a metal cutlass|a metal kasai|a metal shotel|a metal dao) from any material\.
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a metal broadsword|a metal namkomba|a metal arzfilt|a metal hunting sword|a metal kudalata|a metal nimsha|a metal spatha|a metal back-sword|a metal longsword|a metal recade|a metal round axe|a metal battle axe|a metal nehdalata|a metal robe sword|a metal condottiere|a metal falchion|a metal cinquedea|a metal schiavona|a metal abassi|a metal hurling axe|a metal dagasse) from any material\.
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (a metal two-handed sword|a metal kaskara|a metal warring axe|a metal shh'oi'ata|a metal marauder blade|a metal greatsword|a metal greataxe|a metal flamberge|a metal claymore|a metal periperiu sword|a metal karambit|a metal double axe|a metal twin-point axe|a metal igorat axe) from any material\.
@@ -443,7 +450,7 @@ identify.order:
                matchre chapter.3 This logbook is tracking a work order requiring you to craft (a cloth napkin|a cloth talisman pouch|a cloth rag|a cloth herb pouch|a cloth hip pouch|a cloth carryall|a cloth weapon strap|a cloth knapsack|a cloth gem pouch|a cloth backpack|a cloth towel|a cloth charm bag|a cloth thigh bag|a cloth bandolier|a cloth pouch|a cloth saddle pad|a cloth haversack|a cloth utility belt|a cloth duffel bag|a cloth sack|a small cloth rucksack|a cloth bag|a cloth rucksack|a cloth arm pouch) from any (material|fabric)\.
                matchre chapter.4 This logbook is tracking a work order requiring you to craft (a quilted cloth mask|some insulated cloth pants|a quilted cloth aventail|an insulated cloth hood|a padded cloth mask|a quilted cloth tabard|a padded cloth aventail|a padded cloth mantle|a quilted cloth cap|a padded cloth vest|some quilted cloth gloves|an insulated cloth tasset|some quilted cloth pants|some padded cloth sleeves|an insulated cloth mask|some insulated cloth vambraces|an insulated cloth aventail|a padded cloth tabard|a padded cloth cap|a quilted cloth shirt|some padded cloth gloves|a quilted cloth robe|a quilted cloth hood|an insulated cloth mantle|a quilted cloth tasset|an insulated cloth vest|some quilted cloth vambrace|some insulated cloth sleeves|some padded cloth pants|an insulated cloth tabard|an insulated cloth cap|a padded cloth shirt|some insulated cloth gloves|a quilted cloth hauberk|a padded cloth hood|a padded cloth robe|a quilted cloth mantle|an insulated cloth shirt|a quilted cloth vest|a padded cloth hauberk|a padded cloth tasset|an insulated cloth robe|some quilted cloth sleeves|an insulated cloth hauberk|some padded cloth vambraces) from any (material|fabric)\.
                matchre chapter.5 This logbook is tracking a work order requiring you to craft (a knitted napkin|a knitted skirt|a knitted armband|a knitted shirt|some knitted socks|some knitted gloves|a knitted ankleband|some knitted legwarmers|a knitted headband|a knitted towel|some knitted mittens|some knitted hose|a knitted hood|a knitted sweater|some knitted booties|a knitted cloak|a knitted hat|a knitted blanket|a knitted scarf|some knitted slippers) from any (?:material|fabric)\.
-               matchre chapter.7 This logbook is tracking a work order requiring you to craft (some fingerless gloves|a leather dress belt|a leather ankleband|a segmented belt|a leather armband|a sleeveless leather shirt|a leather belt|a leather shirt|a leather headband|a double-wrapped belt|a leather eyepatch|a leather dress|some elbow-length gloves|a leather tunic|a commoner's cloak|a hooded leather cloak|a leather hat|a leather utility belt|some leather shoes|a leather cape|some leather moccasins|a deeply-hooded cloak|a leather cloak|a leather skirt) from any (cloth|material|leather)\.
+               matchre chapter.7 This logbook is tracking a work order requiring you to craft (some fingerless gloves|a leather dress belt|a leather ankleband|a segmented belt|a leather armband|a sleeveless leather shirt|a leather belt|a leather shirt|a leather headband|a double-wrapped belt|a leather eyepatch|a leather dress|some elbow-length gloves|a leather tunic|a commoner's cloak|a hooded leather cloak|a leather hat|a leather utility belt|some leather shoes|a leather cape|some leather moccasins|a deeply-hooded cloak|a leather cloak|a leather skirt|a leather hunting shirt|a leather mining belt|a leather dueling shirt|a leather war belt|an? leather artisan's belt) from any (cloth|material|leather)\.
                matchre chapter.8 This logbook is tracking a work order requiring you to craft (a leather weapon strap|a leather saddle) from any (material|leather)\.
                matchre chapter.9 This logbook is tracking a work order requiring you to craft (a rugged leather mask|a thick leather tasset|a rugged leather aventail|a rugged leather jerkin|a thick leather mask|a coarse leather cowl|a thick leather aventail|some coarse greaves|a rugged leather cap|some coarse vambraces|some rugged gloves|a coarse leather tasset|a coarse leather mask|a thick leather vest|a thick leather cap|some thick leather sleeves|some thick gloves|a thick leather jerkin|a rugged leather helm|a rugged leather robe|a coarse leather aventail|a rugged leather coat|a coarse leather cap|a thick leather mantle|some coarse gloves|a coarse leather vest|a thick leather helm|some coarse leather sleeves|a rugged leather cowl|a coarse leather mantle|some rugged greaves|a coarse leather jerkin|some rugged vambraces|a thick leather coat|a rugged leather tasset|some rugged leathers|a coarse leather helm|a thick leather robe|a thick leather cowl|a coarse leather coat|some thick greaves|some thick leathers|some thick vambraces|a coarse leather robe|some rugged leather sleeves|some coarse leathers|a rugged leather vest|a rugged leather mantle) from any (material|leather)\.
                matchre chapter.10 This logbook is tracking a work order requiring you to craft (a leather shield handle|a leather oval shield|a long leather cord|a leather targe|a leather target shield|a medium leather shield|an ordinary leather shield|a leather kite shield|a leather buckler|a small leather shield) from any (material|leather)\.
@@ -489,7 +496,7 @@ identify.order:
                matchre chapter.5 This logbook is tracking a work order requiring you to craft (a simple stonebow|a stonebow |a sturdy stonebow|a alpine stonebow|a saddle stonebow|a lobbing stonebow|a steppe stonebow|a battle stonebow|a forester's stonebow|a slingbow|a pelletbow) from any material\.
                #matchre chapter.7 This logbook is tracking a work order requiring you to craft (boar-tusk bolts|cougar-claw bolts|hele'la bolts|angiswaerd bolts|sabertooth bolts|elsralael bolts|basilisk bolts|soot-stained bolts|ice-adder bolts|drake-fang bolts|jagged-horn bolts) from any material\.
                matchre chapter.9 This logbook is tracking a work order requiring you to craft (a small music box|a simple telescope|a miniature female soldier|a miniature male soldier|a musical box|a telescope|a clockwork telescope)
-               
+
                put read my %society.type logbook
                matchwait 3
                goto new.order.wait
@@ -506,7 +513,7 @@ identify.order:
                matchwait 3
                goto new.order.wait
           }
-               
+
      if ("%discipline" = "artif") then
                {
                matchre chapter.2 This logbook is tracking a work order requiring you to craft (a radiant trinket|a mana trinket|a cambrinth retuner|a flash trinket|a wind trinket|an earth trinket)
@@ -519,7 +526,7 @@ identify.order:
                }
      echo Discipline is not set properly
      put #echo >Log Discipline is not set properly
-     exit          
+     exit
 
 chapter.name:
      if ("%discipline" = "tinkering") then var order.type lumber
@@ -531,7 +538,7 @@ chapter.name:
      echo Chapter Item Is In : %order.chapter
      echo Quantity Desired : %order.quantity
      goto keep.order
-      
+
 chapter.1:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type cloth
@@ -540,7 +547,7 @@ chapter.1:
      var order.chapter 1
      pause .5
      goto chapter.name
-     
+
 chapter.2:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type cloth
@@ -549,7 +556,7 @@ chapter.2:
      var order.chapter 2
      pause .5
      goto chapter.name
-     
+
 chapter.3:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type cloth
@@ -558,7 +565,7 @@ chapter.3:
      var order.chapter 3
      pause .5
      goto chapter.name
-     
+
 chapter.4:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type cloth
@@ -567,7 +574,7 @@ chapter.4:
      var order.chapter 4
      pause .5
      goto chapter.name
-     
+
 chapter.5:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type yarn
@@ -576,7 +583,7 @@ chapter.5:
      var order.chapter 5
      pause .5
      goto chapter.name
-     
+
 chapter.6:
      var full.order.noun $1
      if ("%discipline" = "carving") then var order.type stack
@@ -584,7 +591,7 @@ chapter.6:
      var order.chapter 6
      pause .5
      goto chapter.name
-     
+
 chapter.7:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type leather
@@ -593,7 +600,7 @@ chapter.7:
      var order.chapter 7
      pause .5
      goto chapter.name
-     
+
 chapter.8:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type leather
@@ -602,7 +609,7 @@ chapter.8:
      var order.chapter 8
      pause .5
      goto chapter.name
-     
+
 chapter.9:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type leather
@@ -611,7 +618,7 @@ chapter.9:
      var order.chapter 9
      pause .5
      goto chapter.name
-     
+
 chapter.10:
      var full.order.noun $1
      if ("%discipline" = "tailor") then var order.type leather
@@ -636,7 +643,7 @@ turn.page:
      gosub GET my %discipline book
      if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
      action (book) on
-     #### ADDED THIS LINE TO HANDLE MT BOOKS THAT HAVE ALL DISCIPLINES 
+     #### ADDED THIS LINE TO HANDLE MT BOOKS THAT HAVE ALL DISCIPLINES
      if matchre("$righthand|$lefthand", "crafting book") then
 		{
 			put turn my book to discipline %discipline
@@ -653,7 +660,7 @@ turn.page:
 	if !matchre("$righthand|$lefthand", "book") then gosub GET %discipline book
      if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
      #gosub STUDY my book
-     if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+     if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
           {
                math difficultytry add 1
                put #echo >Log Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
@@ -662,7 +669,7 @@ turn.page:
           }
      goto calc.material
 
-      
+
 #################################
 #
 #  Gathering materials and parts
@@ -724,7 +731,7 @@ calc.material:
      if ("%discipline" = "tailor") then
           {
                pause 0.1
-               action (book) on     
+               action (book) on
                if !matchre("$righthand", "book") then gosub GET my %discipline book
 			pause 0.5
 			pause 0.1
@@ -778,9 +785,9 @@ calc.material:
                waitforre .*bone stack.*\((\d+) (piece|pieces)\)
                var volume $1
 			pause 2
-               action (book) off          
+               action (book) off
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                     {
                          gosub PUT_IT my book in my %main.storage
                          math difficultytry add 1
@@ -791,7 +798,7 @@ calc.material:
                var mass.volume %volume
                evalmath mass.volume %volume * %order.quantity
    			if (("%order.pref" = "stack") && (%mass.volume > 99)) then goto new.order
-               gosub parts.inv          
+               gosub parts.inv
                if %%order.pref.item.count > 11 then var %order.pref.item.count 11
                if %%order.pref.item.count > 0 then gosub count.material stack
                if %%order.pref.deed.count > 11 then var %order.pref.deed.count 11
@@ -824,7 +831,7 @@ calc.material:
 			pause 0.1
                if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
 			pause 0.2
-               #################################################################               
+               #################################################################
                pause 0.2
                send read my book
                waitforre .*lumber.*\((\d+) (piece|pieces)\)
@@ -835,14 +842,14 @@ calc.material:
 			pause 0.1
                evalmath mass.volume %volume * %order.quantity
                if (%mass.volume > 70) then goto new.order
-               gosub parts.inv          
+               gosub parts.inv
                if (%%order.pref.item.count > 11) then var %order.pref.item.count 11
                if (%%order.pref.item.count > 0) then gosub count.material lumber
                if ("%assemble2" = "mechanism") then gosub count.material mechanism
                if ("%assemble3" = "mechanism") then gosub count.material mechanism
                if (%%order.pref.deed.count > 11) then var %order.pref.deed.count 11
                if (%%order.pref.deed.count > 0) then gosub count.material deed
-               if (%mass.volume > %material.volume) then gosub lack.material     
+               if (%mass.volume > %material.volume) then gosub lack.material
                gosub combine.check "%main.storage" %order.pref
                pause 0.5
                echo Total Pieces Req'd: %mass.volume
@@ -860,12 +867,12 @@ calc.material:
                          gosub ORDER %stain.order
                          gosub PUT_IT my stain in my %main.storage
                     }
-         }     
+         }
      if matchre("%discipline", "remed") then
           {
                pause .1
                action (book) on
-               pause 0.5          
+               pause 0.5
                if !matchre("$righthand", "book") then gosub GET my %discipline book
                pause 0.2
                if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
@@ -879,12 +886,12 @@ calc.material:
                gosub EMPTY_HANDS
                var herb1 NULL
                var herb2 NULL
-			### SET THE PRIMARY HERB DEPENDING ON THE RECIPE 
+			### SET THE PRIMARY HERB DEPENDING ON THE RECIPE
                if matchre("%full.order.noun", "(neck salve|neck unguent)") then var herb1 georin
                if matchre("%full.order.noun", "(abdominal salve|abdominal unguent)") then var herb1 nilos
                if matchre("%full.order.noun", "(chest salve|chest unguent)") then var herb1 plovik
                if matchre("%full.order.noun", "(head salve|head unguent)") then var herb1 nemoih
-               if matchre("%full.order.noun", "(limb salve|limb unguent)") then var herb1 jadice 
+               if matchre("%full.order.noun", "(limb salve|limb unguent)") then var herb1 jadice
                if matchre("%full.order.noun", "(neck potion|neck tonic)") then var herb1 riolur
                if matchre("%full.order.noun", "(chest potion|chest tonic)") then var herb1 root
                if matchre("%full.order.noun", "(back potion|back tonic)") then var herb1 junliar
@@ -893,7 +900,7 @@ calc.material:
                if matchre("%full.order.noun", "(eye potion|eye tonic)") then var herb1 aevaes
                if matchre("%full.order.noun", "(face ointment|face poultice)") then var herb1 pollen
                if matchre("%full.order.noun", "(body ointment|body poultice)") then var herb1 genich
-               ### SPECIAL ORDERS - HERBS THAT MUST BE FORAGED / PROCESSED FIRST 
+               ### SPECIAL ORDERS - HERBS THAT MUST BE FORAGED / PROCESSED FIRST
 			if matchre("%full.order.noun", "(limb poultice|limb ointment)") then var herb1 blocil
 			if matchre("%full.order.noun", "general elixir") then var herb1 belradi
 			if matchre("%full.order.noun", "hangover potion") then var herb1 blue.flower
@@ -925,7 +932,7 @@ calc.material:
                var %herb2.material.volume 0
                gosub parts.inv
                #if (%%herb1.item.count > 11) then var %%herb1.item.count 11
-               if (%%herb1.item.count > 0) then 
+               if (%%herb1.item.count > 0) then
                     {
                          gosub count.material %herb1
                          var %herb1.material.volume %material.volume
@@ -935,12 +942,12 @@ calc.material:
                          gosub count.material %herb2
                          var %herb2.material.volume %material.volume
                     }
-               if (%mass.volume > %%herb1.material.volume) then 
+               if (%mass.volume > %%herb1.material.volume) then
                     {
                          var order.type %herb1
                          gosub lack.material %herb1
                     }
-			if ((%order.chapter = 2) && (%order.quantity > %%herb2.material.volume)) then 
+			if ((%order.chapter = 2) && (%order.quantity > %%herb2.material.volume)) then
 				{
 					var order.type %herb2
 					# use a dedicated required amount for herb2 (1 piece per potion is typical)
@@ -978,7 +985,7 @@ calc.material:
                          gosub PUT_IT my nugget in my %main.storage
                          gosub automove alchemy supplies
                     }
-                    
+
           }
      if ("%discipline" = "artif") then
      {
@@ -1028,7 +1035,7 @@ calc.material:
 			     gosub get my fount
 				put drop my fount
 				math fount.count subtract 1
-                    if (%fount.count < 1) then 
+                    if (%fount.count < 1) then
                               {
 					          gosub automove enchanting tool
                                    gosub ORDER 3
@@ -1047,11 +1054,11 @@ calc.material:
                     gosub PUT_IT my salt in my %main.storage
                     gosub automove enchanting supplies
                }
-     }          
+     }
      goto calc.parts
-     
+
 sigil.count:
-     if (%sigil.total = 0) then 
+     if (%sigil.total = 0) then
           {
                var need.%sigil 1
                return
@@ -1064,7 +1071,7 @@ sigil.count_1:
      eval replace("%sigil", "%sigil(%sigil.count)")
      math sigil.count add 1
      goto sigil.count_1
-          
+
 calc.parts:
      var temp.room 0
 	## This multiplies the ingredients by number of orders needed to get correct quantity
@@ -1104,7 +1111,7 @@ calc.parts:
 		if matchre("%assemble2", "strips") then math asmCount2 subtract %strips.count
 		if matchre("%assemble2", "backer") then math asmCount2 subtract %backer.count
 		if matchre("%assemble2", "mechanism") then math asmCount2 subtract %mechanism.count
-		
+
 		if matchre("%assemble3", "long cord") then math asmCount3 subtract %long.cord.count
 		if matchre("%assemble3", "short cord") then math asmCount3 subtract %short.cord.count
 		if matchre("%assemble3", "padding") then math asmCount3 subtract %small.padding.count
@@ -1130,7 +1137,7 @@ calc.parts:
 		}
 	pause 0.01
 	#####################################################################
-	if ("%assemble2" = "mechanism") then 
+	if ("%assemble2" = "mechanism") then
           {
                put #tvar totalmechanisms %asmCount2
                math asmCount2 subtract %mechnumber
@@ -1328,7 +1335,7 @@ parts.inv:
 	echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	echo
 	pause 2
-     return     
+     return
 
 count.material:
 	var count $0
@@ -1375,7 +1382,7 @@ count.material:
           }
      if ("%count" = "mechanism") then
           {
-               if (%mechanism.count = 0) then 
+               if (%mechanism.count = 0) then
                     {
                          var mechnumber 0
                          return
@@ -1389,7 +1396,7 @@ count.material:
           }
 	 if ("%count" = "fount") then
 	      {
-               if (%fount.count = 0) then 
+               if (%fount.count = 0) then
                     {
                          var fount.uses 0
                          return
@@ -1425,7 +1432,7 @@ count.material2:
      matchwait 3
 count.material3:
 	pause 0.1
-     if (%manual =  1) then 
+     if (%manual =  1) then
           {
                var bagcount %tempcount
                goto manual.count
@@ -1441,7 +1448,7 @@ count.material3:
                put tap deed
                gosub PUT_IT %work.material %order.pref in %main.storage
                if (%material.volume > %mass.volume) then return
-          }     
+          }
      if ((%tempcount < 1) || (%countloop > 18)) then
           {
                unvar tempcount
@@ -1457,9 +1464,9 @@ countfail:
      unvar tempcount
      unvar count
      return
-     
+
      mechcount:
-     if ("%countarray(%i)" = "%mechs") then 
+     if ("%countarray(%i)" = "%mechs") then
           {
 			action (count) off
                var mechnumber %i
@@ -1474,7 +1481,7 @@ foundit:
 
 manual.count:
           action (count) on
-          if ("$righthand" != "Empty") then 
+          if ("$righthand" != "Empty") then
                {
                     var rightsave $righthand
                     gosub PUT_IT $righthand in my %main.storage
@@ -1501,7 +1508,7 @@ manual.count:
                     return
                }
           goto manual.count
-     
+
 purchase.assemble:
      if ("%assemble" = "NULL") then return
      # if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble", "strips|string|backing|backing|padding|hilt|haft|cord|pole|handle|boss") && $roomid != $part.room) then gosub automove $part.room
@@ -1516,7 +1523,7 @@ purchase.assemble_2:
      if !matchre("%discipline", "tailor|artif") then gosub ORDER %assemble
      else if matchre("%discipline", "tailor|artif") then
           {
-               if ("%discipline" = "tailor") then 
+               if ("%discipline" = "tailor") then
                     {
                          if matchre("%assemble", "handle") then gosub ORDER %handle.order
                          if matchre("%assemble", "large padding") then gosub ORDER %l.padding.order
@@ -1536,11 +1543,11 @@ purchase.assemble_2:
 
 purchase.assemble2:
      if ("%assemble2" = "NULL") then return
-     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble2", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then 
+     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble2", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then
 		{
 			if ($roomid != $part.room) then gosub automove $part.room
 		}
-     elseif $roomid != $supply.room then 
+     elseif $roomid != $supply.room then
           {
                if (("%assemble2" = "mechanism") && ($roomid != $ingot.buy)) then gosub automove $ingot.buy
                if ("%assemble2" != "mechanism") then gosub automove $supply.room
@@ -1602,7 +1609,7 @@ purchase.assemble2:
      else gosub ORDER %assemble2
      math asmCount2 subtract 1
      pause 0.2
-     if ("%assemble2" != "mechanism") then 
+     if ("%assemble2" != "mechanism") then
           {
                if ("%discipline" = "artif") then gosub PUT_IT my sigil in my %main.storage
                else gosub PUT_IT my %assemble2 in my %main.storage
@@ -1610,14 +1617,14 @@ purchase.assemble2:
      if ("%assemble2" = "mechanism") then gosub PUT_IT my ingot in my %main.storage
      if (%asmCount2 <= 0) then return
      goto purchase.assemble2_2
-     
+
 purchase.assemble3:
      if ("%assemble3" = "NULL") then return
-     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble3", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then 
+     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble3", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then
 		{
 			if ($roomid != $part.room) then gosub automove $part.room
 		}
-     elseif $roomid != $supply.room then 
+     elseif $roomid != $supply.room then
           {
                if (("%assemble3" = "mechanism") && ($roomid != $ingot.buy)) then gosub automove $ingot.buy
                if ("%assemble3" != "mechanism") then gosub automove $supply.room
@@ -1653,7 +1660,7 @@ purchase.assemble3:
      else gosub ORDER %assemble3
      math asmCount3 subtract 1
      pause .2
-     if ("%assemble3" != "mechanism") then 
+     if ("%assemble3" != "mechanism") then
           {
                if ("%discipline" = "artif") then gosub PUT_IT my sigil in my %main.storage
                else gosub PUT_IT my %assemble3 in my %main.storage
@@ -1676,7 +1683,7 @@ process.order:
      if ((($MC_WORK.OUTSIDE = 0) && !matchre("$work.room", "$roomid")) || (matchre("%discipline", "blacksmith|armor|weapon"))) then gosub find.room $work.room
      if matchre("%discipline", "weapon|armor|blacksmith") then
           {
-               
+
                put store custom %work.material ingot in %main.storage
                var manual 0
                if !matchre("$work.room", "\b$roomid\b") then gosub find.room $work.room
@@ -1699,7 +1706,7 @@ process.order:
                pause 0.1
                gosub STUDY my book
                pause .5
-               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                     {
                          gosub GET %work.material ingot on anvil
                          gosub PUT_IT ingot in $MC_FORGING.STORAGE
@@ -1740,7 +1747,7 @@ process.order:
                          if matchre("$righthand", "crafting book") then gosub PUT turn my book to page %page
                          pause 0.1
                          gosub STUDY my book
-                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                               {
                                    gosub PUT_IT %work.material %order.pref in my %main.storage
                                    math difficultytry add 1
@@ -1773,7 +1780,7 @@ process.order:
                          pause 0.1
                          ####
                          gosub STUDY my book
-                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                               {
                                    gosub PUT_IT %work.material yarn in my %main.storage
                                    math difficultytry add 1
@@ -1813,7 +1820,7 @@ process.order:
                          pause 0.1
                          ####
                          gosub STUDY my book
-                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+                         if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                               {
                                    gosub PUT_IT %work.material stack in my %main.storage
                                    echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
@@ -1842,7 +1849,7 @@ process.order:
                gosub gather.material %order.pref
                send count my %order.pref
                waitforre You count out (\d+) pieces.*of lumber remaining
-               if %volume > $1 then 
+               if %volume > $1 then
                     {
                          gosub small.mat %order.pref
                          send count my %order.pref
@@ -1862,7 +1869,7 @@ process.order:
                pause 0.1
                ####
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
@@ -1900,7 +1907,7 @@ process.order:
                pause 0.1
                ####
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          echo *** Too difficult to try crafting %full.order.noun, getting new Work Order. You might need %technique technique.
@@ -1945,7 +1952,7 @@ process.order:
 				}
                gosub GET my %discipline book
                if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
-               ## ADDED THIS LINE TO HANDLE MT BOOKS THAT HAVE ALL DISCIPLINES 
+               ## ADDED THIS LINE TO HANDLE MT BOOKS THAT HAVE ALL DISCIPLINES
                if matchre("$righthand", "crafting book") then gosub PUT turn my book to discipline %discipline
                pause 0.2
                if matchre("$righthand", "crafting book") then gosub PUT turn my book to chapter %order.chapter
@@ -1953,7 +1960,7 @@ process.order:
                if matchre("$righthand", "crafting book") then gosub PUT turn my book to page %page
                pause 0.2
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                     {
                          gosub PUT_IT %work.material %order.pref in my %main.storage
                          math difficultytry add 1
@@ -1984,7 +1991,7 @@ process.order:
                pause 0.1
                ####
                gosub STUDY my book
-               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then 
+               if (($MC_DIFFICULTY < 4) && (!%NOWO)) then
                     {
                          gosub PUT_IT %order.pref in my %main.storage
                          math difficultytry add 1
@@ -2005,13 +2012,13 @@ process.order:
 	var mass.volume 0
 	if (($MC_END.EARLY = 1) || (%NOWO = 1)) then gosub expcheck
      if ("%repair" = "on") then gosub check.tools
-     if (%order.quantity = 0) then 
+     if (%order.quantity = 0) then
           {
                if %NOWO then goto endearly
                goto order.summary
           }
      goto process.order
-     
+
 expcheck:
      if (matchre("%discipline", "weapon|armor|blacksmith") && ($Forging.LearningRate > 28)) then goto endearly
      if (matchre("%discipline", "tailor") && ($Outfitting.LearningRate > 28)) then goto endearly
@@ -2038,7 +2045,7 @@ endearly:
 	if ("%repair" = "on") then gosub check.tools
      put #parse MASTERCRAFT DONE
      exit
-     
+
 untie.early:
      matchre return You have nothing bundled with the logbook|^Untie what\?
      matchre trash.early ^You untie the(?:.*)? (\S+) from the logbook
@@ -2068,9 +2075,9 @@ codex:
      gosub STUDY my codex
      gosub PUT_IT my book in my %main.storage
      return
-     
+
 bundle.order:
-     if ($MC_%society.type_NOWO = 1) then 
+     if ($MC_%society.type_NOWO = 1) then
           {
                if matchre("$roomobjs", "(bucket|bin)") then
                     {
@@ -2159,14 +2166,14 @@ grind:
                if (("$roomplayers" != "") && (%order.quantity > 1)) then gosub find.room $work.room
           }
      return
-     
+
 gather.ingot:
      var tempingot 1
      gosub bigenoughcheck
      if %bigenoughfinal < %order.quantity then gosub smelt
      gosub setold
 gather.ingot1:
-     if %vol.%ordinal(%tempingot) >= %volume then 
+     if %vol.%ordinal(%tempingot) >= %volume then
           {
                gosub GET %ordinal(%tempingot) %work.material ingot from my %main.storage
                var ingotchange %ordinal(%tempingot)
@@ -2174,7 +2181,7 @@ gather.ingot1:
                goto ingotchange
           }
      math tempingot add 1
-     if %tempingot > %ingot.item.count then 
+     if %tempingot > %ingot.item.count then
           {
                gosub smelt
                return
@@ -2192,7 +2199,7 @@ bigenoughcheck1:
           }
      math tracker add 1
      goto bigenoughcheck1
-     
+
 setold:
      var oldvolume 1
 setold_1:
@@ -2200,7 +2207,7 @@ setold_1:
      var oldvol.%ordinal(%oldvolume) %vol.%ordinal(%oldvolume)
      math oldvolume add 1
      goto setold_1
-	
+
 setold.mat:
      var oldvolume 1
 setold.mat1:
@@ -2208,17 +2215,17 @@ setold.mat1:
      var oldvol.%ordinal(%oldvolume) %vol.%ordinal(%oldvolume)
      math oldvolume add 1
      goto setold.mat1
-     
+
 ingotchange:
      var tempchange %ingot.item.count
-     if %vol.%ingotchange = %volume then 
+     if %vol.%ingotchange = %volume then
           {
                var old %ingot.item.count
                evalmath ingot.item.count %ingot.item.count - 1
           }
      var new %ingot.item.count
 ingotchange1:
-     if %new < 1 then 
+     if %new < 1 then
           {
                if %new != %old then var vol.%ordinal(%old)
                return
@@ -2229,7 +2236,7 @@ ingotchange1:
      math new subtract 1
      if ((%tempchange < 1) && (%newvolume != 0)) then var vol.first %newvolume
      goto ingotchange1
-     
+
 
 gather.material:
      var get.mat $0
@@ -2249,9 +2256,9 @@ gather.material2:
                gosub GET %work.material %get.mat from my %main.storage
                return
           }
-     if ("%discipline" = "remed") then 
+     if ("%discipline" = "remed") then
           {
-               if (%%get.mat.material.volume < %mass.volume) then 
+               if (%%get.mat.material.volume < %mass.volume) then
                     {
                     var order.type %get.mat
                     gosub lack.material
@@ -2285,7 +2292,7 @@ gather.material2:
 #     if "%get.mat" = "stone" then {}
      var itemno 1
 gather.material_1:
-     if (%vol.%ordinal(%itemno) >= %volume) then 
+     if (%vol.%ordinal(%itemno) >= %volume) then
           {
                gosub GET %ordinal(%itemno) %work.material %get.mat from my %main.storage
                if ("%discipline" = "tailor") then
@@ -2357,7 +2364,7 @@ flower.wrong:
      math flower.bin add 1
      pause 0.3
      goto flower.cycle1
-	
+
 count.up:
 	var itemno 1
 	var material.volume 0
@@ -2376,7 +2383,7 @@ count.up1:
 itemchange:
 	var itemchangeloop 0
      var tempchange %%get.mat.item.count
-     if %vol.%itemchange = %volume then 
+     if %vol.%itemchange = %volume then
           {
                var old %%get.mat.item.count
                evalmath %get.mat.item.count %%get.mat.item.count - 1
@@ -2385,7 +2392,7 @@ itemchange:
 itemchange1:
 	math itemchangeloop add 1
 	if (%itemchangeloop > 500) then return
-     if %new < 1 then 
+     if %new < 1 then
           {
                if %new != %old then var vol.%ordinal(%old)
                return
@@ -2406,7 +2413,7 @@ small.mat:
      if (%material.volume < %mass.volume) then gosub lack.material
      gosub clear
      goto process.order
-   
+
 combine.check:
      var combine.storage $1
      var combine.temp $2
@@ -2426,7 +2433,7 @@ combine.check:
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT my %combine.temp in my %combine.storage
 	pause 0.1
      return
-     
+
 combine.cut:
      var item.number 0
      pause 0.1
@@ -2506,7 +2513,7 @@ smelt_2:
      put get ingot from %main.storage
      var vol.first %material.volume
      return
-     
+
 combine:
      var combine.loop 0
 combine1:
@@ -2545,7 +2552,7 @@ combine1:
      if !matchre("$lefthand|$righthand", "Empty") then goto combineNext
      pause 0.5
      goto combine
-	
+
 combineNext:
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
      if matchre("$righthand|$lefthand", "%combine.temp") then gosub PUT_IT %combine.temp in %combine.storage
@@ -2592,7 +2599,7 @@ combine.end2:
      # unvar combine.temp
      # unvar combine.storage
      return
-   
+
 fail:
     pause 1
     put #echo >Log Failed to craft %full.order.noun, you might need %technique technique.
@@ -2613,7 +2620,7 @@ diff.change:
      var fail2 1
      var diff.change 1
      if "%work.difficulty" = "easy" then return
-     if "%work.difficulty" = "challenging" then 
+     if "%work.difficulty" = "challenging" then
           {
                var work.difficulty easy
                if matchre("%discipline", "blacksmith|armor|weapon") then put #var MC_FORGING.DIFFICULTY easy
@@ -2622,7 +2629,7 @@ diff.change:
                if ("%discipline" = "remed") then put #var MC_ALC.DIFFICULTY easy
                if ("%discipline" = "artif") then put #var MC_ENCHANTING.DIFFICULTY easy
           }
-     if "%work.difficulty" = "hard" then 
+     if "%work.difficulty" = "hard" then
           {
                var work.difficulty challenging
                if matchre("%discipline", "blacksmith|armor|weapon") then put #var MC_FORGING.DIFFICULTY challenging
@@ -2642,7 +2649,7 @@ order.summary:
      else goto turn.in
 
 turn.in:
-     if !matchre("$roomid", "$master.room") then 
+     if !matchre("$roomid", "$master.room") then
           {
                if (("$zoneid" = "67") && ("%discipline" = "artif")) then gosub automove $master.room
                else gosub automove $master.room(1)
@@ -2716,7 +2723,7 @@ buyingvolumechange1:
      if ("%work.material" = "steel") then var vol.%ordinal(%tracker) 10
      math tracker add 1
      goto buyingvolumechange1
-     
+
 oldchange:
      if %oldnumber < 1 then return
      var vol.%ordinal(%tempnumber) %vol.%ordinal(%oldnumber)
@@ -2734,14 +2741,14 @@ first.order:
      if matchre("%discipline", "carving|shaping|tailor|tinkering") then
           {
                if (!matchre("$righthand", "Empty") && !matchre("$lefthand", "Empty")) then gosub EMPTY_HANDS
-               if (%reqd.order >= 1) then    
+               if (%reqd.order >= 1) then
                     {
                          gosub ORDER %order.num
                          math reqd.order subtract 1
 #                        gosub PUT_IT my %order.type in my %main.storage
                          math %order.pref.item.count add 1
 				     gosub combine.order
-                         if matchre("%order.type", "lumber") then 
+                         if matchre("%order.type", "lumber") then
                               {
                                    if "%work.material" = "balsa" then math material.volume add 10
                                    else math material.volume add 5
@@ -2749,7 +2756,7 @@ first.order:
                          if matchre("%order.type", "leather|cloth|stack") then math material.volume add 10
                          if matchre("%order.type", "yarn") then math material.volume add 100
                          if ("%discipline" = "remed") then math %herb1.material.volume add 25
-                         if %reqd.order < 1 then 
+                         if %reqd.order < 1 then
 							{
 								gosub PUT_IT my %order.type in my %main.storage
 								return
@@ -2758,7 +2765,7 @@ first.order:
                     }
                else return
           }
-          
+
      if matchre("%discipline", "weapon|armor|blacksmith") then
           {
                if %reqd.order >= 1 then
@@ -2778,7 +2785,7 @@ first.order:
      if ("%discipline" = "remed") then
           {
                gosub EMPTY_HANDS
-               if %reqd.order >= 1 then    
+               if %reqd.order >= 1 then
                     {
                          gosub ORDER %order.num
                          math reqd.order subtract 1
@@ -2804,10 +2811,10 @@ first.order:
 			goto first.order
 		}
      return
-     
+
 combine.order:
 	 gosub GET my %work.material %order.type from my %main.storage
-	 if ("$righthand" != "$lefthand") then 
+	 if ("$righthand" != "$lefthand") then
 		{
 			gosub EMPTY_HANDS
 			return
@@ -2822,18 +2829,18 @@ combine.order.return:
      math %order.pref.item.count subtract 1
 	gosub PUT_IT %order.type in my %main.storage
 	return
-     
+
 stowright:
      gosub PUT_IT #$righthandid in %main.storage
      gosub GET %order.type from my %main.storage
      goto combine.order
-     
+
 
 switch:
       gosub PUT_IT %order.type in %main.storage
       gosub GET second %order.type from my %main.storage
       goto combine.order
-       
+
 lack.material.exit:
          echo Not Enough Material To Make %order.quantity $MC.order.noun !
          put #parse Need material

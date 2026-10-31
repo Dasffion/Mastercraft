@@ -48,7 +48,6 @@ action (work) off
 put #var MC_WORK.TOOLS $MC_HAMMER|$MC_TONGS|$MC_SHOVEL|$MC_BELLOWS|$MC_STIRROD|$MC_PLIERS
 if (matchre("$MC_KERTIGEN.HALO", "(?i)ON") && (%HaloRemoved = 0)) then gosub HALO_REMOVE
 
-
 action var assemble $1 when another finished \S+ shield (handle)
 action var assemble $1 when another finished wooden (hilt|haft)
 action var assemble $1 $2 when another finished (long|short|small|large) leather (cord|backing)

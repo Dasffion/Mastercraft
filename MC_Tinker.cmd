@@ -6,7 +6,7 @@
 # Script Usage: .Tinker <item>					--shapes the item
 # Item can be any tinkering item
 #
-# Also handles enhancements to run an enhancement have the finished short/long/bow 
+# Also handles enhancements to run an enhancement have the finished short/long/bow
 # in hand and use .shape <item> YES
 #
 # To create arrowheads
@@ -84,11 +84,11 @@ unfinished:
 		goto work
 	}
 
-first.carve:	
+first.carve:
 	##If the provided item name is in the ArrowheadMats list make arrowheads instead
 	if matchre("$MC.order.noun", "%ArrowheadMats") then goto arrowheads
 	if matchre("$MC.order.noun", "shaft") then goto shaft
-	if $needmechanisms > 0 then 
+	if $needmechanisms > 0 then
 		{
 		gosub PRESS
 		gosub GET my lumber from my $MC_ENGINEERING.STORAGE
@@ -102,7 +102,7 @@ first.carve:
 	{
 		var MarkIt NO
 		var Action clamp
-		if contains("$righthandnoun", "bow") then gosub PUT swap		
+		if contains("$righthandnoun", "bow") then gosub PUT swap
 		pause 1
 		goto work
 	}
@@ -114,9 +114,9 @@ first.carve:
 			var Action shaper
 			var excessmats shafts
 			var MarkIt NO
-			
+
 			gosub GET my shafts
-			
+
 			if contains("$righthandnoun", "shafts") then gosub PUT swap
 			gosub ToolCheckRight $MC_SHAPER
 			 matchre excess You place the excess parts at your feet.
@@ -137,23 +137,23 @@ first.carve:
 			matchwait
 		}
 	}
-	
+
 excess:
 	pause
 	 gosub STOW_RIGHT
 	 gosub STOW %excessmats
 	 goto work
-	 
+
 work:
 	action (work) on
 	save %Action
 	gosub %Action
 	goto work
-	
+
 fouledup:
 	gosub Action analyze my $MC.order.noun
 	goto work
-	
+
 restudy:
 	gosub EMPTY_HANDS
 	if ("%repair" = "on") then gosub check.tools
@@ -162,7 +162,7 @@ restudy:
 	gosub PUT_IT my book in my $MC_ENGINEERING.STORAGE
 	gosub GET my $MC_DRAWKNIFE
 	goto WORK
-	
+
 press:
 	pause 1
 	if $Engineering.Ranks < 100 then var pressset 1
@@ -189,18 +189,18 @@ mechcombine_1:
 	put get my mech from my $MC_ENGINEERING.STORAGE
 	matchwait 1
 	goto %lastlabel
-	
+
 mechcombine_2:
 	send combine mech with other mech
 	pause 0.5
 	goto mechcombine_1
-	
+
 presscount:
 	var i 0
 	send count my mech
 	pause 1
 	mechcount:
-	if "%count(%i)" = "%mechs" then 
+	if "%count(%i)" = "%mechs" then
 		{
 		var mechnumber %i
 		goto foundit
@@ -210,7 +210,7 @@ presscount:
 
 foundit:
 	gosub PUT_IT my mech in my $MC_ENGINEERING.STORAGE
-	if %mechnumber >= $totalmechanisms then 
+	if %mechnumber >= $totalmechanisms then
 		{
 		put #var needmechanisms 0
 		return
@@ -222,7 +222,7 @@ shovel:
 	gosub ToolCheckRight $MC_SHOVEL
 	 gosub Action push fuel with my $MC_SHOVEL
 	return
-	
+
 plierspress:
 	save plierspress
 	var Action Pliers
@@ -241,10 +241,10 @@ plierspress:
 	 send push my ingot with press
 	 matchwait 1
 	return
-	
+
 	return:
 	return
-	
+
 toosmall:
 	gosub PUT_IT ingot in buck
 	pause 0.5
@@ -289,13 +289,13 @@ tools:
 	var Action drawknife
 	 gosub Action adjust my $MC.order.noun with my $MC_TINKERTOOL
 	return
-	
+
 clamp:
 	gosub ToolCheckRight $MC_CLAMP
 	var Action drawknife
 	 gosub Action push my $MC.order.noun with my $MC_CLAMP
 	return
-	
+
 pliers:
 	gosub ToolCheckRight $MC_PLIERS
 	var Action drawknife
@@ -317,7 +317,7 @@ assemble:
 	 pause 0.5
 	 gosub Action analyze my $MC.order.noun
 	return
-	
+
 assemblemech:
 	matchre return The (\S+) mechanisms (?:is|are) not required to continue|What were you
 	match assemblemech You place your
@@ -337,7 +337,7 @@ glue:
 	var Action drawknife
 	gosub Action apply my glue to my $MC.order.noun
 	return
-	
+
 shaft:
 	if !matchre("$righthand|$lefthand", "lumber") then gosub GET my lumber
 	gosub GET my $MC_SHAPER
@@ -351,10 +351,10 @@ shaft:
 	matchre shapeshaft You get|You pickup
 	send lumber
 	matchwait
-	
+
 arrowheads:
 	gosub GET my %ArrowheadTool
-	
+
 arrowhead_material:
 	pause 0.5
 	matchre arrowhead_material \.\.\.wait|type ahead

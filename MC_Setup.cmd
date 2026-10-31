@@ -25,7 +25,7 @@ CHARACTER1:
 put #var MC_FORGING.STORAGE portal
 put #var MC_FORGING.DISCIPLINE blacksmith
 put #var MC_FORGING.MATERIAL steel
-put #var MC_FORGING.DIFFICULTY hard
+put #var MC_FORGING.DIFFICULTY challenging
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
 put #var MC_Forging_NOWO 0
@@ -58,7 +58,7 @@ put #var MC_OUTFITTING.STORAGE portal
 put #var MC_OUT.DISCIPLINE tailor
 put #var MC_OUT.MATERIAL cougar-pelt
 put #var MC_OUT.PREF leather
-put #var MC_OUT.DIFFICULTY challenging
+put #var MC_OUT.DIFFICULTY hard
 put #var MC_OUT.DEED off
 put #var MC_Outfitting_NOWO 0
 #######################################################################
@@ -119,7 +119,7 @@ put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST NULL
 put #var MC_WORK.OUTSIDE 0
-#put #var MC_PREFERRED.ROOM 
+#put #var MC_PREFERRED.ROOM
 #put #var MC_FRIENDLIST
 put #var MC_END.EARLY 0
 put #var MC_MAX.ORDER 5
@@ -163,6 +163,7 @@ put #var MC_TOOLBELT_Engineering NULL
 put #var MC_TOOL.STORAGE_Engineering portal
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
+put #var MC_KNITNEEDLES knitting needles
 put #var MC_SCISSORS scissors
 put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK aldamdin yardstick
@@ -295,7 +296,7 @@ put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
-#put #var MC_PREFERRED.ROOM 
+#put #var MC_PREFERRED.ROOM
 #put #var MC_FRIENDLIST
 put #var MC_END.EARLY 0
 put #var MC_MAX.ORDER 4
@@ -339,6 +340,7 @@ put #var MC_TOOLBELT_Engineering NULL
 put #var MC_TOOL.STORAGE_Engineering shoulder pack
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
+put #var MC_KNITNEEDLES knitting needles
 put #var MC_SCISSORS ka'hurst scissors
 put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
@@ -471,7 +473,7 @@ put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
-#put #var MC_PREFERRED.ROOM 
+#put #var MC_PREFERRED.ROOM
 #put #var MC_FRIENDLIST
 put #var MC_NOWO 1
 put #var MC_END.EARLY 0
@@ -516,6 +518,7 @@ put #var MC_TOOLBELT_Engineering NULL
 put #var MC_TOOL.STORAGE_Engineering shoulder pack
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
+put #var MC_KNITNEEDLES knitting needles
 put #var MC_SCISSORS ka'hurst scissors
 put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
@@ -553,7 +556,7 @@ CHARACTER4:
 #	MC_SMALL.ORDERS: For only working orders 5 volumes or smaller, 0 for off, 1 for on
 put #var MC_FORGING.STORAGE carry-all
 put #var MC_FORGING.DISCIPLINE blacksmith
-put #var MC_FORGING.MATERIAL steel								   
+put #var MC_FORGING.MATERIAL steel
 put #var MC_FORGING.DIFFICULTY hard
 put #var MC_FORGING.DEED off
 put #var MC_SMALL.ORDERS 0
@@ -648,7 +651,7 @@ put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
-#put #var MC_PREFERRED.ROOM 
+#put #var MC_PREFERRED.ROOM
 #put #var MC_FRIENDLIST
 put #var MC_NOWO 0
 put #var MC_END.EARLY 0
@@ -693,6 +696,7 @@ put #var MC_TOOLBELT_Engineering NULL
 put #var MC_TOOL.STORAGE_Engineering satchel
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
+put #var MC_KNITNEEDLES knitting needles
 put #var MC_SCISSORS ka'hurst scissors
 put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
@@ -825,7 +829,7 @@ put #var MC_REORDER on
 put #var MC.Mark off
 put #var MC_BLACKLIST none
 put #var MC_WORK.OUTSIDE 0
-#put #var MC_PREFERRED.ROOM 
+#put #var MC_PREFERRED.ROOM
 #put #var MC_FRIENDLIST
 put #var MC_END.EARLY 0
 put #var MC_MAX.ORDER 4
@@ -869,6 +873,7 @@ put #var MC_TOOLBELT_Engineering NULL
 put #var MC_TOOL.STORAGE_Engineering shoulder pack
 #OUTFITTING
 put #var MC_NEEDLES sewing needles
+put #var MC_KNITNEEDLES knitting needles
 put #var MC_SCISSORS ka'hurst scissors
 put #var MC_SLICKSTONE slickstone
 put #var MC_YARDSTICK silversteel yardstick
