@@ -5,7 +5,7 @@
 # Script Usage: .shape <item>					--shapes the item
 # Item can be any shaping item
 #
-# Also handles enhancements to run an enhancement have the finished short/long/bow 
+# Also handles enhancements to run an enhancement have the finished short/long/bow
 # in hand and use .shape <item> YES
 #
 # To create arrowheads
@@ -47,7 +47,7 @@ action var assemble flights when You need another arrow flights
 action var assemble strips when You need another finished leather strips|strengthened with some leather strips
 action var assemble $1 $2 when another finished (long|short) leather (cord)
 action var assemble $1 $2 when another finished (long|short) wooden (pole)
- 
+
 action var Action assemble when ^\[Ingredients can|You must assemble|appears ready to be reinforced|appears ready to be strengthened
 #action (work) goto Retry when \.\.\.wait|type ahead
 action goto done when ^Applying the final touches|You cannot figure out how to do that
@@ -75,7 +75,7 @@ unfinished:
 		goto work
 	}
 
-first.carve:	
+first.carve:
 	##If the provided item name is in the ArrowheadMats list make arrowheads instead
 	if matchre("$MC.order.noun", "%ArrowheadMats") then goto arrowheads
 	if matchre("$MC.order.noun", "shaft" then goto shaft
@@ -85,7 +85,7 @@ first.carve:
 	{
 		var MarkIt NO
 		var Action clamp
-		if contains("$righthandnoun", "bow") then gosub PUT swap		
+		if contains("$righthandnoun", "bow") then gosub PUT swap
 		pause 1
 		goto work
 	}
@@ -97,18 +97,18 @@ first.carve:
 			var Action shaper
 			var excessmats shafts
 			var MarkIt NO
-			
+
 			pause 1
 			gosub GET my shafts
 			if !matchre ("$righthand|$lefthand", "shafts") then gosub GET my shafts from my portal
 			pause 2
-			
+
 			if contains("$righthandnoun", "shafts") then gosub PUT swap
 			pause 1
 			gosub ToolCheckRight $MC_SHAPER
-			 matchre excess You place the excess parts at your feet.
-			 matchre work Roundtime: \d+
-			 send shape my shaft with my $MC_SHAPER
+			matchre excess You place the excess parts at your feet.
+			matchre work Roundtime: \d+
+			send shape my shaft with my $MC_SHAPER
 			matchwait
 		}
 		else
@@ -118,9 +118,9 @@ first.carve:
 			if contains("$righthandnoun", "lumber") then gosub PUT swap
 			pause 1
 			gosub ToolCheckRight $MC_DRAWKNIFE
-			 matchre excess You carefully separate out the excess material and place it (on the ground|at your feet).
-			 matchre work Roundtime: \d+
-			 send scrape my lumber with $MC_DRAWKNIFE
+			matchre excess You carefully separate out the excess material and place it (on the ground|at your feet).
+			matchre work Roundtime: \d+
+			send scrape my lumber with $MC_DRAWKNIFE
 			matchwait
 		}
 	}
@@ -134,14 +134,14 @@ excess:
 	 gosub PUT_IT my %excessmats in my $MC_ENGINEERING.STORAGE
 	 pause 0.5
 	 goto work
-	 
+
 work:
 	action (work) on
 	save %Action
 	gosub %Action
      if (%need.repair = 1) then goto done
 	goto work
-	
+
 fouledup:
 	send analyze my $MC.order.noun
 	pause 1
@@ -149,63 +149,63 @@ fouledup:
 
 drawknife:
 	gosub ToolCheckRight $MC_DRAWKNIFE
-	 gosub action scrape my $MC.order.noun with my $MC_DRAWKNIFE
+	gosub action scrape my $MC.order.noun with my $MC_DRAWKNIFE
 	return
 
 carving.knife:
 	gosub ToolCheckRight $MC_CARVINGKNIFE
 	var Action drawknife
-	 gosub action carve my $MC.order.noun with my $MC_CARVINGKNIFE
+	gosub action carve my $MC.order.noun with my $MC_CARVINGKNIFE
 	return
 
 rasp:
 	gosub ToolCheckRight $MC_RASP
 	var Action drawknife
-	 gosub action scrape my $MC.order.noun with my $MC_RASP
+	gosub action scrape my $MC.order.noun with my $MC_RASP
 	return
 
 shaper:
 	gosub ToolCheckRight $MC_SHAPER
 	var Action drawknife
-	 gosub action shape my $MC.order.noun with my $MC_SHAPER
+	gosub action shape my $MC.order.noun with my $MC_SHAPER
 	return
-	
+
 clamp:
 	gosub ToolCheckRight $MC_CLAMP
 	var Action drawknife
-	 gosub action push my $MC.order.noun with my $MC_CLAMP
+	gosub action push my $MC.order.noun with my $MC_CLAMP
 	return
 
 assemble:
 	if "$righthandnoun" != "%assemble" then
 	{
-	 pause 1
-	 gosub STOW_RIGHT
-	 gosub GET my %assemble
- 	 if !matchre ("$righthand|$lefthand", "%assemble") then gosub GET my %assemble from my portal
+	pause 1
+	gosub STOW_RIGHT
+	gosub GET my %assemble
+ 	if !matchre ("$righthand|$lefthand", "%assemble") then gosub GET my %assemble from my portal
 	}
-	 ###send assemble my $MC.order.noun with my %assemble
-	 send assemble my %assemble with my $MC.order.noun
-	 pause 1
-	 gosub action analyze my $MC.order.noun
-	 pause 1
+	###send assemble my $MC.order.noun with my %assemble
+	send assemble my %assemble with my $MC.order.noun
+	pause 1
+	gosub action analyze my $MC.order.noun
+	pause 1
 	return
 
 stain:
 	if %stain.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight stain
 	var Action drawknife
-	 gosub action apply my stain to my $MC.order.noun
-	 pause 1
+	gosub action apply my stain to my $MC.order.noun
+	pause 1
 	return
 
 glue:
 	if %glue.gone = 1 then gosub tool.swap
 	gosub ToolCheckRight glue
 	var Action drawknife
-	 gosub action apply my glue to my $MC.order.noun
+	gosub action apply my glue to my $MC.order.noun
 	return
-	
+
 shaft:
 	if !matchre("$righthand|$lefthand", "lumber") then gosub GET my lumber
 	if !matchre("$righthand|$lefthand", "lumber") then gosub GET my lumber from my portal
@@ -222,10 +222,10 @@ shaft:
 	gosub PUT_IT my shafts in my $MC_ENGINEERING.STORAGE
 	repeat:
 	goto shaft
-	
+
 arrowheads:
 	gosub GET my %ArrowheadTool
-	
+
 arrowhead_material:
 	match arrowhead_make You get
 	match done What were you
@@ -241,36 +241,36 @@ arrowhead_make:
 
 tool.swap:
 	if !contains("$scriptlist", "mastercraft") then return
-	 var temp.room $roomid
-	 gosub location.vars
-	 gosub check.location
-	 if !("$righthand" = "Empty" || "$lefthand" = "Empty") then gosub PUT_IT my $MC.order.noun in my $MC_ENGINEERING.STORAGE
+	var temp.room $roomid
+	gosub location.vars
+	gosub check.location
+	if !("$righthand" = "Empty" || "$lefthand" = "Empty") then gosub PUT_IT my $MC.order.noun in my $MC_ENGINEERING.STORAGE
 	if %stain.gone = 1 then
 		{
-		 gosub automove $tool.room
-		 action (order) on
-		 gosub ORDER
-		 pause .5
-		 action (order) off
-		 gosub ORDER %stain.order
-		 gosub PUT_IT my stain in my $MC_ENGINEERING.STORAGE
-		 var stain.gone 0
+		gosub automove $tool.room
+		action (order) on
+		gosub ORDER
+		pause .5
+		action (order) off
+		gosub ORDER %stain.order
+		gosub PUT_IT my stain in my $MC_ENGINEERING.STORAGE
+		var stain.gone 0
 		}
 	if %glue.gone = 1 then
 		{
-		 gosub automove $tool.room
-		 action (order) on
-		 gosub ORDER
-		 pause .5
-		 action (order) off
-		 gosub ORDER %glue.order
-		 gosub PUT_IT my glue in my $MC_ENGINEERING.STORAGE
-		 if ("$righthandnoun" != "$MC.order.noun" && "$lefthandnoun" != "$MC.order.noun") then gosub GET my $MC.order.noun from my $MC_ENGINEERING.STORAGE
-		 var glue.gone 0
+		gosub automove $tool.room
+		action (order) on
+		gosub ORDER
+		pause .5
+		action (order) off
+		gosub ORDER %glue.order
+		gosub PUT_IT my glue in my $MC_ENGINEERING.STORAGE
+		if ("$righthandnoun" != "$MC.order.noun" && "$lefthandnoun" != "$MC.order.noun") then gosub GET my $MC.order.noun from my $MC_ENGINEERING.STORAGE
+		var glue.gone 0
 		}
-	 if ("$righthandnoun" != "$MC.order.noun" && "$lefthandnoun" != "$MC.order.noun") then gosub GET my $MC.order.noun from my $MC_ENGINEERING.STORAGE
-	 gosub automove %temp.room
-	 unvar temp.room
+	if ("$righthandnoun" != "$MC.order.noun" && "$lefthandnoun" != "$MC.order.noun") then gosub GET my $MC.order.noun from my $MC_ENGINEERING.STORAGE
+	gosub automove %temp.room
+	unvar temp.room
 	return
 
 Retry:
@@ -280,7 +280,7 @@ Retry:
 
 return:
 	return
-	
+
 repeat:
 	math shape.repeat subtract 1
 	if ("%repair" = "on") then gosub check.tools
@@ -296,12 +296,12 @@ repeat:
 done:
 	if %stain.gone = 1 then gosub tool.swap
 	if %glue.gone = 1 then gosub tool.swap
-	 gosub STOW_RIGHT
+	gosub STOW_RIGHT
 	if "$lefthandnoun" = "$MC.order.noun" then gosub PUT swap
 	pause 1
 	if ("%MarkIt" = "YES") then gosub mark
 	if %shape.repeat > 1 then goto repeat
-	 put #parse SHAPING DONE
+	put #parse SHAPING DONE
 	exit
 
 

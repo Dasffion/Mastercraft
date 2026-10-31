@@ -12,13 +12,12 @@
 #
 #	If you have an unfinished item on your needles, this script will try to finish it for you.
 #
-
 var sew.repeat 0
-if_2 var sew.repeat %2
 if_1 put #var MC.order.noun %1
-if !matchre("$scriptlist", "mastercraft") then var society.type Outfitting
+if_2 var sew.repeat %2
 include mc_include.cmd
-
+if !matchre("$scriptlist", "mastercraft") then var society.type Outfitting
+if !def(MC_KNITNEEDLES) then put #var MC_KNITNEEDLES $MC_NEEDLES
 
 action var Action knit when ^push my needle|^turn my needle|^cast my needle|^knit my needle|^The .* need of more knitting
 action var Action push when addition of some purl stitching|some purl stitches|^Some purl stitching
@@ -28,9 +27,9 @@ action var Action cast when be cast off the needles|cast to finish binding the k
 action var Action done when ^Applying the final touches
 action (work) off
 
-gosub ToolCheckLeft $MC_NEEDLES
+gosub ToolCheckLeft $MC_KNITNEEDLES
 pause .5
-if matchre("$MC_NEEDLES", "$righthandnoun") then send swap
+if matchre("$MC_KNITNEEDLES", "$righthandnoun") then send swap
 if !matchre("$righthand", "yarn") then send get my yarn
 if !matchre("$righthand", "yarn") then send get my yarn from my portal
 
@@ -42,7 +41,7 @@ unfinished:
 	{
 	send analyze my needle
 	waitforre ^You.*analyze
-	if !matchre("$MC_NEEDLES", "$lefthandnoun") then send swap
+	if !matchre("$MC_KNITNEEDLES", "$lefthandnoun") then send swap
 	pause 1
 	goto KnitAction
 	}
@@ -51,13 +50,13 @@ first.cut:
 	var Action knit
 	matchre excess You carefully cut off the excess
 	matchre KnitAction Roundtime: \d+
-	send knit my yarn with my $MC_NEEDLES
+	send knit my yarn with my $MC_KNITNEEDLES
 	matchwait
 
 excess:
      gosub PUT_IT my yarn in my %outfitting.storage
-	
-	
+
+
 KnitAction:
 	action (work) on
 	if "%Action" = "done" then goto done

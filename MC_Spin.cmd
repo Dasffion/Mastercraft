@@ -8,13 +8,13 @@
 #
 
 var spinner wheel
-action var Action push when Slowly the fiber bundle begins to slide down the|One half of the fiber bundle begins to slip from the 
+action var Action push when Slowly the fiber bundle begins to slide down the|One half of the fiber bundle begins to slip from the
 action var Action clean when The spun thread begins taking on a dull shade from grime trapped in the fiber.
 action var Action turn when Individual strands of the fiber begin twisting apart unevenly|A counter-twist in the fiber strand threatens to unravel if not corrected
 action var Action spin when ^clean wheel|^push wheel|^turn wheel|^clean distaff|^push distaff|^turn distaff
 action goto Distaff when ^What were you referring to\?
 action goto Retry when \.\.\.wait|type ahead
-action goto End when You tie off the 
+action goto End when You tie off the
 
 Spin:
 	var Action spin

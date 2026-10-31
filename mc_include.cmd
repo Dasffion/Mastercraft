@@ -216,6 +216,34 @@ discfail:
 
 
 location.vars:
+	#Crossing Forging
+     var CF.room.list 903|865|962|961|960|902|905|904|906|963|907|908|909
+     var CF.master.room 903|865|962|961|960|902|905|904|906|963|907|908|909
+     var CF.smelt.room 903|904|960|961
+     var CF.work.room 907|908|909|962|963
+     var CF.grind.room 907|908|909|962|963
+	#Crossing Outfitting
+     var CO.room.list 873|910|911|912|913|914|915|916|917|918|919|920|921|922|923|924
+     var CO.master.room 873|910|911|912|913|914|915|916
+     var CO.work.room 917|918
+     var CO.wheel.room 922|923|924
+     var CO.loom.room 919|920|921
+	#Crossing Engineering
+     var CE.room.list 851|925|874|926|927|928|929|930
+     var CE.master.room 851|925|874|926|927|928|929|930
+     var CE.work.room 928|929|930
+	#Crossing Alchemy
+     var CA.room.list 898|931|932|933|934
+     var CA.master.room 898|931|932|933|934
+     var CA.work.room 898|931|932|933|934
+     #Crossing Enchanting
+     var CENT.tools.room 997
+     var CENT.supplies.room 996
+     var CENT.books.room 995
+     var CENT.work.room 1000|1001|1002|1003
+     var CENT.room.list 994|995|996|997|998|999|1000|1001|1002|1003
+     var CENT.master.room 994|995|996|997|998|999
+	
 	#Haven Forging
      var HF.room.list 442|441|443|405|404|398|402|403|409|408|399|406|407|400|410|411|401
      var HF.master.room 398|399|400|401
@@ -247,34 +275,6 @@ location.vars:
      var HENT.room.list 526|527|528|529|530|531|532|533|534|535|536|537|538|539|540
      var HENT.master.room 526|529|530|531|527|528
 
-	#Crossing Forging
-     var CF.room.list 903|865|962|961|960|902|905|904|906|963|907|908|909
-     var CF.master.room 903|865|962|961|960|902|905|904|906|963|907|908|909
-     var CF.smelt.room 903|904|960|961
-     var CF.work.room 907|908|909|962|963
-     var CF.grind.room 907|908|909|962|963
-	#Crossing Outfitting
-     var CO.room.list 873|910|911|912|913|914|915|916|917|918|919|920|921|922|923|924
-     var CO.master.room 873|910|911|912|913|914|915|916
-     var CO.work.room 917|918
-     var CO.wheel.room 922|923|924
-     var CO.loom.room 919|920|921
-	#Crossing Engineering
-     var CE.room.list 851|925|874|926|927|928|929|930
-     var CE.master.room 851|925|874|926|927|928|929|930
-     var CE.work.room 928|929|930
-	#Crossing Alchemy
-     var CA.room.list 898|931|932|933|934
-     var CA.master.room 898|931|932|933|934
-     var CA.work.room 898|931|932|933|934
-     #Crossing Enchanting
-     var CENT.tools.room 997
-     var CENT.supplies.room 996
-     var CENT.books.room 995
-     var CENT.work.room 1000|1001|1002|1003
-     var CENT.room.list 994|995|996|997|998|999|1000|1001|1002|1003
-     var CENT.master.room 994|995|996|997|998|999
-
 	#Lava Forge
      var LvF.room.list 774|777|776|775|778|782|779|784|780|786|781|783|785
      var LvF.master.room 775|778|782|779|784|780|786
@@ -282,32 +282,37 @@ location.vars:
      var LvF.work.room 781|783|785
      var LvF.grind.room 782|786|784
 
+     #Muspari Forging
+     var MUF.room.list 504|505|506|507|508|509|510|511|512|513|514|515|516|517|518|519|520
+     var MUF.master.room 504|505|506|507|508|509|510|511|512|513|514
+     var MUF.work.room 516|518|520
+     var MUF.grind.room 516|518|520
+     var MUF.smelt.room 515|517|519
+     #Muspari Engineering
+     var MUE.room.list 521|522|523|524|525|526|527|528|529|530
+     var MUE.master.room 521|522|523|524|525|526|527
+     var MUE.work.room 528|529|530
+     #Muspari Outfitting
+     var MUO.room.list 489|490|491|492|493|494|495|496|497|498|499|500|501|502|503
+     var MUO.master.room 489|490|491|492|493|494|495|496|497
+     var MUO.work.room 498|499|500|501|502|503
+     #Muspari Alchemy
+     var MUA.room.list 531|532|533|534|535|536|537|538|539
+     var MUA.master.room 531|532|533|534|535|536
+     var MUA.work.room 537|538|539
+     #Muspari Enchanting
+     var MUENT.tools.room 547
+     var MUENT.supplies.room 545
+     var MUENT.books.room 544
+     var MUENT.work.room 551|550|549|548
+     var MUENT.room.list 541|542|543|544|545|546|547|548|549|550|551
+     var MUENT.master.room 541|542|543|544|545|546|547
+
 	#Leth Premie Forge
      var LPF.room.list 248|238|239|240|241|242|243|244|245|246|247|253|252|251|250|249|237
      var LPF.master.room 248|238|239|240|241|242|243|244|245|246|247|253|252
      var LPF.work.room 251|250|249
      var LPF.grind.room 252|253|247
-
-     #Ratha Forging
-     var RF.room.list 818|819|820|821|822|823|824|825|826|827|828|829|830|831|832
-     var RF.master.room 819|820|821|822|823|824|825|826|827|828|829|830|831|832
-     var RF.work.room 830|831|832
-     var RF.grind.room 821|822|823
-     #Ratha Outfitting
-     var RO.room.list 850|851|852|846|843|845|847|848|849|844|841|839|840|842
-     var RO.master.room 844|841|839|840|842|843|845|846
-     var RO.work.room 845|846
-     var RO.wheel.room 847|848|849
-     var RO.loom.room 850|851|852
-    #Ratha Engineering
-     var RE.room.list 853|854|855|856|857|858|859|860|861|862
-     var RE.master.room 853|854|855|856|857|858|859
-     var RE.work.room 860|861|862
-	#Ratha Alchemy
-     var RA.room.list 863|864|865|866|867|868|869|870|871|872|873
-     var RA.master.room 863|864|865|866|867|868|869|870
-     var RA.work.room 871|872|873
-
 
 	#Shard Forging
      var SF.room.list 644|661|645|648|647|649|650|651|652|653|654|655|656|657|658|659|660|646
@@ -334,6 +339,32 @@ location.vars:
      var SENT.work.room 762|763|764|765|766|767
      var SENT.room.list 755|756|757|758|759|760|761|762|763|764|765|766|767
      var SENT.master.room 756
+	
+     #Fang Cove Engineering
+     var FE.room.list 206|207|208|209|210|220|221
+     var FE.master.room 206|207|208|209|210
+     var FE.work.room 220|221
+     #Fang Cove Forging
+     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248|249|252
+     var FF.master.room 196|197|198|199|200|201|202|203|204|252
+     var FF.work.room 217|219|249
+     var FF.grind.room 217|219|249
+     var FF.smelt.room 216|218|248
+     #Fang Cove Outfitting
+     var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
+     var FO.master.room 183|184|185|186|187|188|189
+     var FO.work.room 211|212|213|214
+     #Fang Cove Alchemy
+     var FA.room.list 190|191|192|193|194|195
+     var FA.master.room 190|191|192|193|194|195
+     var FA.work.room 190|191
+     #Fang Cove Enchanting
+     var FENT.tools.room 235
+     var FENT.supplies.room 236
+     var FENT.books.room 234
+     var FENT.work.room 241|240|238|239
+     var FENT.room.list 232|233|234|235|236|237|238|239|240|241|182
+     var FENT.master.room 232|233|234|235|236|237|182
 
 	#Hibarnhivdar Forging
      var HibF.room.list 401|402|403|404|405|406|407|408|409|410|411|412|413
@@ -378,58 +409,60 @@ location.vars:
      var MKF.work.room 344|345|346|347|348
      var MKF.grind.room %MKF.work.room
 
-     #Fang Cove Engineering
-     var FE.room.list 206|207|208|209|210|220|221
-     var FE.master.room 206|207|208|209|210
-     var FE.work.room 220|221
-     #Fang Cove Forging
-     var FF.room.list 196|197|198|199|200|201|202|203|204|215|216|217|218|219|247|248|249|252
-     var FF.master.room 196|197|198|199|200|201|202|203|204|252
-     var FF.work.room 217|219|249
-     var FF.grind.room 217|219|249
-     var FF.smelt.room 216|218|248
-     #Fang Cove Outfitting
-     var FO.room.list 183|184|185|186|187|188|189|211|212|213|214
-     var FO.master.room 183|184|185|186|187|188|189
-     var FO.work.room 211|212|213|214
-     #Fang Cove Alchemy
-     var FA.room.list 190|191|192|193|194|195
-     var FA.master.room 190|191|192|193|194|195
-     var FA.work.room 190|191
-     #Fang Cove Enchanting
-     var FENT.tools.room 235
-     var FENT.supplies.room 236
-     var FENT.books.room 234
-     var FENT.work.room 241|240|238|239
-     var FENT.room.list 232|233|234|235|236|237|238|239|240|241|182
-     var FENT.master.room 232|233|234|235|236|237|182
+     #Ratha Forging
+     var RF.room.list 818|819|820|821|822|823|824|825|826|827|828|829|830|831|832
+     var RF.master.room 819|820|821|822|823|824|825|826|827|828|829|830|831|832
+     var RF.work.room 830|831|832
+     var RF.grind.room 821|822|823
+     #Ratha Outfitting
+     var RO.room.list 850|851|852|846|843|845|847|848|849|844|841|839|840|842
+     var RO.master.room 844|841|839|840|842|843|845|846
+     var RO.work.room 845|846
+     var RO.wheel.room 847|848|849
+     var RO.loom.room 850|851|852
+	#Ratha Engineering
+     var RE.room.list 853|854|855|856|857|858|859|860|861|862
+     var RE.master.room 853|854|855|856|857|858|859
+     var RE.work.room 860|861|862
+	#Ratha Alchemy
+     var RA.room.list 863|864|865|866|867|868|869|870|871|872|873
+     var RA.master.room 863|864|865|866|867|868|869|870
+     var RA.work.room 871|872|873
 
-     #Muspari Forging
-     var MUF.room.list 504|505|506|507|508|509|510|511|512|513|514|515|516|517|518|519|520
-     var MUF.master.room 504|505|506|507|508|509|510|511|512|513|514
-     var MUF.work.room 516|518|520
-     var MUF.grind.room 516|518|520
-     var MUF.smelt.room 515|517|519
-     #Muspari Engineering
-     var MUE.room.list 521|522|523|524|525|526|527|528|529|530
-     var MUE.master.room 521|522|523|524|525|526|527
-     var MUE.work.room 528|529|530
-     #Muspari Outfitting
-     var MUO.room.list 489|490|491|492|493|494|495|496|497|498|499|500|501|502|503
-     var MUO.master.room 489|490|491|492|493|494|495|496|497
-     var MUO.work.room 498|499|500|501|502|503
-     #Muspari Alchemy
-     var MUA.room.list 531|532|533|534|535|536|537|538|539
-     var MUA.master.room 531|532|533|534|535|536
-     var MUA.work.room 537|538|539
-     #Muspari Enchanting
-     var MUENT.tools.room 547
-     var MUENT.supplies.room 545
-     var MUENT.books.room 544
-     var MUENT.work.room 551|550|549|548
-     var MUENT.room.list 541|542|543|544|545|546|547|548|549|550|551
-     var MUENT.master.room 541|542|543|544|545|546|547
-
+	#Aesry Forging
+     var AF.room.list 439|440|441|442|443|445|446|447|448|449|450|451|452
+     var AF.master.room 439|440|441|442|443|445|446|447|448|449|450|451|452
+     var AF.work.room 450|452|443|441
+     var AF.grind.room 450|452|443|441
+     var AF.smelt.room 442|451
+	#Aesry Engineering
+	var AE.tools.room 480
+     var AE.supplies.room 485
+     var AE.books.room 479
+     var AE.work.room 482|483|483
+     var AE.room.list 477|478|479|480|481|482|483|484|485
+     var AE.master.room 477|478|479|480|481|482|483|484|485
+	#Aesry Outfitting
+     var AO.room.list 463|464|465|466|467|468|469|470|471|472|473|474|475|476
+     var AO.master.room 463|464|465|466|467|468|469|470|471|472|473|474|475|476
+     var AO.work.room 475|474|473|465|466|467
+     var AO.wheel.room 465|466|467
+     var AO.loom.room 475|474|473
+	#Aesry Alchemy
+     var AA.tools.room 493
+     var AA.supplies.room 491
+     var AA.books.room 490
+     var AA.work.room 495|496|497
+     var AA.room.list 488|489|490|491|492|493|494|495|496|495|496|497
+     var AA.master.room 488|489|490|491|492|493|494|495|496|495|496|497
+	#Aesry Enchanting
+     var AENT.tools.room 432
+     var AENT.supplies.room 433
+     var AENT.books.room 431
+     var AENT.work.room 436|437|438|435
+     var AENT.room.list 453|454|455|456|457|458|459|460|461
+     var AENT.master.room 453|454|455|456|457|458|459|460|461
+	
 	#Repair Locations
      var crossing.repair.room Rangu
      var crossing.repair Rangu
@@ -441,12 +474,14 @@ location.vars:
      var shard.repair clerk
      var muspari.repair.room 506
      var muspari.repair Rokumru
-     var fang.repair.room 205
+     var aesry.repair.room 448
+	var aesry.repair clerk
+	var fang.repair.room 205
      var fang.repair clerk
-
+	
      var FC 0
      var Master.Found 0
-     action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than
+     action instant var Master.Found 1 when ^Heavily muscled for an Elf, Fereldrin|^Yalda is a plump Dwarf|^Standing at an imposing height, the Gor'Tog surveys |^Serric is a muscular Human|^Juln is a muscular Dwarf|^Hagim is slight Gnome man|^Paarupensteen is a balding plump Halfling|^Milline is a tall Elothean woman|^Talia is a honey-brown haired Human|^This well-muscled Elf stands taller than|^The Society .+ appears comfortably dressed
      return
 
 check.location:
@@ -490,6 +525,11 @@ check.location:
      if $zoneid = 47 && matchre("%MUO.room.list", "\b$roomid\b") then var society Muspari.Outfitting
      if $zoneid = 47 && matchre("%MUA.room.list", "\b$roomid\b") then var society Muspari.Alchemy
      if $zoneid = 47 && matchre("%MUENT.room.list", "\b$roomid\b") then var society Muspari.Enchanting
+	if $zoneid = 99 && matchre("%AE.room.list", "\b$roomid\b") then var society Aesry.Engineering
+	if $zoneid = 99 && matchre("%AF.room.list", "\b$roomid\b") then var society Aesry.Forging
+	if $zoneid = 99 && matchre("%AO.room.list", "\b$roomid\b") then var society Aesry.Outfitting
+	if $zoneid = 99 && matchre("%AA.room.list", "\b$roomid\b") then var society Aesry.Alchemy
+	if $zoneid = 99 && matchre("%AENT.room.list", "\b$roomid\b") then var society Aesry.Enchanting
 	pause 1
 	assembleloc:
 	gosub %society
@@ -713,6 +753,74 @@ put #tvar oil.room 819
 put #tvar repair.room %ratha.repair.room
 var repair.clerk %ratha.repair
 var society.type Alchemy
+return
+
+Aesry.Forging:
+var master Master
+put #tvar master.room %AF.master.room
+put #tvar grind.room %AF.grind.room
+put #tvar work.room %AF.work.room
+put #tvar smelt.room %AF.smelt.room
+put #tvar deed.room 445
+put #tvar supply.room 446
+put #tvar part.room 819
+put #tvar tool.room 448
+put #tvar oil.room 448
+put #tvar repair.room %aesry.repair.room
+put #tvar repair.clerk %aesry.repair
+var society.type Forging
+return
+
+Aesry.Alchemy:
+var master Daryrd
+put #tvar master.room %AA.master.room
+put #tvar work.room %AA.work.room
+put #tvar supply.room 491
+put #tvar tool.room 493
+put #tvar oil.room 448
+put #tvar repair.room %aesry.repair.room
+put #tvar repair.clerk %aesry.repair
+var society.type Alchemy
+return
+
+Aesry.Engineering:
+var master Master
+put #tvar master.room %AE.master.room
+put #tvar work.room %AE.work.room
+put #tvar supply.room 485
+put #tvar part.room 485
+put #tvar tool.room 480
+put #tvar ingot.buy 446
+put #tvar oil.room 448
+put #tvar repair.room %aesry.repair.room
+put #tvar repair.clerk %aesry.repair
+var society.type Engineering
+return
+
+Aesry.Outfitting:
+var master Master
+put #tvar master.room %AO.master.room
+put #tvar work.room %AO.work.room
+put #tvar part.room 471
+put #tvar supply.room 471
+put #tvar tool.room 470
+put #tvar oil.room 448
+put #tvar repair.room %aesry.repair.room
+put #tvar repair.clerk %aesry.repair
+var society.type Outfitting
+return
+
+Aesry.Enchanting:
+var master Trainer
+put #tvar master.room %AENT.master.room
+put #tvar work.room %AENT.work.room
+put #tvar supply.room %AENT.supplies.room
+put #tvar part.room %AENT.supplies.room
+put #tvar tool.room %AENT.tools.room
+put #tvar oil.room 448
+put #tvar repair.room %aesry.repair.room
+put #tvar repair.clerk %aesry.repair
+var society.type Enchanting
 return
 
 Shard.Forging:

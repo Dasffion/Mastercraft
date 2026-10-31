@@ -12,7 +12,7 @@ action var Action push when and needs pushing together|and need pushing together
 action var Action turn when a tight turn in the fabric|bunching up from excessive tension
 action var Action weave when ^push loom|^clean loom|^turn loom|^weave loom
 action goto Retry when \.\.\.wait|type ahead
-action goto End when You snip off the bolt of fabric and 
+action goto End when You snip off the bolt of fabric and
 
 Weave:
 	var Action weave

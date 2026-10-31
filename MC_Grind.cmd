@@ -27,13 +27,13 @@ if !matchre("$lefthand|$righthand", "$MC.order.noun") then
 	{
 	 gosub EMPTY_HANDS
 	 pause .5
-	 send get $MC.order.noun
+	 send get $MC.order.noun from my %main.storage
 	 if !matchre("$lefthand|$righthand", "$MC.order.noun") then send get $MC.order.noun from my portal
 	}
 
-pause .5	
+pause .5
 	var action turn
-	
+
 GrindAction:
 	pause .5
 	gosub %action

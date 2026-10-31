@@ -42,13 +42,13 @@ SetMaterial:
      var material %1
 SetMaterial_1:
      shift
-     if_1 then 
+     if_1 then
           {
           var material %material|%1
           goto setmaterial_1
           }
      return
-     
+
 itemcountclear:
      counter set 0
 itemcountclear_1:

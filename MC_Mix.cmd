@@ -3,7 +3,7 @@
 ## .MC_Mix unguent 10 jadice coal - Makes 10 Jadice Unguents
 ## .MC_Mix <order noun> <count to make> <herb> <catalyst>
 ## Make sure to stock up water/alcohol/coal/herbs
-## SET YOUR BOOK TO CORRECT RECIPE AND STUDY BEFORE RUNNING 
+## SET YOUR BOOK TO CORRECT RECIPE AND STUDY BEFORE RUNNING
 var mix.repeat 0
 var current.lore ALCHEMY
 if_3 var herb1 %3
@@ -17,11 +17,10 @@ var catalyst.gone 0
 var need.repair 0
 var special NULL
 include mc_include.cmd
-
 action var tool mix when appears free of defects that would
 action var tool mix when You do not see anything that would prevent
 action var tool mix when composition looks accurate
-action var tool mix when ^You realize the(.*) is not required to continue 
+action var tool mix when ^You realize the(.*) is not required to continue
 action var tool mix when ^That tool does not seem
 action var tool turn when Clumps of material stick to the sides
 action var tool turn when ^Once finished you notice clumps of material
@@ -68,7 +67,7 @@ if matchre("$MC.order.noun", "%solid") then
 		var bowl $MC_MORTAR
 		var tool.mix crush
 		var water water
-		}	
+		}
 unfinished:
 	if !matchre("$righthand|$lefthand", "book") then gosub GET %discipline book
      if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
@@ -149,7 +148,7 @@ mix:
 	else gosub Action %tool.mix my %bowl with my %mixer
      if (%need.repair = 1) then goto too.damaged
 	return
-	
+
 
 sieve:
 	gosub specialcheck
@@ -157,19 +156,19 @@ sieve:
 	var tool mix
 	gosub Action push my $MC.order.noun with my $MC_SIEVE
 	return
-	
+
 smell:
 	gosub specialcheck
 	var tool mix
 	gosub Action smell my $MC.order.noun
 	return
-	
+
 turn:
 	gosub specialcheck
 	var tool mix
 	gosub Action turn my %bowl
 	return
-	
+
 water:
 	if (%water.gone = 1) then gosub tool.swap
 	gosub ToolCheckLeft water in my %main.storage
@@ -179,7 +178,7 @@ water:
 	if !contains("$lefthandnoun", "water") then var water.gone 1
      if (%need.repair = 1) then goto too.damaged
 	return
-	
+
 alcohol:
 	if (%alcohol.gone = 1) then gosub tool.swap
 	gosub ToolCheckLeft alcohol in my %main.storage
@@ -189,7 +188,7 @@ alcohol:
 	if !contains("$lefthandnoun", "alcohol") then var alcohol.gone 1
      if (%need.repair = 1) then goto too.damaged
 	return
-	
+
 catalyst:
 	if (%catalyst.gone = 1) then gosub tool.swap
 	if !contains("$lefthandnoun", "nugget") then
@@ -232,7 +231,7 @@ add.herb:
      pause 0.5
      var special NULL
      return
-	
+
 specialcheck:
 	if "%special" != "NULL" then gosub %special
 	var special NULL
@@ -293,7 +292,7 @@ else
 	put #parse MIX DONE
 	put #parse ALCHEMY DONE
 	exit
-	} 
+	}
 
 lack.coin:
 	if ("%get.coin" = "off") then goto lack.coin.exit
@@ -318,8 +317,8 @@ return
 Retry:
 	pause 1
 	goto work
-	
-	
+
+
 repeat:
 	math mix.repeat subtract 1
 	gosub PUT_IT my $MC.order.noun in my %main.storage
@@ -333,7 +332,7 @@ repeat:
 	if !matchre("$righthand|$lefthand", "%material") then gosub GET my %material
 	var tool mix
 	goto first.mix
-	
+
 too.damaged:
      echo ** TOOL is too damaged to continue! need repairs!
 done:
@@ -344,9 +343,9 @@ done:
 	gosub GET my $MC.order.noun from my %bowl
 	if ("$righthand" != "Empty") then gosub STOW_RIGHT
 	gosub countcheck
-	if ((%mix.repeat > 1) && (%need.repair = 0)) then 
+	if ((%mix.repeat > 1) && (%need.repair = 0)) then
 		{
-		gosub PUT_IT $MC.order.noun in %main.storage 
+		gosub PUT_IT $MC.order.noun in %main.storage
 		goto repeat
 		}
      if ("%repair" = "on") then gosub check.tools
@@ -355,13 +354,13 @@ done:
 	# if matchre("$MC_KERTIGEN.HALO", "(?i)ON") then gosub HALO_RESTACK
 	put #parse ALCHEMY DONE
 	exit
-	
+
 countcheck:
 if ($MC_NOWO = 1) then return
 action var temprem $1 when ^You count out (\d+) uses remaining\.
 gosub PUT count my $MC.order.noun
 pause 0.1
-if (%temprem > 5) then 
+if (%temprem > 5) then
 	{
 	gosub PUT mark my $MC.order.noun at 5
 	gosub PUT break my $MC.order.noun
