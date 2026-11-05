@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# Latest updates 10/30/2026
-# v 1.9.7
+# Latest updates 11/4/2026
+# v 1.9.8
 #
 #  Script Usage:
 #
@@ -1543,9 +1543,19 @@ purchase.assemble_2:
 
 purchase.assemble2:
      if ("%assemble2" = "NULL") then return
-     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble2", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then
+     if (matchre("%discipline", "weapon|armor|blacksmith|shaping|carving|tinkering") && matchre("%assemble2", "strips|string|backing|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then
 		{
 			if ($roomid != $part.room) then gosub automove $part.room
+		}
+	if matchre("%assemble2", "(string|backer|pole|cord|strips|handle|lense)") then
+		{
+			var item $1
+			send buy %item
+			pause 0.6
+			gosub PUT_IT my %item in my %main.storage
+			math asmCount2 subtract 1
+			if (%asmCount2 <= 0) then return
+			goto purchase.assemble2
 		}
      elseif $roomid != $supply.room then
           {
@@ -1620,9 +1630,19 @@ purchase.assemble2:
 
 purchase.assemble3:
      if ("%assemble3" = "NULL") then return
-     if (matchre("%discipline", "weapon|armor|blacksmith") && matchre("%assemble3", "strips|backing|string|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then
+     if (matchre("%discipline", "weapon|armor|blacksmith|carving|shaping|tinkering") && matchre("%assemble3", "strips|string|backing|backing|padding|hilt|haft|cord|pole|handle|boss|backer")) then
 		{
 			if ($roomid != $part.room) then gosub automove $part.room
+		}
+	if matchre("%assemble3", "(string|backer|pole|cord|strips|handle|lense)") then
+		{
+			var item $1
+			send buy %item
+			pause 0.6
+			gosub PUT_IT my %item in my %main.storage
+			math asmCount3 subtract 1
+			if (%asmCount3 <= 0) then return
+			goto purchase.assemble3
 		}
      elseif $roomid != $supply.room then
           {
@@ -1666,6 +1686,10 @@ purchase.assemble3:
                else gosub PUT_IT my %assemble3 in my %main.storage
           }
      if ("%assemble3" = "mechanism") then gosub PUT_IT my ingot in my %main.storage
+     if matchre("%discipline", "weapon|armor|blacksmith|shaping|carving|tinkering") then
+		{
+			if ($roomid != $part.room) then gosub automove $part.room
+		}
      if (%asmCount3 <= 0) then return
      goto purchase.assemble3_2
 
