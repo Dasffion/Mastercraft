@@ -1,5 +1,6 @@
 <h1>MAIN FEATURES:</h1>
-<h3>- Trains all 5 Crafting skills<br><br>
+<h3>GENIE 4/5 CRAFTING SCRIPT<br><br>
+- TRAINS ALL 5 CRAFT SKILLS:<br><br>
 FORGING - Weapon / Armor / Blacksmithing<br>
 ENGINEERING - Carving / Shaping / Tinkering<br>
 OUTFITTING - Tailoring<br>
