@@ -2776,6 +2776,10 @@ PUT:
      put #echo >$Log Crimson $datetime Command = %Command
      put #log $datetime MISSING MATCH IN PUT (mc_include.cmd)
      return
+	
+PUT_STOW:
+	gosub EMPTY_HANDS
+	goto PUT_1
 
 #### DOUBLE PUT SUB
 PUT_IT:
@@ -2833,8 +2837,8 @@ STUDY:
      matchre STUDY_1 You continue studying the
      matchre STUDY_1 You continue to study
      matchre RETURN You take on a studious look
-     matchre STUDY_END Why do you need to study this chart again?
-     matchre STUDY_NEXT (^With|^In) a sudden moment of clarity
+     matchre RETURN Why do you need to study this chart again?
+     matchre RETURN (^With|^In) a sudden moment of clarity
      matchre GET_BOOK ^But you are not holding it
      matchre GET_BOOK ^But you're not holding it
      matchre GET_BOOK ^Study what?
@@ -3063,13 +3067,18 @@ STOW:
      matchre RETURN ^What were you referring to\?
      matchre RETURN ^Stow what\?  Type 'STOW HELP' for details\.
      matchre STOW_LEFT You need a free hand
-     matchre STOW.UNLOAD ^You should unload
+     matchre STOW_UNLOAD ^You should unload
      send stow %Stow
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN STOW! (mc_include.cmd) ***
      put #echo >$Log Crimson $datetime Stow = %Stow
      put #log $datetime MISSING MATCH IN STOW (mc_include.cmd)
      return
+
+STOW_UNLOAD:
+	send unload my $righthandnoun
+	pause 2
+	goto STOW_1
 
 STOW_LEFT:
      if "$lefthandnoun" != "" then
@@ -3254,12 +3263,6 @@ FULLHANDS:
 	gosub EMPTY_HANDS
 	goto ORDER_BUY
 
-WAIT:
-     pause 0.0001
-     pause 0.1
-     if (!$standing) then put STAND
-     goto %LOCATION
-
 RESET:
 	pause 0.1
 	echo
@@ -3272,6 +3275,32 @@ RESET:
 	goto identify.order
 
 #### RETURNS
+WAIT:
+     pause 0.0001
+     pause 0.1
+     if (!$standing) then put STAND
+     goto %LOCATION
+WEBBED:
+     delay 0.0001
+     if ($webbed) then waiteval (!$webbed)
+     if ($standing = 0) then send STAND
+     goto %LOCATION
+IMMOBILE:
+     delay 0.0001
+     if contains("$prompt" , "I") then pause 20
+     if ($standing = 0) then send STAND
+     goto %LOCATION
+STUNNED:
+     delay 0.0001
+     if ($stunned) then waiteval (!$stunned)
+     if ($standing = 0) then send STAND
+     goto %LOCATION
+CALMED:
+     delay 5
+     if ($stunned) then waiteval (!$stunned)
+     if ($standing = 0) then send STAND
+     goto %LOCATION
+
 RETURN_CLEAR:
      pause 0.0001
      put #queue clear
