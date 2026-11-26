@@ -62,7 +62,9 @@ ENCHANTING - Artificing</h3><br>
 
 7) Recently added Alchemy support for many higher level (challenging/hard) workorders w/ FORAGED herbs that can't be bought at the store.
    Script assumes you have sufficient Outdoorsmanship to forage the herbs (Around ~350+ needed??) 
-   It forages the herbs and processes them (press/grind) to be used in the recipes<br><br>
+   It forages the herbs and processes them (press/grind) to be used in the recipes<br>
+   If for some weird reason you are doing challenging/hard workorders but have very low Outdoorsmanship<br>
+   You may want to switch to easy workorders<br><br>
 
 8) KERTIGEN HALO support was added in a past patch - but may not work well at all (untested recently)<br>
    Recommend DO NOT USE HALO AT ALL! Halos are EXTREMELY unwieldy and have terrible downsides!<br>
