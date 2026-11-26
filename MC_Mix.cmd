@@ -1,4 +1,5 @@
 #debug 10
+# v 1.9.8
 ## STANDALONE SCRIPT RUN EXAMPLE:
 ## .MC_Mix unguent 10 jadice coal - Makes 10 Jadice Unguents
 ## .MC_Mix <order noun> <count to make> <herb> <catalyst>
@@ -72,7 +73,7 @@ unfinished:
 	if !matchre("$righthand|$lefthand", "book") then gosub GET %discipline book
      if !matchre("$righthand|$lefthand", "book") then gosub GET crafting book
      gosub STUDY book
-	gosub ToolCheckRight %bowl in my %main.storage
+	gosub ToolCheckRight %bowl
 	if matchre("%bowl", "$lefthand") then gosub PUT swap
 	send look in my %bowl
 	waitforre (^In the (.*)\.$|^I could not find|^There is nothing in there)
@@ -95,29 +96,21 @@ unfinished:
 first.mix:
 	gosub ToolCheckRight %bowl
 	if matchre("%bowl", "$lefthand") then gosub PUT swap
-	gosub ToolCheckLeft %herb1 in my %main.storage
-	### IF MISSING HERB1 AND MC IS RUNNING - RUN LACK.MATERIAL SUB TO RESTOCK
-     if !matchre("$righthand|$lefthand", "%herb1") then
+	if ("$lefthand" != "Empty") then gosub STOW_LEFT
+	gosub GET my %herb1 from my %main.storage
+	if !matchre("$righthand|$lefthand", "%herb1") then
 		{
-			if matchre("%scriptlist", "(?i)mastercraft") then
+			gosub restock.herb %herb1
+			gosub ToolCheckLeft %herb1
+			if !matchre("$righthand|$lefthand", "%herb1") then
 				{
-					gosub lack.material
-					if !matchre("$righthand|$lefthand", "%herb1") then gosub GET my %herb1 from my %main.storage
-					if !matchre("$righthand|$lefthand", "%herb1") then
-						{
-							echo *** Still missing %herb1 after restock!!
-							exit
-						}
-					goto unfinished
+					echo *** Something went wrong!!
+					echo *** Still missing %herb1 after restock!!
+					echo *** Restock manually 
+					exit
 				}
-			### IF MC IS NOT RUNNING (RUNNING SCRIPT SOLO) SCRIPT WILL ABORT DUE TO LACK OF HERB1
-			if !matchre("%scriptlist", "(?i)mastercraft") then
-			{
-				echo *** Missing %herb1 — cannot continue!
-				echo *** RESTOCK MANUALLY!
-				exit
-			}
 		}
+
 	gosub PUT_IT my %herb1 in my %bowl
 	pause 0.5
 	if ("$lefthand" != "Empty") then gosub STOW_LEFT
@@ -171,7 +164,11 @@ turn:
 
 water:
 	if (%water.gone = 1) then gosub tool.swap
-	gosub ToolCheckLeft water in my %main.storage
+	if !matchre("$lefthand", "water") then
+		{
+			if ("$lefthand" != "Empty") then gosub STOW_LEFT
+			gosub GET my water from my %main.storage
+		}
 	var tool mix
 	send pour part water in my %bowl
 	pause 0.5
@@ -181,7 +178,11 @@ water:
 
 alcohol:
 	if (%alcohol.gone = 1) then gosub tool.swap
-	gosub ToolCheckLeft alcohol in my %main.storage
+	if !matchre("$lefthand", "alcohol") then
+		{
+			if ("$lefthand" != "Empty") then gosub STOW_LEFT
+			gosub GET my alcohol from my %main.storage
+		}
 	var tool mix
 	send pour part alcohol in my %bowl
 	pause 0.5
@@ -203,34 +204,23 @@ catalyst:
 	return
 
 add.herb:
-	if !matchre("$lefthand", "$MC_BOWL") then gosub STOW_LEFT
-     if !matchre("$righthand", "$MC_BOWL") then gosub STOW_RIGHT
-     gosub GET my %herb2 from my %main.storage
-	### IF MISSING HERB2 AND MC IS RUNNING - RUN LACK.MATERIAL SUB TO RESTOCK
-     if !matchre("$righthand|$lefthand", "%herb2") then
+	if !matchre("$lefthand", "%bowl") then gosub STOW_LEFT
+	if !matchre("$righthand", "%bowl") then gosub STOW_RIGHT
+	gosub GET my %herb2 from my %main.storage
+	if !matchre("$righthand|$lefthand", "%herb2") then
 		{
-			if matchre("%scriptlist", "(?i)mastercraft") then
+			gosub restock.herb %herb2
+			gosub GET my %herb2 from my %main.storage
+			if !matchre("$righthand|$lefthand", "%herb2") then
 				{
-					gosub lack.material
-					if !matchre("$righthand|$lefthand", "%herb2") then gosub GET my %herb2 from my %main.storage
-					if !matchre("$righthand|$lefthand", "%herb2") then
-						{
-							echo *** Still missing %herb2 after restock!!
-							exit
-						}
-					goto unfinished
+					echo *** Still missing %herb2 after restock!!
+					exit
 				}
-			### IF MC IS NOT RUNNING (RUNNING SCRIPT SOLO) SCRIPT WILL ABORT DUE TO LACK OF HERB2
-			if !matchre("%scriptlist", "(?i)mastercraft") then
-			{
-				echo *** Missing %herb2 — cannot continue!
-				exit
-			}
 		}
-     put put my %herb2 in my $MC_BOWL
-     pause 0.5
-     var special NULL
-     return
+	put put my %herb2 in my %bowl
+	pause 0.5
+	var special NULL
+	return
 
 specialcheck:
 	if "%special" != "NULL" then gosub %special
@@ -249,7 +239,7 @@ if contains("$scriptlist", "mastercraft") then
           }
 	if (%water.gone = 1) then
 	{
-		if !("$righthand" = "Empty" || "$lefthand" = "Empty") then send put my %bowl in my %tool.storage
+		if (("$righthand" != "Empty") || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
 		gosub summonwater
 		if (("$righthandnoun" != "%bowl") && ("$lefthandnoun" != "%bowl")) then send get my %bowl from my %tool.storage
 		pause .5
@@ -265,7 +255,7 @@ if contains("$scriptlist", "mastercraft") then
 	if (%catalyst.gone = 1) then
 	{
 		gosub automove Forging suppl
-		if (("$righthand" != "Empty" || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
+		if (("$righthand" != "Empty") || ("$lefthand" != "Empty")) then send put my %bowl in my %tool.storage
 		action (order) on
 		send order
 		pause 2
@@ -294,22 +284,43 @@ else
 	exit
 	}
 
-lack.coin:
-	if ("%get.coin" = "off") then goto lack.coin.exit
-	action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
-	gosub automove teller
-	send withd 9 gold
-	waitfor The clerk counts|You count out
-	gosub automove %temp.room
-	var need.coin 0
-	action remove (^The clerk flips through her ledger|^The clerk tells you)
-	pause 1
-	goto %purchaselabel
-
-lack.coin.exit:
-	echo You need some startup coin to purchase stuff! Go to the bank and try again!
-	put #parse Need coin
-	exit
+restock.herb:
+     var restock.target $0
+     if !matchre("$scriptlist", "(?i)mastercraft") then
+          {
+			echo
+			echo *** DETECTED MASTERCRAFT IS NOT RUNNING!
+               echo *** Missing %restock.target — cannot continue!
+               echo *** RESTOCK HERBS MANUALLY!
+			echo
+               exit
+          }
+     action (work) off
+     var temp.room $roomid
+     if matchre("$righthand", "%bowl") then gosub PUT_IT #$righthandid in my %tool.storage
+     if matchre("$lefthand", "%bowl") then gosub PUT_IT #$lefthandid in my %tool.storage
+     gosub EMPTY_HANDS
+     var order.type %restock.target
+     if (("%restock.target" = "flower") && def(MC.herb1)) then var order.type $MC.herb1
+     var %order.type.material.volume 0
+     if def(MC.order.qty) then var order.quantity $MC.order.qty
+     else var order.quantity 1
+     if (%order.quantity < 1) then var order.quantity 1
+     if def(MC.order.vol) then var volume $MC.order.vol
+     else var volume 5
+     evalmath mass.volume (%volume * %order.quantity * 5)
+     var saved.herb2 %herb2
+     if (def(MC.herb2) && ("%order.type" = "$MC.herb2")) then var herb2 $MC.herb2
+     else var herb2 NULL
+     gosub lack.material
+     var herb2 %saved.herb2
+     unvar saved.herb2
+     gosub automove %temp.room
+     unvar temp.room
+     gosub ToolCheckRight %bowl
+     if matchre("%bowl", "$lefthand") then gosub PUT swap
+     action (work) on
+     return
 
 return:
 return
@@ -356,7 +367,7 @@ done:
 	exit
 
 countcheck:
-if ($MC_NOWO = 1) then return
+if ($MC_Alchemy_NOWO = 1) then return
 action var temprem $1 when ^You count out (\d+) uses remaining\.
 gosub PUT count my $MC.order.noun
 pause 0.1

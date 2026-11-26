@@ -75,6 +75,7 @@ action (count) math material.volume add $1;var itemvolume $1 when \s+(?:Volume|Y
 action (count) math material.volume add $1;var itemvolume $1 when possess a volume of (\d+)\.$
 action (count) math material.volume add $1;var itemvolume $1 when ^You count out (\d+) (piece|pieces|yards|uses)
 action (count) var manual 1 when unable to discern hardly anything about it\.$|make a few observations\.$|learn more about its construction\.$
+action (count) off
 #### Identifying extra pieces from the instruction book
 action (book) var difficulty $1;var technique $2 when This is considered to be an? (.*?) piece to make, though knowledge of the (.*?) technique
 action (book) var assemble $2 $3; var asmCount1 $1 when .*(\d).* (long|short) wooden (pole)$
@@ -456,12 +457,12 @@ location.vars:
      var AA.room.list 488|489|490|491|492|493|494|495|496|495|496|497
      var AA.master.room 488|489|490|491|492|493|494|495|496|495|496|497
 	#Aesry Enchanting
-     var AENT.tools.room 432
-     var AENT.supplies.room 433
-     var AENT.books.room 431
-     var AENT.work.room 436|437|438|435
-     var AENT.room.list 453|454|455|456|457|458|459|460|461
-     var AENT.master.room 453|454|455|456|457|458|459|460|461
+     var AENT.tools.room 454
+     var AENT.supplies.room 453
+     var AENT.books.room 455
+     var AENT.work.room 457|458|460|461
+     var AENT.room.list 453|454|455|456|457|458|460|461|462
+     var AENT.master.room 453|454|455|456|457|458|460|461
 	
 	#Repair Locations
      var crossing.repair.room Rangu
@@ -739,7 +740,7 @@ put #tvar tool.room 857
 put #tvar ingot.buy 829
 put #tvar oil.room 819
 put #tvar repair.room %ratha.repair.room
-var #tvar repair.clerk %ratha.repair
+put #tvar repair.clerk %ratha.repair
 var society.type Engineering
 return
 
@@ -751,7 +752,7 @@ put #tvar supply.room 865
 put #tvar tool.room 864
 put #tvar oil.room 819
 put #tvar repair.room %ratha.repair.room
-var repair.clerk %ratha.repair
+put #tvar repair.clerk %ratha.repair
 var society.type Alchemy
 return
 
@@ -763,7 +764,7 @@ put #tvar work.room %AF.work.room
 put #tvar smelt.room %AF.smelt.room
 put #tvar deed.room 445
 put #tvar supply.room 446
-put #tvar part.room 819
+put #tvar part.room 485
 put #tvar tool.room 448
 put #tvar oil.room 448
 put #tvar repair.room %aesry.repair.room
@@ -1172,7 +1173,7 @@ find.room.wait:
      return
 
 find.master:
-     if (def(automapper.typeahead) && ($automapper.typeahead != 0) then
+     if (def(automapper.typeahead) && ($automapper.typeahead != 0)) then
           {
           var currenttypeahead $automapper.typeahead
           put #var automapper.typeahead 0
@@ -1343,7 +1344,7 @@ manualalcohol:
      pause 0.9
      pause 0.5
 	action (order) off
-	gosub ORDER $alcohol.order
+	gosub ORDER %alcohol.order
 	gosub PUT_IT my alcohol in my %main.storage
 	var water.gone 0
 	return
@@ -1368,11 +1369,35 @@ BUY_SPHERE_FAIL:
      var buy.ok 0
      return
 
+#################################
+#
+#  Commonly referenced Gosubs
+#
+#################################
+buyingvolumechange:
+     var oldnumber %ingot.item.count
+     evalmath tempnumber %ingot.item.count + %reqd.order
+     evalmath ingotdiff %tempnumber - %oldnumber
+     gosub oldchange
+     var tracker 1
+buyingvolumechange1:
+     if (%tracker > %ingotdiff) then return
+     if ("%work.material" = "bronze") then var vol.%ordinal(%tracker) 5
+     if ("%work.material" = "steel") then var vol.%ordinal(%tracker) 10
+     math tracker add 1
+     goto buyingvolumechange1
+oldchange:
+     if %oldnumber < 1 then return
+     var vol.%ordinal(%tempnumber) %vol.%ordinal(%oldnumber)
+     math tempnumber subtract 1
+     math oldnumber subtract 1
+     goto oldchange
+
 lack.material:
 	pause 0.1
      if ("%reorder" = "off") then goto lack.material.exit
+	if ("%order.type" = "") then goto lack.material.exit
 	if ("%order.type" = "flower") then var order.type blue flower
-	if ("%order.type" = "") then var order.type blue flower
      if matchre("%discipline", "weapon|armor|blacksmith") then
           {
                if "%work.material" = "bronze" then var order.num 11
@@ -1510,24 +1535,31 @@ lack.material:
 			if ("%order.type" = "hulnik") then gosub GETHERBS hulnik grass
 			if ("%order.type" = "cebi") then gosub GETHERBS cebi root
 			if ("%order.type" = "hisan") then gosub GETHERBS hisan flower
-			if matchre("%order.type", "(belradi|eghmok|yelith|lujeakave|hulij|nuloe|sufil|muljin|cebi|hulnik|blue flower|hisan|hulij|dioica|blocil)") then goto first.order
+			if matchre("%order.type", "(belradi|eghmok|yelith|lujeakave|hulij|nuloe|sufil|muljin|cebi|hulnik|blue[ .]flower|hisan|dioica|blocil)") then return
 
-			# --- secondary herb (ojhenik etc.) needs its own required amount ---
-			if matchre("%order.type", "(ojhenik|aevaes|riolur|nilos|muljin|sufil|nemoih|plovik|jadice|dioica|belradi)") then
+			# --- secondary herb ONLY when order.type is actually herb2 for this recipe ---
+			var herb.calc 0
+			if (("%order.type" = "%herb2") && ("%herb2" != "NULL") && ("%herb2" != "")) then
 				{
-					evalmath herb2.needed %order.quantity
+					evalmath herb2.needed (%order.quantity * 5)
 					evalmath reqd.order ceiling((%herb2.needed - %%order.type.material.volume)/25)
 					if (%reqd.order < 1) then var reqd.order 1
+					var herb.calc 1
 				}
-			if matchre("%order.type", "pollen|root") then
+			if ((%herb.calc = 0) && matchre("%order.type", "^(pollen|root)$")) then
 				{
-					evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/4)
+					evalmath reqd.order ceiling((%mass.volume - %%order.type.material.volume)/4)
+					if (%reqd.order < 1) then var reqd.order 1
+					var herb.calc 1
 				}
-			if !matchre("%order.type", "(pollen|root|ojhenik|aevaes|riolur|nilos|muljin|sufil|nemoih|plovik|jadice|dioica|belradi)") then
+			if (%herb.calc = 0) then
 				{
-					evalmath reqd.order ceiling((%mass.volume-%%order.type.material.volume)/25)
+					evalmath reqd.order ceiling((%mass.volume - %%order.type.material.volume)/25)
+					if (%reqd.order < 1) then var reqd.order 1
 				}
+
 			goto purchase.material
+
 		}
      if ("%discipline" = "artif") then
           {
@@ -1542,6 +1574,111 @@ lack.material:
                goto purchase.material
           }
      goto lack.material.exit
+
+purchase.material:
+     var purchaselabel purchase.material
+     action var need.coin 1 when ^The attendant shrugs and says, "Ugh, you don't have enough
+     #"
+     if ($roomid != $supply.room) then gosub automove $supply.room
+	gosub EMPTY_HANDS
+first.order:
+     if matchre("%discipline", "carving|shaping|tailor|tinkering") then
+          {
+               if (!matchre("$righthand", "Empty") && !matchre("$lefthand", "Empty")) then gosub EMPTY_HANDS
+               if (%reqd.order >= 1) then
+                    {
+                         gosub ORDER %order.num
+                         math reqd.order subtract 1
+#                        gosub PUT_IT my %order.type in my %main.storage
+                         math %order.pref.item.count add 1
+				     gosub combine.order
+                         if matchre("%order.type", "lumber") then
+                              {
+                                   if "%work.material" = "balsa" then math material.volume add 10
+                                   else math material.volume add 5
+                              }
+                         if matchre("%order.type", "leather|cloth|stack") then math material.volume add 10
+                         if matchre("%order.type", "yarn") then math material.volume add 100
+                         if ("%discipline" = "remed") then math %herb1.material.volume add 25
+                         if %reqd.order < 1 then
+							{
+								gosub PUT_IT my %order.type in my %main.storage
+								return
+							}
+                         goto first.order
+                    }
+               else return
+          }
+
+     if matchre("%discipline", "weapon|armor|blacksmith") then
+          {
+               if %reqd.order >= 1 then
+                    {
+                         gosub EMPTY_HANDS
+                         gosub ORDER %order.num
+                         math reqd.order subtract 1
+                         gosub PUT_IT my %order.type in my %main.storage
+                         math %order.pref.item.count add 1
+                         if "%work.material" = "bronze" then math material.volume add 5
+                         if "%work.material" = "steel" then math material.volume add 10
+                         if %reqd.order < 1 then return
+                         goto first.order
+                    }
+               else return
+          }
+     if ("%discipline" = "remed") then
+          {
+               gosub EMPTY_HANDS
+               if %reqd.order >= 1 then
+                    {
+                         gosub ORDER %order.num
+                         math reqd.order subtract 1
+                         gosub PUT_IT my %order.type in my %main.storage
+                         math %order.type.item.count add 1
+                         if (("%discipline" = "remed") && (!matchre("%order.type", "^(pollen|root)$"))) then math %order.type.material.volume add 25
+                         else math %order.type.material.volume add 4
+                         if %reqd.order < 1 then return
+                         goto first.order
+                    }
+               else return
+          }
+	if ("%discipline" = "artif") then
+		{
+			if matchre("%order.pref", "sphere") then
+				{
+					gosub BUY_SPHERE
+					if "%buy.ok" != "1" then return
+				}
+			else gosub ORDER %order.num
+			math reqd.order subtract 1
+			if (%reqd.order < 1) then return
+			goto first.order
+		}
+     return
+
+combine.order:
+	 gosub GET my %work.material %order.type from my %main.storage
+	 if ("$righthand" != "$lefthand") then
+		{
+			gosub EMPTY_HANDS
+			return
+		}
+     matchre combine.order ^\.\.\.wait|^Sorry
+     match combine.order.return You combine
+     match return too large
+     match return You must be holding
+     put combine
+     matchwait
+combine.order.return:
+     math %order.pref.item.count subtract 1
+	gosub PUT_IT %order.type in my %main.storage
+	return
+
+lack.material.exit:
+     echo Not Enough Material To Make %order.quantity $MC.order.noun !
+     put #parse Need material
+	if matchre("(%clerktools)", "(%work.tools)") then gosub return.tools
+     exit
 ##############################
 ### MIGRATED FROM MASTERCRAFT - TO WORK WITH ALL INDIVIDUAL SCRIPTS
 
@@ -1633,10 +1770,11 @@ check.tools2:
           {
                unvar temp
                unvar MaxTemp
-               return
+               goto check.tools.done
           }
-     gosub check.tools2
-     if $MC.Mark = "on" then
+     goto check.tools2
+check.tools.done:
+     if ("$MC.Mark" = "on") then
           {
                gosub GET my stamp from my %main.storage
                gosub repair.tool stamp
@@ -1675,7 +1813,7 @@ repair.tool_2:
      waitforre ^From the blacksmithing crafting discipline you have been trained in (.*)\.$
      var repair.techs $0
      pause 0.1
-     if (contains("%repair.techs", "Tool Repair") then
+     if contains("%repair.techs", "Tool Repair") then
           {
                gosub toolcheck
                pause 0.2
@@ -1858,7 +1996,7 @@ ToolCheckLeft:
 		{
 		if (matchre("%tools", "tongs") && (%worn.tongs = 1)) then gosub HOLD my %tools
 		else gosub GET my %tools
-          if !matchre("$righthand", "%tools") then gosub GET my %tools
+          if !matchre("$lefthand", "%tools") then gosub GET my %tools
 		return
 		}
 	if !matchre("%tools", "$lefthandnoun") then
@@ -2129,7 +2267,7 @@ HERB_PROCESS:
                var Ordinals first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth
                var Num 0
                gosub HERB_COMBINE
-               goto first.order
+               return
           }
 HERB_PRESS:
      math %herb1.item.count add 1
@@ -2146,23 +2284,26 @@ HERB_PRESS:
      goto HERB_PROCESS
 
 HERB_COMBINE:
+var combine.herb %order.type
+if matchre("%combine.herb", "(blue flower|blue\.flower)") then var combine.herb flower
+
      if (%Num > 14) then goto COMBINE_FAIL
      pause 0.2
-     put get my %Ordinals(%Num) %herb1 from my %tool.storage
+     put get my %Ordinals(%Num) %combine.herb from my %tool.storage
      pause 0.5
      pause 0.1
      if ("$righthand" = "Empty") then
           {
-          put get my %Ordinals(%Num) %herb1 from my portal
+          put get my %Ordinals(%Num) %combine.herb from my portal
           pause 0.8
           pause 0.5
           }
      if ("$righthand" = "Empty") then goto COMBINE_FAIL
-     put get my %Ordinals(%Num) %herb1 from my %tool.storage
+     put get my %Ordinals(%Num) %combine.herb from my %tool.storage
      pause 0.5
      if ("$lefthand" = "Empty") then
           {
-          put get my %Ordinals(%Num) %herb1 from my portal
+          put get my %Ordinals(%Num) %combine.herb from my portal
           pause 0.5
           }
 	pause 0.01
@@ -2272,13 +2413,7 @@ ORDER_BUY:
         }
      pause 0.1
      pause 0.1
-     if matchre("%Order", "^\d+$") then send order %Order
-	else send order %Order
-     if !matchre("%Order", "\d+") then
-		{
-		if matchre("%Order", "\w+") then send order %Order
-		else send order
-		}
+     send order %Order
      matchwait 15
      if (%need.coin = 1) then
         {
@@ -2850,7 +2985,7 @@ GET_DOUBLECHECK:
      matchre RETURN ^Perhaps you should
      matchre UNTIE ^You pull at it|^You pull at|^You should untie
 	matchre WRONG_ITEM ^That is far too dangerous to remove
-	if matchre("%Get", "from my") then send get %Get
+	if matchre("%Get", "(from|in) my") then send get %Get
 	else send get %Get from my portal
      matchwait 15
      put #echo >$Log Crimson $datetime *** MISSING MATCH IN GET2! (mc_include.cmd) ***
@@ -2974,6 +3109,7 @@ STOW_RIGHT:
                                    {
                                         put wear book
                                         pause 0.5
+								return
                                    }
 						if matchre("%alltools", "$righthandnoun") then
 							{

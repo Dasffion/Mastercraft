@@ -1,6 +1,6 @@
 #MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 0.1.6
+#v 1.9.8
 #
 # Script Usage: .knit <item>					--knits the item
 #				.knit <item> <no. of times>		--to knit more than one, assuming you have enough material
@@ -15,9 +15,10 @@
 var sew.repeat 0
 if_1 put #var MC.order.noun %1
 if_2 var sew.repeat %2
-include mc_include.cmd
 if !matchre("$scriptlist", "mastercraft") then var society.type Outfitting
+include mc_include.cmd
 if !def(MC_KNITNEEDLES) then put #var MC_KNITNEEDLES $MC_NEEDLES
+var main.storage $MC_OUTFITTING.STORAGE
 
 action var Action knit when ^push my needle|^turn my needle|^cast my needle|^knit my needle|^The .* need of more knitting
 action var Action push when addition of some purl stitching|some purl stitches|^Some purl stitching
@@ -54,12 +55,12 @@ first.cut:
 	matchwait
 
 excess:
-     gosub PUT_IT my yarn in my %outfitting.storage
+     gosub PUT_IT my yarn in my %main.storage
 
 
 KnitAction:
 	action (work) on
-	if "%Action" = "done" then goto done
+	if ("%Action" = "done") then goto done
 	gosub Action %Action my needle
 	goto KnitAction
 
@@ -69,17 +70,17 @@ Retry:
 
 repeat:
 	math sew.repeat subtract 1
-	gosub PUT_IT my $MC.order.noun in my %outfitting.storage
+	gosub PUT_IT my $MC.order.noun in my %main.storage
      if ("%repair" = "on") then gosub check.tools
 	gosub GET my tailor book
 	gosub STUDY my book
-	gosub PUT_IT my book in my %outfitting.storage
+	gosub PUT_IT my book in my %main.storage
 	gosub GET my yarn
 	goto first.cut
 
 done:
 	gosub mark
-	if %sew.repeat > 1 then goto repeat
-	gosub STOW my needle in my %tool.storage
+	if (%sew.repeat > 1) then goto repeat
+	gosub PUT_IT my $MC_KNITNEEDLES in my %main.storage
 	put #parse KNITTING DONE
 	exit
