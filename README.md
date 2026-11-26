@@ -50,7 +50,8 @@ ENCHANTING - Artificing</h3><br>
 
 4) Workorders are only automated using .mastercraft in crafting societies.<br> 
    Individual scripts can be run elsewhere if you desire<br>
-   Part purchasing and order turn-in will NOT be automatic when the scripts are run solo.<br><br>
+   Part purchasing and order turn-in will NOT be automatic when the scripts are run solo.<br>
+   If you run the scripts solo (without Mastercraft) you will have to buy materials yourself!<br><br>
 
 5) Make sure your stock materials (specifically ingots) are managed in sizes your character can lift.<br> 
    If he can't pick up an ingot, I don't know how you'll be able to cut it down to a more manageable size.<br><br> 
