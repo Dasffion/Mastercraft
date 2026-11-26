@@ -68,12 +68,10 @@ Recommend 20+ plat for higher end crafting with MT level tools (as repair costs 
    Type CRAFT to see your available 'points' - Recommended to learn new techniques often.<br>
    Techniques in your discipline can enable faster crafting / better results / access to higher end recipes / etc.<br>
    Don't forget to choose a CAREER and HOBBY as that will get you even more points to work with<br><br>
-
-10) NOTE - Mastercraft is primarily written/intended as an XP/TRAINING script.<br>
-    It is NOT designed to train every single possible recipe and does NOT support every single craft recipe.<br> 
+10) NOTE - Mastercraft is primarily written as an EXP / TRAINING script.<br>
+    It is NOT designed to train every single recipe and does NOT support every single craft recipe.<br> 
     Although a very large number of recipes are supported<br>
-    You can use it to produce specific items, however don't expect every single item or top tier items<br><br>  
-
+    You CAN use it to produce specific items, however don't expect every single item supported or top tier items - results vary<br><br>  
 11) Last but not least, don't change the scriptfile names (ie mastercraft.cmd to mc.cmd) unless you want to parse through them yourself
    and edit all the script calls. Each subscript is called by name here and runs as a **second, separate script.**
    This allows for each subscript to be used standalone. Also, some subscripts (pound, carve, etc.) check if Mastercraft.cmd is running
