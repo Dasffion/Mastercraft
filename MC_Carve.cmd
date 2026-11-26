@@ -1,6 +1,6 @@
 #MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 0.1.6
+# v 1.9.8
 #
 # Script Usage: .carve <item>					--carves the item from bone
 #				.carve <item> <stone size>		--carves the item from the stone size specified (ie pebble, rock, stone, boulder)
@@ -65,7 +65,7 @@ action var Action carve when ^carve .* with my %chisel|^scrape .* with my rasp|^
 #action (work) goto Retry when \.\.\.wait|type ahead
 action goto done when ^Applying the final touches|You cannot figure out how to do that
 
-action (order) put #tvar polish.order $1 when (\d+)\)\..*jar of surface polish.*(Lirums|Kronars|Dokoras)
+action (order) var polish.order $1 when (\d+)\)\..*jar of surface polish.*(Lirums|Kronars|Dokoras)
 action var polish.gone 1 when ^The polish is all used up, so you toss it away.
 
 action var assemble $1 when another finished \S+ shield (handle)

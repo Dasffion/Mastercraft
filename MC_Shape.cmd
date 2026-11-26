@@ -1,4 +1,5 @@
 ###debug 10
+# v 1.9.8
 # Shaping by Arvedui Iorlas
 # Based off Mastercraft Carving script
 #
@@ -78,7 +79,7 @@ unfinished:
 first.carve:
 	##If the provided item name is in the ArrowheadMats list make arrowheads instead
 	if matchre("$MC.order.noun", "%ArrowheadMats") then goto arrowheads
-	if matchre("$MC.order.noun", "shaft" then goto shaft
+	if matchre("$MC.order.noun", "shaft") then goto shaft
 
 	##Enhancements start with clamp.
 	if ("%enhance" = "ON") then

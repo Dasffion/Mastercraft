@@ -1,5 +1,5 @@
 #debug 10
-### Thanks to Usrnme for the udpates to the script
+### UPDATE 11/25/2026
 var mix.repeat 0
 var current.lore ENCHANTING
 if_1 var rawmat %1
@@ -120,7 +120,7 @@ clean:
                gosub PUT_IT fount in %main.storage
           }
      if matchre("$MC_BRAZIER", "(?i)\b(NULL|OFF|0|^%|^\s*$)") then gosub GET $MC.order.noun from %usebrazier
-     else gosub GET "$MC.order.noun" from my %usebrazier
+     else gosub GET $MC.order.noun from my %usebrazier
      gosub PUT_IT $MC.order.noun in bin
      pause 0.5
      goto unfinished
@@ -137,7 +137,7 @@ start.enchant:
 			var rawmat sphere
 		}
 	put #tvar prepared 0
-	if "$MC_IMBUE" = "SPELL|spell" then gosub PREPARE imbue $MC_IMBUE.MANA
+	if matchre("$MC_IMBUE", "(?i)\bspell") then gosub PREPARE imbue $MC_IMBUE.MANA
 	if !matchre("$righthand|$lefthand", "%rawmat") then gosub GET my %rawmat from %main.storage
      if !matchre("$righthand|$lefthand", "%rawmat") then goto RESTARTENCHANT
      gosub clean.prep
@@ -176,7 +176,7 @@ work:
 	goto work
 
 restudy:
-	if "$MC_IMBUE" = "SPELL" then put release spell
+	if matchre("$MC_IMBUE", "(?i)\bspell") then put release spell
      if matchre("$MC_BRAZIER", "(?i)\b(NULL|OFF|0|^%|^\s*$)") then gosub GET %rawmat from %usebrazier
 	else gosub GET %rawmat from my %usebrazier
 	gosub PUT_IT my %rawmat in %main.storage
@@ -198,7 +198,7 @@ imbue:
           else gosub Action wave $MC_IMBUE.ROD at $MC.order.noun on my %usebrazier
 		}
 	if "%tool" = "sigil" then goto sigil
-	if ("$MC_IMBUE" = "SPELL") then
+	if matchre("$MC_IMBUE", "(?i)\bspell") then
 		{
           if "$preparedspell" != "Imbue" then
                {
@@ -263,7 +263,7 @@ meditate:
 
 focus:
      if !def(MC_FOCUS.WAND) then put #var MC_FOCUS.WAND NULL
-	if matchre("$MC_FOCUS.WAND", "WAND") then
+	if matchre("$MC_FOCUS.WAND", "(?i)WAND") then
 		{
 		gosub ToolCheckRight $MC_FOCUS.WAND
           if matchre("$MC_BRAZIER", "(?i)\b(NULL|OFF|0|^%|^\s*$)") then

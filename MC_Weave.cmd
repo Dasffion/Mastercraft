@@ -1,6 +1,6 @@
 #MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 0.1.6
+# v 1.9.8
 #
 # Script Usage: .weave			--weaves cloth on a loom
 #

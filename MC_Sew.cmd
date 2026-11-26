@@ -2,8 +2,8 @@
 # Mastercraft by Dasffion
 # Based on MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-# many versions later - Latest updates 10/28/2026
-#
+# many versions later - Latest updates 11/25/2026
+# v 1.9.8
 # Script Usage (for standalone use):
 # .mc_sew <item>	             --sews the item
 # .mc_sew <item> <no. of times>  --to sew more than one, assuming you have enough material
@@ -70,17 +70,17 @@ unfinished:
 		pause 1
 		goto work
 	}
-     if !contains("$righthandnoun", "(cloth|leather)") then
+     if !matchre("$righthandnoun", "(cloth|leather)") then
           {
-               if !contains("$lefthandnoun", "(cloth|leather)") then
+               if !matchre("$lefthandnoun", "(cloth|leather)") then
                     {
                          gosub get my %order.pref
                     }
           }
 
 first.cut:
-	if (contains("$righthandnoun", "cloth") || contains("$lefthandnoun", "cloth")) then var material cloth
-	if (contains("$righthandnoun", "leather") || contains("$lefthandnoun", "leather")) then var material leather
+	if (matchre("$righthandnoun", "cloth") || matchre("$lefthandnoun", "cloth")) then var material cloth
+	if (matchre("$righthandnoun", "leather") || matchre("$lefthandnoun", "leather")) then var material leather
 	pause 1
 	if !matchre("leather|cloth", "$righthandnoun") then send swap
 	pause 1
@@ -150,6 +150,7 @@ pins:
           {
                var pins.gone 1
                gosub tool.swap
+               gosub GET my pins from my %main.storage
           }
 	var tool needle
      if matchre("$righthand", "pins") then gosub SWAP
@@ -230,7 +231,7 @@ if contains("$scriptlist", "mastercraft") then
 			action (order) off
 			gosub ORDER %thread.order
 			pause 1
-			if !matchre("$righthand|$lefthand", "needle") then gosub GET my needle from my %main.storage
+			if !matchre("$righthand|$lefthand", "$MC_NEEDLES") then gosub GET my $MC_NEEDLES from my %main.storage
 			send put my thread on my needles
 			waitforre ^You carefully thread
 			var thread.gone 0
@@ -249,25 +250,6 @@ echo *** Out of pins or thread! Go get more!
 put #parse SEWING DONE
 exit
 }
-
-lack.coin:
-	if "%get.coin" = "off" then goto lack.coin.exit
-	action (withdrawl) goto lack.coin.exit when (^The clerk flips through her ledger|^The clerk tells you)
-	gosub automove teller
-	send withd 5 gold
-	waitforre The clerk counts|You count out
-	gosub automove %temp.room
-	var need.coin 0
-	action remove (^The clerk flips through her ledger|^The clerk tells you)
-	pause 1
-	return
-
-lack.coin.exit:
-	echo You need some startup coin to purchase stuff! Go to the bank and try again!
-	put #parse Need coin
-	exit
-
-
 
 return:
 return

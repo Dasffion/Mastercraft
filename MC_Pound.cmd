@@ -1,7 +1,7 @@
 #debug 10
 #MasterCraft - by the player of Jaervin Ividen
 # A crafting script suite...
-#v 0.1.6
+# v 1.9.8
 #
 # Script Usage: .pound <item>					--forges the item
 #				.pound <item> <no. of times>	--to forge more than one, assuming you have enough material
