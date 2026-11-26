@@ -9,7 +9,7 @@
 .mastercraft 2 - complete 2 work orders at your set difficulty <br>
 .mastercraft 4 challenging - Complete 4 challenging workorders<br>
 
-Simply setup your variables in MC_Setup, go to the crafting society you want to train in and start mastercraft.<br>
+Simply setup your variables in MC_Setup, have some gold/plat on you (for supplies), go to the crafting society you want to train in and start mastercraft.<br>
 Mastercraft automatically detects which discipline to train based on the Society you start it in.<br>
 
 Mastercraft takes the tedium out of workorders, and works in practically every society for practically every craft. 
