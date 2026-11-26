@@ -1,7 +1,8 @@
 <h1>Script Usage:</h1>
-<b>EDIT: MC_Setup.cmd - This contains variables to control crafting settings for all your characters</b><br>
-By default supports up to 5 characters<br><br>
-.mastercraft -- to only do one work order<br>
+<b>EDIT: MC_Setup.cmd</b><br>
+<b>This contains the variables to control crafting settings for all your characters</b><br>
+<b>By default supports up to 5 characters<br><br>
+.mastercraft -- do a single work order<br>
 .mastercraft (no. of orders) --to perform more than one<br>
 .mastercraft (no. of orders) (difficulty)  --to ask for a different difficulty than you have set in your character profile.<br><br>
 
